@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>Глава 1 — Powerhouse</title>
+<style>
+  :root { --text:#f3efe8; --dim:#a9a3b8; --accent:#f0b35e; --cold:#8fc3ff; --box:rgba(16,14,28,.88); --tg:#2b5278; }
+  * { box-sizing:border-box; }
+  html, body { margin:0; height:100%; background:#07070c; color:var(--text);
+    font:18px/1.55 "Trebuchet MS", "Segoe UI", system-ui, sans-serif; overflow:hidden; }
+  #stage { position:relative; width:min(100vw, 177.78vh); height:min(100vh, 56.25vw); margin:auto;
+    top:50%; transform:translateY(-50%); overflow:hidden; border-radius:6px; }
+  #bg { position:absolute; inset:-2%; width:104%; height:104%; image-rendering:pixelated; }
+
+  /* Пьяный режим: всё плывёт */
+  #stage.drunk #bg, #stage.drunk .sprite { animation:sway 5s ease-in-out infinite; }
+  #stage.drunk #egor { animation:sway 5s ease-in-out infinite reverse; }
+  @keyframes sway { 0%,100% { rotate:-.6deg; translate:-.6% 0; } 50% { rotate:.6deg; translate:.6% .4%; } }
+  #stage.drunk::after { content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(transparent 50%, #3a0a3a88); }
+
+  /* Персонажи */
+  /* Персонажи вырезаны из фото (прозрачный фон). Дышат, подпрыгивают на реплике, тянутся к собеседнику */
+  .sprite { position:absolute; bottom:0; height:84%; opacity:0; transform:translateY(6%); image-rendering:pixelated;
+    transform-origin:50% 100%; transition:opacity .5s, transform .4s, filter .3s;
+    filter:drop-shadow(0 0 2px #000) drop-shadow(0 12px 18px #000a);
+    animation:breathe 2.4s steps(1) infinite; }
+  #egor { animation-delay:-1.1s; }
+  @keyframes breathe { 50% { scale:1 1.012; } }
+  .sprite.on { opacity:1; transform:translateY(0); }
+  .sprite.dim { filter:brightness(.5) saturate(.6) drop-shadow(0 12px 18px #000a); }
+  .sprite.speak { transform:translateY(0) rotate(var(--lean)); }
+  .sprite.hop { animation:hop .28s steps(3), breathe 2.4s steps(1) infinite; }
+  @keyframes hop { 50% { translate:0 -2.5%; } }
+  #gleb { left:6%; --lean:1.5deg; }
+  #egor { right:6%; --lean:-1.5deg; }
+
+  /* Телефон с Telegram */
+  #phone { position:absolute; left:50%; top:4%; width:min(34%, 330px); transform:translateX(-50%) translateY(20px) rotate(-3deg);
+    background:#0d0d10; border-radius:28px; padding:10px; box-shadow:0 20px 60px #000c, inset 0 0 0 2px #333;
+    opacity:0; transition:opacity .4s, transform .4s; z-index:3; }
+  #phone.on { opacity:1; transform:translateX(-50%) translateY(0) rotate(-3deg); }
+  #phone .scr { background:#0e1621; border-radius:20px; overflow:hidden; min-height:260px; display:flex; flex-direction:column; }
+  #phone .hdr { background:#17212b; padding:9px 12px; display:flex; align-items:center; gap:10px; }
+  #phone .ava { width:34px; height:34px; border-radius:50%; background:linear-gradient(#e8a0c8, #b0609a); display:grid; place-items:center;
+    font-weight:bold; font-size:16px; color:#fff; flex:none; }
+  #phone .nm { font-size:14px; font-weight:bold; line-height:1.2; }
+  #phone .st { font-size:12px; color:#7d8b99; line-height:1.2; }
+  #phone .st.typing { color:#6ab2f2; }
+  #msgs { padding:10px; display:flex; flex-direction:column; gap:6px; flex:1; justify-content:flex-end;
+    background:repeating-linear-gradient(45deg, #0e1621 0 12px, #101a26 12px 24px); }
+  .msg { align-self:flex-end; background:var(--tg); border-radius:14px 14px 4px 14px; padding:6px 10px 4px; font-size:14px; max-width:88%;
+    animation:pop .3s ease-out; line-height:1.35; }
+  .msg i { display:block; text-align:right; font-style:normal; font-size:11px; color:#7da8d3; }
+  .msg i.read { color:#6ab2f2; }
+  @keyframes pop { from { transform:scale(.6); opacity:0; } }
+
+  /* Плашки */
+  #place { position:absolute; top:3%; left:3%; padding:6px 14px; background:var(--box); border-left:3px solid var(--accent);
+    font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); z-index:2; }
+  #memory { position:absolute; top:11%; right:3%; display:flex; gap:8px; z-index:2; }
+  #mute { position:absolute; top:3%; right:3%; z-index:7; background:var(--box); border:1px solid #ffffff22; color:var(--text);
+    border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
+  #mute:hover { border-color:var(--accent); }
+  .mem { background:var(--box); border:1px solid var(--cold); color:var(--cold); border-radius:20px; padding:4px 12px; font-size:13px;
+    animation:pop .4s ease-out; }
+
+  /* Диалог */
+  #box { position:absolute; left:4%; right:4%; bottom:4%; min-height:24%; background:var(--box); border-radius:14px;
+    padding:22px 26px 18px; border:1px solid #ffffff1a; backdrop-filter:blur(6px); cursor:pointer; z-index:4; }
+  #name { position:absolute; top:-16px; left:22px; padding:3px 16px; border-radius:8px; font-weight:bold; font-size:16px;
+    background:var(--accent); color:#1a1320; }
+  #name.gleb { background:#e07a4a; }
+  #name.think { background:var(--cold); }
+  #name:empty { display:none; }
+  #line { min-height:2.6em; }
+  #line.think { color:var(--cold); font-style:italic; }
+  #next { position:absolute; right:18px; bottom:10px; font-size:13px; color:var(--dim); animation:blink 1.2s infinite; }
+  @keyframes blink { 50% { opacity:.2; } }
+
+  /* Выборы */
+  #choices { position:absolute; inset:0; display:none; align-items:flex-end; justify-content:center; gap:3%;
+    background:linear-gradient(transparent 30%, #000a); padding:0 4% 5%; z-index:5; }
+  #choices.on { display:flex; }
+  .card { width:min(23%, 250px); background:var(--box); border:1px solid #ffffff22; border-radius:16px; padding:16px; cursor:pointer;
+    text-align:center; transition:transform .2s, border-color .2s, box-shadow .2s; animation:rise .35s ease-out backwards; }
+  .card:nth-child(2) { animation-delay:.08s; } .card:nth-child(3) { animation-delay:.16s; }
+  @keyframes rise { from { transform:translateY(30px); opacity:0; } }
+  .card:hover { transform:translateY(-6px); border-color:var(--accent); box-shadow:0 10px 30px #f0b35e33; }
+  .card svg { width:50px; height:50px; stroke:var(--accent); fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .card b { display:block; margin:8px 0 4px; font-size:17px; }
+  .card small { color:var(--dim); font-size:13px; }
+  .card.new { border-color:var(--cold); box-shadow:0 0 24px #8fc3ff44; }
+  .card.new svg { stroke:var(--cold); }
+  .card.new::before { content:"Новый вариант"; display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--cold); margin-bottom:6px; }
+  .card.rewind { border:1px dashed var(--cold); }
+  .card.rewind svg { stroke:var(--cold); animation:spin 3s linear infinite reverse; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Драка: сцепились в центре, экран трясёт, вспышка и «БАМ» */
+  #stage.fight #gleb { left:22%; }
+  #stage.fight #egor { right:22%; }
+  #stage.fight .sprite { transition:opacity .5s, transform .4s, filter .3s, left .3s, right .3s; }
+  #stage.shake { animation:shake .35s steps(6); }
+  @keyframes shake { 20% { translate:-12px 6px; } 40% { translate:10px -8px; } 60% { translate:-8px -4px; } 80% { translate:6px 8px; } }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:8; }
+  #flash.on { animation:flash .25s ease-out; }
+  @keyframes flash { 0% { opacity:.7; } 100% { opacity:0; } }
+  .bam { position:absolute; z-index:9; pointer-events:none; font:bold 54px/1 "Courier New", monospace; color:#ffe14f;
+    text-shadow:4px 4px 0 #c0392b, -2px -2px 0 #000; animation:bam .7s steps(4) forwards; }
+  @keyframes bam { 0% { scale:.3; rotate:-15deg; } 30% { scale:1.2; } 100% { scale:1; opacity:0; translate:0 -30px; } }
+  .msg.voice { display:flex; align-items:center; gap:8px; min-width:70%; }
+  .msg.voice .play { width:26px; height:26px; border-radius:50%; background:#6ab2f2; flex:none; display:grid; place-items:center; color:#0e1621; font-size:12px; }
+  .msg.voice .wave { display:flex; align-items:center; gap:2px; height:22px; flex:1; }
+  .msg.voice .wave b { width:3px; background:#9fc9ef; border-radius:2px; }
+
+  /* Пропуск лет */
+  #skip { position:absolute; inset:0; background:#000; z-index:9; display:none; align-items:center; justify-content:center;
+    font:bold 44px "Courier New", monospace; color:#d8d2c4; letter-spacing:.1em; cursor:pointer; }
+  #skip.on { display:flex; animation:fadein 1.2s ease-out; }
+  @keyframes fadein { from { opacity:0; } }
+  .msg.in { align-self:flex-start; background:#182533; border-radius:14px 14px 14px 4px; font-weight:bold; color:#6ab2f2; }
+
+  /* Перемотка */
+  #rw { position:absolute; inset:0; pointer-events:none; opacity:0; display:flex; align-items:center; justify-content:center; z-index:6;
+    background:repeating-linear-gradient(0deg, #8fc3ff10 0 2px, transparent 2px 6px), radial-gradient(#3b6ea855, #0a1430ee); }
+  #rw.on { animation:rw 1.4s ease-in-out; }
+  #rw svg { width:22%; stroke:var(--cold); fill:none; stroke-width:3; animation:spin .7s linear infinite reverse; }
+  @keyframes rw { 0%,100% { opacity:0; } 25%,75% { opacity:1; } }
+  #stage.rewinding #bg, #stage.rewinding .sprite { filter:hue-rotate(180deg) saturate(.3) blur(3px); }
+
+  #ending { position:absolute; top:3%; left:50%; transform:translateX(-50%); padding:8px 20px; border-radius:20px; white-space:nowrap;
+    background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
+
+  /* Заставка главы */
+  #title { position:absolute; inset:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:10; cursor:pointer; transition:opacity .8s; }
+  #title.gone { opacity:0; pointer-events:none; }
+  #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
+  #title h1 { margin:10px 0 24px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.08em;
+    text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
+  #title p { color:var(--dim); font-size:14px; }
+  @keyframes neon { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.4; } 95% { opacity:1; } 97% { opacity:.6; } }
+
+  #bg { object-fit:cover; }
+
+  /* ---------- Телефон вертикально (и Telegram) ---------- */
+  @media (max-aspect-ratio: 1/1) {
+    html, body { font-size:16px; }
+    #stage { width:100vw; height:100vh; height:100dvh; top:0; transform:none; border-radius:0; }
+    .sprite { height:50%; bottom:20%; }
+    #gleb { left:-6%; } #egor { right:-6%; }
+    #stage.fight #gleb { left:6%; } #stage.fight #egor { right:6%; }
+    #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px; }
+    #mute { top:calc(env(safe-area-inset-top) + 10px); right:10px; font-size:12px; }
+    #memory { top:calc(env(safe-area-inset-top) + 48px); right:10px; left:10px; justify-content:flex-end; flex-wrap:wrap; }
+    .mem { font-size:12px; }
+    #ending { top:calc(env(safe-area-inset-top) + 48px); font-size:13px; white-space:normal; text-align:center; max-width:90%; }
+    #box { left:3%; right:3%; bottom:calc(env(safe-area-inset-bottom) + 14px); min-height:20%; padding:20px 18px 26px; font-size:16px; }
+    #name { font-size:14px; left:14px; }
+    #phone { width:80%; top:calc(env(safe-area-inset-top) + 50px); }
+    #phone .scr { min-height:220px; }
+    #choices { flex-direction:column; align-items:center; justify-content:flex-end; gap:10px;
+      padding:0 4% calc(env(safe-area-inset-bottom) + 18px); }
+    .card { width:100%; max-width:440px; display:grid; grid-template-columns:44px 1fr; grid-template-rows:auto auto;
+      column-gap:12px; text-align:left; padding:12px 14px; align-items:center; }
+    .card svg { width:40px; height:40px; grid-row:1 / 3; }
+    .card b { margin:0; font-size:16px; }
+    .card small { font-size:13px; }
+    .card { position:relative; }
+    .card.new::before { position:absolute; top:7px; right:12px; margin:0; font-size:10px; }
+    .card:hover { transform:none; }
+    #title h1 { font-size:40px; }
+    #skip { font-size:28px; }
+    .bam { font-size:40px; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="320" height="180"></canvas>
+  <img class="sprite" id="gleb" src="img/gleb_px.png" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png" alt="Егор">
+  <div id="phone"><div class="scr">
+    <div class="hdr"><div class="ava">Ю</div><div><div class="nm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div id="msgs"></div>
+  </div></div>
+  <div id="place"></div>
+  <div id="memory"></div>
+  <button id="mute" title="Клавиша M">♫ звук: вкл</button>
+  <div id="ending"></div>
+  <div id="box"><div id="name"></div><div id="line"></div><div id="next">▼ щёлкни</div></div>
+  <div id="choices"></div>
+  <div id="flash"></div>
+  <div id="skip"></div>
+  <div id="rw"><svg viewBox="0 0 100 100"><path d="M20 50a30 30 0 1 0 9-21"/><path d="M18 18v14h14"/></svg></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p>щёлкни, чтобы начать</p></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// ---------- Фоны в пиксель-арте. Холст 320×180 на компьютере и 180×320 на телефоне ----------
+// Всё рисуется в долях ширины W и высоты H, поэтому одна функция работает в обеих ориентациях.
+function fitCanvas() {
+  const portrait = innerHeight > innerWidth;
+  const cv = $("bg");
+  cv.width = portrait ? 180 : 320; cv.height = portrait ? 320 : 180;
+}
+function redraw() {
+  if (!scene) return drawBar(false);
+  if (scene.bg === "cell") drawCell(curYears); else drawBar(!!scene.drunk);
+}
+let curYears = 0;
+
+// ---------- Локация: бар Powerhouse на Таганке ----------
+function drawBar(drunk) {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  let seed = 11; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const counterY = Math.round(H * .71);
+
+  // кирпичная стена
+  R(0, 0, W, H, "#170b09");
+  for (let y = 0, row = 0; y < counterY; y += 6, row++)
+    for (let x = (row % 2) * -7; x < W; x += 14) {
+      const v = rnd();
+      R(x + 1, y + 1, 12, 4, v < .3 ? "#3a1a13" : v < .7 ? "#46201a" : "#52281e");
+      if (rnd() < .15) R(x + 2, y + 1, 4, 1, "#5e3024");
+    }
+
+  const glow = (x, y, r, col) => {
+    const g = c.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, col); g.addColorStop(1, "transparent");
+    c.fillStyle = g; c.fillRect(x - r, y - r, r * 2, r * 2);
+  };
+
+  // полки с винилом слева
+  const vinylW = Math.min(76, W * .4);
+  for (const sy of portrait ? [H * .27, H * .36] : [H * .2, H * .344]) {
+    R(8, sy + 18, vinylW, 3, "#2a160e");
+    for (let x = 10; x < 8 + vinylW - 2; x += 3) {
+      const cols = ["#d94f4f", "#f0c040", "#3d7dd8", "#e8e0d0", "#1b1b1b", "#6fbf73", "#c86fd8"];
+      R(x, sy + 2 + Math.floor(rnd() * 3), 2, 16, cols[Math.floor(rnd() * cols.length)]);
+    }
+  }
+  // диджейский пульт справа
+  const djX = W - 76, djY = portrait ? H * .45 : H * .32, djW = portrait ? 66 : 66;
+  R(djX, djY, djW, 20, "#121214"); R(djX, djY, djW, 2, "#2e2e33");
+  for (const px of [djX + 14, djX + 46]) { c.fillStyle = "#050505"; c.beginPath(); c.arc(px, djY + 8, 7, 0, 7); c.fill(); R(px - 1, djY + 7, 2, 2, "#d94f4f"); }
+  R(djX + 28, djY + 4, 6, 10, "#2e2e33"); R(djX + 30, djY + 6, 2, 2, "#6ab2f2");
+
+  // неоновая вывеска
+  c.save();
+  c.font = `bold ${portrait ? 18 : 20}px 'Courier New', monospace`; c.textAlign = "center";
+  c.shadowColor = "#ff4f7e"; c.shadowBlur = 12; c.fillStyle = "#ff8fae";
+  c.fillText("POWERHOUSE", W / 2, portrait ? 58 : 28);
+  c.shadowBlur = 0; c.fillStyle = "#ffe0ea"; c.fillText("POWERHOUSE", W / 2, portrait ? 58 : 28);
+  c.restore();
+  glow(W / 2, portrait ? 52 : 22, 90, "#ff4f7e33");
+
+  // полка с бутылками за стойкой
+  const shelfY = Math.round(H * .567), bx0 = portrait ? 8 : W * .3, bx1 = portrait ? W - 8 : W * .74;
+  R(bx0 - 4, shelfY, bx1 - bx0 + 8, 3, "#2a160e");
+  for (let x = bx0; x < bx1 - 4; x += 9) {
+    const h = 12 + Math.floor(rnd() * 6), col = ["#b5651d", "#d08a2e", "#7a3b12", "#3c6e3a", "#c9a227"][Math.floor(rnd() * 5)];
+    R(x, shelfY - h, 6, h, col); R(x + 2, shelfY - h - 4, 2, 4, col); R(x + 1, shelfY - h + 3, 1, h - 5, "#ffffff44");
+    R(x + 1, shelfY - h + 6, 4, 4, "#e8dcc0");
+  }
+
+  // лампы
+  for (const f of [.22, .5, .78]) {
+    const lx = Math.round(W * f), ly = portrait ? H * .22 : 34;
+    R(lx, 0, 1, ly, "#0a0a0a"); R(lx - 6, ly, 13, 4, "#1b120d"); R(lx - 4, ly + 4, 9, 2, "#ffd27a");
+    glow(lx, ly + 10, 70, drunk ? "#ffb05a44" : "#ffcf7a3a");
+  }
+
+  // стойка
+  R(0, counterY, W, H - counterY, "#2a150c");
+  R(0, counterY, W, 4, "#7a4524"); R(0, counterY + 4, W, 1, "#3d200f");
+  for (let x = 0; x < W; x += 40) R(x, counterY + 5, 1, H, "#1f0f08");
+
+  // стаканы виски: трезвым — два, пьяным — гора
+  const glasses = drunk
+    ? [[120, 0], [130, 1], [140, 0], [182, 1], [192, 0], [202, 1], [212, 1], [150, 1], [170, 0]]
+    : [[140, 0], [176, 0]];
+  for (const [gx0, empty] of glasses) {
+    const gx = Math.round(gx0 / 320 * W);
+    R(gx, counterY - 10, 8, 10, "#c9d6e055");
+    if (!empty) R(gx + 1, counterY - 6, 6, 5, "#d08a2e");
+    R(gx + 1, counterY - 9, 1, 7, "#ffffff66");
+  }
+  if (drunk) { const bx = W / 2; R(bx, counterY - 16, 6, 16, "#b5651d"); R(bx + 2, counterY - 22, 2, 6, "#b5651d"); R(bx + 1, counterY - 12, 4, 4, "#e8dcc0"); }
+
+  if (drunk) { c.fillStyle = "#4a1a6a33"; c.fillRect(0, 0, W, H); }
+}
+
+// ---------- Локация: камера. Насечки на стене — прожитые месяцы ----------
+function drawCell(years) {
+  curYears = years;
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  let seed = 5; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const floorY = Math.round(H * .767), paintY = Math.round(H * .51);
+
+  // бетонная стена, облупленная краска снизу
+  R(0, 0, W, H, "#3b3f45");
+  for (let i = 0; i < W * H / 60; i++) R(Math.floor(rnd() * W), Math.floor(rnd() * floorY), 2, 1, rnd() < .5 ? "#34383d" : "#444950");
+  R(0, paintY, W, floorY - paintY, "#2f4a44"); R(0, paintY, W, 2, "#26403a");
+  for (let i = 0; i < 30; i++) R(Math.floor(rnd() * W), paintY + Math.floor(rnd() * 4), 3 + Math.floor(rnd() * 6), 2, "#3b3f45");
+
+  // окно с решёткой и холодным светом
+  const wx = W / 2 - 28, wy = portrait ? H * .08 : 18;
+  R(wx, wy, 56, 34, "#0f1a2a"); R(wx, wy, 56, 2, "#22262b");
+  const g = c.createLinearGradient(0, wy, 0, wy + 34); g.addColorStop(0, "#5a7fa8"); g.addColorStop(1, "#2a3f5c");
+  c.fillStyle = g; c.fillRect(wx + 2, wy + 2, 52, 30);
+  for (let x = wx + 8; x < wx + 54; x += 8) R(x, wy + 2, 2, 30, "#1a1d21");
+  R(wx + 2, wy + 16, 52, 2, "#1a1d21");
+  c.fillStyle = "#8fb4e022"; c.beginPath(); c.moveTo(wx + 2, wy + 32); c.lineTo(wx + 54, wy + 32); c.lineTo(wx + 82, floorY); c.lineTo(wx - 22, floorY); c.fill();
+
+  // двухъярусная шконка справа
+  const bkX = W - 84, b1 = paintY - 22, b2 = paintY + 16;
+  R(bkX, b1 + 6, 76, 4, "#555b63"); R(bkX, b2 + 6, 76, 4, "#555b63");
+  R(bkX + 2, b1, 72, 6, "#6f6a5e"); R(bkX + 2, b2, 72, 6, "#6f6a5e");
+  R(bkX, b1 - 4, 3, floorY - b1 + 4, "#4a5058"); R(bkX + 73, b1 - 4, 3, floorY - b1 + 4, "#4a5058");
+
+  // дверь с кормушкой слева
+  const dy = floorY - 100;
+  R(18, dy, 44, 100, "#4a3f36"); R(18, dy, 44, 2, "#5e5146");
+  R(28, dy + 32, 24, 8, "#2a231e"); R(54, dy + 48, 4, 6, "#8a7a68");
+
+  // насечки: по одной на месяц, пачками по пять
+  const marks = years * 12, mx0 = portrait ? 12 : 76, my0 = portrait ? H * .23 : 58;
+  const cols = Math.floor(((portrait ? W - 12 : 212) - mx0) / 15), myMax = portrait ? dy - 12 : 88;
+  c.fillStyle = "#d8d2c4";
+  for (let i = 0; i < marks; i++) {
+    const grp = Math.floor(i / 5), k = i % 5;
+    const gx = mx0 + (grp % cols) * 15, gy = Math.round(my0 + Math.floor(grp / cols) * 11);
+    if (gy > myMax) break;
+    if (k < 4) c.fillRect(gx + k * 3, gy, 1, 8);
+    else { for (let d = 0; d < 11; d++) c.fillRect(gx - 1 + d, gy + 7 - Math.floor(d * .7), 1, 1); }
+  }
+
+  // пол
+  R(0, floorY, W, H - floorY, "#2a2c30"); R(0, floorY, W, 2, "#1d1f22");
+  for (let x = 0; x < W; x += 32) R(x, floorY + 2, 1, H, "#232528");
+}
+
+// ---------- Техно на фоне (синтезируется в браузере, без файлов) ----------
+// 124 BPM: бочка на каждую долю, хэт на слабую, хлопок на 2 и 4, бас на офбитах.
+// Звук глухой, как из-за стены зала. Пьяным фильтр «плавает», при перемотке звук проваливается.
+const music = {
+  ac: null, out: null, filt: null, lfo: null, lfoGain: null, noise: null,
+  on: true, step: 0, next: 0, timer: null, bpm: 124,
+
+  start() {
+    if (this.ac) return;
+    const ac = this.ac = new (window.AudioContext || window.webkitAudioContext)();
+    this.out = ac.createGain(); this.out.gain.value = .32;
+    this.filt = ac.createBiquadFilter(); this.filt.type = "lowpass"; this.filt.frequency.value = 1600; this.filt.Q.value = 4;
+    this.filt.connect(this.out); this.out.connect(ac.destination);
+    // медленное «плавание» фильтра для пьяной сцены
+    this.lfo = ac.createOscillator(); this.lfo.frequency.value = .25;
+    this.lfoGain = ac.createGain(); this.lfoGain.gain.value = 0;
+    this.lfo.connect(this.lfoGain); this.lfoGain.connect(this.filt.frequency); this.lfo.start();
+    // белый шум для хэтов и хлопков
+    const len = ac.sampleRate, buf = ac.createBuffer(1, len, ac.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+    this.noise = buf;
+    this.next = ac.currentTime + .05;
+    this.timer = setInterval(() => this.tick(), 25);
+  },
+
+  tick() {
+    const sixteenth = 60 / this.bpm / 4;
+    while (this.next < this.ac.currentTime + .1) {
+      const s = this.step % 16, bar = Math.floor(this.step / 16) % 4, t = this.next;
+      if (s % 4 === 0) this.kick(t);
+      if (s % 4 === 2) this.hat(t, .22, .05);
+      if (s % 2 === 1) this.hat(t, .06, .02);
+      if (s === 4 || s === 12) this.clap(t);
+      if (s % 4 === 2 || s === 15) this.bass(t, [55, 55, 65.4, 49][bar] * (s === 15 ? 2 : 1));
+      this.next += sixteenth; this.step++;
+    }
+  },
+
+  kick(t) {
+    const o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .12);
+    g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(.001, t + .35);
+    o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .36);
+  },
+  noiseHit(t, type, freq, vol, dec) {
+    const s = this.ac.createBufferSource(), f = this.ac.createBiquadFilter(), g = this.ac.createGain();
+    s.buffer = this.noise; f.type = type; f.frequency.value = freq;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dec);
+    s.connect(f); f.connect(g); g.connect(this.filt); s.start(t, Math.random() * .5); s.stop(t + dec + .01);
+  },
+  hat(t, vol, dec) { this.noiseHit(t, "highpass", 7000, vol, dec); },
+  clap(t) { this.noiseHit(t, "bandpass", 1400, .35, .14); },
+  bass(t, f) {
+    const o = this.ac.createOscillator(), lp = this.ac.createBiquadFilter(), g = this.ac.createGain();
+    o.type = "sawtooth"; o.frequency.value = f;
+    lp.type = "lowpass"; lp.frequency.setValueAtTime(900, t); lp.frequency.exponentialRampToValueAtTime(180, t + .14);
+    g.gain.setValueAtTime(.32, t); g.gain.exponentialRampToValueAtTime(.001, t + .16);
+    o.connect(lp); lp.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .17);
+  },
+
+  // удар: глухой стук плюс хлёсткий шум
+  punch() {
+    if (!this.ac || !this.on) return;
+    const t = this.ac.currentTime, o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(35, t + .15);
+    g.gain.setValueAtTime(1.4, t); g.gain.exponentialRampToValueAtTime(.001, t + .25);
+    o.connect(g); g.connect(this.out); o.start(t); o.stop(t + .26);
+    const s = this.ac.createBufferSource(), f = this.ac.createBiquadFilter(), n = this.ac.createGain();
+    s.buffer = this.noise; f.type = "bandpass"; f.frequency.value = 2200;
+    n.gain.setValueAtTime(.8, t); n.gain.exponentialRampToValueAtTime(.001, t + .09);
+    s.connect(f); f.connect(n); n.connect(this.out); s.start(t); s.stop(t + .1);
+  },
+
+  // трезвый бар / пьяный бар / тюрьма (техно еле слышно, как из чужого радио)
+  mood(m) {
+    if (!this.ac) return;
+    const t = this.ac.currentTime;
+    this.filt.frequency.setTargetAtTime({ bar: 1600, drunk: 750, jail: 260 }[m], t, .5);
+    this.lfoGain.gain.setTargetAtTime(m === "drunk" ? 450 : 0, t, .5);
+    if (this.on) this.out.gain.setTargetAtTime(m === "jail" ? .12 : .32, t, .5);
+  },
+  // при перемотке звук проваливается и возвращается
+  rewind() {
+    if (!this.ac) return;
+    const t = this.ac.currentTime, base = this.filt.frequency.value;
+    this.filt.frequency.cancelScheduledValues(t);
+    this.filt.frequency.setValueAtTime(base, t);
+    this.filt.frequency.exponentialRampToValueAtTime(120, t + .5);
+    this.filt.frequency.exponentialRampToValueAtTime(base, t + 1.3);
+    this.noiseHit(t, "bandpass", 600, .25, 1.1);
+  },
+  toggle() {
+    this.on = !this.on;
+    if (this.ac) this.out.gain.setTargetAtTime(this.on ? .32 : 0, this.ac.currentTime, .05);
+    $("mute").textContent = this.on ? "♫ звук: вкл" : "♫ звук: выкл";
+  }
+};
+$("mute").onclick = e => { e.stopPropagation(); music.toggle(); };
+
+// ---------- Иконки для карточек ----------
+const ICON = {
+  talk:   `<svg viewBox="0 0 64 64"><path d="M10 14h44v26H30l-12 10V40h-8z"/></svg>`,
+  write:  `<svg viewBox="0 0 64 64"><rect x="18" y="6" width="28" height="52" rx="5"/><path d="M26 22h12M26 30h12M26 38h6"/></svg>`,
+  forget: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M16 48L48 16"/></svg>`,
+  grab:   `<svg viewBox="0 0 64 64"><path d="M22 34V14a4 4 0 0 1 8 0v16M30 28V10a4 4 0 0 1 8 0v20M38 28V14a4 4 0 0 1 8 0v24c0 12-8 20-18 20-8 0-12-4-16-12l-6-10a4 4 0 0 1 7-4l5 6"/></svg>`,
+  let:    `<svg viewBox="0 0 64 64"><path d="M12 36l12 12 28-30"/></svg>`,
+  stop:   `<svg viewBox="0 0 64 64"><path d="M22 6h20l14 14v24L42 58H22L8 44V20z"/><path d="M22 32h20"/></svg>`,
+  fight:  `<svg viewBox="0 0 64 64"><path d="M14 30V22a5 5 0 0 1 10 0M24 22v-4a5 5 0 0 1 10 0v4M34 22a5 5 0 0 1 10 0v4M44 26a5 5 0 0 1 8 2v10c0 10-8 18-18 18h-4c-9 0-16-7-16-16V30"/><path d="M50 8l4-4M56 14l5-1M44 6l1-5"/></svg>`,
+  help:   `<svg viewBox="0 0 64 64"><path d="M14 50l6-16 26-26 10 10-26 26z"/><path d="M40 14l10 10"/></svg>`,
+  rewind: `<svg viewBox="0 0 64 64"><path d="M14 32a18 18 0 1 0 6-13"/><path d="M12 10v12h12"/></svg>`,
+  again:  `<svg viewBox="0 0 64 64"><path d="M8 32h40M36 20l12 12-12 12"/><path d="M56 14v36"/></svg>`
+};
+
+// ---------- Сцены ----------
+// who: "Егор" / "Глеб" — реплика вслух, "" — мысли Глеба, null — описание
+// tg: сообщение Егора в Telegram, tgStatus: строка под именем Юлии
+const scenes = {
+  s1: {
+    place: "Powerhouse · Таганка · 21:10", egor: true,
+    lines: [
+      { who: null, t: "Пятница. Powerhouse на Гончарной. Кирпич, винил, бас в груди." },
+      { who: "Егор", t: "Глеб. Мне надо тебе кое-что сказать. Только не ржи." },
+      { who: "Глеб", t: "Ну?" },
+      { who: "Егор", t: "Я влюбился. В Юлию. Ну… в Юлю. Которая ведёт у нас семинары." },
+      { who: "", t: "Он серьёзно. Он ни разу не пропустил её пару. Даже в девять утра." },
+      { who: "Егор", t: "Что мне делать?" }
+    ],
+    choices: () => [
+      { icon: "talk", t: "Сказать лично", sub: "«Подойди к ней после пары.»", go: "a_talk" },
+      { icon: "write", t: "Написать", sub: "«Напиши ей. Спокойно, без паники.»", go: "a_write" },
+      { icon: "forget", t: "Отговорить", sub: "«Бро, она преподша. Забей.»", go: "a_forget" }
+    ]
+  },
+  a_talk: {
+    place: "Powerhouse · 21:14", egor: true, next: "s2",
+    lines: [
+      { who: "Егор", t: "Лично? Я при ней двух слов связать не могу. Я на семинаре в окно смотрю, чтобы не на неё." },
+      { who: "Глеб", t: "Ладно. Тогда для смелости." },
+      { who: null, t: "Бармен ставит два виски." }
+    ]
+  },
+  a_write: {
+    place: "Powerhouse · 21:14", egor: true, next: "s2",
+    lines: [
+      { who: "Егор", t: "Написать… Да. Написать я могу. Но не сейчас. Сначала для смелости." },
+      { who: null, t: "Бармен ставит два виски." }
+    ]
+  },
+  a_forget: {
+    place: "Powerhouse · 21:14", egor: true, next: "s2",
+    lines: [
+      { who: "Егор", t: "Забить? Я с сентября пытаюсь. Не выходит." },
+      { who: null, t: "Он заказывает два виски. Двойных." }
+    ]
+  },
+  s2: {
+    place: "Powerhouse · 00:40", egor: true, drunk: true,
+    lines: [
+      { who: null, t: "Пять виски спустя. Или шесть. Бас стал мягче, а идеи — смелее." },
+      { who: "Егор", t: "Всё. Я решил. Я ей пишу. Прямо сейчас." },
+      { who: "", t: "Он открывает Telegram. Контакт: «Юлия — семинары»." },
+      { who: "Егор", t: "Не мешай. Я знаю, что делаю." }
+    ],
+    choices: () => [
+      { icon: "grab", t: "Отобрать телефон", sub: "«Дай сюда. Утром напишешь.»", go: "s2_grab" },
+      { icon: "let", t: "Не мешать", sub: "«Твоя жизнь, бро.»", go: "s3" },
+      { icon: "fight", t: "Подраться", sub: "«Только через мой труп.»", go: "fight" },
+      ...(known.size ? [{ icon: "help", t: "Написать вместе", sub: "«Давай я помогу. Коротко и по-человечески.»", go: "s3b", cls: "new" }] : [])
+    ]
+  },
+  s2_grab: {
+    place: "Powerhouse · 00:41", egor: true, drunk: true, next: "s3",
+    lines: [
+      { who: "Глеб", t: "Дай сюда." },
+      { who: null, t: "Глеб тянется за телефоном. Егор уворачивается с ловкостью, которой у него трезвого никогда не было." },
+      { who: "Егор", t: "Поздно. Я уже печатаю." }
+    ]
+  },
+  fight: {
+    place: "Powerhouse · 00:42", egor: true, drunk: true, fight: true,
+    lines: [
+      { who: "Глеб", t: "Только через мой труп. Дай телефон." },
+      { who: "Егор", t: "Отвали, Глеб!" },
+      { fx: "punch", who: null, t: "Глеб хватает Егора за рукав. Егор толкает в ответ." },
+      { fx: "punch", who: null, t: "Стакан летит со стойки. Бармен что-то кричит, но бас громче." },
+      { who: "Егор", t: "Ты мне не мама!" },
+      { fx: "punch", who: null, t: "Оба падают на пол. Телефон выскальзывает и вибрирует под барным стулом." }
+    ],
+    choices: () => [
+      { icon: "stop", t: "Остановиться", sub: "«Всё, всё. Хватит.»", go: "fight_end" },
+      { icon: "fight", t: "Не останавливаться", sub: "«Ты сам напросился.»", go: "riot" }
+    ]
+  },
+  fight_end: {
+    place: "Powerhouse · 00:43", egor: true, drunk: true, fight: true,
+    lines: [
+      { who: "", t: "Экран светится. Красный кружок. Он что, записывает? Нет. Нет-нет-нет." },
+      { voice: "0:47" },
+      { who: null, t: "Голосовое на 47 секунд: звон стекла, мат и где-то в середине «Юля, я вас люблю!»." },
+      { who: null, t: "Охранник выводит обоих на Гончарную. Холодно. Егор смотрит в телефон." },
+      { tgStatus: "печатает…" },
+      { who: "Егор", t: "Глеб. Она прослушала. Она… печатает." }
+    ],
+    learn: "voice",
+    ending: "Конец главы 1 · драка",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать назад", sub: "Вернуться до драки", go: "s2", rewind: true, cls: "rewind" },
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+    ]
+  },
+  riot: {
+    place: "Powerhouse · 00:44", egor: true, drunk: true, fight: true, next: "jail",
+    lines: [
+      { fx: "punch", who: null, t: "Глеб вскакивает. Егор хватает барный стул." },
+      { fx: "punch", who: null, t: "Зеркало за стойкой — вдребезги. Полка с виски — следом." },
+      { fx: "punch", who: null, t: "Охранник пытается их разнять и получает от обоих сразу." },
+      { who: "", t: "Бармен уже звонит. На Гончарной мигают синие огни." }
+    ]
+  },
+  jail: {
+    bg: "cell", years: 0, place: "СИЗО · ноябрь", egor: true,
+    lines: [
+      { who: null, t: "Суд был быстрым. Хулиганство, разгромленный бар, сломанный нос охранника." },
+      { who: null, t: "Обоим — по восемь лет. Камера одна на двоих." },
+      { who: "Егор", t: "Глеб. А она ответила?" },
+      { who: "Глеб", t: "Телефоны забрали, гений." },
+      { skip: "3 года спустя", years: 3, place: "Колония · год 3" },
+      { who: "Егор", t: "Я посчитал. Тысяча девяносто пять дней. Я так и не написал ей ни одного письма." },
+      { who: "", t: "Бумага есть, ручка есть. Он всё равно боится. Даже отсюда." },
+      { who: "Глеб", t: "Может, ты боишься, что она опять тебя не поймёт?" },
+      { who: "Егор", t: "…Может." },
+      { skip: "8 лет спустя", years: 8, place: "Колония · выход" },
+      { who: null, t: "Выход. Вещи в пакете. Телефон заряжен у дежурного из жалости." },
+      { tgUnread: "8 лет назад" },
+      { who: "Егор", t: "Одно непрочитанное. От неё. Восемь лет назад." },
+      { who: "", t: "Он смотрит на экран и не открывает." }
+    ],
+    learn: "jail",
+    ending: "Конец главы 1 · восемь лет спустя",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать восемь лет", sub: "Вернуться в Powerhouse, в 00:40", go: "s2", rewind: true, cls: "rewind" },
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+    ]
+  },
+  s3: {
+    place: "Powerhouse · 00:47", egor: true, drunk: true,
+    lines: [
+      { tg: "Юля добрый вечер!!" },
+      { tg: "простите что Юля. Юлия. вы лучший преподаватель в вышке и вообще" },
+      { tg: "я не могу думать ни о чём кроме ваших семинаров. и вас. особенно вас" },
+      { tg: "можно я приглашу вас на кофе?? это Егор. который у окна" },
+      { who: "", t: "Две галочки. Прочитано." },
+      { tgStatus: "печатает…" },
+      { who: "Егор", t: "Глеб… Она печатает." },
+      { who: "", t: "То, что она ответит, изменит жизнь Егора. И я знаю, что он отправил." }
+    ],
+    learn: "text",
+    ending: "Конец главы 1 · отправлено",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать назад", sub: "Вернуться за минуту до сообщения", go: "s2", rewind: true, cls: "rewind" },
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+    ]
+  },
+  s3b: {
+    place: "Powerhouse · 00:47", egor: true, drunk: true,
+    lines: [
+      { who: "Глеб", t: "Без «вы лучший» и без «особенно вас». Коротко." },
+      { who: "Егор", t: "Коротко. Ладно. Коротко я могу." },
+      { tg: "Добрый вечер. У меня не хватает уверенности сказать вам это вживую. Я бы хотел пригласить вас попить со мной кофе в аутентичной монастырской кофейне. Как вы на это смотрите?" },
+      { who: "", t: "Прочитано. И почти сразу:" },
+      { tgStatus: "печатает…" },
+      { who: "Егор", t: "Она печатает. Глеб. Она печатает." },
+      { who: "", t: "Не знаю, лучше ли так. Но это хотя бы его слова, а не виски." }
+    ],
+    ending: "Конец главы 1 · трезвая версия",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать ещё раз", sub: "Попробовать по-другому", go: "s2", rewind: true, cls: "rewind" },
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+    ]
+  }
+};
+
+// ---------- Движок ----------
+const known = new Set();          // что Глеб знает; переживает перемотку
+const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии" };
+
+// эффект удара: тряска, вспышка, «БАМ», звук
+function punchFx() {
+  const st = $("stage");
+  st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
+  $("flash").classList.remove("on"); void $("flash").offsetWidth; $("flash").classList.add("on");
+  const b = document.createElement("div");
+  b.className = "bam";
+  b.textContent = ["БАМ!", "ХРЯСЬ!", "ДЗЫНЬ!", "БУМ!"][Math.floor(Math.random() * 4)];
+  b.style.left = 30 + Math.random() * 30 + "%"; b.style.top = 15 + Math.random() * 25 + "%";
+  st.appendChild(b); setTimeout(() => b.remove(), 800);
+  music.punch();
+  // в Telegram телефон вибрирует на ударе
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("heavy");
+}
+let scene, idx, typing = null;
+
+// анимация персонажей: три кадра у каждого
+const FRAMES = {}, anim = {};
+for (const n of ["gleb", "egor"]) {
+  FRAMES[n] = { base: `img/${n}_px.png`, talk: `img/${n}_talk.png`, blink: `img/${n}_blink.png` };
+  Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
+  anim[n] = { talking: false, blinking: false, open: false };
+}
+function frame(n) {
+  const a = anim[n], f = FRAMES[n];
+  $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
+}
+function blinkLoop(n) {
+  setTimeout(() => {
+    anim[n].blinking = true; frame(n);
+    setTimeout(() => { anim[n].blinking = false; frame(n); blinkLoop(n); }, 140);
+  }, 2000 + Math.random() * 3000);
+}
+blinkLoop("gleb"); blinkLoop("egor");
+
+let mouthTimer = null;
+function talk(n) {
+  clearInterval(mouthTimer);
+  for (const k in anim) { anim[k].talking = false; anim[k].open = false; frame(k); }
+  if (!n) return;
+  anim[n].talking = true;
+  mouthTimer = setInterval(() => { anim[n].open = !anim[n].open; frame(n); }, 120);
+}
+
+function focus(who) {
+  $("gleb").classList.toggle("dim", who === "Егор");
+  $("egor").classList.toggle("dim", who === "Глеб" || who === "");
+  // говорящий наклоняется к собеседнику и коротко подпрыгивает
+  const sp = who === "Егор" ? "egor" : who === "Глеб" ? "gleb" : null;
+  for (const n of ["gleb", "egor"]) {
+    $(n).classList.toggle("speak", n === sp);
+    $(n).classList.remove("hop");
+  }
+  if (sp) { void $(sp).offsetWidth; $(sp).classList.add("hop"); }
+}
+
+function renderMemory() {
+  $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("");
+}
+
+function show(id) {
+  scene = scenes[id]; idx = 0;
+  if (scene.bg === "cell") drawCell(scene.years || 0); else drawBar(!!scene.drunk);
+  $("stage").classList.toggle("drunk", !!scene.drunk);
+  $("stage").classList.toggle("fight", !!scene.fight);
+  music.mood(scene.bg === "cell" ? "jail" : scene.drunk ? "drunk" : "bar");
+  $("place").textContent = scene.place;
+  $("gleb").classList.add("on");
+  $("egor").classList.toggle("on", !!scene.egor);
+  focus(null);
+  $("msgs").innerHTML = "";
+  $("tgst").textContent = "была недавно"; $("tgst").className = "st";
+  $("phone").classList.remove("on");
+  $("choices").classList.remove("on");
+  $("ending").style.display = "none";
+  $("box").style.display = "";
+  renderMemory();
+  step();
+}
+
+function step() {
+  const l = scene.lines[idx];
+  if (!l) {
+    if (scene.learn) { known.add(scene.learn); renderMemory(); }
+    return scene.next ? show(scene.next) : showChoices();
+  }
+  idx++;
+  // пропуск времени: чёрный экран с надписью, стена перерисовывается
+  if (l.skip) {
+    $("box").style.display = "none";
+    $("skip").textContent = l.skip;
+    $("skip").classList.add("on");
+    if (l.years !== undefined) drawCell(l.years);
+    if (l.place) $("place").textContent = l.place;
+    return;
+  }
+  if (l.tgUnread) {
+    $("phone").classList.add("on");
+    $("msgs").innerHTML = "";
+    $("tgst").textContent = "была очень давно"; $("tgst").className = "st";
+    const m = document.createElement("div");
+    m.className = "msg in";
+    m.innerHTML = `1 непрочитанное сообщение<i>${l.tgUnread}</i>`;
+    $("msgs").appendChild(m);
+    return step();
+  }
+  if (l.tgStatus) {
+    $("tgst").textContent = l.tgStatus; $("tgst").className = "st typing";
+    return step();
+  }
+  if (l.tg) {
+    $("phone").classList.add("on");
+    // все прошлые сообщения становятся «прочитанными»
+    $("msgs").querySelectorAll("i").forEach(i => i.className = "read");
+    const m = document.createElement("div");
+    m.className = "msg";
+    m.innerHTML = `${l.tg}<i>00:47 ✓✓</i>`;
+    $("msgs").appendChild(m);
+    say(null, "Егор печатает, высунув язык.", true);
+    return;
+  }
+  if (l.voice) {
+    $("phone").classList.add("on");
+    const m = document.createElement("div");
+    m.className = "msg voice";
+    const bars = Array.from({ length: 26 }, () => `<b style="height:${20 + Math.random() * 80}%"></b>`).join("");
+    m.innerHTML = `<span class="play">▶</span><span class="wave">${bars}</span><i>${l.voice}</i>`;
+    $("msgs").appendChild(m);
+    say(null, "Отправлено: голосовое сообщение.");
+    return;
+  }
+  if (l.fx === "punch") punchFx();
+  say(l.who, l.t);
+}
+
+function say(who, text, quiet) {
+  const think = who === "";
+  focus(who);
+  $("name").textContent = think ? "Глеб (мысли)" : (who || "");
+  $("name").className = think ? "think" : who === "Глеб" ? "gleb" : "";
+  $("line").className = think ? "think" : "";
+  // рот двигается у того, кто говорит вслух и стоит в кадре
+  talk(who === "Егор" && scene.egor ? "egor" : who === "Глеб" ? "gleb" : null);
+  let i = 0;
+  clearInterval(typing);
+  $("line").textContent = "";
+  typing = setInterval(() => {
+    $("line").textContent = text.slice(0, ++i);
+    if (i >= text.length) { clearInterval(typing); typing = null; talk(null); }
+  }, 28);
+  $("line").dataset.full = text;
+}
+
+function showChoices() {
+  $("box").style.display = "none";
+  focus(null);
+  if (scene.ending) { $("ending").textContent = scene.ending; $("ending").style.display = "block"; }
+  const box = $("choices");
+  box.innerHTML = "";
+  for (const c of scene.choices()) {
+    const el = document.createElement("div");
+    el.className = "card " + (c.cls || "");
+    el.innerHTML = `${ICON[c.icon]}<b>${c.t}</b><small>${c.sub}</small>`;
+    el.onclick = () => choose(c);
+    box.appendChild(el);
+  }
+  box.classList.add("on");
+}
+
+function choose(c) {
+  if (c.reset) known.clear();
+  if (!c.rewind) return show(c.go);
+  $("choices").classList.remove("on");
+  $("stage").classList.add("rewinding");
+  music.rewind();
+  $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on");
+  setTimeout(() => show(c.go), 700);
+  setTimeout(() => $("stage").classList.remove("rewinding"), 1300);
+}
+
+function advance() {
+  if (typing) { clearInterval(typing); typing = null; talk(null); $("line").textContent = $("line").dataset.full; return; }
+  step();
+}
+$("box").onclick = advance;
+function closeSkip() { $("skip").classList.remove("on"); $("box").style.display = ""; step(); }
+$("skip").onclick = closeSkip;
+document.addEventListener("keydown", e => {
+  if (e.key === "m" || e.key === "M" || e.key === "ь" || e.key === "Ь") return music.toggle();
+  if (e.key !== " " && e.key !== "Enter") return;
+  e.preventDefault();
+  if (!$("title").classList.contains("gone")) return start();
+  if ($("skip").classList.contains("on")) return closeSkip();
+  if ($("box").style.display !== "none") advance();
+});
+
+// браузер разрешает звук только после щелчка, поэтому музыка стартует с заставки
+function start() { $("title").classList.add("gone"); music.start(); show("s1"); }
+$("title").onclick = start;
+// ---------- Telegram Mini App ----------
+// Внутри Telegram: развернуть на весь экран, не закрываться свайпом вниз, тёмная шапка.
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg && tg.initData !== undefined) {
+  tg.ready(); tg.expand();
+  if (tg.disableVerticalSwipes) tg.disableVerticalSwipes();
+  if (tg.setHeaderColor) tg.setHeaderColor("#07070c");
+  if (tg.setBackgroundColor) tg.setBackgroundColor("#07070c");
+}
+
+fitCanvas(); drawBar(false);
+addEventListener("resize", () => { fitCanvas(); redraw(); });
+</script>
+</body>
+</html>
