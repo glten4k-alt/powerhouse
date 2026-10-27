@@ -156,7 +156,7 @@
 
   /* Посвящение перед заставкой, как в кино */
   #dedic { position:absolute; inset:0; z-index:12; background:#000; display:flex; flex-direction:column; align-items:center;
-    justify-content:center; text-align:center; padding:0 10%; cursor:pointer; transition:opacity 1s; }
+    justify-content:center; text-align:center; padding:0 10%; cursor:default; transition:opacity 1s; }
   #dedic.gone { opacity:0; pointer-events:none; }
   #dedic p { margin:0; color:#d8d2c4; font:italic 22px/1.6 Georgia, "Times New Roman", serif; opacity:0; animation:dedin 1.6s ease-out forwards; }
   #dedic p + p { animation-delay:1.2s; color:var(--dim); font-size:17px; }
@@ -169,6 +169,7 @@
   #howto h2 { margin:0 0 12px; font-size:22px; color:var(--accent); }
   #howto p { margin:0 0 10px; font-size:15px; line-height:1.45; }
   #howto b.c { color:var(--cold); }
+  #howto button:disabled { opacity:.45; cursor:default; }
   #howto button { margin-top:8px; width:100%; padding:12px; border-radius:10px; border:1px solid var(--accent); background:#f0b35e22;
     color:var(--text); font:inherit; font-size:16px; cursor:pointer; }
   #hint { position:absolute; left:50%; top:16%; transform:translateX(-50%); z-index:6; max-width:min(90%, 520px); text-align:center;
@@ -1146,7 +1147,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "m" || e.key === "M" || e.key === "ь" || e.key === "Ь") return music.toggle();
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
-  if (!$("dedic").classList.contains("gone")) return closeDedic();
+  if (!$("dedic").classList.contains("gone")) return;   // посвящение не пропускается
   if (!$("title").classList.contains("gone")) return start();
   if ($("howto").classList.contains("on")) return closeHowto();
   if ($("skip").classList.contains("on")) return closeSkip();
@@ -1154,14 +1155,22 @@ document.addEventListener("keydown", e => {
 });
 
 // браузер разрешает звук только после щелчка, поэтому музыка стартует с заставки
-function start() { $("title").classList.add("gone"); music.start(); $("howto").classList.add("on"); }
-function closeHowto() { $("howto").classList.remove("on"); show("s0"); }
+function start() {
+  $("title").classList.add("gone"); music.start(); $("howto").classList.add("on");
+  // кнопка «Понятно» оживает через 4 секунды, чтобы правила не проскочили
+  const b = $("howtoOk"); let n = 4;
+  b.disabled = true; b.textContent = `Понятно (${n})`;
+  const t = setInterval(() => {
+    if (--n > 0) { b.textContent = `Понятно (${n})`; return; }
+    clearInterval(t); b.disabled = false; b.textContent = "Понятно";
+  }, 1000);
+}
+function closeHowto() { if ($("howtoOk").disabled) return; $("howto").classList.remove("on"); show("s0"); }
 $("howtoOk").onclick = closeHowto;
 
-// посвящение уходит само через 5 секунд или по нажатию
+// посвящение нельзя пропустить: уходит само через 6 секунд
 function closeDedic() { $("dedic").classList.add("gone"); }
-$("dedic").onclick = closeDedic;
-setTimeout(closeDedic, 5000);
+setTimeout(closeDedic, 6000);
 
 // подсказки: каждая показывается один раз за игру
 const hinted = new Set();
