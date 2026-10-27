@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280134") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280135") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -403,11 +403,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280134" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280134" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280135" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280135" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280134) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280135) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -794,7 +794,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280134"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280135"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -912,7 +912,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280134`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280135`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -2275,7 +2275,7 @@ const scenes = {
       { fx: "timer", who: null, t: "Звонок в дверь. Долгий. Требовательный." },
       { who: null, t: "В глазок: парень в капюшоне. В руках толстая папка. Лицо не видно." },
       { who: "Голос за дверью", t: "Виктор? Открывай. Я по поводу твоей квартиры." },
-      { who: "Витя", t: "…Инвестбанк. Это инвестбанк. Я знал, что за квартирой придут. Я один раз заплатил на день позже." },
+      { who: "Витя", t: "…«Бизнес-Инвестиции». Это банк «Бизнес-Инвестиции». Я знал, что за квартирой придут. Я один раз заплатил на день позже." },
       { who: "Витя", t: "Папка. У них всегда папка. Там мой договор, мой залог и моя жизнь." }
     ],
     choices: () => [
@@ -2300,7 +2300,7 @@ const scenes = {
   v_fight: {
     bg: "flat", place: "Витя · прихожая · 23:43", noSprites: true, music: "tense",
     lines: [
-      { battle: "melee", me: "Витя", foe: "Инвестбанкир?", tip: "Жми «УДАР». Когда «банкир» замахнётся — «БЛОК»!", lost: "Витя на полу…", win: "v_reveal", lose: "v_reveal" }
+      { battle: "melee", me: "Витя", foe: "Банк «Бизнес-Инвестиции»?", tip: "Жми «УДАР». Когда «банкир» замахнётся — «БЛОК»!", lost: "Витя на полу…", win: "v_reveal", lose: "v_reveal" }
     ]
   },
   v_reveal: {
@@ -2309,7 +2309,7 @@ const scenes = {
       { fx: "punch", who: null, t: "Мы катимся по прихожей. Папка лопается. По полу разлетаются листы с интегралами." },
       { npcShow: "npc_petya", who: "Петя", t: "Бро! Бро, это я, епта! Петя!" },
       { who: null, t: "Он скидывает капюшон. Петя. С синяком. С папкой по матанализу." },
-      { who: "Витя", t: "Ты… не инвестбанк?" },
+      { who: "Витя", t: "Ты… не из «Бизнес-Инвестиций»?" },
       { who: "Петя", t: "Я гаражный король, Вить. У меня четыре гаража и две квартиры. Зачем мне твоя?" },
       { who: "Петя", t: "Я просто подумал, что тебе тут одному херово. Приехал с репетитора. Три года в универ не ходил, теперь матан догоняю." },
       { who: null, t: "И где-то у соседей, как специально, включается регги." }
@@ -3664,13 +3664,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280134`, talk: `img/${n}_talk.png?v=10280134`, blink: `img/${n}_blink.png?v=10280134` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280135`, talk: `img/${n}_talk.png?v=10280135`, blink: `img/${n}_blink.png?v=10280135` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280134" : `img/${n}_spartan.png?v=10280134`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280135" : `img/${n}_spartan.png?v=10280135`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3699,7 +3699,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280134`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280135`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3708,7 +3708,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280134`; el.alt = who;
+  el.src = `img/${n}.png?v=10280135`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3897,7 +3897,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280134) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280135) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
