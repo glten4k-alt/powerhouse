@@ -148,6 +148,7 @@
   #title h1 { margin:10px 0 24px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.08em;
     text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
   #title p { color:var(--dim); font-size:14px; }
+  #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
   @keyframes neon { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.4; } 95% { opacity:1; } 97% { opacity:.6; } }
 
   #bg { object-fit:cover; }
@@ -220,6 +221,7 @@
   <div id="rw"><svg viewBox="0 0 100 100"><path d="M20 50a30 30 0 1 0 9-21"/><path d="M18 18v14h14"/></svg></div>
   <div id="howto"><div class="in">
     <h2>Как играть</h2>
+    <p>Ты играешь за Глеба. <b class="c">Глеб — купидон:</b> каждым выбором он решает судьбу Егора.</p>
     <p>Нажимай на окно с текстом (или пробел), чтобы читать дальше.</p>
     <p>В важные моменты появляются карточки с выбором. От них зависит, чем кончится вечер.</p>
     <p><b class="c">Глеб умеет перематывать время.</b> После концовки можно вернуться назад, и Глеб запомнит, что узнал. Это видно по синей плашке «Глеб помнит» наверху.</p>
@@ -228,7 +230,7 @@
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p>щёлкни, чтобы начать</p></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p>щёлкни, чтобы начать</p></div>
 </div>
 
 <script>
