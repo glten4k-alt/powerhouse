@@ -157,7 +157,8 @@
   #saveBtns { display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:6px; }
   #saveBtns button { width:220px; padding:12px; border-radius:10px; font:inherit; font-size:16px; cursor:pointer; color:var(--text);
     border:1px solid var(--accent); background:#f0b35e22; }
-  #saveBtns #mBrawl { border-color:#c44848; background:#c4484822; }
+  #saveBtns #mBrawl { border-color:#ffffff33; background:none; color:var(--dim); }
+  #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
   #saveBtns small:empty { display:none; }
   #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
@@ -169,6 +170,30 @@
 
 
 
+
+  /* Глава «Изнанка»: магия, глитч, ад, двойник, одержимость */
+  .mem.mana { border-color:#b56cff; color:#d9b8ff; }
+  .card.magic { border-color:#b56cff; box-shadow:0 0 24px #b56cff55; }
+  .card.magic svg { stroke:#d9b8ff; }
+  .card.magic::before { content:"Магия · ✦1"; display:block; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#d9b8ff; margin-bottom:6px; }
+  @media (max-aspect-ratio: 1/1) { .card.magic::before { position:absolute; top:7px; right:12px; margin:0; font-size:10px; } }
+  #stage.glitch { animation:glitch .55s steps(5); }
+  @keyframes glitch { 20% { translate:-6px 2px; filter:hue-rotate(90deg) contrast(1.6); } 40% { translate:5px -3px; filter:invert(.15); }
+    60% { translate:-3px 4px; filter:hue-rotate(-90deg); } 80% { translate:4px 0; filter:saturate(3); } }
+  #stage.inferno #bg { filter:hue-rotate(-25deg) saturate(1.8) brightness(.62) contrast(1.25); }
+  #stage.inferno::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:radial-gradient(transparent 40%, #5a0008aa), repeating-linear-gradient(0deg, #ff000008 0 2px, transparent 2px 5px); }
+  #stage.soulless #gleb { filter:grayscale(1) brightness(.8) !important; }
+  #stage.soulless #bg { filter:grayscale(.85); }
+  .sprite.devil { filter:grayscale(1) sepia(1) hue-rotate(-45deg) saturate(5) brightness(.72) drop-shadow(0 0 18px #ff2a2a) !important; scale:-1 1; }
+  .sprite.possessed { filter:drop-shadow(0 0 16px #b56cff) saturate(1.25) !important; animation:possess 2.4s ease-in-out infinite !important; }
+  @keyframes possess { 50% { filter:drop-shadow(0 0 28px #d9b8ff) saturate(1.6) hue-rotate(-20deg); } }
+  #flash.magic { background:#b56cff; }
+  .spark { position:absolute; z-index:8; color:#e6ccff; font-size:18px; pointer-events:none; text-shadow:0 0 8px #b56cff;
+    animation:spark 1.1s ease-out forwards; }
+  @keyframes spark { to { translate:var(--dx) -120px; opacity:0; scale:.4; } }
+  #name.devil { background:linear-gradient(90deg, #6a0010, #c41a2a); color:#fff; }
+  #line.devil { color:#ffb3b3; }
 
   /* Драка beat 'em up */
   #brawl { position:absolute; inset:0; z-index:8; display:none; flex-direction:column; }
@@ -357,11 +382,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272227" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272227" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272234" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272234" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272227) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272234) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -410,7 +435,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -747,7 +772,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272227"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272234"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -835,7 +860,8 @@ const music = {
     hope:     { bpm: 124, drums: "light", bass: false, pad: "hope", f: 1800, vol: .9,  lfo: 0 },
     suspense: { bpm: 124, drums: "heart", bass: false, pad: null,   f: 500,  vol: 1,   lfo: 0 },
     street:   { bpm: 124, drums: "full",  bass: true,  pad: null,   f: 420,  vol: .5,  lfo: 0 },
-    jail:     { bpm: 124, drums: "none",  bass: false, pad: "sad",  f: 650,  vol: .6,  lfo: 0 }
+    jail:     { bpm: 124, drums: "none",  bass: false, pad: "sad",  f: 650,  vol: .6,  lfo: 0 },
+    eerie:    { bpm: 124, drums: "heart", bass: false, pad: "sad",  f: 600,  vol: .8,  lfo: 220 }
   },
   cur: null, curName: "bar",
   // Стиль: "anime" — пианино, струнные, мелодия (как опенинг); "techno" — прежний бит. Переключается радио в машине.
@@ -849,7 +875,8 @@ const music = {
     suspense: { bpm: 90,  prog: "sad",   arp: 0,  drums: "heart", melody: false, strings: true,  f: 1200, vol: .9,  lfo: 0 },
     street:   { bpm: 132, prog: "royal", arp: 8,  drums: "light", melody: false, strings: false, f: 700,  vol: .5,  lfo: 0 },
     jail:     { bpm: 70,  prog: "sad",   arp: 4,  drums: "none",  melody: false, strings: true,  f: 1400, vol: .6,  lfo: 0 },
-    radio:    { bpm: 96,  prog: "royal", arp: 8,  drums: "none",  melody: true,  strings: true,  f: 1600, vol: .8,  lfo: 0 }
+    radio:    { bpm: 96,  prog: "royal", arp: 8,  drums: "none",  melody: true,  strings: true,  f: 1600, vol: .8,  lfo: 0 },
+    eerie:    { bpm: 70,  prog: "tense", arp: 4,  drums: "heart", melody: false, strings: true,  f: 1000, vol: .9,  lfo: 220 }
   },
   // Аккорды: «королевская» последовательность аниме (IV–V–iii–vi), грустная и тревожная
   progs: {
@@ -1084,6 +1111,8 @@ const ICON = {
   metro:  `<svg viewBox="0 0 64 64"><path d="M8 52h48"/><path d="M14 52L24 14l8 20 8-20 10 38"/></svg>`,
   yard:   `<svg viewBox="0 0 64 64"><path d="M8 54V24l24-14 24 14v30"/><path d="M24 54V36h16v18"/></svg>`,
   party:  `<svg viewBox="0 0 64 64"><path d="M20 58h24M32 58V36"/><path d="M14 8h36L32 36z"/><path d="M40 8l8-6"/></svg>`,
+  spark:  `<svg viewBox="0 0 64 64"><path d="M32 4l6 20 20 8-20 8-6 20-6-20-20-8 20-8z"/></svg>`,
+  soul:   `<svg viewBox="0 0 64 64"><path d="M32 56s-20-12-20-28a10 10 0 0 1 20-4 10 10 0 0 1 20 4c0 16-20 28-20 28z"/><path d="M26 30l12 0M32 24v14"/></svg>`,
   stop:   `<svg viewBox="0 0 64 64"><path d="M22 6h20l14 14v24L42 58H22L8 44V20z"/><path d="M22 32h20"/></svg>`,
   fight:  `<svg viewBox="0 0 64 64"><path d="M14 30V22a5 5 0 0 1 10 0M24 22v-4a5 5 0 0 1 10 0v4M34 22a5 5 0 0 1 10 0v4M44 26a5 5 0 0 1 8 2v10c0 10-8 18-18 18h-4c-9 0-16-7-16-16V30"/><path d="M50 8l4-4M56 14l5-1M44 6l1-5"/></svg>`,
   help:   `<svg viewBox="0 0 64 64"><path d="M14 50l6-16 26-26 10 10-26 26z"/><path d="M40 14l10 10"/></svg>`,
@@ -1226,6 +1255,184 @@ const scenes = {
       { who: "Охранник", t: "Без драк сегодня, ладно? В прошлую пятницу тут чуть зеркало не разбили." },
       { who: "Глеб", t: "Мы мирные. Почти." },
       { who: "Охранник", t: "Все так говорят." }
+    ]
+  },
+  // ================= Экспериментальная глава «Изнанка» (18+) =================
+  // Тот же вечер, но мир треснул. У Глеба магия (✦), в полночь приходит Дьявол.
+  x_home: {
+    x: true, manaStart: 3, bg: "home", place: "Изнанка · Фрунзенская · 19:58", music: "eerie",
+    lines: [
+      { skip: "18+" },
+      { who: null, t: "Экспериментальная глава. Тот же вечер, но мир треснул. Здесь мат, оккультизм, кровь и сделки, о которых жалеют." },
+      { who: null, t: "На карте в QGIS сам собой появляется слой, которого я не добавлял. Пентаграмма — ровно над Таганкой." },
+      { fx: "glitch", who: "", t: "Пальцы покалывает. Курсор двигается сам, хотя я не трогаю мышь." },
+      { inmsg: "Глеб", chat: "Егор" },
+      { inmsg: "ты уже знаешь, да?", chat: "Егор" },
+      { inmsg: "Powerhouse. 20:30. приходи", chat: "Егор" },
+      { who: "", t: "Он написал это за минуту до того, как я о нём подумал." }
+    ],
+    choices: () => [
+      { icon: "spark", t: "Зажечь лампу взглядом", sub: "Проверить, правда ли это", magic: 1, cls: "magic", go: "x_home_magic" },
+      { icon: "let", t: "Списать на недосып", sub: "Просто поехать в бар", go: "x_drive" }
+    ]
+  },
+  x_home_magic: {
+    x: true, bg: "home", place: "Изнанка · Фрунзенская · 19:59", music: "eerie", next: "x_drive",
+    lines: [
+      { who: null, t: "Лампа на столе вспыхивает. Потом ещё раз. Потом все окна в доме напротив — разом." },
+      { who: "", t: "У меня есть магия. Пиздец. Ладно. Едем." }
+    ]
+  },
+  x_drive: {
+    x: true, bg: "drive", place: "Изнанка · набережная · 20:10", music: "radio", next: "x_bar",
+    lines: [
+      { who: null, t: "Москва-река течёт в обратную сторону. Никто, кроме меня, этого не замечает." },
+      { fx: "glitch", who: null, t: "Радио поёт по-японски, но слова складываются в моё имя. Снова и снова." },
+      { who: "", t: "Таганка. Вывеска над баром мигает задом наперёд: ESUOHREWOP." }
+    ]
+  },
+  x_bar: {
+    x: true, place: "Изнанка · Powerhouse · 21:10", egor: true, music: "eerie",
+    lines: [
+      { who: null, t: "У бармена нет отражения в зеркале. Диджей ставит треки задом наперёд — и все танцуют задом наперёд." },
+      { npcShow: "npc_yulia", npcClass: "possessed", who: null, t: "У всех пяти девушек у стойки одно и то же лицо. Её лицо." },
+      { who: "Егор", t: "Ты тоже это видишь?" },
+      { who: "Глеб", t: "Вижу. Не смотри на них, епта." },
+      { who: "Егор", t: "Глеб. Я влюбился в Юлю. И я готов на всё. Вообще на всё." },
+      { who: "", t: "Где-то в баре кто-то засмеялся. Слишком низко для человека." }
+    ],
+    choices: () => [
+      { icon: "spark", t: "Прочитать мысли Егора", sub: "Узнать, чего он боится на самом деле", magic: 1, cls: "magic", go: "x_mind" },
+      { icon: "talk", t: "Спросить, что значит «на всё»", sub: "«Бро, ты о чём вообще?»", go: "x_devil" }
+    ]
+  },
+  x_mind: {
+    x: true, place: "Изнанка · Powerhouse · 21:12", egor: true, music: "sad", next: "x_devil",
+    lines: [
+      { who: "", t: "Его мысли — как чат, который он боится отправить." },
+      { who: null, t: "«Если она скажет нет — значит, со мной что-то не так. Значит, все уйдут. Как Рус. Лучше вообще не спрашивать.»" },
+      { who: "", t: "Он не хочет любви. Он хочет, чтобы не было больно. Это разные вещи." }
+    ]
+  },
+  x_devil: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:00", egor: true, music: "tense",
+    lines: [
+      { fx: "glitch", who: null, t: "Полночь. Музыка обрывается на полуслове. Все в баре замирают, как манекены." },
+      { npcShow: "gleb_px", npcClass: "devil", who: null, t: "У стойки сидит кто-то, кто выглядит как я. Только улыбается шире, чем умеет лицо." },
+      { who: "Дьявол", t: "Привет, Глеб. Не пугайся. Я просто взял самую удобную форму." },
+      { who: "Дьявол", t: "Твой друг хочет любви. Я дам её прямо сейчас. Юля полюбит его. Навсегда. Без сообщений, без страха, без отказа." },
+      { who: "Дьявол", t: "Цена смешная. Твоя душа. И магия — она всё равно моя, ты просто брал её взаймы." },
+      { who: "Егор", t: "Глеб… соглашайся. Пожалуйста, бро." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Продать душу", sub: "Егор получит любовь сразу", go: "x_deal" },
+      { icon: "spark", t: "Ударить магией", sub: "Вышвырнуть его из нашего бара", magic: 1, cls: "magic", go: "x_duel" },
+      { icon: "write", t: "Позвать юриста", sub: "Пусть Витя прочитает договор", go: "x_lawyer" }
+    ]
+  },
+  x_lawyer: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:03", egor: true, music: "tense",
+    lines: [
+      { npcShow: "npc_viktor", who: null, t: "Из-за спины Дьявола выходит Витя. В пиджаке, с договором в руках. Как он тут оказался — лучше не спрашивать." },
+      { who: "Виктор Резник", t: "Так. Пункт тринадцать: душа не возвращается. Пункт четырнадцать: любовь «в объёме, достаточном для заказчика»." },
+      { who: "Виктор Резник", t: "Глеб, мои интересы в «Ровеснике» ты уже представлял. Свои представляй сам. Я бы не подписывал." },
+      { who: "Дьявол", t: "Две квартиры, Виктор?" },
+      { who: "Виктор Резник", t: "…Три. И я молчу." },
+      { who: "", t: "Даже в аду у Вити своя цена." },
+      { npcShow: "gleb_px", npcClass: "devil", who: "Дьявол", t: "Ну что, Глеб? Время тикает. Даже здесь." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Продать душу", sub: "Несмотря на пункт тринадцать", go: "x_deal" },
+      { icon: "spark", t: "Ударить магией", sub: "Договор — в огонь", magic: 1, cls: "magic", go: "x_duel" }
+    ]
+  },
+  x_deal: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:05", egor: true, music: "eerie", next: "x_love",
+    lines: [
+      { npcShow: "gleb_px", npcClass: "devil", who: null, t: "Дьявол протягивает руку. Она тёплая, как батарея зимой. Я её пожимаю." },
+      { fx: "glitch", setMana: 0, addClass: "soulless", who: null, t: "Из мира уходит цвет. Сначала — из меня." },
+      { who: "", t: "Ничего не болит. Вообще ничего. Это и есть цена." }
+    ]
+  },
+  x_love: {
+    x: true, soulless: true, place: "Изнанка · Powerhouse · 00:07", egor: true, music: "eerie",
+    lines: [
+      { npcShow: "npc_yulia", npcClass: "possessed", who: null, t: "Дверь бара открывается. Входит Юля. Идёт прямо к Егору, не глядя по сторонам." },
+      { who: "Юля", t: "Егор. Я тебя люблю." },
+      { who: "Егор", t: "Правда?.." },
+      { who: "Юля", t: "Егор. Я тебя люблю." },
+      { who: "Юля", t: "Егор. Я тебя люблю." },
+      { who: "Егор", t: "Глеб… она повторяет. Она только это и говорит." },
+      { who: "", t: "Это не любовь. Это эхо, купленное на мою душу." }
+    ],
+    choices: () => [
+      { icon: "let", t: "Оставить как есть", sub: "Он же этого хотел", go: "x_end_deal" },
+      { icon: "stop", t: "Разорвать договор", sub: "Отдать остатки себя, чтобы всё отменить", go: "x_break" }
+    ]
+  },
+  x_end_deal: {
+    x: true, soulless: true, place: "Изнанка · Powerhouse · навсегда", egor: true, music: "jail",
+    lines: [
+      { npcShow: "npc_yulia", npcClass: "possessed", who: null, t: "Егор и Юля сидят за стойкой. Она держит его за руку и смотрит в одну точку." },
+      { who: "", t: "Мир серый. Мне не больно. Мне никак." }
+    ],
+    ending: "Изнанка · концовка «Сделка»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать полночь", sub: "Вернуться к Дьяволу", go: "x_devil", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  x_break: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:09", egor: true, music: "tense",
+    lines: [
+      { npcShow: "gleb_px", npcClass: "devil", fx: "glitch", who: null, t: "Я хватаю Дьявола за ту же руку и тяну обратно. Договор горит у него в пальцах." },
+      { who: "Дьявол", t: "Ты понимаешь, что ничего не получишь?" },
+      { who: "Глеб", t: "Понимаю. Пусть он сам." },
+      { fx: "magic", who: null, t: "Цвет возвращается — с болью, как кровь в отсиженную ногу." },
+      { who: "Егор", t: "Глеб… я сам ей напишу. По-настоящему." },
+      { tg: "Добрый вечер. У меня не хватает уверенности сказать вам это вживую. Я бы хотел пригласить вас попить со мной кофе в аутентичной монастырской кофейне. Как вы на это смотрите?", sayWho: "", sayText: "Его пальцы дрожат. Но это его пальцы." },
+      { tgStatus: "печатает…", music: "hope" },
+      { who: "", t: "Пусть ответит что угодно. Главное — это ответит она, а не эхо." }
+    ],
+    ending: "Изнанка · концовка «Настоящее»",
+    choices: () => [
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  x_duel: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:05", egor: true, music: "tense",
+    lines: [
+      { who: "Глеб", t: "Пошёл нахуй из нашего бара." },
+      { npcShow: "gleb_px", npcClass: "devil", who: "Дьявол", t: "Ох. Как грубо. Мальчики, проводите гостя." },
+      { who: null, t: "Из теней лезут бесы. У каждого — моё лицо." },
+      { battle: "shoot", foe: "Бесы", tlabel: "бес", tlabel2: "тень", tip: "Жги бесов магией — тапай по ним! Не дай им достать Егора.", win: "x_win", lose: "x_lose" }
+    ]
+  },
+  x_win: {
+    x: true, place: "Изнанка · Powerhouse · 00:09", egor: true, music: "hope",
+    lines: [
+      { fx: "magic", who: null, t: "Последний бес лопается, как лампочка. Дьявол смеётся и растворяется в моём отражении в зеркале." },
+      { who: "Дьявол", t: "Магию оставь себе. Посмотрим, на что ты её потратишь." },
+      { who: "Егор", t: "Глеб, что это было?.. Ладно. Неважно. Я сам ей напишу." },
+      { tg: "Добрый вечер. У меня не хватает уверенности сказать вам это вживую. Я бы хотел пригласить вас попить со мной кофе в аутентичной монастырской кофейне. Как вы на это смотрите?", sayWho: "", sayText: "Без магии. Без сделок. Сам." },
+      { tgStatus: "печатает…" },
+      { who: "", t: "Вывеска за окном снова читается правильно: POWERHOUSE." }
+    ],
+    ending: "Изнанка · концовка «Свет»",
+    choices: () => [
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  x_lose: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:09", music: "jail",
+    lines: [
+      { fx: "glitch", who: null, t: "Бесы гасят свет. Когда он включается, Егора за стойкой нет." },
+      { who: "", t: "На его стуле лежит телефон. Последнее сообщение Юле: «я согласен»." }
+    ],
+    ending: "Изнанка · концовка «Тьма»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать полночь", sub: "Попробовать ещё раз", go: "x_devil", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
     ]
   },
   secret: {
@@ -2276,13 +2483,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272227`, talk: `img/${n}_talk.png?v=10272227`, blink: `img/${n}_blink.png?v=10272227` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272234`, talk: `img/${n}_talk.png?v=10272234`, blink: `img/${n}_blink.png?v=10272234` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272227" : `img/${n}_spartan.png?v=10272227`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272234" : `img/${n}_spartan.png?v=10272234`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2311,8 +2518,8 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272227`; });
-function showNpc(who, file) {
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272234`; });
+function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
   // в петле Halo Петя и Витя в броне (у Вити своя картинка npc_viktor, а броня — npc_vitya_sp)
@@ -2320,14 +2527,17 @@ function showNpc(who, file) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272227`; el.alt = who;
+  el.src = `img/${n}.png?v=10272234`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
+  el.classList.remove("devil", "possessed");
+  if (cls) el.classList.add(cls);
   el.classList.add("on");
 }
 
 function focus(who) {
   if (NPC_IMG[who]) showNpc(who);
-  $("npc").classList.toggle("dim", !!who && !NPC_IMG[who] && $("npc").classList.contains("on"));
+  // собеседник в тени, пока говорят Глеб, Егор или мысли
+  $("npc").classList.toggle("dim", (who === "Глеб" || who === "Егор" || who === "") && $("npc").classList.contains("on"));
   // говорит третий (полицейский, судья) — оба героя в тени
   const other = who && who !== "Глеб" && who !== "Егор";
   $("gleb").classList.toggle("dim", who === "Егор" || other);
@@ -2341,8 +2551,23 @@ function focus(who) {
   if (sp) { void $(sp).offsetWidth; $(sp).classList.add("hop"); }
 }
 
+// Магия Глеба (только в главе «Изнанка»): каждое заклинание тратит ✦
+let mana = 0;
 function renderMemory() {
-  $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("");
+  $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
+    + (scene && scene.x ? `<div class="mem mana">✦ магия: ${mana}</div>` : "");
+}
+function magicFx() {
+  const fl = $("flash"); fl.classList.add("magic"); fl.classList.remove("on"); void fl.offsetWidth; fl.classList.add("on");
+  setTimeout(() => fl.classList.remove("magic"), 300);
+  for (let i = 0; i < 14; i++) {
+    const sp = document.createElement("div");
+    sp.className = "spark"; sp.textContent = "✦";
+    sp.style.left = 30 + Math.random() * 40 + "%"; sp.style.top = 35 + Math.random() * 30 + "%";
+    sp.style.setProperty("--dx", (Math.random() - .5) * 120 + "px");
+    $("stage").appendChild(sp); setTimeout(() => sp.remove(), 1200);
+  }
+  if (music.ac && music.on) [880, 1174.7, 1568].forEach((f, i) => music.bell(music.ac.currentTime + i * .09, f, .07));
 }
 
 // Секрет: если в самом начале ничего не нажимать 25 секунд, Егор уходит в Halo.
@@ -2379,6 +2604,9 @@ function show(id) {
   $("stage").classList.toggle("fight", !!scene.fight);
   $("stage").classList.toggle("spartan", !!scene.spartan || !!scene.spartanAll);
   $("stage").classList.toggle("memory", scene.bg === "memory");
+  $("stage").classList.toggle("inferno", !!scene.inferno);
+  $("stage").classList.toggle("soulless", !!scene.soulless);
+  if (scene.manaStart !== undefined) mana = scene.manaStart;
   $("stage").classList.remove("frozen");
   if (scene.linesFn) scene.lines = scene.linesFn();
   music.mood(scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
@@ -2389,7 +2617,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272227) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272234) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -2467,7 +2695,11 @@ function step() {
     return;
   }
   if (l.battle) return startBattle(l.battle, l.win, l.lose, l);
-  if (l.npcShow) showNpc(null, l.npcShow);
+  if (l.npcShow) showNpc(null, l.npcShow, l.npcClass);
+  if (l.setMana !== undefined) { mana = l.setMana; renderMemory(); }
+  if (l.fx === "glitch") { const st = $("stage"); st.classList.remove("glitch"); void st.offsetWidth; st.classList.add("glitch"); music.rewind(); }
+  if (l.fx === "magic") magicFx();
+  if (l.addClass) $("stage").classList.add(l.addClass);
   if (l.brawl) return brawlStart(l.win, l.lose);
   if (l.fx === "rewind") { $("stage").classList.add("rewinding"); music.rewind(); $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on"); setTimeout(() => $("stage").classList.remove("rewinding"), 1300); }
   if (l.fx === "punch") punchFx();
@@ -2481,9 +2713,9 @@ function say(who, text, quiet) {
   const think = who === "";
   focus(who);
   $("name").textContent = think ? "Глеб (мысли)" : (who || "");
-  const prov = who === "Провидение";
-  $("name").className = think ? "think" : prov ? "prov" : who === "Глеб" ? "gleb" : who && who !== "Егор" ? "npc" : "";
-  $("line").className = think ? "think" : prov ? "prov" : "";
+  const prov = who === "Провидение", devil = who === "Дьявол";
+  $("name").className = think ? "think" : prov ? "prov" : devil ? "devil" : who === "Глеб" ? "gleb" : who && who !== "Егор" ? "npc" : "";
+  $("line").className = think ? "think" : prov ? "prov" : devil ? "devil" : "";
   // рот двигается у того, кто говорит вслух и стоит в кадре
   talk(who === "Егор" && scene.egor ? "egor" : who === "Глеб" ? "gleb" : null);
   let i = 0;
@@ -2502,7 +2734,7 @@ function showChoices() {
   if (scene.ending) { $("ending").textContent = scene.ending; $("ending").style.display = "block"; }
   const box = $("choices");
   box.innerHTML = "";
-  for (const c of scene.choices()) {
+  for (const c of scene.choices().filter(c => !c.magic || mana >= c.magic)) {
     const el = document.createElement("div");
     el.className = "card " + (c.cls || "");
     el.innerHTML = `${ICON[c.icon] || ICON.let}<b>${c.t}</b><small>${c.sub}</small>`;
@@ -2519,6 +2751,7 @@ let loopDay = 1;
 function choose(c) {
   clearIdle();
   if (c.menu) return goMenu();
+  if (c.magic) { mana = Math.max(0, mana - c.magic); magicFx(); }
   if (c.loop) loopDay++;
   if (c.loopReset) loopDay = 1;
   if (c.style) music.setStyle(c.style);
@@ -2610,7 +2843,7 @@ const SAVE_KEY = "powerhouse-save-v1";
 const SAVE_ON = true;
 function saveGame(id) {
   if (!SAVE_ON || id.startsWith("brawl")) return;
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], place: scenes[id].place, t: Date.now() })); } catch (e) {}
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], mana, place: scenes[id].place, t: Date.now() })); } catch (e) {}
 }
 function loadSave() {
   if (!SAVE_ON) return null;
@@ -2620,6 +2853,7 @@ function continueGame() {
   const d = loadSave(); if (!d) return start();
   $("title").classList.add("gone"); music.start();
   known.clear(); d.known.forEach(k => known.add(k));
+  mana = d.mana || 0;
   show(d.scene);
 }
 function newGame() {
@@ -2634,6 +2868,11 @@ function initMenu() {
 }
 $("mCont").onclick = e => { e.stopPropagation(); continueGame(); };
 $("mStory").onclick = e => { e.stopPropagation(); newGame(); };
+$("mX").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); $("title").classList.add("gone"); music.start(); show("x_home");
+};
 $("mBrawl").onclick = e => { e.stopPropagation(); $("title").classList.add("gone"); music.start(); show("brawl_mode"); };
 initMenu();
 
