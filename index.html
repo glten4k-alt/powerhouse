@@ -159,6 +159,7 @@
     border:1px solid var(--accent); background:#f0b35e22; }
   #saveBtns #mBrawl { border-color:#ffffff33; background:none; color:var(--dim); }
   #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
+  #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
   #saveBtns small:empty { display:none; }
   #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
@@ -382,11 +383,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272239" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272239" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272252" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272252" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272239) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272252) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -435,7 +436,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -772,7 +773,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272239"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272252"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1496,6 +1497,125 @@ const scenes = {
     ending: "Изнанка · концовка «Тьма»",
     choices: () => [
       { icon: "rewind", t: "Перемотать полночь", sub: "Попробовать ещё раз", go: "x_devil", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  // ================= «Лилит · 12 платежей» (18+, отдельный режим) =================
+  // Тёмная романтика без откровенных сцен: флирт, напряжение, затемнение.
+  l_1: {
+    place: "Платёж 1/12 · Powerhouse · ночь", music: "eerie", inferno: true,
+    lines: [
+      { skip: "Лилит · 12 платежей" },
+      { npcShow: "npc_lilith", who: null, t: "Месяц после той ночи. Тот же бар, тот же стул. Она уже ждёт и крутит в пальцах мою зажигалку." },
+      { who: "Лилит", t: "Ты опоздал на семь минут. За это — отдельная плата." },
+      { who: "Глеб", t: "Какая?" },
+      { who: "Лилит", t: "Сядь ближе. Ещё. Вот так." },
+      { who: "", t: "От неё пахнет корицей и грозой. Я забываю, зачем пришёл." },
+      { who: "Лилит", t: "Сегодня я заберу у тебя мелочь. Цвет первого снега. Ты больше не вспомнишь, какой он." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Отдать", sub: "Первый снег — не самое важное", go: "l_1_give" },
+      { icon: "talk", t: "Предложить другое", sub: "«Возьми лучше мой страх.»", go: "l_1_trade" }
+    ]
+  },
+  l_1_give: {
+    place: "Платёж 1/12 · Powerhouse · ночь", music: "eerie", inferno: true, next: "l_6",
+    lines: [
+      { npcShow: "npc_lilith", fx: "magic", who: null, t: "Она касается губами моего виска. Холодно, как зимой." },
+      { who: "", t: "Первый снег. Какой он был? Не помню." }
+    ]
+  },
+  l_1_trade: {
+    place: "Платёж 1/12 · Powerhouse · ночь", music: "eerie", inferno: true, next: "l_6", learn: "brave",
+    lines: [
+      { npcShow: "npc_lilith", who: "Лилит", t: "Страх? Интересно. Без страха люди совершают очень красивые ошибки." },
+      { fx: "magic", who: "", t: "Мне впервые за долгое время не страшно. Даже её." }
+    ]
+  },
+  l_6: {
+    bg: "home", place: "Платёж 6/12 · её квартира · ночь", music: "radio",
+    lines: [
+      { skip: "Полгода спустя" },
+      { npcShow: "npc_lilith", who: null, t: "Теперь она назначает встречи у себя. Окна во всю стену, свечи, пластинки." },
+      { who: "Лилит", t: "Ты же понимаешь, что я демон. И что это плохая идея." },
+      { who: "Глеб", t: "Ты повторяешь это каждый раз. Как будто уговариваешь себя." },
+      { who: "Лилит", t: "Может, и себя." },
+      { who: null, t: "Она ставит пластинку. Ту самую, из Powerhouse, «для Егора». Мы танцуем медленно, хотя музыка быстрая." },
+      { who: "", t: "Её ладонь у меня на шее. Тёплая. Раньше она была холодной." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Поцеловать", sub: "Плохая идея. Отличная идея.", go: "l_6_kiss" },
+      { icon: "talk", t: "Спросить, почему она тёплая", sub: "Что с ней происходит", go: "l_6_ask" }
+    ]
+  },
+  l_6_kiss: {
+    bg: "home", place: "Платёж 6/12 · её квартира", music: "hope", next: "l_12",
+    lines: [
+      { npcShow: "npc_lilith", who: null, t: "Я целую её. Свечи гаснут разом, будто кто-то выдохнул." },
+      { skip: "…" },
+      { who: null, t: "Утро. На подушке рыжий волос. На запястье 6/12. Цифры почему-то бледнее, чем были." },
+      { who: "", t: "Будто долг уменьшается не только у меня." }
+    ]
+  },
+  l_6_ask: {
+    bg: "home", place: "Платёж 6/12 · её квартира", music: "sad", next: "l_12",
+    lines: [
+      { npcShow: "npc_lilith", who: "Лилит", t: "Каждый платёж — обмен. Ты отдаёшь мне кусочек себя. А я становлюсь чуть больше человеком." },
+      { who: "Лилит", t: "Ещё шесть раз — и я смогу умереть. Как вы. Это самое красивое, что у вас есть." },
+      { who: "", t: "Она не забирает мою душу. Она её примеряет." }
+    ]
+  },
+  l_12: {
+    bg: "summer", place: "Платёж 12/12 · набережная · рассвет", music: "sad",
+    lines: [
+      { skip: "Двенадцатый месяц" },
+      { npcShow: "npc_lilith", who: null, t: "Она позвала на набережную, на рассвет. Без рогов. Красные глаза стали карими." },
+      { who: "Лилит", t: "Последний платёж. Если я его заберу — у тебя не останется души. А у меня появится своя." },
+      { who: "Лилит", t: "Или уходи. Договор сгорит, и я снова стану тем, чем была." },
+      { who: "", t: "Я не знаю, что из этого любовь, а что сделка. Может, это одно и то же." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Отдать последнее", sub: "Пусть она станет человеком", go: "l_end_give" },
+      { icon: "go", t: "Уйти", sub: "Сохранить себя", go: "l_end_leave" },
+      ...(known.has("brave") ? [{ icon: "talk", t: "Остаться без сделки", sub: "«Договор — в реку. Давай просто будем.»", cls: "new", go: "l_end_stay" }] : [])
+    ]
+  },
+  l_end_give: {
+    bg: "summer", place: "Набережная · рассвет", music: "hope",
+    lines: [
+      { npcShow: "npc_lilith", fx: "magic", who: null, t: "Она берёт меня за руку. Тёплая. Живая." },
+      { who: "", t: "Внутри тихо и пусто, как в баре под утро. Но она улыбается так, как не умеют демоны." },
+      { who: "Лилит", t: "Спасибо. Я буду помнить за нас двоих." }
+    ],
+    ending: "Лилит · концовка «Двенадцатый платёж»",
+    choices: () => [
+      { icon: "rewind", t: "Сначала", sub: "Первый платёж", go: "l_1", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  l_end_leave: {
+    bg: "summer", place: "Набережная · рассвет", music: "sad",
+    lines: [
+      { who: null, t: "Я ухожу, не оборачиваясь. За спиной вспыхивает договор." },
+      { who: "", t: "Душа на месте. Только первый снег так и не вспоминается." }
+    ],
+    ending: "Лилит · концовка «Сгоревший договор»",
+    choices: () => [
+      { icon: "rewind", t: "Сначала", sub: "Первый платёж", go: "l_1", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  l_end_stay: {
+    bg: "summer", place: "Набережная · рассвет", music: "hope",
+    lines: [
+      { npcShow: "npc_lilith", who: "Глеб", t: "Договор — в реку. Давай без платежей. Просто будем." },
+      { who: null, t: "Она смеётся, впервые по-человечески. Бумага летит в реку и тонет, будто весит тонну." },
+      { who: "Лилит", t: "Это против всех правил." },
+      { who: "Глеб", t: "Мне больше не страшно, помнишь?" }
+    ],
+    ending: "Лилит · концовка «Без сделки»",
+    choices: () => [
+      { icon: "rewind", t: "Сначала", sub: "Первый платёж", go: "l_1", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
     ]
   },
@@ -2513,7 +2633,7 @@ function closeGPhone() {
 
 // ---------- Движок ----------
 const known = new Set();          // что Глеб знает; переживает перемотку
-const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии", gun: "травмат в кармане — плохая идея", address: "где живёт Юля" };
+const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии", gun: "травмат в кармане — плохая идея", address: "где живёт Юля", brave: "страх отдан Лилит" };
 
 // выстрел: резкая вспышка, «БАХ!», звук
 function shotFx() {
@@ -2547,13 +2667,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272239`, talk: `img/${n}_talk.png?v=10272239`, blink: `img/${n}_blink.png?v=10272239` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272252`, talk: `img/${n}_talk.png?v=10272252`, blink: `img/${n}_blink.png?v=10272252` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272239" : `img/${n}_spartan.png?v=10272239`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272252" : `img/${n}_spartan.png?v=10272252`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2582,7 +2702,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272239`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272252`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -2591,7 +2711,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272239`; el.alt = who;
+  el.src = `img/${n}.png?v=10272252`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -2681,7 +2801,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272239) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272252) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -2936,6 +3056,11 @@ $("mX").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); $("title").classList.add("gone"); music.start(); show("x_home");
+};
+$("mL").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); $("title").classList.add("gone"); music.start(); show("l_1");
 };
 $("mBrawl").onclick = e => { e.stopPropagation(); $("title").classList.add("gone"); music.start(); show("brawl_mode"); };
 initMenu();
