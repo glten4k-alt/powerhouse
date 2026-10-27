@@ -154,6 +154,35 @@
   #bg { object-fit:cover; }
 
 
+
+  /* Телефон Глеба: список чатов и переписка */
+  #gphone { position:absolute; left:50%; top:50%; width:min(36%, 340px); height:86%; transform:translate(-50%,-50%) scale(.9);
+    background:#0d0d10; border-radius:30px; padding:10px; box-shadow:0 20px 60px #000d, inset 0 0 0 2px #333; z-index:9;
+    opacity:0; pointer-events:none; transition:opacity .3s, transform .3s; display:flex; }
+  #gphone.on { opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
+  #gphone .scr { flex:1; background:#0e1621; border-radius:22px; overflow:hidden; display:flex; flex-direction:column; }
+  #gphone .top { background:#17212b; padding:10px 12px; display:flex; align-items:center; gap:10px; font-weight:bold; font-size:15px; }
+  #gphone .top button { background:none; border:0; color:#6ab2f2; font:inherit; font-size:15px; cursor:pointer; padding:0 4px; }
+  #gphone .top .sub { display:block; font-weight:normal; font-size:12px; color:#7d8b99; }
+  #gphone .list { overflow-y:auto; flex:1; }
+  #gphone .row { display:flex; gap:10px; padding:9px 12px; border-bottom:1px solid #ffffff0d; cursor:pointer; align-items:center; }
+  #gphone .row:hover { background:#ffffff08; }
+  #gphone .av { width:38px; height:38px; border-radius:50%; flex:none; display:grid; place-items:center; color:#fff; font-weight:bold; }
+  #gphone .row b { font-size:14px; display:block; }
+  #gphone .row span { font-size:13px; color:#7d8b99; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  #gphone .row .mid { flex:1; min-width:0; }
+  #gphone .badge { background:#3e6aa0; color:#fff; border-radius:10px; font-size:11px; padding:1px 7px; }
+  #gphone .chat { flex:1; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:6px; justify-content:flex-end;
+    background:repeating-linear-gradient(45deg, #0e1621 0 12px, #101a26 12px 24px); }
+  #gphone .m { max-width:82%; padding:6px 10px 4px; border-radius:14px; font-size:14px; line-height:1.35; }
+  #gphone .m.in { align-self:flex-start; background:#182533; border-radius:14px 14px 14px 4px; }
+  #gphone .m.out { align-self:flex-end; background:var(--tg); border-radius:14px 14px 4px 14px; }
+  #gphone .m i { display:block; text-align:right; font-style:normal; font-size:11px; color:#7da8d3; }
+  #gphone .day { align-self:center; font-size:12px; color:#7d8b99; background:#0008; border-radius:10px; padding:2px 10px; }
+  #gphone .close { margin:8px; padding:10px; border-radius:10px; border:1px solid #ffffff22; background:#17212b; color:var(--text);
+    font:inherit; font-size:14px; cursor:pointer; }
+  @media (max-aspect-ratio: 1/1) { #gphone { width:88%; height:82%; } }
+
   /* Посвящение перед заставкой, как в кино */
   #dedic { position:absolute; inset:0; z-index:12; background:#000; display:flex; flex-direction:column; align-items:center;
     justify-content:center; text-align:center; padding:0 10%; cursor:default; transition:opacity 1s; }
@@ -172,7 +201,7 @@
   #howto button:disabled { opacity:.45; cursor:default; }
   #howto button { margin-top:8px; width:100%; padding:12px; border-radius:10px; border:1px solid var(--accent); background:#f0b35e22;
     color:var(--text); font:inherit; font-size:16px; cursor:pointer; }
-  #hint { position:absolute; left:50%; top:16%; transform:translateX(-50%); z-index:6; max-width:min(90%, 520px); text-align:center;
+  #hint { position:absolute; left:50%; top:16%; transform:translateX(-50%); z-index:10; max-width:min(90%, 520px); text-align:center;
     background:#0b1a2ef0; border:1px solid var(--cold); color:var(--cold); border-radius:12px; padding:10px 16px; font-size:14px;
     display:none; animation:pop .3s ease-out; }
   #hint.on { display:block; }
@@ -239,6 +268,7 @@
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
+  <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
   <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p>щёлкни, чтобы начать</p></div>
 </div>
@@ -682,7 +712,7 @@ const scenes = {
     ]
   },
   s0_rus: {
-    place: "Powerhouse · 20:35", egor: true, next: "s1", music: "sad",
+    place: "Powerhouse · 20:35", egor: true, next: "s0_buzz", music: "sad",
     lines: [
       { who: "Глеб", t: "Вы же с ним с восемнадцатого года. С Xbox." },
       { who: "Егор", t: "Ага. Rainbow Six Siege по сетке, ночами. Он в Питере, я в Чебоксарах. Семь лет в одной команде." },
@@ -693,10 +723,40 @@ const scenes = {
     ]
   },
   s0_skip: {
-    place: "Powerhouse · 20:35", egor: true, next: "s1",
+    place: "Powerhouse · 20:35", egor: true, next: "s0_buzz",
     lines: [
       { who: "Егор", t: "Вот и правильно." },
       { who: "", t: "Он опять ушёл от разговора. И я ему в этом помог." }
+    ]
+  },
+  s0_buzz: {
+    place: "Powerhouse · 20:41", egor: true,
+    lines: [
+      { who: null, t: "Телефон вибрирует в кармане. Потом ещё раз. И ещё." },
+      { who: "Егор", t: "Тебе там весь поток пишет, что ли?" }
+    ],
+    choices: () => [
+      { icon: "write", t: "Открыть телефон", sub: "Посмотреть, кто пишет.", phone: true, go: "liza" },
+      { icon: "let", t: "Не смотреть", sub: "Убрать телефон обратно.", go: "liza_skip" }
+    ]
+  },
+  liza_skip: {
+    place: "Powerhouse · 20:42", egor: true, next: "liza",
+    lines: [
+      { who: "", t: "Не буду. Там всё равно нет того, что я хочу увидеть." }
+    ]
+  },
+  liza: {
+    place: "Powerhouse · 20:44", egor: true, music: "sad", next: "s1",
+    lines: [
+      { who: "Егор", t: "Ты чего завис? Слушай… а как Лиза?" },
+      { who: "Глеб", t: "Пиздец. Опять не получилось. В сентябре." },
+      { who: "Егор", t: "Что случилось-то?" },
+      { who: "Глеб", t: "Там всё слишком сложно." },
+      { who: "", t: "Она была старше. То тепло, то холодно, и никогда не знаешь, какой она будет завтра." },
+      { who: "", t: "А теперь просто «была в сети давно». Даже не поругались нормально." },
+      { who: "Егор", t: "Бро… Сочувствую. Серьёзно." },
+      { who: "", t: "Смешно. Пришёл помогать ему, а со своим так и не разобрался.", music: "bar" }
     ]
   },
   s1: {
@@ -944,6 +1004,57 @@ const scenes = {
   }
 };
 
+// ---------- Телефон Глеба ----------
+const GCHATS = [
+  { n: "Лиза", c: "#b0609a", last: "давай поговорим нормально?", time: "12 сен", st: "была в сети давно", liza: true },
+  { n: "Аня (поток)", c: "#5a8f5a", last: "скинь конспект по сад пжпж", time: "20:38", unread: 2 },
+  { n: "Катя", c: "#c08a3e", last: "ты в субботу на днюхе будешь?", time: "20:36", unread: 1 },
+  { n: "Маша", c: "#5a7fc0", last: "ахахах это ты на фотке??", time: "20:33", unread: 3 },
+  { n: "Вика", c: "#9a5ac0", last: "привет) давно не виделись", time: "19:58", unread: 1 },
+  { n: "Даша", c: "#c05a5a", last: "го в кино на неделе?", time: "вчера" },
+  { n: "Соня", c: "#4aa0a0", last: "спасибо за помощь с qgis!!", time: "вчера" }
+];
+const LIZA = [
+  { day: "28 августа" },
+  { in: "ты сегодня какой-то другой", t: "23:14" },
+  { out: "в смысле?", t: "23:15" },
+  { in: "ладно, проехали", t: "23:40" },
+  { day: "12 сентября" },
+  { out: "Лиз, давай поговорим нормально?", t: "01:02" },
+  { out: "Лиза?", t: "01:30", one: true }
+];
+let gphoneAfter = null;
+function gList() {
+  $("gscr").innerHTML = `<div class="top">Чаты</div><div class="list">${GCHATS.map((c, i) =>
+    `<div class="row" data-i="${i}"><div class="av" style="background:${c.c}">${c.n[0]}</div>
+     <div class="mid"><b>${c.n}</b><span>${c.last}</span></div>
+     <div>${c.unread ? `<span class="badge">${c.unread}</span>` : `<span style="font-size:11px;color:#7d8b99">${c.time}</span>`}</div></div>`
+  ).join("")}</div><button class="close" id="gclose">Убрать телефон</button>`;
+  $("gscr").querySelectorAll(".row").forEach(r => r.onclick = () => gChat(GCHATS[+r.dataset.i]));
+  $("gclose").onclick = closeGPhone;
+}
+function gChat(c) {
+  const msgs = c.liza ? LIZA : [{ in: c.last, t: c.time }];
+  $("gscr").innerHTML = `<div class="top"><button id="gback">‹</button><div class="av" style="background:${c.c};width:32px;height:32px">${c.n[0]}</div>
+    <div>${c.n}<span class="sub">${c.st || "в сети"}</span></div></div>
+    <div class="chat">${msgs.map(m => m.day ? `<div class="day">${m.day}</div>` :
+      `<div class="m ${m.in ? "in" : "out"}">${m.in || m.out}<i>${m.t}${m.out ? (m.one ? " ✓" : " ✓✓") : ""}</i></div>`).join("")}</div>
+    <button class="close" id="gclose">Убрать телефон</button>`;
+  $("gback").onclick = gList;
+  $("gclose").onclick = closeGPhone;
+  if (c.liza) hint("liza", "«Была в сети давно» и одна галочка — так Telegram показывает, когда тебя заблокировали.");
+}
+function openGPhone(after) {
+  gphoneAfter = after;
+  $("choices").classList.remove("on");
+  gList();
+  $("gphone").classList.add("on");
+}
+function closeGPhone() {
+  $("gphone").classList.remove("on");
+  if (gphoneAfter) { const g = gphoneAfter; gphoneAfter = null; show(g); }
+}
+
 // ---------- Движок ----------
 const known = new Set();          // что Глеб знает; переживает перемотку
 const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии" };
@@ -1126,6 +1237,7 @@ function showChoices() {
 }
 
 function choose(c) {
+  if (c.phone) return openGPhone(c.go);
   if (c.reset) known.clear();
   if (!c.rewind) return show(c.go);
   $("choices").classList.remove("on");
