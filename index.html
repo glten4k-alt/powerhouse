@@ -155,6 +155,39 @@
 
 
 
+
+  /* Бой: полоски здоровья, мишени, кнопки */
+  #battle { position:absolute; inset:0; z-index:7; display:none; }
+  #battle.on { display:block; }
+  #battle .hps { position:absolute; top:4%; left:50%; transform:translateX(-50%); width:min(92%, 620px); display:flex; gap:14px; }
+  #battle .hp { flex:1; background:var(--box); border:1px solid #ffffff22; border-radius:10px; padding:6px 10px; }
+  #battle .hp span { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); }
+  #battle .bar { height:12px; background:#2a1f2a; border-radius:3px; margin-top:4px; overflow:hidden; border:1px solid #000; }
+  #battle .bar i { display:block; height:100%; width:100%; background:repeating-linear-gradient(90deg, #5fd16a 0 6px, #4ab856 6px 8px);
+    transition:width .25s steps(4); }
+  #battle .hp.enemy .bar i { background:repeating-linear-gradient(90deg, #e05a5a 0 6px, #c44848 6px 8px); }
+  #battle .hp.low .bar i { background:repeating-linear-gradient(90deg, #f0b35e 0 6px, #d89a40 6px 8px); animation:blink .5s infinite; }
+  #bTip { position:absolute; top:17%; left:50%; transform:translateX(-50%); background:var(--box); border-radius:10px; padding:6px 14px;
+    font-size:14px; color:var(--text); text-align:center; max-width:90%; }
+  #bTip.warn { background:#7a1010ee; color:#fff; font-weight:bold; font-size:22px; animation:pop .2s ease-out; }
+  .target { position:absolute; width:56px; height:56px; margin:-28px 0 0 -28px; border-radius:50%; cursor:crosshair;
+    background:radial-gradient(#fff6c8, #ffd25a 40%, #ff9a2a77 70%, transparent 72%); box-shadow:0 0 30px #ffd25a;
+    animation:pop .2s ease-out; }
+  .target.siren { background:radial-gradient(#fff, #ff3b3b 40%, #3b7bff88 70%, transparent 72%); box-shadow:0 0 30px #ff3b3b; }
+  .target::after { content:attr(data-l); position:absolute; top:58px; left:50%; transform:translateX(-50%); font-size:11px; color:#fff;
+    white-space:nowrap; text-shadow:0 1px 2px #000; }
+  #bBtns { position:absolute; bottom:6%; left:50%; transform:translateX(-50%); display:flex; gap:14px; }
+  #bBtns button { font:bold 20px "Courier New", monospace; padding:16px 26px; border-radius:12px; cursor:pointer; color:#fff;
+    border:2px solid #000; box-shadow:0 4px 0 #000; }
+  #bBtns button:active { transform:translateY(3px); box-shadow:0 1px 0 #000; }
+  #bBtns .hit { background:#c44848; } #bBtns .blk { background:#3b6ea8; }
+  .dmg { position:absolute; z-index:8; font:bold 28px "Courier New", monospace; color:#ff4a4a; text-shadow:2px 2px 0 #000;
+    pointer-events:none; animation:dmg .8s ease-out forwards; }
+  @keyframes dmg { to { translate:0 -50px; opacity:0; } }
+  #hurt { position:absolute; inset:0; pointer-events:none; z-index:7; background:radial-gradient(transparent 40%, #ff000088); opacity:0; }
+  #hurt.on { animation:flash .35s ease-out; }
+  .sprite.hit { filter:sepia(1) saturate(6) hue-rotate(-30deg) brightness(.9) !important; }
+
   /* Телефон Глеба: список чатов и переписка */
   #gphone { position:absolute; left:50%; top:50%; width:min(36%, 340px); height:86%; transform:translate(-50%,-50%) scale(.9);
     background:#0d0d10; border-radius:30px; padding:10px; box-shadow:0 20px 60px #000d, inset 0 0 0 2px #333; z-index:9;
@@ -268,6 +301,16 @@
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
+  <div id="hurt"></div>
+  <div id="battle">
+    <div class="hps">
+      <div class="hp" id="hpE"><span>Егор</span><div class="bar"><i id="hpEgor"></i></div></div>
+      <div class="hp enemy"><span id="enName"></span><div class="bar"><i id="hpEnemy"></i></div></div>
+    </div>
+    <div id="bTip"></div>
+    <div id="bArena"></div>
+    <div id="bBtns"></div>
+  </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
   <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p>щёлкни, чтобы начать</p></div>
@@ -987,16 +1030,30 @@ const scenes = {
     bg: "street", siren: true, place: "Гончарная улица · 01:03", egor: true, drunk: true, fight: true, music: "tense",
     lines: [
       { who: "Полицейский", t: "Руки! Руки, блять, чтобы я видел!" },
-      { fx: "shot", who: null, t: "Глеб стреляет в фонарь. Стекло сыплется на асфальт, улица гаснет." },
+      { who: "", t: "Если погасить фонари и мигалку — уйдём в темноту. Главное, чтобы Егора не задело." },
+      { battle: "shoot", win: "shootout_win", lose: "shootout_lose" }
+    ]
+  },
+  shootout_win: {
+    bg: "street", place: "Гончарная улица · 01:04", egor: true, drunk: true, fight: true, music: "tense",
+    lines: [
+      { who: null, t: "Последний фонарь лопается. Улица тонет в темноте, мигалка мертва." },
       { who: "Егор", t: "Ты пидарнулся?! Глеб, ты ебанулся совсем?!" },
-      { fx: "shot", who: null, t: "Полицейский падает за машину и стреляет в воздух. Второй орёт в рацию." },
       { who: "Полицейский", t: "Вооружённое сопротивление на Гончарной! Нужно подкрепление, срочно!" },
-      { fx: "shot", who: null, t: "Ещё выстрел. Пуля звенит по капоту полицейской машины." },
       { who: "", t: "Всё. Назад дороги нет. Хотя… у меня есть перемотка." }
     ],
     choices: () => [
       { icon: "stop", t: "Бросить травмат", sub: "«Всё, всё, сдаюсь!»", go: "surrender" },
       { icon: "go", t: "Бежать", sub: "«Егор, валим нахуй!»", go: "chase" }
+    ]
+  },
+  shootout_lose: {
+    bg: "street", siren: true, place: "Гончарная улица · 01:04", egor: true, drunk: true, next: "court", music: "sad",
+    lines: [
+      { fx: "shot", who: null, t: "Резиновая пуля прилетает Егору в плечо. Он садится прямо в лужу." },
+      { who: "Егор", t: "Глеб… Это, блять, больно…" },
+      { who: "", t: "Это я его сюда притащил. С травматом. Гений, епта." },
+      { who: null, t: "Через секунду оба лежат лицом в мокром асфальте." }
     ]
   },
   surrender: {
@@ -1104,10 +1161,29 @@ const scenes = {
       { fx: "punch", who: null, t: "Удар подносом. Каша на стене." },
       { who: null, t: "У одного в руке блестит заточка." },
       { who: "", t: "Только не Егор. Только не сейчас, сука." },
+      { battle: "melee", win: "jail_win", lose: "jail_hurt" }
+    ]
+  },
+  jail_win: {
+    bg: "cell", years: .5, place: "Колония · столовая", egor: true, music: "tense", next: "jail_rest",
+    lines: [
       { fx: "punch", who: null, t: "Глеб бьёт по руке. Заточка звенит по кафелю." },
-      { fx: "punch", who: null, t: "Егор впервые в жизни никуда не исчезает. Он стоит рядом и бьёт." },
+      { who: null, t: "Егор впервые в жизни никуда не исчезает. Он стоит рядом и бьёт." },
       { who: "Егор", t: "Ещё раз, сука, подойдёте — устрою вам Halo на легендарной." },
-      { who: null, t: "Охрана. Обоих в ШИЗО на десять суток. В одну камеру.", music: "sad" },
+      { who: null, t: "Охрана. Обоих в ШИЗО на десять суток. В одну камеру.", music: "sad" }
+    ]
+  },
+  jail_hurt: {
+    bg: "cell", years: .5, place: "Колония · санчасть", egor: true, music: "sad", next: "jail_rest",
+    lines: [
+      { who: null, t: "Заточка задевает Егору бок. Кровь на кафеле, крики, охрана." },
+      { who: "Егор", t: "Глеб… Я в порядке. Почти, блять." },
+      { who: null, t: "Санчасть, три недели. Глеб приходит каждый день, пока пускают." }
+    ]
+  },
+  jail_rest: {
+    bg: "cell", years: .5, place: "Колония · год 1", egor: true, music: "sad",
+    lines: [
       { who: "Егор", t: "Глеб… Спасибо, что не ушёл." },
       { who: "", t: "Смешно. В тюрьме он впервые не сбежал." },
       { skip: "3 года спустя", years: 3, place: "Колония · год 3" },
@@ -1168,6 +1244,101 @@ const scenes = {
     ]
   }
 };
+
+// ---------- Бой: у Егора 100 HP ----------
+// shoot — стрельба по фонарям и мигалке, полиция стреляет в ответ.
+// melee — драка с заточкой: «УДАР» бьёт, «БЛОК» спасает от замаха.
+let B = null;
+function bAfter(ms, f) { const t = setTimeout(f, ms); B.timers.push(t); return t; }
+function bEvery(ms, f) { const t = setInterval(f, ms); B.timers.push(t); return t; }
+function bUpdate() {
+  $("hpEgor").style.width = Math.max(0, B.hp) + "%";
+  $("hpEnemy").style.width = Math.max(0, B.en) + "%";
+  $("hpE").classList.toggle("low", B.hp <= 30);
+}
+function dmgPop(text, x, y, color) {
+  const d = document.createElement("div");
+  d.className = "dmg"; d.textContent = text; d.style.left = x; d.style.top = y;
+  if (color) d.style.color = color;
+  $("stage").appendChild(d); setTimeout(() => d.remove(), 800);
+}
+function hurtEgor(n) {
+  if (B.done) return;
+  B.hp -= n; bUpdate();
+  $("hurt").classList.remove("on"); void $("hurt").offsetWidth; $("hurt").classList.add("on");
+  $("egor").classList.add("hit"); setTimeout(() => $("egor").classList.remove("hit"), 250);
+  dmgPop("−" + n, "72%", "40%");
+  music.punch();
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("medium");
+  if (B.hp <= 0) endBattle(false);
+}
+function hitEnemy(n, x, y) {
+  if (B.done) return;
+  B.en -= n; bUpdate();
+  dmgPop("−" + n, x, y, "#ffe14f");
+  if (B.en <= 0) endBattle(true);
+}
+function endBattle(won) {
+  B.done = true;
+  B.timers.forEach(t => { clearTimeout(t); clearInterval(t); });
+  $("bTip").className = ""; $("bTip").textContent = won ? "Победа!" : "Егор ранен…";
+  $("bArena").innerHTML = ""; $("bBtns").innerHTML = "";
+  const next = won ? B.win : B.lose;
+  setTimeout(() => { $("battle").classList.remove("on"); B = null; $("box").style.display = ""; show(next); }, 1200);
+}
+function startBattle(type, win, lose) {
+  B = { type, win, lose, hp: 100, en: 100, timers: [], done: false };
+  $("box").style.display = "none";
+  $("battle").classList.add("on");
+  $("bArena").innerHTML = ""; $("bBtns").innerHTML = ""; $("bTip").className = "";
+  bUpdate();
+  if (type === "shoot") {
+    $("enName").textContent = "Свет на улице";
+    $("bTip").textContent = "Гаси фонари и мигалку — тапай по ним! Уйдём в темноту.";
+    const need = 6;
+    const spawn = () => {
+      if (B.done || $("bArena").children.length >= 2) return;
+      const t = document.createElement("div");
+      const siren = Math.random() < .35;
+      t.className = "target" + (siren ? " siren" : "");
+      t.dataset.l = siren ? "мигалка" : "фонарь";
+      t.style.left = 12 + Math.random() * 76 + "%"; t.style.top = 26 + Math.random() * 34 + "%";
+      t.onclick = () => { if (B.done) return; shotFx(); hitEnemy(Math.ceil(100 / need), t.style.left, t.style.top); t.remove(); };
+      $("bArena").appendChild(t);
+      bAfter(1800, () => t.remove());
+    };
+    spawn(); bEvery(800, spawn);
+    // полиция стреляет в ответ резиновыми
+    bEvery(1300, () => { if (Math.random() < .55) { music.shot(); hurtEgor(14); } });
+  } else {
+    $("enName").textContent = "Зэк с заточкой";
+    $("bTip").textContent = "Жми «УДАР». Когда появится ⚠ — сразу «БЛОК»!";
+    $("bBtns").innerHTML = '<button class="blk" id="bBlk">БЛОК</button><button class="hit" id="bHit">УДАР</button>';
+    let cool = 0;
+    B.strike = () => {
+      if (B.done || Date.now() < cool) return;
+      cool = Date.now() + 300;
+      music.punch();
+      $("stage").classList.remove("shake"); void $("stage").offsetWidth; $("stage").classList.add("shake");
+      hitEnemy(7, 35 + Math.random() * 30 + "%", "38%");
+    };
+    B.block = () => { if (B.warn) { B.blocked = true; } };
+    $("bHit").onclick = B.strike; $("bBlk").onclick = B.block;
+    const attack = () => {
+      if (B.done) return;
+      B.warn = true; B.blocked = false;
+      $("bTip").className = "warn"; $("bTip").textContent = "⚠ ЗАМАХ!";
+      bAfter(900, () => {
+        if (B.done) return;
+        B.warn = false; $("bTip").className = "";
+        if (B.blocked) { $("bTip").textContent = "Блок!"; dmgPop("БЛОК", "60%", "40%", "#8fc3ff"); }
+        else { $("bTip").textContent = "Пропустил…"; hurtEgor(20); }
+        bAfter(1100 + Math.random() * 1100, attack);
+      });
+    };
+    bAfter(1500, attack);
+  }
+}
 
 // ---------- Телефон Глеба ----------
 const GCHATS = [
@@ -1322,6 +1493,7 @@ function show(id) {
 }
 
 function step() {
+  if (B) return;                       // идёт бой — текст стоит
   const l = scene.lines[idx];
   if (!l) {
     if (scene.learn) { known.add(scene.learn); renderMemory(); }
@@ -1373,6 +1545,7 @@ function step() {
     say(null, "Отправлено: голосовое сообщение.");
     return;
   }
+  if (l.battle) return startBattle(l.battle, l.win, l.lose);
   if (l.fx === "punch") punchFx();
   if (l.fx === "shot") shotFx();
   say(l.who, l.t);
@@ -1436,6 +1609,11 @@ function closeSkip() { $("skip").classList.remove("on"); $("box").style.display 
 $("skip").onclick = closeSkip;
 document.addEventListener("keydown", e => {
   if (e.key === "m" || e.key === "M" || e.key === "ь" || e.key === "Ь") return music.toggle();
+  if (B && !B.done) {
+    if (B.type === "melee" && e.key === " ") { e.preventDefault(); B.strike(); }
+    if (B.type === "melee" && (e.key === "Enter" || e.key === "b" || e.key === "и")) { e.preventDefault(); B.block(); }
+    return;
+  }
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
   if (!$("dedic").classList.contains("gone")) return;   // посвящение не пропускается
