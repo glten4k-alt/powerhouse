@@ -2059,8 +2059,11 @@ Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png`; });
 function showNpc(who) {
   let n = NPC_IMG[who];
   if (!n) return;
-  if (scene.spartanAll && (who === "Петя" || who === "Витя")) n += "_sp";
+  // в петле Halo Петя и Витя в броне (у Вити своя картинка npc_viktor, а броня — npc_vitya_sp)
+  if (scene.spartanAll && who === "Петя") n = "npc_petya_sp";
+  if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
+  el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
   el.src = `img/${n}.png`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.add("on");
