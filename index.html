@@ -162,6 +162,41 @@
 
 
 
+
+  /* Аниме-опенинг: иероглифы и сакура */
+  #op { position:absolute; inset:0; z-index:11; display:none; align-items:center; justify-content:center; flex-direction:column;
+    background:radial-gradient(circle at 50% 40%, #3a1838, #0a0612 70%); overflow:hidden; }
+  #op.on { display:flex; }
+  #op .k { font:700 min(22vw, 120px)/1 "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif; color:#fff;
+    text-shadow:0 0 18px #ff8fc8, 0 0 50px #ff4f9e88; opacity:0; animation:opk 1.9s ease-out forwards; text-align:center; }
+  #op .k.title { font-size:min(14vw, 84px); letter-spacing:.06em; }
+  #op .ru { margin-top:14px; color:#ffd6ea; font:italic 18px Georgia, serif; opacity:0; animation:opk 1.9s .2s ease-out forwards; }
+  @keyframes opk { 0% { opacity:0; transform:scale(1.25); filter:blur(8px); } 25% { opacity:1; transform:scale(1); filter:blur(0); }
+    80% { opacity:1; } 100% { opacity:0; transform:scale(.96); } }
+  .petal { position:absolute; top:-5%; width:12px; height:9px; background:#ffb7d5; border-radius:80% 0 80% 0; opacity:.85;
+    animation:petal linear infinite; }
+  @keyframes petal { to { transform:translate(-18vw, 115vh) rotate(540deg); } }
+  #op .bar1, #op .bar2 { position:absolute; left:0; right:0; height:9%; background:#000; }
+  #op .bar1 { top:0; } #op .bar2 { bottom:0; }
+
+  /* Сообщение «от» в телефоне */
+  .msg.from { align-self:flex-start; background:#182533; border-radius:14px 14px 14px 4px; }
+
+  /* Прогулка по бару: точки интереса */
+  #explore { position:absolute; inset:0; z-index:5; display:none; }
+  #explore.on { display:block; }
+  .hs { position:absolute; transform:translate(-50%,-50%); display:flex; align-items:center; gap:6px; cursor:pointer;
+    background:var(--box); border:1px solid var(--accent); color:var(--text); border-radius:20px; padding:6px 12px 6px 8px;
+    font:inherit; font-size:14px; animation:rise .35s ease-out backwards; }
+  .hs::before { content:""; width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 0 #f0b35e88;
+    animation:ping 1.6s infinite; }
+  @keyframes ping { 70% { box-shadow:0 0 0 10px #f0b35e00; } }
+  .hs.seen { opacity:.55; border-color:#ffffff33; } .hs.seen::before { background:#7d8b99; animation:none; }
+  #exGo { position:absolute; left:50%; bottom:6%; transform:translateX(-50%); padding:12px 22px; border-radius:12px;
+    border:1px solid var(--cold); background:#0b1a2ef0; color:var(--cold); font:inherit; font-size:15px; cursor:pointer; white-space:nowrap; }
+  #exTip { position:absolute; left:50%; top:12%; transform:translateX(-50%); background:var(--box); padding:6px 14px; border-radius:10px;
+    font-size:13px; color:var(--dim); white-space:nowrap; }
+
   /* Бой: полоски здоровья, мишени, кнопки */
   #battle { position:absolute; inset:0; z-index:7; display:none; }
   #battle.on { display:block; }
@@ -284,7 +319,7 @@
   <img class="sprite" id="gleb" src="img/gleb_px.png" alt="Глеб">
   <img class="sprite" id="egor" src="img/egor_px.png" alt="Егор">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava">Ю</div><div><div class="nm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava">Ю</div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -308,6 +343,8 @@
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
+  <div id="explore"><div id="exTip">Пройдись по бару: нажимай на людей</div><div id="exSpots"></div><button id="exGo">Сесть за стойку и ждать Егора →</button></div>
+  <div id="op"><div class="bar1"></div><div class="bar2"></div><div id="opK"></div></div>
   <div id="hurt"></div>
   <div id="battle">
     <div class="hps">
@@ -336,7 +373,8 @@ function fitCanvas() {
 // рисует фон текущей сцены
 function paint(years) {
   const b = scene && scene.bg;
-  if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing(); else drawBar(!!(scene && scene.drunk));
+  if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
+  else if (b === "home") drawHome(); else if (b === "drive") startDrive(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -573,6 +611,87 @@ function drawRing() {
   for (let x = 0; x < W; x += 6) { c.fillStyle = rnd() < .5 ? "#2f4a2a" : "#3d5a34"; c.fillRect(x, gy - Math.floor(rnd() * 4), 6, 4); }
 }
 
+// ---------- Локация: комната Глеба на Фрунзенской ----------
+function drawHome() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  let seed = 3; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#1a1a2e");
+  for (let x = 0; x < W; x += 12) R(x, 0, 1, H, "#1e1e34");
+  // большое окно: ночная Москва-река и огни набережной
+  const wx = portrait ? 14 : W * .12, wy = portrait ? H * .08 : 14, ww = portrait ? W - 28 : W * .5, wh = portrait ? H * .32 : H * .5;
+  R(wx - 3, wy - 3, ww + 6, wh + 6, "#3a3a52");
+  const g = c.createLinearGradient(0, wy, 0, wy + wh); g.addColorStop(0, "#0a1030"); g.addColorStop(1, "#2a2050");
+  c.fillStyle = g; c.fillRect(wx, wy, ww, wh);
+  for (let i = 0; i < 40; i++) R(wx + rnd() * ww, wy + rnd() * wh * .4, 1, 1, "#ffffff66");
+  let x = wx; while (x < wx + ww) { const bw = 6 + rnd() * 12, bh = wh * (.15 + rnd() * .3); R(x, wy + wh * .62 - bh, bw, bh, "#141830");
+    for (let yy = wy + wh * .62 - bh + 3; yy < wy + wh * .6; yy += 5) if (rnd() < .4) R(x + 2, yy, 2, 2, "#f0c27a"); x += bw + 1; }
+  R(wx, wy + wh * .62, ww, wh * .38, "#0c1428");
+  for (let i = 0; i < 18; i++) R(wx + rnd() * ww, wy + wh * (.66 + rnd() * .3), 6 + rnd() * 10, 1, rnd() < .5 ? "#f0c27a88" : "#ff8fae66");
+  R(wx + ww / 2 - 1, wy, 2, wh, "#3a3a52");
+  // стол, ноутбук с картой, лампа
+  const ty = portrait ? H * .58 : H * .66;
+  R(0, ty, W, 5, "#4a3424"); R(0, ty + 5, W, H - ty, "#22182a");
+  const lx = portrait ? W * .5 : W * .66;
+  R(lx, ty - 30, 52, 30, "#202434"); R(lx + 2, ty - 28, 48, 26, "#1d3a2a");
+  for (let i = 0; i < 9; i++) R(lx + 4 + rnd() * 40, ty - 26 + rnd() * 20, 3 + rnd() * 6, 2, ["#6fbf73", "#f0c040", "#3d7dd8"][i % 3]);
+  R(lx - 6, ty - 2, 64, 3, "#2e3244");
+  const lampX = portrait ? W * .86 : W * .92;
+  R(lampX, ty - 40, 2, 40, "#555"); R(lampX - 8, ty - 46, 18, 7, "#e8c27a");
+  const lg = c.createRadialGradient(lampX, ty - 30, 0, lampX, ty - 30, 70); lg.addColorStop(0, "#ffd27a44"); lg.addColorStop(1, "transparent");
+  c.fillStyle = lg; c.fillRect(0, 0, W, H);
+}
+
+// ---------- Локация: в машине, едем по набережной (анимация) ----------
+let driveRAF = null, driveOff = 0;
+function drawDrive() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const o = driveOff;
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#0a0c22"); g.addColorStop(.6, "#2a1e48"); g.addColorStop(1, "#0a0a12");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  const hy = portrait ? H * .36 : H * .42;           // горизонт
+  // дальние дома ползут медленно
+  let seed = 9; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 40; i++) {
+    const bw = 10 + rnd() * 18, bh = 10 + rnd() * 40, bx = ((i * 22 - o * .3) % (W + 60) + W + 60) % (W + 60) - 30;
+    R(bx, hy - bh, bw, bh, "#161a34");
+    for (let yy = hy - bh + 3; yy < hy - 3; yy += 6) if (rnd() < .35) R(bx + 3, yy, 2, 2, "#f0c27a");
+  }
+  // река с отражениями
+  R(0, hy, W, H * .12, "#0e1430");
+  for (let i = 0; i < 14; i++) R(((i * 31 - o * .6) % W + W) % W, hy + 3 + (i % 4) * 4, 10, 1, i % 2 ? "#f0c27a66" : "#ff8fae55");
+  // дорога и разметка
+  const ry = hy + H * .12;
+  R(0, ry, W, H - ry, "#141418");
+  for (let i = 0; i < 8; i++) R(((i * 60 - o * 3) % (W + 60) + W + 60) % (W + 60) - 30, ry + (H - ry) * .3, 24, 2, "#d8d2c4");
+  // фонари пролетают мимо
+  for (let i = 0; i < 5; i++) {
+    const px = ((i * 90 - o * 2) % (W + 90) + W + 90) % (W + 90) - 45;
+    R(px, hy - 46, 2, 46 + H * .12, "#2a2a36"); R(px - 6, hy - 48, 14, 3, "#2a2a36");
+    const lg = c.createRadialGradient(px, hy - 44, 0, px, hy - 44, 30); lg.addColorStop(0, "#ffd27a77"); lg.addColorStop(1, "transparent");
+    c.fillStyle = lg; c.fillRect(px - 30, hy - 74, 60, 60);
+  }
+  // салон: стойки, торпеда, руль, магнитола
+  R(0, 0, portrait ? 8 : 14, H, "#08080c"); R(W - (portrait ? 8 : 14), 0, 14, H, "#08080c");
+  const dy = portrait ? H * .66 : H * .74;
+  R(0, dy, W, H - dy, "#0c0c12"); R(0, dy, W, 2, "#24242e");
+  c.strokeStyle = "#1c1c24"; c.lineWidth = 8; c.beginPath(); c.arc(W * .26, H + 6, portrait ? 50 : 56, Math.PI * 1.15, Math.PI * 1.85); c.stroke();
+  const rx = portrait ? W * .5 - 34 : W * .58, rw = 68, ry2 = dy + 10;
+  R(rx, ry2, rw, 16, "#05140c");
+  c.fillStyle = "#5fd16a"; c.font = "7px 'Courier New', monospace";
+  c.fillText(music.style === "anime" ? "♪ ANIME FM 88.2" : "♪ TECHNO 101.7", rx + 4, ry2 + 7);
+  for (let i = 0; i < 10; i++) { const h = 2 + Math.abs(Math.sin(o * .05 + i)) * 4; R(rx + 4 + i * 6, ry2 + 15 - h, 4, h, "#5fd16a"); }
+}
+function startDrive() {
+  cancelAnimationFrame(driveRAF);
+  const loop = () => {
+    if (!scene || scene.bg !== "drive") return;
+    driveOff += 1.2; drawDrive(); driveRAF = requestAnimationFrame(loop);
+  };
+  loop();
+}
+
 // ---------- Техно на фоне (синтезируется в браузере, без файлов) ----------
 // 124 BPM: бочка на каждую долю, хэт на слабую, хлопок на 2 и 4, бас на офбитах.
 // Звук глухой, как из-за стены зала. Пьяным фильтр «плавает», при перемотке звук проваливается.
@@ -617,12 +736,37 @@ const music = {
     jail:     { bpm: 124, drums: "none",  bass: false, pad: "sad",  f: 650,  vol: .6,  lfo: 0 }
   },
   cur: null, curName: "bar",
+  // Стиль: "anime" — пианино, струнные, мелодия (как опенинг); "techno" — прежний бит. Переключается радио в машине.
+  style: "anime",
+  animeModes: {
+    bar:      { bpm: 132, prog: "royal", arp: 8,  drums: "light", melody: true,  strings: false, f: 3000, vol: 1,   lfo: 0 },
+    drunk:    { bpm: 118, prog: "royal", arp: 8,  drums: "light", melody: true,  strings: false, f: 1400, vol: 1,   lfo: 500 },
+    tense:    { bpm: 160, prog: "tense", arp: 16, drums: "full",  melody: false, strings: true,  f: 3200, vol: 1,   lfo: 0 },
+    sad:      { bpm: 76,  prog: "sad",   arp: 4,  drums: "none",  melody: true,  strings: true,  f: 2400, vol: .9,  lfo: 0 },
+    hope:     { bpm: 140, prog: "royal", arp: 8,  drums: "full",  melody: true,  strings: true,  f: 3400, vol: 1,   lfo: 0 },
+    suspense: { bpm: 90,  prog: "sad",   arp: 0,  drums: "heart", melody: false, strings: true,  f: 1200, vol: .9,  lfo: 0 },
+    street:   { bpm: 132, prog: "royal", arp: 8,  drums: "light", melody: false, strings: false, f: 700,  vol: .5,  lfo: 0 },
+    jail:     { bpm: 70,  prog: "sad",   arp: 4,  drums: "none",  melody: false, strings: true,  f: 1400, vol: .6,  lfo: 0 },
+    radio:    { bpm: 96,  prog: "royal", arp: 8,  drums: "none",  melody: true,  strings: true,  f: 1600, vol: .8,  lfo: 0 }
+  },
+  // Аккорды: «королевская» последовательность аниме (IV–V–iii–vi), грустная и тревожная
+  progs: {
+    royal: { ch: [[174.6, 220, 261.6], [196, 246.9, 293.7], [164.8, 196, 246.9], [220, 261.6, 329.6]], bass: [87.3, 98, 82.4, 110],
+      mel: [[880, 0, 784, 880, 1046.5, 0, 880, 784], [784, 0, 659.3, 784, 880, 784, 659.3, 587.3],
+            [659.3, 0, 587.3, 659.3, 784, 0, 659.3, 587.3], [523.3, 587.3, 659.3, 0, 880, 0, 659.3, 0]] },
+    sad:   { ch: [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]], bass: [110, 87.3, 130.8, 98],
+      mel: [[659.3, 0, 0, 523.3, 0, 0, 587.3, 0], [523.3, 0, 0, 440, 0, 0, 523.3, 0],
+            [392, 0, 0, 523.3, 0, 0, 659.3, 0], [587.3, 0, 0, 493.9, 0, 0, 0, 0]] },
+    tense: { ch: [[220, 261.6, 329.6], [174.6, 220, 261.6], [196, 246.9, 293.7], [164.8, 207.7, 246.9]], bass: [110, 87.3, 98, 82.4],
+      mel: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]] }
+  },
   chords: {
     sad:  [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]],   // Am F C G
     hope: [[261.6, 329.6, 392], [196, 246.9, 293.7], [220, 261.6, 329.6], [174.6, 220, 261.6]]    // C G Am F
   },
 
   tick() {
+    if (this.style === "anime") return this.animeTick();
     const m = this.cur || this.modes.bar;
     const sixteenth = 60 / m.bpm / 4;
     // вкладка была в фоне и таймер стоял: пропущенные доли не играем разом, иначе выходит громкий хрип
@@ -651,6 +795,72 @@ const music = {
       this.next += sixteenth; this.step++;
     }
   },
+
+  animeTick() {
+    const m = this.cur || this.animeModes.bar, P = this.progs[m.prog];
+    const sixteenth = 60 / m.bpm / 4;
+    if (this.next < this.ac.currentTime - .05) this.next = this.ac.currentTime + .05;
+    while (this.next < this.ac.currentTime + .1) {
+      const s = this.step % 16, bar = Math.floor(this.step / 16) % 4, t = this.next;
+      const ch = P.ch[bar];
+      // пианино-арпеджио
+      const every = m.arp === 16 ? 1 : m.arp === 8 ? 2 : m.arp === 4 ? 4 : 0;
+      if (every && s % every === 0) {
+        const k = (s / every) % 4;
+        this.piano(t, ch[[0, 1, 2, 1][k]] * 2, m.arp === 16 ? .25 : .9, m.arp === 16 ? .05 : .07);
+      }
+      // бас: половинки, в напряжении четверти
+      if (s % (m.prog === "tense" ? 4 : 8) === 0) this.piano(t, P.bass[bar], 1.2, .1);
+      // струнные на весь такт
+      if (m.strings && s === 0) this.strings(t, ch, 16 * sixteenth);
+      // мелодия восьмыми
+      if (m.melody && s % 2 === 0) { const f = P.mel[bar][s / 2]; if (f) this.bell(t, f); }
+      // ударные
+      if (m.drums === "full") {
+        if (s % 4 === 0) this.kick(t, .55);
+        if (s === 4 || s === 12) this.noiseHit(t, "bandpass", 1800, .2, .15);
+        if (s % 2 === 0) this.hat(t, .06, .03);
+      } else if (m.drums === "light") {
+        if (s === 0 || s === 8) this.kick(t, .4);
+        if (s === 4 || s === 12) this.noiseHit(t, "bandpass", 1800, .12, .12);
+        if (s % 4 === 2) this.hat(t, .05, .03);
+      } else if (m.drums === "heart") {
+        if (s === 0) this.kick(t, .5);
+        if (s === 3) this.kick(t, .35);
+        if (s === 8) this.bell(t, 1318.5, .03);
+      }
+      this.next += sixteenth; this.step++;
+    }
+  },
+  // пианино: синус с обертоном и быстрым затуханием
+  piano(t, f, dec = .9, v = .07) {
+    for (const [type, mul, g0] of [["sine", 1, v], ["triangle", 2, v * .35]]) {
+      const o = this.ac.createOscillator(), g = this.ac.createGain();
+      o.type = type; o.frequency.value = f * mul;
+      g.gain.setValueAtTime(g0, t); g.gain.exponentialRampToValueAtTime(.0001, t + dec);
+      o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + dec + .05);
+    }
+  },
+  // струнные: пила через мягкий фильтр, медленная атака
+  strings(t, freqs, len) {
+    for (const f of freqs) {
+      const o = this.ac.createOscillator(), lp = this.ac.createBiquadFilter(), g = this.ac.createGain();
+      o.type = "sawtooth"; o.frequency.value = f; o.detune.value = (Math.random() - .5) * 10;
+      lp.type = "lowpass"; lp.frequency.value = 1100;
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.022, t + .5);
+      g.gain.setValueAtTime(.022, t + len - .2); g.gain.linearRampToValueAtTime(.0001, t + len + .4);
+      o.connect(lp); lp.connect(g); g.connect(this.filt); o.start(t); o.stop(t + len + .5);
+    }
+  },
+  // мелодия: колокольчик с лёгким вибрато
+  bell(t, f, v = .06) {
+    const o = this.ac.createOscillator(), g = this.ac.createGain(), vib = this.ac.createOscillator(), vg = this.ac.createGain();
+    o.type = "triangle"; o.frequency.value = f;
+    vib.frequency.value = 5.5; vg.gain.value = f * .006; vib.connect(vg); vg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .45);
+    o.connect(g); g.connect(this.filt); o.start(t); vib.start(t); o.stop(t + .5); vib.stop(t + .5);
+  },
+  setStyle(st) { this.style = st; this.mood(this.curName); },
 
   // тянущийся аккорд на весь такт: мягкая атака, медленное затухание
   pad(t, freqs, len) {
@@ -734,10 +944,11 @@ const music = {
 
   // смена настроения: фильтр, «плавание» и громкость меняются плавно, ударные — со следующей доли
   mood(name) {
-    if (!this.modes[name]) return;
-    this.curName = name; this.cur = this.modes[name];
+    const table = this.style === "anime" ? this.animeModes : this.modes;
+    const m = table[name] || table.bar;
+    this.curName = name; this.cur = m;
     if (!this.ac) return;
-    const t = this.ac.currentTime, m = this.cur;
+    const t = this.ac.currentTime;
     this.filt.frequency.setTargetAtTime(m.f, t, .6);
     this.lfoGain.gain.setTargetAtTime(m.lfo, t, .6);
     if (this.on) this.out.gain.setTargetAtTime(this.vol * m.vol, t, .6);
@@ -804,6 +1015,86 @@ const scenes = {
       { icon: "let", t: "Не лезть", sub: "«Ну и ладно.»", go: "s0_skip" }
     ]
   },
+  home: {
+    bg: "home", place: "Фрунзенская · 19:58", music: "sad",
+    lines: [
+      { who: null, t: "Фрунзенская. Ноутбук открыт, в QGIS третий час не грузится слой." },
+      { who: "", t: "Пятница. Можно было бы лечь спать. Можно было бы доделать карту." },
+      { inmsg: "Глеб", chat: "Егор" },
+      { inmsg: "давай соберёмся в баре сегодня", chat: "Егор" },
+      { inmsg: "есть что обсудить. серьёзно", chat: "Егор" },
+      { inmsg: "Powerhouse, 20:30?", chat: "Егор" },
+      { who: "", t: "Егор никогда не пишет «серьёзно». Значит, правда серьёзно." },
+      { tg: "еду", time: "19:59", sayWho: "", sayText: "Беру ключи от машины. QGIS подождёт." }
+    ],
+    next: "drive"
+  },
+  drive: {
+    bg: "drive", place: "Фрунзенская набережная · 20:05", music: "radio",
+    lines: [
+      { who: null, t: "Фрунзенская набережная. Москва-река чёрная, фонари отражаются в ней полосками." },
+      { who: "", t: "Радио само переключилось на что-то японское. Грустное. Как опенинг к аниме, где все в конце плачут." },
+      { who: null, t: "Ведущий что-то говорит по-японски. Я понимаю только «кои». Любовь." },
+      { who: "", t: "Садовое кольцо, потом прямо до Таганки. Минут двадцать." }
+    ],
+    choices: () => [
+      { icon: "talk", t: "Оставить аниме", sub: "Пусть играет. Под настроение.", go: "drive2", style: "anime" },
+      { icon: "go", t: "Переключить на техно", sub: "Хватит грустить, епта.", go: "drive2", style: "techno" }
+    ]
+  },
+  drive2: {
+    bg: "drive", place: "Садовое кольцо · 20:18", next: "explore",
+    lines: [
+      { who: "", t: "Машину оставлю у бара. Обратно на такси: чую, сегодня будем пить." },
+      { who: null, t: "Таганка. Вывеска POWERHOUSE мигает розовым на мокром асфальте." }
+    ]
+  },
+  explore: {
+    place: "Powerhouse · 20:24", music: "bar",
+    lines: [
+      { inmsg: "опаздываю на 5 минут, займи место", chat: "Егор" },
+      { who: "", t: "Пять минут. Можно пройтись по бару." }
+    ],
+    explore: [
+      { label: "Бармен", x: 50, y: 58, px: 55, py: 58, go: "ex_bar" },
+      { label: "Диджей", x: 84, y: 32, px: 74, py: 44, go: "ex_dj" },
+      { label: "Полка с винилом", x: 16, y: 26, px: 26, py: 30, go: "ex_vinyl" },
+      { label: "Охранник у двери", x: 10, y: 60, px: 22, py: 70, go: "ex_guard" }
+    ],
+    exploreGo: "s0"
+  },
+  ex_bar: {
+    place: "Powerhouse · стойка", music: "bar", next: "explore",
+    lines: [
+      { who: "Бармен", t: "Тебе как обычно? Два виски — тебе и тому, кто опоздает?" },
+      { who: "Глеб", t: "Пока воду, епта. Я за рулём." },
+      { who: "Бармен", t: "«Пока». Знаю я ваше «пока»." }
+    ]
+  },
+  ex_dj: {
+    place: "Powerhouse · пульт", music: "bar", next: "explore",
+    lines: [
+      { who: "Диджей", t: "Сегодня ставлю японский сити-поп. Не спрашивай почему. Само как-то вышло." },
+      { who: "Глеб", t: "У меня в машине тоже само вышло." },
+      { who: "Диджей", t: "Значит, вечер такой. Аниме-вечер, блять." }
+    ]
+  },
+  ex_vinyl: {
+    place: "Powerhouse · винил", music: "bar", next: "explore",
+    lines: [
+      { who: null, t: "Старый рок, советская эстрада и одна пластинка с саундтреком к аниме." },
+      { who: null, t: "На конверте маркером: «для Егора. если решишься»." },
+      { who: "", t: "Странно. Очень странно, епта." }
+    ]
+  },
+  ex_guard: {
+    place: "Powerhouse · вход", music: "bar", next: "explore",
+    lines: [
+      { who: "Охранник", t: "Без драк сегодня, ладно? В прошлую пятницу тут чуть зеркало не разбили." },
+      { who: "Глеб", t: "Мы мирные. Почти." },
+      { who: "Охранник", t: "Все так говорят." }
+    ]
+  },
   secret: {
     place: "Powerhouse · 20:31", egor: true, music: "suspense",
     lines: [
@@ -831,7 +1122,7 @@ const scenes = {
     ],
     ending: "Секретная концовка · Спартанец",
     choices: () => [
-      { icon: "again", t: "Начать главу заново", sub: "Теперь попробуй что-нибудь сделать", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Теперь попробуй что-нибудь сделать", go: "home", reset: true }
     ]
   },
   s0_rus: {
@@ -1025,7 +1316,7 @@ const scenes = {
     ending: "Конец главы 1 · на пороге",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться в Powerhouse, в 21:13", go: "s1b", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   },
   a_talk: {
@@ -1104,7 +1395,7 @@ const scenes = {
     ending: "Конец главы 1 · драка",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться до драки", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   },
   riot: {
@@ -1214,7 +1505,7 @@ const scenes = {
     ending: "Конец главы 1 · в бегах",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться в Powerhouse, в 00:40", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   },
   court: {
@@ -1317,7 +1608,7 @@ const scenes = {
     ending: "Конец главы 1 · восемь лет спустя",
     choices: () => [
       { icon: "rewind", t: "Перемотать восемь лет", sub: "Вернуться в Powerhouse, в 00:40", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   },
   s3: {
@@ -1339,7 +1630,7 @@ const scenes = {
     ending: "Конец главы 1 · отправлено",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться за минуту до сообщения", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   },
   s3b: {
@@ -1356,7 +1647,7 @@ const scenes = {
     ending: "Конец главы 1 · трезвая версия",
     choices: () => [
       { icon: "rewind", t: "Перемотать ещё раз", sub: "Попробовать по-другому", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "home", reset: true }
     ]
   }
 };
@@ -1590,6 +1881,24 @@ function renderMemory() {
 let idleT = null;
 function clearIdle() { clearTimeout(idleT); idleT = null; }
 
+const exSeen = new Set();
+function showExplore() {
+  $("box").style.display = "none";
+  $("phone").classList.remove("on");
+  const portrait = innerHeight > innerWidth;
+  $("exSpots").innerHTML = "";
+  for (const h of scene.explore) {
+    const b = document.createElement("button");
+    b.className = "hs" + (exSeen.has(h.go) ? " seen" : "");
+    b.textContent = h.label;
+    b.style.left = (portrait ? h.px : h.x) + "%"; b.style.top = (portrait ? h.py : h.y) + "%";
+    b.onclick = () => { exSeen.add(h.go); show(h.go); };
+    $("exSpots").appendChild(b);
+  }
+  $("exGo").onclick = () => show(scene.exploreGo);
+  $("explore").classList.add("on");
+}
+
 function show(id) {
   clearIdle();
   if (id === "s0") idleT = setTimeout(() => { if (scene === scenes.s0) show("secret"); }, 25000);
@@ -1608,11 +1917,14 @@ function show(id) {
   focus(null);
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
+  $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "Ю";
+  $("explore").classList.remove("on");
   $("phone").classList.remove("on");
   $("choices").classList.remove("on");
   $("ending").style.display = "none";
   $("box").style.display = "";
   renderMemory();
+  if (scene.explore && exSeen.size) idx = scene.lines.length;
   step();
 }
 
@@ -1620,6 +1932,7 @@ function step() {
   if (B) return;                       // идёт бой — текст стоит
   const l = scene.lines[idx];
   if (!l) {
+    if (scene.explore) return showExplore();
     if (scene.learn) { known.add(scene.learn); renderMemory(); }
     return scene.next ? show(scene.next) : showChoices();
   }
@@ -1649,15 +1962,24 @@ function step() {
     $("tgst").textContent = l.tgStatus; $("tgst").className = "st typing";
     return step();
   }
+  if (l.inmsg) {
+    $("phone").classList.add("on");
+    $("tgnm").textContent = l.chat; $("tgava").textContent = l.chat[0]; $("tgst").textContent = "в сети"; $("tgst").className = "st";
+    const m = document.createElement("div");
+    m.className = "msg from"; m.textContent = l.inmsg;
+    $("msgs").appendChild(m);
+    say(l.chat, l.inmsg);
+    return;
+  }
   if (l.tg) {
     $("phone").classList.add("on");
     // все прошлые сообщения становятся «прочитанными»
     $("msgs").querySelectorAll("i").forEach(i => i.className = "read");
     const m = document.createElement("div");
     m.className = "msg";
-    m.innerHTML = `${l.tg}<i>00:47 ✓✓</i>`;
+    m.innerHTML = `${l.tg}<i>${l.time || "00:47"} ✓✓</i>`;
     $("msgs").appendChild(m);
-    say(null, "Егор печатает, высунув язык.", true);
+    say(l.sayWho !== undefined ? l.sayWho : null, l.sayText || "Егор печатает, высунув язык.", true);
     return;
   }
   if (l.voice) {
@@ -1715,6 +2037,7 @@ function showChoices() {
 
 function choose(c) {
   clearIdle();
+  if (c.style) music.setStyle(c.style);
   if (c.phone) return openGPhone(c.go);
   if (c.reset) known.clear();
   if (!c.rewind) return show(c.go);
@@ -1761,7 +2084,28 @@ function start() {
     clearInterval(t); b.disabled = false; b.textContent = "Понятно";
   }, 1000);
 }
-function closeHowto() { if ($("howtoOk").disabled) return; $("howto").classList.remove("on"); show("s0"); }
+function closeHowto() { if ($("howtoOk").disabled) return; $("howto").classList.remove("on"); runOP(() => show("home")); }
+
+// Аниме-опенинг: иероглифы по одному, сакура, потом название серии
+function runOP(done) {
+  music.mood("hope");
+  const op = $("op");
+  op.querySelectorAll(".petal").forEach(p => p.remove());
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.style.left = Math.random() * 120 + "%";
+    p.style.animationDuration = 4 + Math.random() * 4 + "s";
+    p.style.animationDelay = -Math.random() * 6 + "s";
+    op.appendChild(p);
+  }
+  op.classList.add("on");
+  const frames = [["恋", "любовь"], ["友情", "дружба"], ["運命", "судьба"], ["時間", "время"], ["パワーハウス", "POWERHOUSE · 第一話 · серия первая", true]];
+  frames.forEach(([k, ru, title], i) => setTimeout(() => {
+    $("opK").innerHTML = `<div class="k${title ? " title" : ""}">${k}</div><div class="ru">${ru}</div>`;
+  }, i * 1900));
+  setTimeout(() => { op.classList.remove("on"); done(); }, frames.length * 1900 + 400);
+}
 $("howtoOk").onclick = closeHowto;
 
 // посвящение нельзя пропустить: уходит само через 6 секунд
