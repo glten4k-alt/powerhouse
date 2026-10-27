@@ -154,6 +154,14 @@
   #bg { object-fit:cover; }
 
 
+  /* Посвящение перед заставкой, как в кино */
+  #dedic { position:absolute; inset:0; z-index:12; background:#000; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; text-align:center; padding:0 10%; cursor:pointer; transition:opacity 1s; }
+  #dedic.gone { opacity:0; pointer-events:none; }
+  #dedic p { margin:0; color:#d8d2c4; font:italic 22px/1.6 Georgia, "Times New Roman", serif; opacity:0; animation:dedin 1.6s ease-out forwards; }
+  #dedic p + p { animation-delay:1.2s; color:var(--dim); font-size:17px; }
+  @keyframes dedin { to { opacity:1; } }
+
   /* Экран «Как играть» и подсказки */
   #howto { position:absolute; inset:0; z-index:11; background:#000d; display:none; align-items:center; justify-content:center; padding:4%; }
   #howto.on { display:flex; animation:fadein .5s ease-out; }
@@ -230,6 +238,7 @@
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
+  <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
   <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p>щёлкни, чтобы начать</p></div>
 </div>
 
@@ -1132,6 +1141,7 @@ document.addEventListener("keydown", e => {
   if (e.key === "m" || e.key === "M" || e.key === "ь" || e.key === "Ь") return music.toggle();
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
+  if (!$("dedic").classList.contains("gone")) return closeDedic();
   if (!$("title").classList.contains("gone")) return start();
   if ($("howto").classList.contains("on")) return closeHowto();
   if ($("skip").classList.contains("on")) return closeSkip();
@@ -1142,6 +1152,11 @@ document.addEventListener("keydown", e => {
 function start() { $("title").classList.add("gone"); music.start(); $("howto").classList.add("on"); }
 function closeHowto() { $("howto").classList.remove("on"); show("s0"); }
 $("howtoOk").onclick = closeHowto;
+
+// посвящение уходит само через 5 секунд или по нажатию
+function closeDedic() { $("dedic").classList.add("gone"); }
+$("dedic").onclick = closeDedic;
+setTimeout(closeDedic, 5000);
 
 // подсказки: каждая показывается один раз за игру
 const hinted = new Set();
