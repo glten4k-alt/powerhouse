@@ -71,9 +71,25 @@
   #memory { position:absolute; top:11%; right:3%; display:flex; gap:8px; z-index:2; }
   #mute { position:absolute; top:3%; right:3%; z-index:7; background:var(--box); border:1px solid #ffffff22; color:var(--text);
     border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
-  #mute:hover, #menuBtn:hover { border-color:var(--accent); }
+  #mute:hover, #menuBtn:hover, #tlBtn:hover { border-color:var(--accent); }
+  #tl { position:absolute; inset:0; z-index:9; background:rgba(6,8,18,.92); display:none; flex-direction:column; padding:5% 6%; overflow:auto; }
+  #tl.on { display:flex; }
+  #tl h2 { margin:0 0 4px; color:var(--cold); font:bold 22px "Courier New", monospace; letter-spacing:.1em; }
+  #tl .sub { color:var(--dim); font-size:13px; margin-bottom:14px; }
+  #tl .pts { position:relative; padding-left:22px; border-left:2px dashed #8fc3ff55; margin-left:6px; }
+  #tl .pt { position:relative; display:block; width:100%; text-align:left; background:var(--box); border:1px solid #ffffff1a; color:var(--text);
+    border-radius:10px; padding:9px 12px; margin:0 0 10px; cursor:pointer; font:inherit; }
+  #tl .pt:hover { border-color:var(--cold); }
+  #tl .pt::before { content:""; position:absolute; left:-30px; top:13px; width:12px; height:12px; border-radius:50%; background:var(--cold); box-shadow:0 0 8px var(--cold); }
+  #tl .pt.now { border-color:var(--accent); cursor:default; }
+  #tl .pt.now::before { background:var(--accent); box-shadow:0 0 10px var(--accent); }
+  #tl .pt b { display:block; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--cold); }
+  #tl .pt.now b { color:var(--accent); }
+  #tl .pt span { font-size:14px; color:var(--dim); }
+  #tl .memo { margin:6px 0 14px; display:flex; gap:6px; flex-wrap:wrap; }
+  #tl .close { align-self:flex-start; margin-top:4px; background:none; border:1px solid #ffffff33; color:var(--text); border-radius:8px; padding:6px 14px; cursor:pointer; font:inherit; }
   #topR { position:absolute; top:3%; right:3%; z-index:7; display:flex; gap:6px; }
-  #topR #mute, #menuBtn { position:static; background:var(--box); border:1px solid #ffffff22; color:var(--text);
+  #topR #mute, #menuBtn, #tlBtn { position:static; background:var(--box); border:1px solid #ffffff22; color:var(--text);
     border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
   .mem { background:var(--box); border:1px solid var(--cold); color:var(--cold); border-radius:20px; padding:4px 12px; font-size:13px;
     animation:pop .4s ease-out; }
@@ -147,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10272312") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10272321") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -357,7 +373,7 @@
     #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px;
       max-width:calc(100% - 190px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     #topR { top:calc(env(safe-area-inset-top) + 10px); right:10px; }
-    #topR #mute, #menuBtn { font-size:12px; padding:4px 9px; }
+    #topR #mute, #menuBtn, #tlBtn { font-size:12px; padding:4px 9px; }
     #memory { top:calc(env(safe-area-inset-top) + 48px); right:10px; left:10px; justify-content:flex-end; flex-wrap:wrap; }
     .mem { font-size:12px; }
     #ending { top:calc(env(safe-area-inset-top) + 48px); font-size:13px; white-space:normal; text-align:center; max-width:90%; }
@@ -384,16 +400,17 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272312" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272312" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272321" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272321" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272312) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272321) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="memory"></div>
-  <div id="topR"><button id="menuBtn">≡ меню</button><button id="mute" title="Клавиша M">♫ звук: вкл</button></div>
+  <div id="tl"><h2>⟲ ПЕРЕМОТКА</h2><div class="sub">Нажми на момент, чтобы вернуться. Всё, что Глеб узнал, останется с ним.</div><div class="memo" id="tlMem"></div><div class="pts" id="tlPts"></div><button class="close" id="tlClose">Закрыть</button></div>
+  <div id="topR"><button id="tlBtn" title="Клавиша T">⟲ время</button><button id="menuBtn">≡ меню</button><button id="mute" title="Клавиша M">♫ звук: вкл</button></div>
   <div id="ending"></div>
   <div id="box"><div id="name"></div><div id="line"></div><div id="next">▼ щёлкни</div></div>
   <div id="choices"></div>
@@ -774,7 +791,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272312"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272321"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -2823,13 +2840,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272312`, talk: `img/${n}_talk.png?v=10272312`, blink: `img/${n}_blink.png?v=10272312` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272321`, talk: `img/${n}_talk.png?v=10272321`, blink: `img/${n}_blink.png?v=10272321` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272312" : `img/${n}_spartan.png?v=10272312`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272321" : `img/${n}_spartan.png?v=10272321`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2858,7 +2875,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272312`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272321`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -2867,7 +2884,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272312`; el.alt = who;
+  el.src = `img/${n}.png?v=10272321`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -2893,6 +2910,33 @@ function focus(who) {
 
 // Магия Глеба (только в главе «Изнанка»): каждое заклинание тратит ✦
 let mana = 0;
+// ---------- Таймлайн перемотки: каждая развилка — точка, к ней можно вернуться ----------
+let timeline = [];
+function markTimeline(id) {
+  const sc = scenes[id];
+  if (!sc.choices || sc.ending || id.startsWith("brawl")) return;
+  const i = timeline.findIndex(p => p.id === id);
+  if (i >= 0) { timeline = timeline.slice(0, i + 1); timeline[i].pick = null; }
+  else timeline.push({ id, place: sc.place });
+}
+function openTimeline() {
+  if (B || BR.on) return;
+  const cur = timeline.length - 1;
+  $("tlMem").innerHTML = known.size ? [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
+    : `<div class="sub" style="margin:0">Глеб пока ничего особенного не узнал.</div>`;
+  $("tlPts").innerHTML = timeline.length ? timeline.map((p, i) =>
+    `<button class="pt${i === cur && scene === scenes[p.id] ? " now" : ""}" data-i="${i}"><b>${p.place}</b><span>${p.pick ? "Ты выбрал: «" + p.pick + "»" : (i === cur ? "Ты здесь. Выбор ещё не сделан." : "")}</span></button>`
+  ).join("") : `<div class="sub">Развилок пока не было. Перематывать некуда.</div>`;
+  $("tlPts").querySelectorAll(".pt").forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    const p = timeline[+b.dataset.i];
+    if (b.classList.contains("now")) return closeTimeline();
+    closeTimeline();
+    choose({ go: p.id, rewind: true });
+  });
+  $("tl").classList.add("on");
+}
+function closeTimeline() { $("tl").classList.remove("on"); }
 function renderMemory() {
   $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
     + (scene && scene.x ? `<div class="mem mana">✦ магия: ${mana}</div>` : "");
@@ -2936,6 +2980,7 @@ function show(id) {
   clearIdle();
   if (id === "s0") idleT = setTimeout(() => { if (scene === scenes.s0) show("secret"); }, 25000);
   scene = scenes[id]; idx = 0;
+  markTimeline(id);
   saveGame(id);
   paint(scene.years || 0);
   $("stage").classList.toggle("siren", !!scene.siren);
@@ -2957,7 +3002,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272312) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272321) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -3083,7 +3128,7 @@ function showChoices() {
   }
   box.classList.add("on");
   const cs = scene.choices();
-  if (cs.some(c => c.rewind)) hint("rewind", "⟲ Это перемотка. Глеб вернётся назад, но запомнит то, что узнал.");
+  if (cs.some(c => c.rewind)) hint("rewind", "⟲ Это перемотка. Глеб вернётся назад, но запомнит то, что узнал. Все развилки — по кнопке «⟲ время» сверху.");
   else if (cs.some(c => c.cls === "new")) hint("new", "Синяя карточка открылась, потому что Глеб помнит прошлую попытку.");
 }
 
@@ -3091,12 +3136,13 @@ let loopDay = 1;
 function choose(c) {
   clearIdle();
   if (c.menu) return goMenu();
+  if (timeline.length && !c.reset) timeline[timeline.length - 1].pick = c.t;
   if (c.magic) { mana = Math.max(0, mana - c.magic); magicFx(); }
   if (c.loop) loopDay++;
   if (c.loopReset) loopDay = 1;
   if (c.style) music.setStyle(c.style);
   if (c.phone) return openGPhone(c.go);
-  if (c.reset) known.clear();
+  if (c.reset) { known.clear(); timeline = []; }
   if (!c.rewind) return show(c.go);
   $("choices").classList.remove("on");
   $("stage").classList.add("rewinding");
@@ -3183,7 +3229,7 @@ const SAVE_KEY = "powerhouse-save-v1";
 const SAVE_ON = true;
 function saveGame(id) {
   if (!SAVE_ON || id.startsWith("brawl")) return;
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], mana, place: scenes[id].place, t: Date.now() })); } catch (e) {}
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], timeline, mana, place: scenes[id].place, t: Date.now() })); } catch (e) {}
 }
 function loadSave() {
   if (!SAVE_ON) return null;
@@ -3192,13 +3238,14 @@ function loadSave() {
 function continueGame() {
   const d = loadSave(); if (!d) return start();
   $("title").classList.add("gone"); music.start();
-  known.clear(); d.known.forEach(k => known.add(k));
+  known.clear(); timeline = []; d.known.forEach(k => known.add(k));
   mana = d.mana || 0;
+  timeline = d.timeline || [];
   show(d.scene);
 }
 function newGame() {
   try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
-  known.clear(); start();
+  known.clear(); timeline = []; start();
 }
 // Главное меню: продолжить сохранение, начать главу 1 или режим драки
 function initMenu() {
@@ -3211,17 +3258,17 @@ $("mStory").onclick = e => { e.stopPropagation(); newGame(); };
 $("mX").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
-  known.clear(); $("title").classList.add("gone"); music.start(); show("x_home");
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("x_home");
 };
 $("mP").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
-  known.clear(); $("title").classList.add("gone"); music.start(); show("p_bar");
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("p_bar");
 };
 $("mL").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
-  known.clear(); $("title").classList.add("gone"); music.start(); show("l_1");
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("l_1");
 };
 $("mBrawl").onclick = e => { e.stopPropagation(); $("title").classList.add("gone"); music.start(); show("brawl_mode"); };
 initMenu();
@@ -3238,6 +3285,10 @@ function goMenu() {
   music.mood("hope");
 }
 $("menuBtn").onclick = e => { e.stopPropagation(); goMenu(); };
+$("tlBtn").onclick = e => { e.stopPropagation(); $("tl").classList.contains("on") ? closeTimeline() : openTimeline(); };
+$("tlClose").onclick = e => { e.stopPropagation(); closeTimeline(); };
+$("tl").onclick = e => e.stopPropagation();
+document.addEventListener("keydown", e => { if ((e.key === "t" || e.key === "е") && $("title").classList.contains("gone")) $("tl").classList.contains("on") ? closeTimeline() : openTimeline(); });
 
 // ---------- Telegram Mini App ----------
 // Внутри Telegram: развернуть на весь экран, не закрываться свайпом вниз, тёмная шапка.
