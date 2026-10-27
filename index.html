@@ -159,6 +159,7 @@
     border:1px solid var(--accent); background:#f0b35e22; }
   #saveBtns #mBrawl { border-color:#ffffff33; background:none; color:var(--dim); }
   #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
+  #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
   #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
   #saveBtns small:empty { display:none; }
   #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
@@ -379,15 +380,15 @@
     .bam { font-size:40px; }
   }
 </style>
-<style>#mX,#mL,#mBrawl{display:none!important}</style></head>
+<style>#mX,#mL,#mP,#mBrawl{display:none!important}</style></head>
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272259" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272259" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272304" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272304" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272259) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272304) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -436,7 +437,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mP">Глава 2 · превью</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -454,7 +455,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -773,7 +774,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272259"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272304"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -818,6 +819,59 @@ function drawLecture() {
   c.fillText("Город — это люди", bx + 6, by + 30);
   // ряды парт
   for (let r = 0; r < 3; r++) R(0, H * (.68 + r * .1), W, 4, "#8a6a4a");
+}
+
+// ---------- Локация: гараж Пети, ночь ----------
+function drawGarage() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#16181c"); R(0, H * .66, W, H * .34, "#24262a");
+  for (let x = 0; x < W; x += 24) R(x, 0, 1, H * .66, "#1e2024");
+  // лампа и конус света
+  R(W / 2 - 6, 4, 12, 3, "#e8f0ff");
+  c.fillStyle = "#dfe8ff14"; c.beginPath(); c.moveTo(W / 2 - 6, 7); c.lineTo(W / 2 + 6, 7); c.lineTo(W * .85, H); c.lineTo(W * .15, H); c.fill();
+  // полуразобранные машины
+  const car = (x, y, w, col) => { R(x, y, w, 10, col); R(x + w * .2, y - 7, w * .5, 7, col); R(x + 3, y + 10, 7, 5, "#0c0c0e"); R(x + w - 10, y + 10, 7, 5, "#0c0c0e"); };
+  car(W * .04, H * .62, W * .38, "#4a3a34"); car(W * .58, H * .6, W * .36, "#2e3a44");
+  R(W * .62, H * .57, 10, 4, "#1a1a1a"); // снятый капот
+  for (let i = 0; i < 6; i++) R(W * .1 + i * 9, H * .8, 6, 3, "#5a5048"); // детали на полу
+  R(W * .78, H * .3, 22, 30, "#2a2c30"); for (let i = 0; i < 4; i++) R(W * .78 + 2, H * .3 + 3 + i * 7, 18, 2, "#4a4c50");
+}
+
+// ---------- Локация: берег Оки ночью, палатки, костёр, буря ----------
+let okaRAF = 0, okaT = 0;
+function drawOka() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const storm = !!(scene && scene.storm), flash = storm && (okaT % 220 < 4 || okaT % 220 === 9);
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, flash ? "#c8d0ff" : "#0a0e1c"); g.addColorStop(.55, flash ? "#6a70a0" : "#1a2238");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  if (!storm) for (let i = 0; i < 26; i++) R((i * 53) % W, (i * 29) % (H * .4), 1, 1, "#cfd8ff");
+  const hy = H * .55;
+  // лес на том берегу
+  for (let x = 0; x < W; x += 6) { const h = 14 + (x * 13 % 11); R(x, hy - h, 6, h, flash ? "#2a2e40" : "#070a12"); }
+  // молния в одно и то же дерево
+  if (flash) { c.strokeStyle = "#f4f6ff"; c.lineWidth = 2; c.beginPath(); c.moveTo(W * .7, 0); c.lineTo(W * .66, H * .2); c.lineTo(W * .72, H * .3); c.lineTo(W * .69, hy - 20); c.stroke(); }
+  // вода
+  R(0, hy, W, H * .15, flash ? "#4a5070" : "#0e1628");
+  for (let i = 0; i < 14; i++) R((i * 41 + okaT * (storm ? 2 : .3)) % W, hy + 3 + (i * 7) % (H * .13), 8, 1, "#2a3a5a");
+  // берег
+  R(0, hy + H * .15, W, H, "#141810");
+  // палатки
+  const tent = (x, w, col) => { c.fillStyle = col; c.beginPath(); c.moveTo(x, H * .86); c.lineTo(x + w / 2, H * .72); c.lineTo(x + w, H * .86); c.fill(); R(x + w / 2 - 1, H * .78, 2, H * .08, "#0a0a0a"); };
+  tent(W * .06, W * .26, "#3a5a3a"); tent(W * .68, W * .26, "#5a4a2a");
+  // костёр
+  const fx = W * .5, fy = H * .86, fl = 6 + Math.sin(okaT * .3) * 2 + (storm ? Math.sin(okaT * .9) * 3 : 0);
+  c.fillStyle = "#ff8a2a33"; c.beginPath(); c.arc(fx, fy - 4, 26, 0, 7); c.fill();
+  R(fx - 8, fy, 16, 2, "#4a2a18");
+  R(fx - 3, fy - fl, 6, fl, "#ff8a2a"); R(fx - 1, fy - fl - 3, 3, fl, "#ffd060");
+  // дождь, ветер со всех сторон
+  if (storm) for (let i = 0; i < 70; i++) { const x = (i * 37 + okaT * (i % 2 ? 3 : -3)) % W, y = (i * 23 + okaT * 6) % H; R((x + W) % W, y, 1, 4, "#8a9ac888"); }
+}
+function startOka() {
+  cancelAnimationFrame(okaRAF);
+  const loop = () => { if (!scene || scene.bg !== "oka") return; okaT++; drawOka(); okaRAF = requestAnimationFrame(loop); };
+  loop();
 }
 
 // ---------- Техно на фоне (синтезируется в браузере, без файлов) ----------
@@ -1617,6 +1671,108 @@ const scenes = {
     choices: () => [
       { icon: "rewind", t: "Сначала", sub: "Первый платёж", go: "l_1", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  // ================= Превью главы 2: «Сохранение» (сюжет Глеба) =================
+  p_bar: {
+    place: "Превью · бар · 23:17", music: "eerie", egor: true,
+    lines: [
+      { skip: "Глава 2 · превью" },
+      { who: null, t: "Почти пустой бар. На столе два стакана и мой телефон." },
+      { fx: "glitch", inmsg: "Срочно. Гараж. Нельзя по телефону. Приезжайте оба.", chat: "Петя" },
+      { who: "Егор", t: "Это Петя? Он так не пишет. Он даже «срочно» с ошибкой пишет." }
+    ],
+    choices: () => [
+      { icon: "go", t: "Поехать", sub: "К Пете в гараж", go: "p_garage" },
+      { icon: "let", t: "Остаться", sub: "Допить и не думать", go: "p_stay" }
+    ]
+  },
+  p_stay: {
+    place: "Превью · бар · 23:18", music: "eerie", egor: true,
+    lines: [
+      { who: null, t: "Мы остаёмся. Телефон больше не вибрирует." },
+      { fx: "glitch", who: "", t: "Странно. Кажется, этот вечер уже был. И я уже оставался." }
+    ],
+    ending: "Превью · ветка оборвалась",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать", sub: "23:17, сообщение от Пети", go: "p_bar", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  p_garage: {
+    bg: "garage", place: "Превью · гараж Пети · 23:52", music: "suspense",
+    lines: [
+      { who: null, t: "Петя стоит среди полуразобранных машин. Экран его телефона светится ровным белым светом." },
+      { who: "Петя", t: "Саша пропала. Сначала просто не отвечала. Потом пришли сообщения. Не от неё." },
+      { who: null, t: "Он показывает переписку. Номера нет. Только «Неизвестный»." },
+      { inmsg: "Если хочешь вернуть объект, поставь палатку на берегу Оки. Координаты придут. Не ищи её в городе. Город — это уже не её слой.", chat: "Неизвестный" },
+      { inmsg: "Она кричит только тогда, когда ты смотришь в ту сторону. Не смотри — и она замолчит. Но тогда её не будет.", chat: "Неизвестный" },
+      { who: "Петя", t: "Они приходят, даже когда телефон в авиарежиме." },
+      { who: "Глеб", t: "Едем." }
+    ],
+    next: "p_oka"
+  },
+  p_oka: {
+    bg: "oka", place: "Превью · берег Оки · 02:40", music: "eerie",
+    lines: [
+      { who: null, t: "Две палатки, костёр. Тишина слишком ровная, будто её нарисовали." },
+      { inmsg: "Трое из вас думают, что приехали спасать. Один из вас уже знает, что это цикл.", chat: "Неизвестный" },
+      { inmsg: "Если услышишь крик — это не она. Это ты сам, только с другого сохранения.", chat: "Неизвестный" }
+    ],
+    next: "p_storm"
+  },
+  p_storm: {
+    bg: "oka", storm: true, place: "Превью · берег Оки · 03:13", music: "tense",
+    lines: [
+      { fx: "shot", who: null, t: "Начинается буря. Ветер дует со всех сторон сразу. Молнии бьют в одни и те же деревья и не сжигают их." },
+      { who: "Петя", t: "Слышите? Это Саша." },
+      { who: null, t: "Из леса доносится её голос. Знакомый и чуть искажённый." },
+      { who: "Егор", t: "Не ходи. Подожди до утра." },
+      { fx: "glitch", inmsg: "Выбор уже сделан. Ты просто ещё не нажал кнопку. Иди один. Или останься. В обоих случаях ты придёшь сюда снова.", chat: "Неизвестный" }
+    ],
+    choices: () => [
+      { icon: "go", t: "Идти одному", sub: "На крик, в бурю", go: "p_alone" },
+      { icon: "let", t: "Остаться у костра", sub: "Переждать до утра", go: "p_fire" }
+    ]
+  },
+  p_alone: {
+    bg: "oka", storm: true, place: "Превью · прогалина", music: "eerie", noSprites: true,
+    lines: [
+      { who: null, t: "Я ухожу в бурю. Через десять шагов голоса друзей обрываются." },
+      { who: null, t: "В прогалине стоит Саша. Неподвижно. Вокруг неё четыре тёмных силуэта, дождь проходит сквозь них." },
+      { who: null, t: "Силуэты поворачиваются. Я узнаю лица, но не совсем. Это мы же, только старше и усталее." },
+      { who: "Настоящий Глеб", t: "Ну наконец-то. Мы уже устали ждать, пока ты дойдёшь до этой сцены." },
+      { who: "Настоящий Петя", t: "Саша тут ни при чём. Она маркер. Точка, к которой тебя тянет каждый раз." },
+      { who: "Настоящий Егор", t: "Ты — Петя из сохранения. Точнее, один из Петь. Мы написали эту ветку как шутку. Потом она начала крутиться сама." },
+      { who: "Настоящий Витя", t: "Каждый раз, когда игрок выбирает «поехать к Пете», ты просыпаешься в баре, получаешь сообщение и доходишь до этой поляны. Мы уже не помним, сколько циклов прошло." },
+      { who: "Саша", t: "Они правда авторы. Я тоже. В этот раз меня поставили в роль пропавшей девушки. В прошлом цикле я сидела в баре." },
+      { who: "Настоящий Глеб", t: "Спроси что угодно. Но ответа, который тебя устроит, не будет. «Выйти из игры» здесь значит перестать загружаться. А мы пока не придумали, как сделать это красиво." },
+      { who: null, t: "Буря стихает. Силуэты теряют плотность." },
+      { who: "Настоящий Глеб", t: "Иди к костру. Или не иди. К утру ты всё равно очнёшься в том же баре. Мы чуть сдвинем диалоги, чтобы тебе не было скучно." },
+      { fx: "glitch", who: null, t: "[Цикл 47. Точка возврата: бар. Сообщение от Пети.]" }
+    ],
+    ending: "Превью · концовка «Цикл 47»",
+    choices: () => [
+      { icon: "rewind", t: "Загрузиться снова", sub: "Бар, 23:17", go: "p_bar", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  p_fire: {
+    bg: "oka", place: "Превью · берег Оки · рассвет", music: "sad",
+    lines: [
+      { who: null, t: "Мы пережидаем бурю. Крик стихает." },
+      { who: null, t: "Под утро Петя находит у кромки леса её телефон. На экране одно сообщение." },
+      { inmsg: "Вы правильно сделали, что остались. Теперь можно говорить нормально.", chat: "Неизвестный" },
+      { who: null, t: "Из леса выходят четыре силуэта. Те же лица, только старше." },
+      { who: "Настоящий Егор", t: "Интересно. Обычно ты бежишь за криком. А тут решил подождать. Мы ставили, что ты сломаешь цикл действием. Оказывается, можно и бездействием." },
+      { who: "Настоящий Витя", t: "Разницы почти нет. Правду ты узнаёшь в одной и той же точке. Просто в этот раз не ты пришёл к нам, а мы к тебе." },
+      { who: null, t: "Дальше тот же разговор: о циклах, об авторах, о Пете, который вечно доходит до этой поляны или ждёт у костра, пока кто-то из создателей не удалит ветку." },
+      { who: "Настоящий Глеб", t: "К утру бар. Сообщение. Выбор. Мы будем здесь. Как всегда." }
+    ],
+    ending: "Превью · концовка «У костра»",
+    choices: () => [
+      { icon: "rewind", t: "Загрузиться снова", sub: "Бар, 23:17", go: "p_bar", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
   secret: {
@@ -2667,13 +2823,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272259`, talk: `img/${n}_talk.png?v=10272259`, blink: `img/${n}_blink.png?v=10272259` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272304`, talk: `img/${n}_talk.png?v=10272304`, blink: `img/${n}_blink.png?v=10272304` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272259" : `img/${n}_spartan.png?v=10272259`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272304" : `img/${n}_spartan.png?v=10272304`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2702,7 +2858,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272259`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272304`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -2711,7 +2867,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272259`; el.alt = who;
+  el.src = `img/${n}.png?v=10272304`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -2801,7 +2957,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272259) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272304) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -3056,6 +3212,11 @@ $("mX").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); $("title").classList.add("gone"); music.start(); show("x_home");
+};
+$("mP").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); $("title").classList.add("gone"); music.start(); show("p_bar");
 };
 $("mL").onclick = e => {
   e.stopPropagation();
