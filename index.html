@@ -71,7 +71,10 @@
   #memory { position:absolute; top:11%; right:3%; display:flex; gap:8px; z-index:2; }
   #mute { position:absolute; top:3%; right:3%; z-index:7; background:var(--box); border:1px solid #ffffff22; color:var(--text);
     border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
-  #mute:hover { border-color:var(--accent); }
+  #mute:hover, #menuBtn:hover { border-color:var(--accent); }
+  #topR { position:absolute; top:3%; right:3%; z-index:7; display:flex; gap:6px; }
+  #topR #mute, #menuBtn { position:static; background:var(--box); border:1px solid #ffffff22; color:var(--text);
+    border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
   .mem { background:var(--box); border:1px solid var(--cold); color:var(--cold); border-radius:20px; padding:4px 12px; font-size:13px;
     animation:pop .4s ease-out; }
 
@@ -151,10 +154,11 @@
   #title h1 { margin:10px 0 24px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.08em;
     text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
   #title p { color:var(--dim); font-size:14px; }
-  #saveBtns { display:none; flex-direction:column; gap:10px; align-items:center; margin-top:6px; }
+  #saveBtns { display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:6px; }
   #saveBtns button { width:220px; padding:12px; border-radius:10px; font:inherit; font-size:16px; cursor:pointer; color:var(--text);
     border:1px solid var(--accent); background:#f0b35e22; }
-  #saveBtns #bNew { border-color:#ffffff33; background:none; color:var(--dim); }
+  #saveBtns #mBrawl { border-color:#c44848; background:#c4484822; }
+  #saveBtns small:empty { display:none; }
   #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
   @keyframes neon { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.4; } 95% { opacity:1; } 97% { opacity:.6; } }
@@ -164,6 +168,24 @@
 
 
 
+
+
+  /* Драка beat 'em up */
+  #brawl { position:absolute; inset:0; z-index:8; display:none; flex-direction:column; }
+  #brawl.on { display:flex; }
+  #brawlCv { flex:1; width:100%; min-height:0; image-rendering:pixelated; object-fit:contain; }
+  #brawl .hud { position:absolute; top:3%; left:50%; transform:translateX(-50%); display:flex; gap:10px; align-items:center;
+    background:var(--box); border-radius:10px; padding:6px 10px; font-size:12px; color:var(--dim); width:min(92%, 560px); }
+  #brawl .hud .b { flex:1; } #brawl .hud .bar { height:9px; background:#2a1f2a; border-radius:2px; overflow:hidden; margin-top:3px; }
+  #brawl .hud .bar i { display:block; height:100%; background:#5fd16a; transition:width .2s; }
+  #brW { color:#ffe14f; font-weight:bold; white-space:nowrap; }
+  #brawl .pad { display:flex; justify-content:space-between; align-items:center; padding:8px 14px calc(env(safe-area-inset-bottom) + 10px); gap:10px; }
+  #brawl .dpad { display:grid; grid-template-columns:repeat(3, 48px); grid-template-rows:repeat(2, 44px); gap:6px; }
+  #brawl .pad button { border-radius:10px; border:2px solid #000; background:#2a2a36; color:#fff; font:bold 18px "Courier New", monospace;
+    box-shadow:0 3px 0 #000; touch-action:none; user-select:none; -webkit-user-select:none; }
+  #brawl .pad button:active { transform:translateY(2px); box-shadow:0 1px 0 #000; }
+  #brawl .pad .hitb { width:96px; height:96px; border-radius:50%; background:#c44848; font-size:20px; }
+  #brawl .tip { text-align:center; font-size:12px; color:var(--dim); padding:0 10px; }
 
   /* Таймер из воспоминания */
   #timer { position:absolute; left:50%; top:30%; transform:translate(-50%,-50%); z-index:6; display:none;
@@ -306,8 +328,9 @@
     #gleb { left:-6%; } #egor { right:-6%; } #stage.spartan #egor { height:40%; } #npc { right:0; height:44%; } #npc.mid { height:38%; }
     #stage.fight #gleb { left:6%; } #stage.fight #egor { right:6%; }
     #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px;
-      max-width:calc(100% - 130px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    #mute { top:calc(env(safe-area-inset-top) + 10px); right:10px; font-size:12px; }
+      max-width:calc(100% - 190px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    #topR { top:calc(env(safe-area-inset-top) + 10px); right:10px; }
+    #topR #mute, #menuBtn { font-size:12px; padding:4px 9px; }
     #memory { top:calc(env(safe-area-inset-top) + 48px); right:10px; left:10px; justify-content:flex-end; flex-wrap:wrap; }
     .mem { font-size:12px; }
     #ending { top:calc(env(safe-area-inset-top) + 48px); font-size:13px; white-space:normal; text-align:center; max-width:90%; }
@@ -334,16 +357,16 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272221" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272221" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272227" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272227" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272221) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272227) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="memory"></div>
-  <button id="mute" title="Клавиша M">♫ звук: вкл</button>
+  <div id="topR"><button id="menuBtn">≡ меню</button><button id="mute" title="Клавиша M">♫ звук: вкл</button></div>
   <div id="ending"></div>
   <div id="box"><div id="name"></div><div id="line"></div><div id="next">▼ щёлкни</div></div>
   <div id="choices"></div>
@@ -363,6 +386,15 @@
   </div></div>
   <div id="hint"></div>
   <div id="explore"><div id="exTip">Пройдись по бару: нажимай на людей</div><div id="exSpots"></div><button id="exGo">Сесть за стойку и ждать Егора →</button></div>
+  <div id="brawl">
+    <div class="hud"><div class="b">Глеб<div class="bar"><i id="brG"></i></div></div><div class="b">Егор<div class="bar"><i id="brE"></i></div></div><span id="brW">Волна 1/3</span></div>
+    <canvas id="brawlCv" width="320" height="180"></canvas>
+    <div class="tip">Стрелки или WASD — ходить, пробел — удар. На телефоне — кнопки.</div>
+    <div class="pad">
+      <div class="dpad"><span></span><button data-k="up">▲</button><span></span><button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button></div>
+      <button class="hitb" data-k="hit">УДАР</button>
+    </div>
+  </div>
   <div id="timer">00:00</div>
   <svg id="crack" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M58 0 L52 18 L60 30 L47 46 L55 58 L44 76 L50 100" stroke="#fff" stroke-width=".6" fill="none" opacity=".85"/><path d="M52 18 L38 24 M47 46 L63 52 M44 76 L30 84" stroke="#fff" stroke-width=".4" fill="none" opacity=".7"/></svg>
   <div id="op"><div class="bar1"></div><div class="bar2"></div><div id="opK"></div></div>
@@ -378,7 +410,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p id="tapStart">щёлкни, чтобы начать</p><div id="saveBtns"><button id="bCont">Продолжить</button><button id="bNew">Новая игра</button><small id="saveInfo"></small></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -715,7 +747,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272221"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272227"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1083,6 +1115,37 @@ const scenes = {
     choices: () => [
       { icon: "talk", t: "Спросить про Руса", sub: "«Что у вас вообще случилось?»", go: "s0_rus" },
       { icon: "let", t: "Не лезть", sub: "«Ну и ладно.»", go: "s0_skip" }
+    ]
+  },
+  brawl_mode: {
+    place: "Режим драки · Powerhouse", music: "tense", noSprites: true,
+    lines: [
+      { who: null, t: "Режим драки. Три волны: вышибалы, фанаты техно и главный вышибала. Никто не умирает — все просто вырубаются." },
+      { brawl: true, win: "brawl_win", lose: "brawl_lose" }
+    ]
+  },
+  brawl_win: {
+    place: "Режим драки · Powerhouse", music: "hope", egor: true,
+    lines: [
+      { who: null, t: "Главный вышибала садится на пол и вежливо просит воды. Немного крови на кафеле — в основном наша." },
+      { who: "Егор", t: "Бро. Это был лучший вечер в моей жизни." }
+    ],
+    ending: "Режим драки · победа",
+    choices: () => [
+      { icon: "fight", t: "Ещё раз", sub: "Те же три волны", go: "brawl_mode" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  brawl_lose: {
+    place: "Режим драки · Powerhouse", music: "sad", egor: true,
+    lines: [
+      { who: null, t: "Нас выносят на Гончарную под руки. Нос разбит, рубашка в крови, но все живы." },
+      { who: "Егор", t: "Бро… мы хотя бы красиво легли." }
+    ],
+    ending: "Режим драки · поражение",
+    choices: () => [
+      { icon: "fight", t: "Ещё раз", sub: "Реванш", go: "brawl_mode" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
     ]
   },
   home: {
@@ -1934,6 +1997,198 @@ function startBattle(type, win, lose, opt = {}) {
   }
 }
 
+// ---------- Драка в стиле beat 'em up: вид сбоку, Глеб и Егор против вышибал ----------
+// Никто не умирает: противники вырубаются и уходят. Немного пиксельной крови на полу.
+const BR = { on: false, keys: {}, raf: 0 };
+const FIGHTER = {
+  gleb:   { hair: "#2e1c14", hairH: 7, curly: true,  skin: "#e8b48a", top: "stripe", topA: "#1c1a1e", topB: "#e8dcc0", legs: "#262632", w: 10, hp: 100, name: "Глеб" },
+  egor:   { hair: "#c0662a", hairH: 4, curly: false, skin: "#e8b48a", top: "jacket", topA: "#3a2a24", topB: "#6a6a70", legs: "#262632", w: 10, hp: 100, name: "Егор" },
+  bouncer:{ hair: null, skin: "#d8a07a", top: "tee", topA: "#141416", topB: "#f0c040", legs: "#18181c", w: 13, hp: 40, dmg: 7, speed: .45 },
+  techno: { hair: "#5fd16a", hairH: 6, mohawk: true, skin: "#e8b48a", top: "tank", topA: "#ff4f9e", topB: "#ff4f9e", legs: "#3a5a8a", w: 9, hp: 28, dmg: 5, speed: .7 },
+  boss:   { hair: null, skin: "#c8906a", top: "tee", topA: "#101012", topB: "#d8d8d8", legs: "#101012", w: 16, hp: 110, dmg: 10, speed: .38, shades: true, big: true }
+};
+const WAVES = [["bouncer", "bouncer"], ["techno", "techno", "techno"], ["boss", "bouncer"]];
+
+function brawlNew(win, lose) {
+  const W = 320;
+  BR.win = win; BR.lose = lose; BR.wave = 0; BR.done = false; BR.t = 0;
+  BR.ents = [
+    { kind: "gleb", x: 70, y: 140, hp: 100, dir: 1, cd: 0, act: 0, hurt: 0, ko: 0, player: true },
+    { kind: "egor", x: 50, y: 155, hp: 100, dir: 1, cd: 0, act: 0, hurt: 0, ko: 0, ally: true }
+  ];
+  BR.blood = []; BR.drops = []; BR.msg = ""; BR.msgT = 0;
+  brawlWave();
+}
+function brawlWave() {
+  const list = WAVES[BR.wave];
+  const edge = Math.min(330, (BR.cam || 0) + (BR.vw || 320) + 10);
+  list.forEach((k, i) => BR.ents.push({ kind: k, x: edge + i * 22, y: 128 + (i % 3) * 14, hp: FIGHTER[k].hp, dir: -1, cd: 60 + i * 30, act: 0, hurt: 0, ko: 0, enemy: true }));
+  brawlSay(BR.wave === 2 ? "ГЛАВНЫЙ ВЫШИБАЛА!" : "ВОЛНА " + (BR.wave + 1) + " / " + WAVES.length);
+}
+function brawlSay(t) { BR.msg = t; BR.msgT = 90; }
+
+function brawlStart(win, lose) {
+  brawlNew(win, lose);
+  BR.on = true;
+  $("box").style.display = "none";
+  $("brawl").classList.add("on");
+  // на телефоне камера ближе и едет за Глебом, на компьютере видно весь зал
+  const portrait = innerHeight > innerWidth, cv = $("brawlCv");
+  BR.vw = portrait ? 160 : 320; BR.vh = portrait ? 140 : 180;
+  cv.width = BR.vw; cv.height = BR.vh;
+  cancelAnimationFrame(BR.raf);
+  const loop = () => { if (!BR.on) return; brawlStep(); brawlDraw(); BR.raf = requestAnimationFrame(loop); };
+  loop();
+}
+function brawlEnd(won) {
+  BR.done = true;
+  brawlSay(won ? "БАР НАШ!" : "НАС ВЫНЕСЛИ…");
+  setTimeout(() => {
+    BR.on = false; cancelAnimationFrame(BR.raf);
+    $("brawl").classList.remove("on"); $("box").style.display = "";
+    show(won ? BR.win : BR.lose);
+  }, 1600);
+}
+
+function bleed(x, y, n) {
+  for (let i = 0; i < n; i++) BR.blood.push({ x, y, vx: (Math.random() - .5) * 1.6, vy: -Math.random() * 1.8, life: 40, floor: y + 18 + Math.random() * 6 });
+}
+function hit(att, tgt, dmg) {
+  if (tgt.ko) return;
+  tgt.hp -= dmg; tgt.hurt = 12; tgt.x += att.dir * 6;
+  bleed(tgt.x, tgt.y - 26, 3 + (Math.random() * 3 | 0));
+  music.punch();
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
+  if (tgt.hp <= 0) { tgt.hp = 0; tgt.ko = 1; if (tgt.enemy) brawlSay(["ВЫРУБИЛСЯ!", "ОТДЫХАЕТ!", "СЕЛ НА ПОЛ!"][Math.random() * 3 | 0]); }
+}
+function attack(f) {
+  if (f.act > 0 || f.ko) return;
+  f.act = 14;
+  const reach = f.kind === "boss" ? 24 : 20;
+  const targets = BR.ents.filter(e => !e.ko && (f.enemy ? !e.enemy : e.enemy));
+  for (const t of targets) {
+    const dx = (t.x - f.x) * f.dir;
+    if (dx > 0 && dx < reach && Math.abs(t.y - f.y) < 9) hit(f, t, f.enemy ? FIGHTER[f.kind].dmg : (f.player ? 9 : 7));
+  }
+}
+
+function brawlStep() {
+  if (BR.done) { BR.msgT && BR.msgT--; return; }
+  BR.t++;
+  const k = BR.keys, p = BR.ents[0];
+  for (const f of BR.ents) { if (f.cd > 0) f.cd--; if (f.act > 0) f.act--; if (f.hurt > 0) f.hurt--; if (f.ko) f.ko++; }
+  // Глеб — под управлением игрока
+  if (!p.ko) {
+    let vx = 0, vy = 0;
+    if (k.left) vx -= 1.3; if (k.right) vx += 1.3; if (k.up) vy -= .9; if (k.down) vy += .9;
+    if (vx) p.dir = Math.sign(vx);
+    if (!p.act) { p.x += vx; p.y += vy; }
+    p.walk = vx || vy ? p.walk + 1 : 0;
+    if (k.hit) { attack(p); k.hit = false; }
+  }
+  // Егор и противники идут к ближайшей цели и бьют
+  for (const f of BR.ents) {
+    if (f.player || f.ko || f.hurt) continue;
+    const foes = BR.ents.filter(e => !e.ko && (f.enemy ? !e.enemy : e.enemy));
+    if (!foes.length) { f.walk = 0; continue; }
+    const t = foes.reduce((a, b) => Math.hypot(b.x - f.x, b.y - f.y) < Math.hypot(a.x - f.x, a.y - f.y) ? b : a);
+    const sp = f.enemy ? FIGHTER[f.kind].speed : .9;
+    const dx = t.x - f.x, dy = t.y - f.y;
+    f.dir = Math.sign(dx) || f.dir;
+    if (Math.abs(dx) > 16 || Math.abs(dy) > 5) {
+      f.x += Math.sign(dx) * Math.min(sp, Math.abs(dx) - 14 > 0 ? sp : 0) ; f.y += Math.sign(dy) * Math.min(sp * .7, Math.abs(dy));
+      f.walk = (f.walk || 0) + 1;
+    } else if (!f.cd) { attack(f); f.cd = f.enemy ? 70 + Math.random() * 40 : 34; f.walk = 0; }
+  }
+  for (const f of BR.ents) { f.x = Math.max(8, Math.min(312, f.x)); f.y = Math.max(118, Math.min(172, f.y)); }
+  // кровь: капли летят и остаются на полу
+  for (const b of BR.blood) { b.x += b.vx; b.y += b.vy; b.vy += .15; if (b.y >= b.floor) { BR.drops.push({ x: b.x, y: b.floor, a: 1 }); b.life = 0; } else b.life--; }
+  BR.blood = BR.blood.filter(b => b.life > 0);
+  BR.drops.forEach(d => d.a = Math.max(.25, d.a - .002));
+  if (BR.drops.length > 120) BR.drops.splice(0, BR.drops.length - 120);
+  // вырубленные противники через время уходят
+  BR.ents = BR.ents.filter(f => !(f.enemy && f.ko > 90));
+  // Егор встаёт: нокаут, а не смерть
+  for (const f of BR.ents) if (!f.enemy && f.ko > 120 && !f.player) { f.ko = 0; f.hp = 30; brawlSay("ЕГОР ВСТАЁТ!"); }
+  if (BR.msgT) BR.msgT--;
+  if (p.ko) return brawlEnd(false);
+  if (!BR.ents.some(f => f.enemy)) { BR.wave++; if (BR.wave >= WAVES.length) return brawlEnd(true); brawlWave(); }
+  $("brG").style.width = Math.max(0, p.hp) + "%";
+  $("brE").style.width = Math.max(0, BR.ents[1] && BR.ents[1].kind === "egor" ? BR.ents[1].hp : 0) + "%";
+  $("brW").textContent = "Волна " + Math.min(BR.wave + 1, WAVES.length) + "/" + WAVES.length;
+}
+
+function drawFighter(c, f) {
+  const d = FIGHTER[f.kind], s = d.big ? 1.25 : 1, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  const x = f.x, y = f.y, dir = f.dir;
+  c.fillStyle = "#0006"; c.beginPath(); c.ellipse(x, y, 9 * s, 2.5, 0, 0, 7); c.fill();
+  if (f.ko) { // лежит на полу
+    if (f.enemy && f.ko > 60 && (f.ko >> 2) % 2) return;
+    R(x - 14 * s, y - 6, 28 * s, 6, d.topA); R(x + (dir > 0 ? -18 : 12) * s, y - 7, 7 * s, 7, d.skin); return;
+  }
+  const flash = f.hurt && (f.hurt >> 1) % 2;
+  const step = Math.sin((f.walk || 0) * .35) * 3;
+  const H = 36 * s, w = d.w * s;
+  const top = y - H;
+  // ноги
+  R(x - w / 2 + 1, y - 12 * s, 4 * s, 12 * s + step, d.legs); R(x + w / 2 - 5 * s, y - 12 * s, 4 * s, 12 * s - step, d.legs);
+  // тело
+  R(x - w / 2, top + 11 * s, w, 14 * s, flash ? "#fff" : d.topA);
+  if (d.top === "stripe") for (let i = 0; i < 3; i++) R(x - w / 2, top + (13 + i * 4) * s, w, 2 * s, d.topB);
+  if (d.top === "jacket") R(x - 2 * s, top + 11 * s, 4 * s, 14 * s, d.topB);
+  if (d.top === "tee") R(x - w / 2 + 2, top + 13 * s, 4 * s, 2 * s, d.topB);
+  // руки: при ударе одна вытянута вперёд
+  const punch = f.act > 6;
+  R(x + dir * (w / 2) - (dir < 0 ? (punch ? 12 : 3) * s : 0), top + 13 * s, (punch ? 12 : 3) * s, 3 * s, d.skin);
+  R(x - dir * (w / 2) - (dir > 0 ? 3 * s : 0), top + 14 * s, 3 * s, 8 * s, d.skin);
+  // голова
+  R(x - 4 * s, top + 2 * s, 8 * s, 9 * s, flash ? "#fff" : d.skin);
+  if (d.hair) {
+    if (d.curly) { R(x - 6 * s, top - 1 * s, 12 * s, d.hairH * s, d.hair); R(x - 6 * s, top + 3 * s, 3 * s, 6 * s, d.hair); R(x + 3 * s, top + 3 * s, 3 * s, 6 * s, d.hair); }
+    else if (d.mohawk) R(x - 1.5 * s, top - 4 * s, 3 * s, d.hairH * s, d.hair);
+    else R(x - 4 * s, top + 1 * s, 8 * s, d.hairH * s, d.hair);
+  }
+  if (d.shades) R(x - 4 * s, top + 5 * s, 8 * s, 2 * s, "#000");
+  else R(x + dir * 2 * s - .5, top + 5 * s, 1.5, 1.5, "#1a1010");
+}
+
+function brawlDraw() {
+  const c = $("brawlCv").getContext("2d"), vw = BR.vw || 320, vh = BR.vh || 180;
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.clearRect(0, 0, vw, vh);
+  const p = BR.ents[0];
+  BR.cam = Math.max(0, Math.min(320 - vw, (p ? p.x : 160) - vw / 2));
+  c.translate(-Math.round(BR.cam), -(180 - vh));
+  // пол с плиткой, чтобы было видно, где можно ходить
+  c.fillStyle = "#00000055"; c.fillRect(0, 112, 320, 68);
+  for (const d of BR.drops) { c.fillStyle = `rgba(170,20,30,${d.a})`; c.fillRect(Math.round(d.x), Math.round(d.y), 2, 1); }
+  [...BR.ents].sort((a, b) => a.y - b.y).forEach(f => drawFighter(c, f));
+  for (const b of BR.blood) { c.fillStyle = "#c01a28"; c.fillRect(Math.round(b.x), Math.round(b.y), 2, 2); }
+  if (BR.msgT) {
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.save(); c.font = `bold ${vw < 200 ? 12 : 16}px 'Courier New', monospace`; c.textAlign = "center";
+    c.fillStyle = "#000"; c.fillText(BR.msg, vw / 2 + 1, vh * .3 + 1); c.fillStyle = "#ffe14f"; c.fillText(BR.msg, vw / 2, vh * .3); c.restore();
+  }
+}
+
+// управление: стрелки/WASD — ходить, пробел/J — удар; на телефоне кнопки
+addEventListener("keydown", e => {
+  if (!BR.on) return;
+  const m = { ArrowLeft: "left", a: "left", ф: "left", ArrowRight: "right", d: "right", в: "right", ArrowUp: "up", w: "up", ц: "up", ArrowDown: "down", s: "down", ы: "down" }[e.key];
+  if (m) { BR.keys[m] = true; e.preventDefault(); e.stopPropagation(); }
+  if (e.key === " " || e.key === "j" || e.key === "о") { BR.keys.hit = true; e.preventDefault(); e.stopPropagation(); }
+}, true);
+addEventListener("keyup", e => {
+  const m = { ArrowLeft: "left", a: "left", ф: "left", ArrowRight: "right", d: "right", в: "right", ArrowUp: "up", w: "up", ц: "up", ArrowDown: "down", s: "down", ы: "down" }[e.key];
+  if (m) BR.keys[m] = false;
+});
+document.querySelectorAll("#brawl [data-k]").forEach(b => {
+  const k = b.dataset.k;
+  const on = e => { e.preventDefault(); if (k === "hit") BR.keys.hit = true; else BR.keys[k] = true; };
+  const off = e => { e.preventDefault(); if (k !== "hit") BR.keys[k] = false; };
+  b.addEventListener("pointerdown", on); b.addEventListener("pointerup", off); b.addEventListener("pointerleave", off); b.addEventListener("pointercancel", off);
+});
+
 // ---------- Телефон Глеба ----------
 const GCHATS = [
   { n: "Лиза", c: "#b0609a", last: "давай поговорим нормально?", time: "12 сен", st: "была в сети давно", liza: true },
@@ -2021,13 +2276,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272221`, talk: `img/${n}_talk.png?v=10272221`, blink: `img/${n}_blink.png?v=10272221` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272227`, talk: `img/${n}_talk.png?v=10272227`, blink: `img/${n}_blink.png?v=10272227` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272221" : `img/${n}_spartan.png?v=10272221`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272227" : `img/${n}_spartan.png?v=10272227`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2056,7 +2311,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272221`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272227`; });
 function showNpc(who, file) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -2065,7 +2320,7 @@ function showNpc(who, file) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272221`; el.alt = who;
+  el.src = `img/${n}.png?v=10272227`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.add("on");
 }
@@ -2128,13 +2383,13 @@ function show(id) {
   if (scene.linesFn) scene.lines = scene.linesFn();
   music.mood(scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
   $("place").textContent = scene.place;
-  $("gleb").classList.add("on");
+  $("gleb").classList.toggle("on", !scene.noSprites);
   $("egor").classList.toggle("on", !!scene.egor);
   focus(null);
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272221) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272227) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -2148,7 +2403,7 @@ function show(id) {
 }
 
 function step() {
-  if (B) return;                       // идёт бой — текст стоит
+  if (B || BR.on) return;                       // идёт бой — текст стоит
   const l = scene.lines[idx];
   if (!l) {
     if (scene.explore) return showExplore();
@@ -2213,6 +2468,8 @@ function step() {
   }
   if (l.battle) return startBattle(l.battle, l.win, l.lose, l);
   if (l.npcShow) showNpc(null, l.npcShow);
+  if (l.brawl) return brawlStart(l.win, l.lose);
+  if (l.fx === "rewind") { $("stage").classList.add("rewinding"); music.rewind(); $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on"); setTimeout(() => $("stage").classList.remove("rewinding"), 1300); }
   if (l.fx === "punch") punchFx();
   if (l.fx === "timer") { $("timer").classList.remove("on"); void $("timer").offsetWidth; $("timer").classList.add("on"); setTimeout(() => $("timer").classList.remove("on"), 2200); }
   if (l.fx === "freeze") { $("stage").classList.add("frozen"); music.rewind(); }
@@ -2261,6 +2518,7 @@ function showChoices() {
 let loopDay = 1;
 function choose(c) {
   clearIdle();
+  if (c.menu) return goMenu();
   if (c.loop) loopDay++;
   if (c.loopReset) loopDay = 1;
   if (c.style) music.setStyle(c.style);
@@ -2293,7 +2551,7 @@ document.addEventListener("keydown", e => {
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
   if (!$("dedic").classList.contains("gone")) return;   // посвящение не пропускается
-  if (!$("title").classList.contains("gone")) return loadSave() ? continueGame() : start();
+  if (!$("title").classList.contains("gone")) return;
   if ($("howto").classList.contains("on")) return closeHowto();
   if ($("skip").classList.contains("on")) return closeSkip();
   if ($("box").style.display !== "none") advance();
@@ -2349,9 +2607,9 @@ function hint(key, text) {
 // ---------- Сохранение ----------
 // Игра запоминает последнюю сцену и то, что Глеб знает после перемоток. Хранится в браузере этого телефона.
 const SAVE_KEY = "powerhouse-save-v1";
-const SAVE_ON = false;   // выключено на время экспериментов: включить true, когда сюжет устоится
+const SAVE_ON = true;
 function saveGame(id) {
-  if (!SAVE_ON) return;
+  if (!SAVE_ON || id.startsWith("brawl")) return;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], place: scenes[id].place, t: Date.now() })); } catch (e) {}
 }
 function loadSave() {
@@ -2368,15 +2626,30 @@ function newGame() {
   try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
   known.clear(); start();
 }
-(function initTitle() {
+// Главное меню: продолжить сохранение, начать главу 1 или режим драки
+function initMenu() {
   const d = loadSave();
-  if (!d) { $("title").onclick = start; return; }
-  $("tapStart").style.display = "none";
-  $("saveBtns").style.display = "flex";
-  $("saveInfo").textContent = "Сохранено: " + d.place;
-  $("bCont").onclick = e => { e.stopPropagation(); continueGame(); };
-  $("bNew").onclick = e => { e.stopPropagation(); newGame(); };
-})();
+  $("mCont").style.display = d ? "" : "none";
+  $("saveInfo").textContent = d ? "Сохранено: " + d.place : "";
+}
+$("mCont").onclick = e => { e.stopPropagation(); continueGame(); };
+$("mStory").onclick = e => { e.stopPropagation(); newGame(); };
+$("mBrawl").onclick = e => { e.stopPropagation(); $("title").classList.add("gone"); music.start(); show("brawl_mode"); };
+initMenu();
+
+// В меню из любого места игры: всё останавливается, сохранение остаётся
+function goMenu() {
+  clearIdle();
+  if (B) { B.done = true; B.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); B = null; $("battle").classList.remove("on"); }
+  if (BR.on) { BR.on = false; cancelAnimationFrame(BR.raf); $("brawl").classList.remove("on"); }
+  ["gphone", "howto", "op", "skip", "choices", "phone"].forEach(id => $(id).classList.remove("on"));
+  $("box").style.display = "";
+  $("title").classList.remove("gone");
+  initMenu();
+  music.mood("hope");
+}
+$("menuBtn").onclick = e => { e.stopPropagation(); goMenu(); };
+
 // ---------- Telegram Mini App ----------
 // Внутри Telegram: развернуть на весь экран, не закрываться свайпом вниз, тёмная шапка.
 const tg = window.Telegram && window.Telegram.WebApp;
