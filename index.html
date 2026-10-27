@@ -18,6 +18,11 @@
   #stage.drunk #bg, #stage.drunk .sprite { animation:sway 5s ease-in-out infinite; }
   #stage.drunk #egor { animation:sway 5s ease-in-out infinite reverse; }
   @keyframes sway { 0%,100% { rotate:-.6deg; translate:-.6% 0; } 50% { rotate:.6deg; translate:.6% .4%; } }
+  /* мигалка полиции */
+  #stage.siren::before { content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+    animation:siren 1s steps(1) infinite; mix-blend-mode:screen; }
+  @keyframes siren { 0% { background:radial-gradient(circle at 30% 60%, #ff2a2a55, transparent 60%); }
+    50% { background:radial-gradient(circle at 70% 60%, #2a5aff66, transparent 60%); } }
   #stage.drunk::after { content:""; position:absolute; inset:0; pointer-events:none;
     background:radial-gradient(transparent 50%, #3a0a3a88); }
 
@@ -74,6 +79,7 @@
     background:var(--accent); color:#1a1320; }
   #name.gleb { background:#e07a4a; }
   #name.think { background:var(--cold); }
+  #name.npc { background:#9aa6b8; }
   #name:empty { display:none; }
   #line { min-height:2.6em; }
   #line.think { color:var(--cold); font-style:italic; }
@@ -153,7 +159,8 @@
     .sprite { height:50%; bottom:20%; }
     #gleb { left:-6%; } #egor { right:-6%; }
     #stage.fight #gleb { left:6%; } #stage.fight #egor { right:6%; }
-    #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px; }
+    #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px;
+      max-width:calc(100% - 130px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     #mute { top:calc(env(safe-area-inset-top) + 10px); right:10px; font-size:12px; }
     #memory { top:calc(env(safe-area-inset-top) + 48px); right:10px; left:10px; justify-content:flex-end; flex-wrap:wrap; }
     .mem { font-size:12px; }
@@ -209,9 +216,14 @@ function fitCanvas() {
   const cv = $("bg");
   cv.width = portrait ? 180 : 320; cv.height = portrait ? 320 : 180;
 }
+// рисует фон текущей сцены
+function paint(years) {
+  const b = scene && scene.bg;
+  if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else drawBar(!!(scene && scene.drunk));
+}
 function redraw() {
   if (!scene) return drawBar(false);
-  if (scene.bg === "cell") drawCell(curYears); else drawBar(!!scene.drunk);
+  paint(curYears);
 }
 let curYears = 0;
 
@@ -348,19 +360,95 @@ function drawCell(years) {
   for (let x = 0; x < W; x += 32) R(x, floorY + 2, 1, H, "#232528");
 }
 
+// ---------- Локация: Гончарная улица ночью, у входа в бар, полицейская машина ----------
+function drawStreet() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  let seed = 23; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const roadY = Math.round(H * .72);
+
+  // небо и дом напротив
+  R(0, 0, W, H, "#0b0f1e");
+  R(0, Math.round(H * .08), W, roadY - Math.round(H * .08), "#2a2430");
+  for (let y = Math.round(H * .12); y < roadY - 30; y += 22)
+    for (let x = 10; x < W - 14; x += 26) {
+      R(x, y, 12, 14, rnd() < .35 ? "#f0c27a" : "#151826");
+      R(x, y + 14, 12, 2, "#3a3340");
+    }
+  // вход в Powerhouse: дверь и маленькая вывеска
+  const dx = W / 2 - 18;
+  R(dx, roadY - 40, 36, 40, "#120a08"); R(dx - 4, roadY - 44, 44, 4, "#3a2a20");
+  c.save(); c.font = "bold 9px 'Courier New', monospace"; c.textAlign = "center";
+  c.shadowColor = "#ff4f7e"; c.shadowBlur = 8; c.fillStyle = "#ffb3c8"; c.fillText("POWERHOUSE", W / 2, roadY - 50); c.restore();
+
+  // тротуар, мокрый асфальт с отражениями
+  R(0, roadY, W, 6, "#4a4a52");
+  R(0, roadY + 6, W, H - roadY - 6, "#14161d");
+  for (let i = 0; i < 40; i++) R(Math.floor(rnd() * W), roadY + 8 + Math.floor(rnd() * (H - roadY - 10)), 4 + Math.floor(rnd() * 10), 1, rnd() < .5 ? "#2a3550" : "#3a2030");
+
+  // полицейская машина
+  const cw = portrait ? 120 : 130, cx = portrait ? (W - cw) / 2 : W - cw - 16, cy = roadY + (portrait ? 30 : 10);
+  R(cx, cy + 10, cw, 22, "#e8ecf2"); R(cx + 22, cy, cw - 50, 12, "#e8ecf2");
+  R(cx + 26, cy + 2, 30, 8, "#2a3a55"); R(cx + 60, cy + 2, cw - 92, 8, "#2a3a55");
+  R(cx, cy + 20, cw, 5, "#2d5bd6");
+  c.fillStyle = "#fff"; c.font = "bold 7px sans-serif"; c.fillText("ПОЛИЦИЯ", cx + cw / 2 - 18, cy + 30);
+  R(cx + cw / 2 - 10, cy - 4, 9, 4, "#ff3b3b"); R(cx + cw / 2 + 1, cy - 4, 9, 4, "#3b7bff");
+  for (const wx of [cx + 18, cx + cw - 30]) { R(wx, cy + 30, 14, 8, "#0a0a0a"); R(wx + 4, cy + 32, 6, 4, "#555"); }
+}
+
+// ---------- Локация: зал суда ----------
+function drawCourt() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const floorY = Math.round(H * .74);
+
+  // деревянные панели
+  R(0, 0, W, H, "#4a2f1c");
+  for (let x = 0; x < W; x += 16) { R(x, 0, 1, floorY, "#3a2414"); R(x + 2, 0, 1, floorY, "#5a3a24"); }
+  R(0, Math.round(H * .44), W, 3, "#2e1c10");
+
+  // весы на стене
+  const sx = W / 2, sy = portrait ? H * .1 : 18;
+  R(sx - 1, sy, 2, 26, "#d9b44a"); R(sx - 22, sy + 4, 44, 2, "#d9b44a");
+  for (const px of [sx - 20, sx + 16]) { R(px, sy + 6, 1, 8, "#d9b44a"); R(px + 4, sy + 6, 1, 8, "#d9b44a"); R(px - 2, sy + 14, 10, 2, "#d9b44a"); }
+  R(sx - 6, sy + 26, 12, 3, "#d9b44a");
+
+  // судейский стол и кресло
+  const bw = portrait ? W - 30 : W * .5, bx = (W - bw) / 2, by = Math.round(H * .3);
+  R(W / 2 - 14, by - 26, 28, 30, "#1c0f08");
+  R(bx, by, bw, Math.round(H * .14), "#2a170c"); R(bx, by, bw, 3, "#6b4226");
+  R(W / 2 - 18, by + 8, 36, 10, "#1a0e07");
+
+  // клетка для подсудимых: прутья по краям, чтобы не закрывать героев
+  for (const side of [0, 1]) {
+    const x0 = side ? W - 34 : 4;
+    for (let x = x0; x < x0 + 30; x += 6) R(x, Math.round(H * .46), 2, floorY - Math.round(H * .46), "#8a8f96");
+  }
+  R(0, Math.round(H * .46), W, 2, "#8a8f96");
+
+  // пол
+  R(0, floorY, W, H - floorY, "#2a1a10");
+  for (let x = 0; x < W; x += 24) R(x, floorY, 1, H, "#1f130b");
+}
+
 // ---------- Техно на фоне (синтезируется в браузере, без файлов) ----------
 // 124 BPM: бочка на каждую долю, хэт на слабую, хлопок на 2 и 4, бас на офбитах.
 // Звук глухой, как из-за стены зала. Пьяным фильтр «плавает», при перемотке звук проваливается.
 const music = {
   ac: null, out: null, filt: null, lfo: null, lfoGain: null, noise: null,
-  on: true, step: 0, next: 0, timer: null, bpm: 124,
+  on: true, step: 0, next: 0, timer: null, bpm: 124, vol: .22, comp: null,
 
   start() {
     if (this.ac) return;
     const ac = this.ac = new (window.AudioContext || window.webkitAudioContext)();
-    this.out = ac.createGain(); this.out.gain.value = .32;
-    this.filt = ac.createBiquadFilter(); this.filt.type = "lowpass"; this.filt.frequency.value = 1600; this.filt.Q.value = 4;
-    this.filt.connect(this.out); this.out.connect(ac.destination);
+    this.out = ac.createGain(); this.out.gain.value = this.vol;
+    // мягкий фильтр без резонанса (с резонансом пьяное «плавание» давало пики громкости)
+    this.filt = ac.createBiquadFilter(); this.filt.type = "lowpass"; this.filt.frequency.value = 1600; this.filt.Q.value = .7;
+    // компрессор-ограничитель в конце: звук не перегружается и не хрипит
+    this.comp = ac.createDynamicsCompressor();
+    this.comp.threshold.value = -20; this.comp.knee.value = 10; this.comp.ratio.value = 8;
+    this.comp.attack.value = .003; this.comp.release.value = .25;
+    this.filt.connect(this.out); this.out.connect(this.comp); this.comp.connect(ac.destination);
     // медленное «плавание» фильтра для пьяной сцены
     this.lfo = ac.createOscillator(); this.lfo.frequency.value = .25;
     this.lfoGain = ac.createGain(); this.lfoGain.gain.value = 0;
@@ -375,9 +463,13 @@ const music = {
 
   tick() {
     const sixteenth = 60 / this.bpm / 4;
+    // вкладка была в фоне и таймер стоял: пропущенные доли не играем разом, иначе выходит громкий хрип
+    if (this.next < this.ac.currentTime - .05) this.next = this.ac.currentTime + .05;
     while (this.next < this.ac.currentTime + .1) {
       const s = this.step % 16, bar = Math.floor(this.step / 16) % 4, t = this.next;
-      if (s % 4 === 0) this.kick(t);
+      const big = Math.floor(this.step / 16) % 16;          // каждые 16 тактов: такт без бочки
+      if (s % 4 === 0 && big !== 15) this.kick(t);
+      if ((s === 6 || s === 14) && bar % 2 === 1) this.stab(t, [[220, 261.6, 329.6], [196, 246.9, 293.7]][bar >> 1]);
       if (s % 4 === 2) this.hat(t, .22, .05);
       if (s % 2 === 1) this.hat(t, .06, .02);
       if (s === 4 || s === 12) this.clap(t);
@@ -389,7 +481,7 @@ const music = {
   kick(t) {
     const o = this.ac.createOscillator(), g = this.ac.createGain();
     o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .12);
-    g.gain.setValueAtTime(1, t); g.gain.exponentialRampToValueAtTime(.001, t + .35);
+    g.gain.setValueAtTime(.75, t); g.gain.exponentialRampToValueAtTime(.001, t + .35);
     o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .36);
   },
   noiseHit(t, type, freq, vol, dec) {
@@ -399,12 +491,31 @@ const music = {
     s.connect(f); f.connect(g); g.connect(this.filt); s.start(t, Math.random() * .5); s.stop(t + dec + .01);
   },
   hat(t, vol, dec) { this.noiseHit(t, "highpass", 7000, vol, dec); },
-  clap(t) { this.noiseHit(t, "bandpass", 1400, .35, .14); },
+  clap(t) { this.noiseHit(t, "bandpass", 1400, .25, .14); },
+  // короткий аккорд на слабую долю, чтобы трек не был однообразным
+  stab(t, freqs) {
+    for (const f of freqs) {
+      const o = this.ac.createOscillator(), g = this.ac.createGain();
+      o.type = "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(.05, t); g.gain.exponentialRampToValueAtTime(.001, t + .18);
+      o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .2);
+    }
+  },
+  // полицейская сирена: два тона по очереди
+  siren() {
+    if (!this.ac || !this.on) return;
+    const t = this.ac.currentTime, o = this.ac.createOscillator(), g = this.ac.createGain();
+    o.type = "square";
+    for (let i = 0; i < 6; i++) o.frequency.setValueAtTime(i % 2 ? 620 : 840, t + i * .45);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05, t + .2);
+    g.gain.setValueAtTime(.05, t + 2.4); g.gain.linearRampToValueAtTime(0, t + 2.7);
+    o.connect(g); g.connect(this.comp); o.start(t); o.stop(t + 2.8);
+  },
   bass(t, f) {
     const o = this.ac.createOscillator(), lp = this.ac.createBiquadFilter(), g = this.ac.createGain();
     o.type = "sawtooth"; o.frequency.value = f;
     lp.type = "lowpass"; lp.frequency.setValueAtTime(900, t); lp.frequency.exponentialRampToValueAtTime(180, t + .14);
-    g.gain.setValueAtTime(.32, t); g.gain.exponentialRampToValueAtTime(.001, t + .16);
+    g.gain.setValueAtTime(.22, t); g.gain.exponentialRampToValueAtTime(.001, t + .16);
     o.connect(lp); lp.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .17);
   },
 
@@ -425,9 +536,9 @@ const music = {
   mood(m) {
     if (!this.ac) return;
     const t = this.ac.currentTime;
-    this.filt.frequency.setTargetAtTime({ bar: 1600, drunk: 750, jail: 260 }[m], t, .5);
+    this.filt.frequency.setTargetAtTime({ bar: 1600, drunk: 750, jail: 260, street: 420 }[m], t, .5);
     this.lfoGain.gain.setTargetAtTime(m === "drunk" ? 450 : 0, t, .5);
-    if (this.on) this.out.gain.setTargetAtTime(m === "jail" ? .12 : .32, t, .5);
+    if (this.on) this.out.gain.setTargetAtTime(m === "jail" ? this.vol * .4 : m === "street" ? this.vol * .5 : this.vol, t, .5);
   },
   // при перемотке звук проваливается и возвращается
   rewind() {
@@ -441,7 +552,7 @@ const music = {
   },
   toggle() {
     this.on = !this.on;
-    if (this.ac) this.out.gain.setTargetAtTime(this.on ? .32 : 0, this.ac.currentTime, .05);
+    if (this.ac) this.out.gain.setTargetAtTime(this.on ? this.vol : 0, this.ac.currentTime, .05);
     $("mute").textContent = this.on ? "♫ звук: вкл" : "♫ звук: выкл";
   }
 };
@@ -471,9 +582,39 @@ const scenes = {
       { who: null, t: "Пятница. Powerhouse на Гончарной. Кирпич, винил, бас в груди." },
       { who: "Егор", t: "Глеб. Мне надо тебе кое-что сказать. Только не ржи." },
       { who: "Глеб", t: "Ну?" },
-      { who: "Егор", t: "Я влюбился. В Юлию. Ну… в Юлю. Которая ведёт у нас семинары." },
-      { who: "", t: "Он серьёзно. Он ни разу не пропустил её пару. Даже в девять утра." },
-      { who: "Егор", t: "Что мне делать?" }
+      { who: "Егор", t: "У меня есть план. Пункт первый: влюбиться. Выполнено." },
+      { who: "Егор", t: "Пункт второй: сказать ей. Тут я застрял. Уже два месяца." },
+      { who: "", t: "Он шутит. Когда Егор шутит про важное, значит, ему по-настоящему страшно." },
+      { who: "Егор", t: "Это Юля. Которая ведёт у нас семинары. Я на её парах в окно смотрю, чтобы не на неё." },
+      { who: "Егор", t: "У меня никогда ни с кем не было. Вообще. Так что не знаю, как это делается." }
+    ],
+    choices: () => [
+      { icon: "forget", t: "Подколоть", sub: "«Бро, ты так со всеми. Чуть страшно — и ты в окно.»", go: "c_blame" },
+      { icon: "talk", t: "Спросить всерьёз", sub: "«Может, ты боишься, что тебя снова подведут?»", go: "c_ask" }
+    ]
+  },
+  c_blame: {
+    place: "Powerhouse · 21:12", egor: true, next: "s1b",
+    lines: [
+      { who: "Егор", t: "…Спасибо. Очень помог." },
+      { who: null, t: "Он отворачивается к стойке. Улыбка остаётся, но глаза уже не здесь." },
+      { who: "Егор", t: "Ладно, проехали. Это был тупой план." },
+      { who: "", t: "Зря я так. Теперь он сделает вид, что ничего не было. Он всегда так делает." }
+    ]
+  },
+  c_ask: {
+    place: "Powerhouse · 21:12", egor: true, next: "s1b",
+    lines: [
+      { who: null, t: "Егор долго молчит. Бас заполняет паузу." },
+      { who: "Егор", t: "Может. Меня один раз уже подвели. Я тогда просто перестал общаться. Так проще." },
+      { who: "Егор", t: "А тут… если она скажет нет, мне что, вышку бросать?" },
+      { who: "", t: "Впервые за вечер он говорит без шуток." }
+    ]
+  },
+  s1b: {
+    place: "Powerhouse · 21:13", egor: true,
+    lines: [
+      { who: "Егор", t: "Короче. Что мне делать?" }
     ],
     choices: () => [
       { icon: "talk", t: "Сказать лично", sub: "«Подойди к ней после пары.»", go: "a_talk" },
@@ -507,7 +648,8 @@ const scenes = {
     place: "Powerhouse · 00:40", egor: true, drunk: true,
     lines: [
       { who: null, t: "Пять виски спустя. Или шесть. Бас стал мягче, а идеи — смелее." },
-      { who: "Егор", t: "Всё. Я решил. Я ей пишу. Прямо сейчас." },
+      { who: "Егор", t: "Пункт второй плана. Выполняю. Прямо сейчас." },
+      { who: "", t: "Трезвым он два месяца молчал. Виски справился за три часа. Только решения за него виски принимает так себе." },
       { who: "", t: "Он открывает Telegram. Контакт: «Юлия — семинары»." },
       { who: "Егор", t: "Не мешай. Я знаю, что делаю." }
     ],
@@ -559,7 +701,7 @@ const scenes = {
     ]
   },
   riot: {
-    place: "Powerhouse · 00:44", egor: true, drunk: true, fight: true, next: "jail",
+    place: "Powerhouse · 00:44", egor: true, drunk: true, fight: true, next: "arrest",
     lines: [
       { fx: "punch", who: null, t: "Глеб вскакивает. Егор хватает барный стул." },
       { fx: "punch", who: null, t: "Зеркало за стойкой — вдребезги. Полка с виски — следом." },
@@ -567,11 +709,54 @@ const scenes = {
       { who: "", t: "Бармен уже звонит. На Гончарной мигают синие огни." }
     ]
   },
-  jail: {
-    bg: "cell", years: 0, place: "СИЗО · ноябрь", egor: true,
+  arrest: {
+    bg: "street", siren: true, place: "Гончарная улица · 01:02", egor: true, drunk: true,
     lines: [
-      { who: null, t: "Суд был быстрым. Хулиганство, разгромленный бар, сломанный нос охранника." },
-      { who: null, t: "Обоим — по восемь лет. Камера одна на двоих." },
+      { who: null, t: "Синие и красные огни прыгают по мокрому асфальту. Из бара выводят обоих, под руки." },
+      { who: "Полицейский", t: "Так, молодые люди. Документы." },
+      { who: "Егор", t: "Офицер. Я должен вам сказать. Я влюблён." },
+      { who: "Полицейский", t: "Это не статья. А вот разбитое зеркало и нос охранника — статья." },
+      { who: "", t: "Два месяца он не мог сказать это ни одному человеку. Первым узнал полицейский." },
+      { who: "Егор", t: "Глеб… А телефон мне вернут? Мне надо проверить, ответила ли она." },
+      { who: "Полицейский", t: "В машину." }
+    ],
+    next: "court"
+  },
+  court: {
+    bg: "court", place: "Таганский районный суд · через полгода", egor: true,
+    lines: [
+      { who: "Судья", t: "Подсудимые, встаньте." },
+      { who: null, t: "Зачитывают ущерб: зеркало, полка виски, барный стул, нос охранника. Список длинный." },
+      { who: "Судья", t: "Подсудимый, вам есть что сказать суду?" },
+      { who: "Егор", t: "Ваша честь. У меня был план. Пункт второй пошёл не по плану." },
+      { who: "", t: "Он шутит. Даже здесь. Значит, ему страшнее, чем когда-либо." }
+    ],
+    choices: () => [
+      { icon: "stop", t: "Взять вину на себя", sub: "«Это я начал. Он ни при чём.»", go: "court_blame" },
+      { icon: "let", t: "Промолчать", sub: "Пусть решает суд.", go: "court_silent" }
+    ]
+  },
+  court_blame: {
+    bg: "court", place: "Таганский районный суд", egor: true, next: "jail",
+    lines: [
+      { who: "Глеб", t: "Ваша честь, драку начал я. Я хотел отобрать у него телефон." },
+      { who: "Егор", t: "Глеб, ты чего?.." },
+      { who: "Судья", t: "Суд учтёт. Но стул подсудимый держал сам. Обоим — по восемь лет." },
+      { who: "", t: "Не помогло. Но Егор смотрит на меня так, будто помогло." }
+    ]
+  },
+  court_silent: {
+    bg: "court", place: "Таганский районный суд", egor: true, next: "jail",
+    lines: [
+      { who: null, t: "Глеб молчит. Егор смотрит в пол." },
+      { who: "Судья", t: "Хулиганство, совершённое группой лиц. Обоим — по восемь лет." },
+      { who: "", t: "Егор не смотрит на меня. Он просто исчезает в себе, как всегда, когда больно." }
+    ]
+  },
+  jail: {
+    bg: "cell", years: 0, place: "Колония · год 1", egor: true,
+    lines: [
+      { who: null, t: "Камера на двоих. Пахнет хлоркой и чужими носками." },
       { who: "Егор", t: "Глеб. А она ответила?" },
       { who: "Глеб", t: "Телефоны забрали, гений." },
       { skip: "3 года спустя", years: 3, place: "Колония · год 3" },
@@ -679,8 +864,10 @@ function talk(n) {
 }
 
 function focus(who) {
-  $("gleb").classList.toggle("dim", who === "Егор");
-  $("egor").classList.toggle("dim", who === "Глеб" || who === "");
+  // говорит третий (полицейский, судья) — оба героя в тени
+  const other = who && who !== "Глеб" && who !== "Егор";
+  $("gleb").classList.toggle("dim", who === "Егор" || other);
+  $("egor").classList.toggle("dim", who === "Глеб" || who === "" || other);
   // говорящий наклоняется к собеседнику и коротко подпрыгивает
   const sp = who === "Егор" ? "egor" : who === "Глеб" ? "gleb" : null;
   for (const n of ["gleb", "egor"]) {
@@ -696,10 +883,12 @@ function renderMemory() {
 
 function show(id) {
   scene = scenes[id]; idx = 0;
-  if (scene.bg === "cell") drawCell(scene.years || 0); else drawBar(!!scene.drunk);
+  paint(scene.years || 0);
+  $("stage").classList.toggle("siren", !!scene.siren);
+  if (scene.siren) music.siren();
   $("stage").classList.toggle("drunk", !!scene.drunk);
   $("stage").classList.toggle("fight", !!scene.fight);
-  music.mood(scene.bg === "cell" ? "jail" : scene.drunk ? "drunk" : "bar");
+  music.mood(scene.bg === "cell" || scene.bg === "court" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar");
   $("place").textContent = scene.place;
   $("gleb").classList.add("on");
   $("egor").classList.toggle("on", !!scene.egor);
@@ -773,7 +962,7 @@ function say(who, text, quiet) {
   const think = who === "";
   focus(who);
   $("name").textContent = think ? "Глеб (мысли)" : (who || "");
-  $("name").className = think ? "think" : who === "Глеб" ? "gleb" : "";
+  $("name").className = think ? "think" : who === "Глеб" ? "gleb" : who && who !== "Егор" ? "npc" : "";
   $("line").className = think ? "think" : "";
   // рот двигается у того, кто говорит вслух и стоит в кадре
   talk(who === "Егор" && scene.egor ? "egor" : who === "Глеб" ? "gleb" : null);
