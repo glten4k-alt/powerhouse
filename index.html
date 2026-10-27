@@ -13,6 +13,9 @@
   #stage { position:relative; width:min(100vw, 177.78vh); height:min(100vh, 56.25vw); margin:auto;
     top:50%; transform:translateY(-50%); overflow:hidden; border-radius:6px; }
   #bg { position:absolute; inset:-2%; width:104%; height:104%; image-rendering:pixelated; }
+  /* на вертикальном экране (Telegram) картинка-сцена целиком, без обрезки: сверху, над текстом */
+  #photoFit { position:absolute; left:0; top:calc(env(safe-area-inset-top) + 9%); width:100%; height:46%; object-fit:contain; display:none; pointer-events:none; }
+  @media (max-aspect-ratio: 1/1) { #photoFit.on { display:block; } }
 
   /* Пьяный режим: всё плывёт */
   #stage.drunk #bg, #stage.drunk .sprite { animation:sway 5s ease-in-out infinite; }
@@ -175,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280238") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280241") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -388,6 +391,8 @@
     display:none; animation:pop .3s ease-out; }
   #hint.on { display:block; }
 
+  /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
+  @media (max-aspect-ratio: 1/1) { #title { background:linear-gradient(#0006,#000c 55%,#000e),#000 url("img/menu_bg.jpg?v=10280241") center calc(env(safe-area-inset-top) + 4%) / 100% auto no-repeat; } }
   /* ---------- Телефон вертикально (и Telegram) ---------- */
   @media (max-aspect-ratio: 1/1) {
     html, body { font-size:16px; }
@@ -425,11 +430,12 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280238" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280238" alt="Егор">
+  <img id="photoFit" alt="">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280241" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280241" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280238) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280241) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -497,6 +503,7 @@ function fitCanvas() {
 }
 // рисует фон текущей сцены
 function paint(years) {
+  $("photoFit").classList.remove("on");
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
@@ -819,7 +826,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280238"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280241"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -827,6 +834,7 @@ function drawMemory() {
   if (!ROV.complete || !ROV.naturalWidth) return;
   const k = Math.max(W / ROV.width, H / ROV.height), w = ROV.width * k, h = ROV.height * k;
   c.drawImage(ROV, (W - w) / 2, (H - h) / 2, w, h);
+  fitPhoto(ROV.src, c, W, H);
 }
 
 // ---------- Локация: 28 августа, закат над рекой ----------
@@ -937,11 +945,18 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280238`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280241`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
   c.drawImage(im, (W - w) / 2, (H - h) / 2, w, h);
+  fitPhoto(im.src, c, W, H);
+}
+// вертикальный экран: обрезанный фон затемняем, а целую картинку показываем поверх
+function fitPhoto(src, c, W, H) {
+  if (H <= W) return;
+  c.fillStyle = "#000000b0"; c.fillRect(0, 0, W, H);
+  const el = $("photoFit"); if (el.getAttribute("src") !== src) el.src = src; el.classList.add("on");
 }
 
 // ---------- Локация: монастырская кофейня — кирпичные своды, свечи, окно ----------
@@ -981,6 +996,10 @@ function drawFlat() {
   R(0, H * .72, W, H * .28, "#2a2420");
   R(W * .05, H * .64, W * .4, H * .1, "#3a3048"); R(W * .05, H * .6, W * .4, H * .05, "#443a56");
   R(W * .55, H * .68, W * .25, 3, "#5a4a3a"); R(W * .62, H * .64, 8, 6, "#e8e0d0"); R(W * .7, H * .655, 14, 4, "#f0f0f0");
+  // таблетки: блистеры, баночки, органайзер
+  for (let i = 0; i < 3; i++) { R(W * .56 + i * 6, H * .655, 5, 3, "#c8d0e0"); R(W * .565 + i * 6, H * .66, 1, 1, "#ff8a8a"); }
+  R(W * .77, H * .63, 4, 7, "#e08a2a"); R(W * .77, H * .625, 4, 2, "#f0f0f0"); R(W * .75, H * .64, 3, 6, "#f0f0f0");
+  for (let i = 0; i < 7; i++) R(W * .6 + i * 3, H * .672, 2, 2, ["#ff8a8a", "#8ad0ff", "#f0e070"][i % 3]);
   c.fillStyle = "#ffd88a22"; c.beginPath(); c.arc(W * .85, H * .55, Math.min(W, H) * .25, 0, 7); c.fill();
   R(W * .85, H * .5, 2, H * .22, "#3a3a3a"); R(W * .83, H * .48, 8, 4, "#ffd88a");
 }
@@ -1326,6 +1345,8 @@ const music = {
     // Мобилизация: марш-тревога — дробь малого, литавры, низкая медь, колокол
     military:   { kind: "military", bpm: 84, prog: "military", f: 2200, vol: 1, lfo: 0 },
     // «Сахар»: медленный тёмный трэп — 808, дробные хэты, тягучие аккорды
+    // Квартира Вити: тиканье часов, гул холодильника, редкое пианино, дождь за окном
+    lonely:     { kind: "lonely", bpm: 60, prog: "lonely", f: 1800, vol: 1, lfo: 0 },
     club:       { kind: "club", bpm: 140, prog: "club", f: 2600, vol: 1, lfo: 120 }
   },
   // Аккорды: «королевская» последовательность аниме (IV–V–iii–vi), грустная и тревожная
@@ -1344,6 +1365,8 @@ const music = {
       mel: [[880, 0, 0, 1046.5, 0, 987.8, 0, 0], [698.5, 0, 0, 880, 0, 0, 830.6, 0], [659.3, 0, 830.6, 0, 987.8, 0, 0, 0], [587.3, 0, 0, 698.5, 0, 659.3, 0, 0]] },
     military: { ch: [[146.8, 174.6, 220], [116.5, 146.8, 174.6], [98, 116.5, 146.8], [110, 138.6, 164.8]], bass: [73.4, 58.3, 49, 55],   // Dm Bb Gm A
       mel: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]] },
+    lonely: { ch: [[220, 261.6, 329.6], [196, 246.9, 293.7], [174.6, 220, 261.6], [164.8, 207.7, 246.9]], bass: [55, 49, 43.7, 41.2],   // Am G F E
+      mel: [[659.3, 0, 0, 0, 523.3, 0, 0, 0], [0, 0, 587.3, 0, 0, 0, 493.9, 0], [523.3, 0, 0, 0, 0, 0, 440, 0], [0, 0, 0, 0, 415.3, 0, 0, 0]] },
     club:   { ch: [[220, 261.6, 329.6, 392], [174.6, 220, 261.6, 329.6], [196, 233.1, 293.7, 349.2], [164.8, 207.7, 246.9, 293.7]], bass: [55, 43.7, 49, 41.2],   // Am7 Fmaj7 Gm7 E7
       mel: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]] },
     reggae: { ch: [[220, 261.6, 329.6, 392], [220, 293.7, 370], [196, 246.9, 293.7], [164.8, 196, 246.9]], bass: [110, 146.8, 98, 82.4],   // Am7 D G Em
@@ -1525,6 +1548,25 @@ const music = {
     if (s % 2 === 0) this.hat(t, .035, .02);
     if (bar % 2 === 1 && s >= 12) this.hat(t + 60 / m.bpm / 8, .03, .015);  // дробь хэта
     if (s === 6 && bar % 2 === 0) this.bell(t, ch[3] * 2, .025);
+  },
+  // Одиночество: часы тикают на каждую долю, холодильник гудит, пианино роняет редкие ноты, за окном дождь
+  lonelyStep(s, bar, t, P, m) {
+    if (s % 4 === 0) this.noiseHit(t, "highpass", 6000, .05, .015);                  // тик
+    if (s % 4 === 2) this.noiseHit(t, "highpass", 4500, .03, .012);                  // так
+    if (s === 0 && bar % 2 === 0) this.hum(t, 32 * 60 / m.bpm / 4);                 // холодильник
+    if (s % 2 === 0) { const f = P.mel[bar][s / 2]; if (f) this.piano(t, f, 2.6, .045); }
+    if (s === 0) this.piano(t, P.bass[bar] * 2, 3, .05);
+    if (s === 8) this.noiseHit(t, "lowpass", 900, .05, 2.2);                         // дождь
+  },
+  // гул: низкий синус с биением
+  hum(t, len) {
+    for (const f of [50, 50.7, 100]) {
+      const o = this.ac.createOscillator(), g = this.ac.createGain();
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(f === 100 ? .008 : .02, t + .8);
+      g.gain.setValueAtTime(f === 100 ? .008 : .02, t + len - .8); g.gain.linearRampToValueAtTime(.0001, t + len);
+      o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + len + .05);
+    }
   },
   // 808: синус с падением высоты
   sub808(t, f, len) {
@@ -3193,21 +3235,35 @@ const scenes = {
   },
   // ================= Глава · Витя (Юго-Западная) =================
   v_home: {
-    bg: "flat", place: "Витя · Юго-Западная · 23:10", noSprites: true, music: "sad",
+    bg: "flat", place: "Витя · Юго-Западная · 23:10", noSprites: true, music: "lonely",
     lines: [
       { skip: "Витя" },
       { npcShow: "npc_viktor", who: null, t: "Юго-Западная. Девятнадцатый этаж. Из окна панельки, тысяча окон и ни одного знакомого." },
-      { who: "Витя", t: "Одна квартира. Ипотека на двадцать лет. И в ней никого, кроме меня и банка." },
-      { who: null, t: "На столе остывший доширак и ипотечный договор. Я перечитываю его третий раз, просто чтобы что-то читать." },
+      { who: "Витя", t: "Одна квартира. И суд с банком «Бизнес-Инвестиции». Банк считает, что квартира его. Я считаю, что нет." },
+      { who: null, t: "На столе остывший доширак, исковое заявление и решение первой инстанции. Не в мою пользу. Я перечитываю его третий раз, просто чтобы что-то читать." },
+      { who: null, t: "Рядом — таблетки. Шесть блистеров, три баночки, один органайзер на неделю. Каждый от своего врача." },
+      { who: "Витя", t: "Психиатр сказал — тревожное. Невролог — что это спина. Психотерапевт — что это мама. А я вчера прочитал, что у меня, похоже, биполярка. Или СДВГ. Надо записаться ещё к одному." },
+      { who: null, t: "Тикают часы. Гудит холодильник. За стеной кто-то смеётся вдвоём." },
       { who: "Витя", t: "Полина ушла к бариста. Алёна — к бывшему. Катя — в Дубай, с запиской «ты слишком юрист». Что это вообще значит." }
     ],
     choices: () => [
       { icon: "write", t: "Написать Кате", sub: "«Как Дубай?» Ничего же страшного.", go: "v_ex" },
-      { icon: "let", t: "Заказать шаурму", sub: "Шаурма не уходит к бариста", go: "v_food" }
+      { icon: "let", t: "Заказать шаурму", sub: "Шаурма не уходит к бариста", go: "v_food" },
+      { icon: "help", t: "Выпить вечерние таблетки", sub: "И погуглить симптомы. Ещё раз.", go: "v_pills" }
+    ]
+  },
+  v_pills: {
+    bg: "flat", place: "Витя · 23:22", noSprites: true, music: "lonely", next: "v_door",
+    lines: [
+      { who: null, t: "Белая — от тревоги. Жёлтая — чтобы спать. Половинка розовой — «по необходимости». Необходимость у меня всегда." },
+      { who: null, t: "Запрос в поиске: «постоянно одиноко это болезнь». Первая ссылка — депрессия. Вторая — шизоидное расстройство. Третья — «просто позвоните другу»." },
+      { who: "Витя", t: "Третья ссылка — явно реклама." },
+      { who: null, t: "Записываюсь к девятому врачу на четверг. В приложении клиники у меня уже статус «постоянный клиент»." },
+      { who: "", t: "Таблетки делают тише. Но не делают теплее." }
     ]
   },
   v_ex: {
-    bg: "flat", place: "Витя · 23:18", noSprites: true, music: "sad", next: "v_door",
+    bg: "flat", place: "Витя · 23:18", noSprites: true, music: "lonely", next: "v_door",
     lines: [
       { tg: "Привет. Как Дубай?", time: "23:17", chat: "Катя", sayWho: "Витя", sayText: "Я пишу и сразу жалею." },
       { tgStatus: "была давно" },
@@ -3215,7 +3271,7 @@ const scenes = {
     ]
   },
   v_food: {
-    bg: "flat", place: "Витя · 23:25", noSprites: true, music: "radio", next: "v_door",
+    bg: "flat", place: "Витя · 23:25", noSprites: true, music: "lonely", next: "v_door",
     lines: [
       { who: null, t: "Курьер пишет «буду через 40 минут». Это самые предсказуемые отношения в моей жизни." },
       { who: "Витя", t: "Хоть кто-то придёт." }
@@ -3227,7 +3283,7 @@ const scenes = {
       { fx: "timer", who: null, t: "Звонок в дверь. Долгий. Требовательный." },
       { who: null, t: "В глазок: парень в капюшоне. В руках толстая папка. Лицо не видно." },
       { who: "Голос за дверью", t: "Виктор? Открывай. Я по поводу твоей квартиры." },
-      { who: "Витя", t: "…«Бизнес-Инвестиции». Это банк «Бизнес-Инвестиции». Я знал, что за квартирой придут. Я один раз заплатил на день позже." },
+      { who: "Витя", t: "…«Бизнес-Инвестиции». Это банк «Бизнес-Инвестиции». Суд же был. Пришли забирать квартиру. Я знал, что придут, апелляцию ещё не рассмотрели!" },
       { who: "Витя", t: "Папка. У них всегда папка. Там мой договор, мой залог и моя жизнь." }
     ],
     choices: () => [
@@ -3273,7 +3329,7 @@ const scenes = {
     lines: [
       { npcShow: "npc_petya", who: null, t: "Балкон. Две сигареты. Внизу Юго-Западная, напротив панельки горят окнами, как новогодняя гирлянда." },
       { who: "Петя", t: "Ну рассказывай. Кто на этот раз?" },
-      { who: "Витя", t: "Все. Полина, Катя, Алёна. Каждая уходила и забирала по куску меня. Скоро от меня останется только ипотека." }
+      { who: "Витя", t: "Все. Полина, Катя, Алёна. Каждая уходила и забирала по куску меня. Скоро от меня останется только иск к банку и органайзер для таблеток." }
     ],
     choices: () => [
       { icon: "talk", t: "Рассказать всё", sub: "Как есть, без юридических формулировок", go: "v_end_open" },
@@ -3283,6 +3339,8 @@ const scenes = {
   v_end_open: {
     bg: "balcony", place: "Витя · балкон · 00:40", noSprites: true, music: "reggae",
     lines: [
+      { who: "Петя", t: "Вить, а к скольким врачам ты ходил за год?" },
+      { who: "Витя", t: "К восьми. Каждый нашёл что-то своё. Никто не нашёл, что мне просто одиноко." },
       { who: "Витя", t: "Мне не квартиру страшно потерять. Мне страшно, что я так и буду один. И что я сам в этом виноват." },
       { npcShow: "npc_petya", who: "Петя", t: "Вить. Ты только что чуть не убил меня сковородкой, защищая квартиру. Представь, как ты будешь защищать человека." },
       { who: null, t: "Мы смеёмся. Сигарета догорает. Регги у соседей играет по третьему кругу." },
@@ -3300,7 +3358,7 @@ const scenes = {
       { who: null, t: "Он уходит. Дверь закрывается. В квартире снова тихо. Одна квартира, ноль людей." },
       { who: "", t: "Он же приехал. Сам. Ночью. А я ему про доширак." }
     ],
-    ending: "Витя · концовка «Ипотека на одного»",
+    ending: "Витя · концовка «Одна квартира, ноль людей»",
     choices: () => vEndChoices()
   },
   // ================= Halo · Бородино: выживание (sv — припасы, патроны, вал, люди) =================
@@ -4632,13 +4690,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280238`, talk: `img/${n}_talk.png?v=10280238`, blink: `img/${n}_blink.png?v=10280238` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280241`, talk: `img/${n}_talk.png?v=10280241`, blink: `img/${n}_blink.png?v=10280241` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280238" : `img/${n}_spartan.png?v=10280238`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280241" : `img/${n}_spartan.png?v=10280241`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -4667,7 +4725,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280238`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280241`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -4676,7 +4734,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280238`; el.alt = who;
+  el.src = `img/${n}.png?v=10280241`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -4970,7 +5028,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280238) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280241) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
