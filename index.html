@@ -1693,10 +1693,13 @@ function hint(key, text) {
 // ---------- Сохранение ----------
 // Игра запоминает последнюю сцену и то, что Глеб знает после перемоток. Хранится в браузере этого телефона.
 const SAVE_KEY = "powerhouse-save-v1";
+const SAVE_ON = false;   // выключено на время экспериментов: включить true, когда сюжет устоится
 function saveGame(id) {
+  if (!SAVE_ON) return;
   try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], place: scenes[id].place, t: Date.now() })); } catch (e) {}
 }
 function loadSave() {
+  if (!SAVE_ON) return null;
   try { const d = JSON.parse(localStorage.getItem(SAVE_KEY)); return d && scenes[d.scene] ? d : null; } catch (e) { return null; }
 }
 function continueGame() {
