@@ -740,6 +740,10 @@ const ICON = {
   forget: `<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><path d="M16 48L48 16"/></svg>`,
   grab:   `<svg viewBox="0 0 64 64"><path d="M22 34V14a4 4 0 0 1 8 0v16M30 28V10a4 4 0 0 1 8 0v20M38 28V14a4 4 0 0 1 8 0v24c0 12-8 20-18 20-8 0-12-4-16-12l-6-10a4 4 0 0 1 7-4l5 6"/></svg>`,
   let:    `<svg viewBox="0 0 64 64"><path d="M12 36l12 12 28-30"/></svg>`,
+  go:     `<svg viewBox="0 0 64 64"><circle cx="38" cy="10" r="5"/><path d="M26 22l10-4 6 10 10 2M36 18l-6 16 10 8-4 14M30 34l-8 6-10-2"/></svg>`,
+  metro:  `<svg viewBox="0 0 64 64"><path d="M8 52h48"/><path d="M14 52L24 14l8 20 8-20 10 38"/></svg>`,
+  yard:   `<svg viewBox="0 0 64 64"><path d="M8 54V24l24-14 24 14v30"/><path d="M24 54V36h16v18"/></svg>`,
+  party:  `<svg viewBox="0 0 64 64"><path d="M20 58h24M32 58V36"/><path d="M14 8h36L32 36z"/><path d="M40 8l8-6"/></svg>`,
   stop:   `<svg viewBox="0 0 64 64"><path d="M22 6h20l14 14v24L42 58H22L8 44V20z"/><path d="M22 32h20"/></svg>`,
   fight:  `<svg viewBox="0 0 64 64"><path d="M14 30V22a5 5 0 0 1 10 0M24 22v-4a5 5 0 0 1 10 0v4M34 22a5 5 0 0 1 10 0v4M44 26a5 5 0 0 1 8 2v10c0 10-8 18-18 18h-4c-9 0-16-7-16-16V30"/><path d="M50 8l4-4M56 14l5-1M44 6l1-5"/></svg>`,
   help:   `<svg viewBox="0 0 64 64"><path d="M14 50l6-16 26-26 10 10-26 26z"/><path d="M40 14l10 10"/></svg>`,
@@ -834,7 +838,7 @@ const scenes = {
     ],
     choices: () => [
       { icon: "forget", t: "Послать нахуй", sub: "«Девочки, идите нахуй. Я с другом.»", go: "girls_no" },
-      { icon: "go", t: "Пойти к ним", sub: "«Я на пять минут, бро.»", go: "girls_yes" },
+      { icon: "party", t: "Пойти к ним", sub: "«Я на пять минут, бро.»", go: "girls_yes" },
       { icon: "fight", t: "Пригрозить травматом", sub: "Молча положить его на стойку.", go: "girls_gun" }
     ]
   },
@@ -1125,8 +1129,8 @@ const scenes = {
       { who: "Глеб", t: "Налево, во дворы! Или в метро, епта!" }
     ],
     choices: () => [
-      { icon: "go", t: "Во дворы", sub: "Там темно, там не найдут.", go: "chase_yards" },
-      { icon: "go", t: "В метро", sub: "Последний поезд через две минуты.", go: "chase_metro" }
+      { icon: "yard", t: "Во дворы", sub: "Там темно, там не найдут.", go: "chase_yards" },
+      { icon: "metro", t: "В метро", sub: "Последний поезд через две минуты.", go: "chase_metro" }
     ]
   },
   chase_yards: {
@@ -1634,7 +1638,7 @@ function showChoices() {
   for (const c of scene.choices()) {
     const el = document.createElement("div");
     el.className = "card " + (c.cls || "");
-    el.innerHTML = `${ICON[c.icon]}<b>${c.t}</b><small>${c.sub}</small>`;
+    el.innerHTML = `${ICON[c.icon] || ICON.let}<b>${c.t}</b><small>${c.sub}</small>`;
     el.onclick = () => choose(c);
     box.appendChild(el);
   }
