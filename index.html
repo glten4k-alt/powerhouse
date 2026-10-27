@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280133") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280134") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -403,11 +403,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280133" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280133" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280134" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280134" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280133) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280134) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -794,7 +794,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280133"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280134"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -912,7 +912,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280133`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280134`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -2245,8 +2245,8 @@ const scenes = {
     lines: [
       { skip: "Витя" },
       { npcShow: "npc_viktor", who: null, t: "Юго-Западная. Девятнадцатый этаж. Из окна видно МГУ и ни одного знакомого окна." },
-      { who: "Витя", t: "Две квартиры. Одна сдаётся, во второй живу я. И в обеих никого." },
-      { who: null, t: "На столе остывший доширак и договор аренды. Я перечитываю его третий раз, просто чтобы что-то читать." },
+      { who: "Витя", t: "Одна квартира. Ипотека на двадцать лет. И в ней никого, кроме меня и банка." },
+      { who: null, t: "На столе остывший доширак и ипотечный договор. Я перечитываю его третий раз, просто чтобы что-то читать." },
       { who: "Витя", t: "Аня ушла к бариста. Лера — к бывшему. Катя — в Дубай, с запиской «ты слишком юрист». Что это вообще значит." }
     ],
     choices: () => [
@@ -2274,8 +2274,8 @@ const scenes = {
     lines: [
       { fx: "timer", who: null, t: "Звонок в дверь. Долгий. Требовательный." },
       { who: null, t: "В глазок: парень в капюшоне. В руках толстая папка. Лицо не видно." },
-      { who: "Голос за дверью", t: "Виктор? Открывай. Я по поводу твоих квартир." },
-      { who: "Витя", t: "…Инвестбанк. Это инвестбанк. Я знал, что за второй квартирой придут." },
+      { who: "Голос за дверью", t: "Виктор? Открывай. Я по поводу твоей квартиры." },
+      { who: "Витя", t: "…Инвестбанк. Это инвестбанк. Я знал, что за квартирой придут. Я один раз заплатил на день позже." },
       { who: "Витя", t: "Папка. У них всегда папка. Там мой договор, мой залог и моя жизнь." }
     ],
     choices: () => [
@@ -2321,7 +2321,7 @@ const scenes = {
     lines: [
       { npcShow: "npc_petya", who: null, t: "Балкон. Две сигареты. Внизу Юго-Западная, вверху МГУ светится, как торт." },
       { who: "Петя", t: "Ну рассказывай. Кто на этот раз?" },
-      { who: "Витя", t: "Все. Аня, Лера, Катя. Каждая уходила и забирала по куску меня. Скоро будет как с квартирой — одна сдаётся, во второй пусто." }
+      { who: "Витя", t: "Все. Аня, Лера, Катя. Каждая уходила и забирала по куску меня. Скоро от меня останется только ипотека." }
     ],
     choices: () => [
       { icon: "talk", t: "Рассказать всё", sub: "Как есть, без юридических формулировок", go: "v_end_open" },
@@ -2345,10 +2345,10 @@ const scenes = {
     lines: [
       { who: "Витя", t: "Да ладно, я в порядке. Просто доширак остыл." },
       { npcShow: "npc_petya", who: "Петя", t: "Ну… ок. Если что — пиши." },
-      { who: null, t: "Он уходит. Дверь закрывается. В квартире снова тихо. Две квартиры, ноль людей." },
+      { who: null, t: "Он уходит. Дверь закрывается. В квартире снова тихо. Одна квартира, ноль людей." },
       { who: "", t: "Он же приехал. Сам. Ночью. А я ему про доширак." }
     ],
-    ending: "Витя · концовка «Две квартиры, ноль людей»",
+    ending: "Витя · концовка «Ипотека на одного»",
     choices: () => vEndChoices()
   },
   // ================= Halo · Бородино: выживание (sv — припасы, патроны, вал, люди) =================
@@ -3664,13 +3664,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280133`, talk: `img/${n}_talk.png?v=10280133`, blink: `img/${n}_blink.png?v=10280133` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280134`, talk: `img/${n}_talk.png?v=10280134`, blink: `img/${n}_blink.png?v=10280134` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280133" : `img/${n}_spartan.png?v=10280133`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280134" : `img/${n}_spartan.png?v=10280134`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3699,7 +3699,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280133`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280134`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3708,7 +3708,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280133`; el.alt = who;
+  el.src = `img/${n}.png?v=10280134`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3897,7 +3897,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280133) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280134) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
