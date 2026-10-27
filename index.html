@@ -486,29 +486,73 @@ const music = {
     this.noise = buf;
     this.next = ac.currentTime + .05;
     this.timer = setInterval(() => this.tick(), 25);
+    this.mood(this.curName);
+  },
+
+  // Настроения музыки. drums: full — полный бит, light — только хэты, heart — стук сердца, none — без ударных.
+  // pad — тянущиеся аккорды: sad (минор) или hope (мажор). f — фильтр, vol — громкость, lfo — «плавание».
+  modes: {
+    bar:      { bpm: 124, drums: "full",  bass: true,  pad: null,   f: 1600, vol: 1,   lfo: 0 },
+    drunk:    { bpm: 124, drums: "full",  bass: true,  pad: null,   f: 750,  vol: 1,   lfo: 450 },
+    tense:    { bpm: 136, drums: "full",  bass: true,  pad: null,   f: 2600, vol: 1.1, lfo: 0, extra: true },
+    sad:      { bpm: 124, drums: "none",  bass: false, pad: "sad",  f: 1100, vol: .9,  lfo: 0 },
+    hope:     { bpm: 124, drums: "light", bass: false, pad: "hope", f: 1800, vol: .9,  lfo: 0 },
+    suspense: { bpm: 124, drums: "heart", bass: false, pad: null,   f: 500,  vol: 1,   lfo: 0 },
+    street:   { bpm: 124, drums: "full",  bass: true,  pad: null,   f: 420,  vol: .5,  lfo: 0 },
+    jail:     { bpm: 124, drums: "none",  bass: false, pad: "sad",  f: 650,  vol: .6,  lfo: 0 }
+  },
+  cur: null, curName: "bar",
+  chords: {
+    sad:  [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]],   // Am F C G
+    hope: [[261.6, 329.6, 392], [196, 246.9, 293.7], [220, 261.6, 329.6], [174.6, 220, 261.6]]    // C G Am F
   },
 
   tick() {
-    const sixteenth = 60 / this.bpm / 4;
+    const m = this.cur || this.modes.bar;
+    const sixteenth = 60 / m.bpm / 4;
     // вкладка была в фоне и таймер стоял: пропущенные доли не играем разом, иначе выходит громкий хрип
     if (this.next < this.ac.currentTime - .05) this.next = this.ac.currentTime + .05;
     while (this.next < this.ac.currentTime + .1) {
       const s = this.step % 16, bar = Math.floor(this.step / 16) % 4, t = this.next;
       const big = Math.floor(this.step / 16) % 16;          // каждые 16 тактов: такт без бочки
-      if (s % 4 === 0 && big !== 15) this.kick(t);
-      if ((s === 6 || s === 14) && bar % 2 === 1) this.stab(t, [[220, 261.6, 329.6], [196, 246.9, 293.7]][bar >> 1]);
-      if (s % 4 === 2) this.hat(t, .22, .05);
-      if (s % 2 === 1) this.hat(t, .06, .02);
-      if (s === 4 || s === 12) this.clap(t);
-      if (s % 4 === 2 || s === 15) this.bass(t, [55, 55, 65.4, 49][bar] * (s === 15 ? 2 : 1));
+      if (m.drums === "full") {
+        if (s % 4 === 0 && big !== 15) this.kick(t);
+        if ((s === 6 || s === 14) && bar % 2 === 1 && !m.extra) this.stab(t, [[220, 261.6, 329.6], [196, 246.9, 293.7]][bar >> 1]);
+        if (s % 4 === 2) this.hat(t, .22, .05);
+        if (s % 2 === 1 || (m.extra && s % 2 === 0)) this.hat(t, m.extra ? .1 : .06, .02);
+        if (s === 4 || s === 12) this.clap(t);
+      } else if (m.drums === "light") {
+        if (s % 4 === 2) this.hat(t, .12, .04);
+        if (s === 0 && bar % 2 === 0) this.kick(t, .35);
+      } else if (m.drums === "heart") {
+        if (s === 0) this.kick(t, .6);
+        if (s === 3) this.kick(t, .4);
+      }
+      if (m.bass && (s % 4 === 2 || s === 15)) {
+        const notes = m.extra ? [55, 58.3, 55, 51.9] : [55, 55, 65.4, 49];   // в напряжении бас тревожнее
+        this.bass(t, notes[bar] * (s === 15 ? 2 : 1));
+      }
+      if (m.pad && s === 0) this.pad(t, this.chords[m.pad][bar], 16 * sixteenth);
       this.next += sixteenth; this.step++;
     }
   },
 
-  kick(t) {
+  // тянущийся аккорд на весь такт: мягкая атака, медленное затухание
+  pad(t, freqs, len) {
+    for (const f of freqs)
+      for (const [type, det] of [["sine", 0], ["triangle", 4]]) {
+        const o = this.ac.createOscillator(), g = this.ac.createGain();
+        o.type = type; o.frequency.value = f; o.detune.value = det;
+        g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.035, t + .5);
+        g.gain.setValueAtTime(.035, t + len - .3); g.gain.linearRampToValueAtTime(.0001, t + len + .4);
+        o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + len + .5);
+      }
+  },
+
+  kick(t, v = .75) {
     const o = this.ac.createOscillator(), g = this.ac.createGain();
     o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(42, t + .12);
-    g.gain.setValueAtTime(.75, t); g.gain.exponentialRampToValueAtTime(.001, t + .35);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + .35);
     o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .36);
   },
   noiseHit(t, type, freq, vol, dec) {
@@ -559,13 +603,15 @@ const music = {
     s.connect(f); f.connect(n); n.connect(this.out); s.start(t); s.stop(t + .1);
   },
 
-  // трезвый бар / пьяный бар / тюрьма (техно еле слышно, как из чужого радио)
-  mood(m) {
+  // смена настроения: фильтр, «плавание» и громкость меняются плавно, ударные — со следующей доли
+  mood(name) {
+    if (!this.modes[name]) return;
+    this.curName = name; this.cur = this.modes[name];
     if (!this.ac) return;
-    const t = this.ac.currentTime;
-    this.filt.frequency.setTargetAtTime({ bar: 1600, drunk: 750, jail: 260, street: 420 }[m], t, .5);
-    this.lfoGain.gain.setTargetAtTime(m === "drunk" ? 450 : 0, t, .5);
-    if (this.on) this.out.gain.setTargetAtTime(m === "jail" ? this.vol * .4 : m === "street" ? this.vol * .5 : this.vol, t, .5);
+    const t = this.ac.currentTime, m = this.cur;
+    this.filt.frequency.setTargetAtTime(m.f, t, .6);
+    this.lfoGain.gain.setTargetAtTime(m.lfo, t, .6);
+    if (this.on) this.out.gain.setTargetAtTime(this.vol * m.vol, t, .6);
   },
   // при перемотке звук проваливается и возвращается
   rewind() {
@@ -579,7 +625,7 @@ const music = {
   },
   toggle() {
     this.on = !this.on;
-    if (this.ac) this.out.gain.setTargetAtTime(this.on ? this.vol : 0, this.ac.currentTime, .05);
+    if (this.ac) this.out.gain.setTargetAtTime(this.on ? this.vol * (this.cur ? this.cur.vol : 1) : 0, this.ac.currentTime, .05);
     $("mute").textContent = this.on ? "♫ звук: вкл" : "♫ звук: выкл";
   }
 };
@@ -623,7 +669,7 @@ const scenes = {
     ]
   },
   s0_rus: {
-    place: "Powerhouse · 20:35", egor: true, next: "s1",
+    place: "Powerhouse · 20:35", egor: true, next: "s1", music: "sad",
     lines: [
       { who: "Егор", t: "Он общался с тем, кто меня кинул. И молчал. Я узнал сам, не от него." },
       { who: "Глеб", t: "А ты с ним говорил?" },
@@ -648,7 +694,7 @@ const scenes = {
       { who: "Егор", t: "Пункт второй: сказать ей. Тут я застрял. Уже два месяца." },
       { who: "", t: "Он шутит. Когда Егор шутит про важное, значит, ему по-настоящему страшно." },
       { who: "Егор", t: "Это Юля. Которая ведёт у нас семинары. Я на её парах в окно смотрю, чтобы не на неё." },
-      { who: "Егор", t: "У меня никогда ни с кем не было. Вообще. Так что не знаю, как это делается." }
+      { who: "Егор", t: "У меня никогда ни с кем не было. Вообще. Так что не знаю, как это делается.", music: "hope" }
     ],
     choices: () => [
       { icon: "forget", t: "Подколоть", sub: "«Бро, ты так со всеми. Чуть страшно — и ты в окно.»", go: "c_blame" },
@@ -656,7 +702,7 @@ const scenes = {
     ]
   },
   c_blame: {
-    place: "Powerhouse · 21:12", egor: true, next: "s1b",
+    place: "Powerhouse · 21:12", egor: true, next: "s1b", music: "sad",
     lines: [
       { who: "Егор", t: "…Спасибо. Очень помог." },
       { who: null, t: "Он отворачивается к стойке. Улыбка остаётся, но глаза уже не здесь." },
@@ -666,13 +712,13 @@ const scenes = {
     ]
   },
   c_ask: {
-    place: "Powerhouse · 21:12", egor: true, next: "s1b",
+    place: "Powerhouse · 21:12", egor: true, next: "s1b", music: "sad",
     lines: [
       { who: null, t: "Егор долго молчит. Бас заполняет паузу." },
       { who: "Егор", t: "Может. Меня один раз уже подвели." },
       { who: "Егор", t: "Я тогда просто исчез. С Русом так и не поговорил. Так проще." },
       { who: "Егор", t: "А тут… если она скажет нет, мне что, вышку бросать?" },
-      { who: "", t: "Впервые за вечер он говорит без шуток." }
+      { who: "", t: "Впервые за вечер он говорит без шуток.", music: "hope" }
     ]
   },
   s1b: {
@@ -726,7 +772,7 @@ const scenes = {
     ]
   },
   s2_grab: {
-    place: "Powerhouse · 00:41", egor: true, drunk: true, next: "s3",
+    place: "Powerhouse · 00:41", egor: true, drunk: true, next: "s3", music: "tense",
     lines: [
       { who: "Глеб", t: "Дай сюда." },
       { who: null, t: "Глеб тянется за телефоном. Егор уворачивается с ловкостью, которой у него трезвого никогда не было." },
@@ -734,7 +780,7 @@ const scenes = {
     ]
   },
   fight: {
-    place: "Powerhouse · 00:42", egor: true, drunk: true, fight: true,
+    place: "Powerhouse · 00:42", egor: true, drunk: true, fight: true, music: "tense",
     lines: [
       { who: "Глеб", t: "Только через мой труп. Дай телефон." },
       { who: "Егор", t: "Отвали, Глеб!" },
@@ -749,13 +795,13 @@ const scenes = {
     ]
   },
   fight_end: {
-    place: "Powerhouse · 00:43", egor: true, drunk: true, fight: true,
+    place: "Powerhouse · 00:43", egor: true, drunk: true, fight: true, music: "suspense",
     lines: [
       { who: "", t: "Экран светится. Красный кружок. Он что, записывает? Нет. Нет-нет-нет." },
       { voice: "0:47" },
       { who: null, t: "Голосовое на 47 секунд: звон стекла, мат и где-то в середине «Юля, я вас люблю!»." },
-      { who: null, t: "Охранник выводит обоих на Гончарную. Холодно. Егор смотрит в телефон." },
-      { tgStatus: "печатает…" },
+      { who: null, t: "Охранник выводит обоих на Гончарную. Холодно. Егор смотрит в телефон.", music: "sad" },
+      { tgStatus: "печатает…", music: "suspense" },
       { who: "Егор", t: "Глеб. Она прослушала. Она… печатает." }
     ],
     learn: "voice",
@@ -766,7 +812,7 @@ const scenes = {
     ]
   },
   riot: {
-    place: "Powerhouse · 00:44", egor: true, drunk: true, fight: true, next: "arrest",
+    place: "Powerhouse · 00:44", egor: true, drunk: true, fight: true, next: "arrest", music: "tense",
     lines: [
       { fx: "punch", who: null, t: "Глеб вскакивает. Егор хватает барный стул." },
       { fx: "punch", who: null, t: "Зеркало за стойкой — вдребезги. Полка с виски — следом." },
@@ -788,7 +834,7 @@ const scenes = {
     next: "court"
   },
   court: {
-    bg: "court", place: "Таганский районный суд · через полгода", egor: true,
+    bg: "court", place: "Таганский районный суд · через полгода", egor: true, music: "suspense",
     lines: [
       { who: "Судья", t: "Подсудимые, встаньте." },
       { who: null, t: "Зачитывают ущерб: зеркало, полка виски, барный стул, нос охранника. Список длинный." },
@@ -802,16 +848,16 @@ const scenes = {
     ]
   },
   court_blame: {
-    bg: "court", place: "Таганский районный суд", egor: true, next: "jail",
+    bg: "court", place: "Таганский районный суд", egor: true, next: "jail", music: "hope",
     lines: [
       { who: "Глеб", t: "Ваша честь, драку начал я. Я хотел отобрать у него телефон." },
       { who: "Егор", t: "Глеб, ты чего?.." },
-      { who: "Судья", t: "Суд учтёт. Но стул подсудимый держал сам. Обоим — по восемь лет." },
+      { who: "Судья", t: "Суд учтёт. Но стул подсудимый держал сам. Обоим — по восемь лет.", music: "sad" },
       { who: "", t: "Не помогло. Но Егор смотрит на меня так, будто помогло." }
     ]
   },
   court_silent: {
-    bg: "court", place: "Таганский районный суд", egor: true, next: "jail",
+    bg: "court", place: "Таганский районный суд", egor: true, next: "jail", music: "sad",
     lines: [
       { who: null, t: "Глеб молчит. Егор смотрит в пол." },
       { who: "Судья", t: "Хулиганство, совершённое группой лиц. Обоим — по восемь лет." },
@@ -834,7 +880,7 @@ const scenes = {
       { who: "", t: "Восемь лет, чтобы понять, что можно было просто поговорить." },
       { skip: "8 лет спустя", years: 8, place: "Колония · выход" },
       { who: null, t: "Выход. Вещи в пакете. Телефон заряжен у дежурного из жалости." },
-      { tgUnread: "8 лет назад" },
+      { tgUnread: "8 лет назад", music: "suspense" },
       { who: "Егор", t: "Одно непрочитанное. От неё. Восемь лет назад." },
       { who: "", t: "Он смотрит на экран и не открывает." }
     ],
@@ -852,7 +898,7 @@ const scenes = {
       { tg: "простите что Юля. Юлия. вы лучший преподаватель в вышке и вообще" },
       { tg: "я не могу думать ни о чём кроме ваших семинаров. и вас. особенно вас" },
       { tg: "можно я приглашу вас на кофе?? это Егор. который у окна" },
-      { who: "", t: "Две галочки. Прочитано." },
+      { who: "", t: "Две галочки. Прочитано.", music: "suspense" },
       { tgStatus: "печатает…" },
       { who: "Егор", t: "Глеб… Она печатает." },
       { who: "", t: "То, что она ответит, изменит жизнь Егора. И я знаю, что он отправил." }
@@ -865,7 +911,7 @@ const scenes = {
     ]
   },
   s3b: {
-    place: "Powerhouse · 00:47", egor: true, drunk: true,
+    place: "Powerhouse · 00:47", egor: true, drunk: true, music: "hope",
     lines: [
       { who: "Глеб", t: "Без «вы лучший» и без «особенно вас». Коротко." },
       { who: "Егор", t: "Коротко. Ладно. Коротко я могу." },
@@ -956,7 +1002,7 @@ function show(id) {
   if (scene.siren) music.siren();
   $("stage").classList.toggle("drunk", !!scene.drunk);
   $("stage").classList.toggle("fight", !!scene.fight);
-  music.mood(scene.bg === "cell" || scene.bg === "court" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar");
+  music.mood(scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
   $("place").textContent = scene.place;
   $("gleb").classList.add("on");
   $("egor").classList.toggle("on", !!scene.egor);
@@ -978,6 +1024,7 @@ function step() {
     return scene.next ? show(scene.next) : showChoices();
   }
   idx++;
+  if (l.music) music.mood(l.music);   // реплика может сменить настроение музыки
   // пропуск времени: чёрный экран с надписью, стена перерисовывается
   if (l.skip) {
     $("box").style.display = "none";
