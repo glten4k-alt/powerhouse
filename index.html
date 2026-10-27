@@ -35,12 +35,14 @@
   #egor { animation-delay:-1.1s; }
   @keyframes breathe { 50% { scale:1 1.012; } }
   .sprite.on { opacity:1; transform:translateY(0); }
-  #stage.spartan #egor { filter:hue-rotate(75deg) saturate(1.6) brightness(1.05) drop-shadow(0 0 12px #e8c25a) drop-shadow(0 12px 18px #000a); }
+  #stage.spartan #egor { filter:drop-shadow(0 0 14px #e8c25a) drop-shadow(0 12px 18px #000a); }
   .sprite.dim { filter:brightness(.5) saturate(.6) drop-shadow(0 12px 18px #000a); }
   .sprite.speak { transform:translateY(0) rotate(var(--lean)); }
   .sprite.hop { animation:hop .28s steps(3), breathe 2.4s steps(1) infinite; }
   @keyframes hop { 50% { translate:0 -2.5%; } }
   #gleb { left:6%; --lean:1.5deg; }
+  #npc { right:6%; height:74%; --lean:-1.5deg; }
+  #npc.mid { right:auto; left:50%; translate:-50% 0; height:62%; }
   #egor { right:6%; --lean:-1.5deg; }
 
   /* Телефон с Telegram */
@@ -285,7 +287,7 @@
     html, body { font-size:16px; }
     #stage { width:100vw; height:100vh; height:100dvh; top:0; transform:none; border-radius:0; }
     .sprite { height:50%; bottom:20%; }
-    #gleb { left:-6%; } #egor { right:-6%; }
+    #gleb { left:-6%; } #egor { right:-6%; } #npc { right:0; height:44%; } #npc.mid { height:38%; }
     #stage.fight #gleb { left:6%; } #stage.fight #egor { right:6%; }
     #place { top:calc(env(safe-area-inset-top) + 10px); left:10px; font-size:11px; padding:5px 10px;
       max-width:calc(100% - 130px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -318,6 +320,7 @@
   <canvas id="bg" width="320" height="180"></canvas>
   <img class="sprite" id="gleb" src="img/gleb_px.png" alt="Глеб">
   <img class="sprite" id="egor" src="img/egor_px.png" alt="Егор">
+  <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
     <div class="hdr"><div class="ava" id="tgava">Ю</div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
@@ -1839,6 +1842,7 @@ for (const n of ["gleb", "egor"]) {
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
+  if (n === "egor" && scene && scene.spartan) { $(n).src = "img/egor_spartan.png"; return; }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
 }
@@ -1859,7 +1863,25 @@ function talk(n) {
   mouthTimer = setInterval(() => { anim[n].open = !anim[n].open; frame(n); }, 120);
 }
 
+// Портреты собеседников: кто заговорил, тот и появляется
+const NPC_IMG = {
+  "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
+  "Судья": "npc_judge", "Виктор Резник": "npc_reznik", "Зэк": "npc_zek",
+  "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde"
+};
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png`; });
+function showNpc(who) {
+  const n = NPC_IMG[who];
+  if (!n) return;
+  const el = $("npc");
+  el.src = `img/${n}.png`; el.alt = who;
+  el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
+  el.classList.add("on");
+}
+
 function focus(who) {
+  if (NPC_IMG[who]) showNpc(who);
+  $("npc").classList.toggle("dim", !!who && !NPC_IMG[who] && $("npc").classList.contains("on"));
   // говорит третий (полицейский, судья) — оба героя в тени
   const other = who && who !== "Глеб" && who !== "Егор";
   $("gleb").classList.toggle("dim", who === "Егор" || other);
@@ -1918,6 +1940,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "Ю";
+  $("npc").classList.remove("on", "dim");
   $("explore").classList.remove("on");
   $("phone").classList.remove("on");
   $("choices").classList.remove("on");
