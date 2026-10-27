@@ -334,8 +334,8 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10271547" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10271547" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
     <div class="hdr"><div class="ava" id="tgava">Ю</div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
@@ -715,7 +715,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10271547"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -2020,13 +2020,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png`, talk: `img/${n}_talk.png`, blink: `img/${n}_blink.png` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10271547`, talk: `img/${n}_talk.png?v=10271547`, blink: `img/${n}_blink.png?v=10271547` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png" : `img/${n}_spartan.png`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10271547" : `img/${n}_spartan.png?v=10271547`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2055,7 +2055,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10271547`; });
 function showNpc(who) {
   let n = NPC_IMG[who];
   if (!n) return;
@@ -2064,7 +2064,7 @@ function showNpc(who) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png`; el.alt = who;
+  el.src = `img/${n}.png?v=10271547`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.add("on");
 }
