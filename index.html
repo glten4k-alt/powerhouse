@@ -334,11 +334,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10271547" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10271547" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272221" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272221" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava">Ю</div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272221) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -715,7 +715,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10271547"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272221"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1394,7 +1394,7 @@ const scenes = {
       { who: "Егор", t: "У меня есть план, епта. Пункт первый: влюбиться. Выполнено." },
       { who: "Егор", t: "Пункт второй: сказать ей. Тут я, блять, застрял. Уже два месяца." },
       { who: "", t: "Он шутит. Когда Егор шутит про важное, значит, ему по-настоящему страшно." },
-      { who: "Егор", t: "Это Юля. Которая ведёт у нас семинары. Я на её парах в окно смотрю, чтобы не на неё." },
+      { npcShow: "npc_yulia", who: "Егор", t: "Это Юля. Которая ведёт у нас семинары. Я на её парах в окно смотрю, чтобы не на неё." },
       { who: "Егор", t: "У меня никогда ни с кем не было. Вообще. Так что не знаю, как это делается.", music: "hope" }
     ],
     choices: () => [
@@ -1495,6 +1495,7 @@ const scenes = {
       { who: "Глеб", t: "Откуда ты…" },
       { who: "Егор", t: "Шучу, епта. Звони." },
       { who: null, t: "Звонок. Шаги за дверью. Щёлкает замок." },
+      { npcShow: "npc_yulia", who: null, t: "Дверь открывается. На пороге Юля. Смотрит на розы, на кольцо, на Егора." },
       { who: "", t: "Сейчас всё решится. И травмат тут уже ничем не поможет." }
     ],
     learn: "address",
@@ -2020,13 +2021,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10271547`, talk: `img/${n}_talk.png?v=10271547`, blink: `img/${n}_blink.png?v=10271547` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272221`, talk: `img/${n}_talk.png?v=10272221`, blink: `img/${n}_blink.png?v=10272221` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10271547" : `img/${n}_spartan.png?v=10271547`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272221" : `img/${n}_spartan.png?v=10272221`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2055,16 +2056,16 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Витя": "npc_viktor"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10271547`; });
-function showNpc(who) {
-  let n = NPC_IMG[who];
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272221`; });
+function showNpc(who, file) {
+  let n = file || NPC_IMG[who];
   if (!n) return;
   // в петле Halo Петя и Витя в броне (у Вити своя картинка npc_viktor, а броня — npc_vitya_sp)
   if (scene.spartanAll && who === "Петя") n = "npc_petya_sp";
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10271547`; el.alt = who;
+  el.src = `img/${n}.png?v=10272221`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.add("on");
 }
@@ -2132,7 +2133,8 @@ function show(id) {
   focus(null);
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
-  $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "Ю";
+  $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272221) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -2181,7 +2183,7 @@ function step() {
   }
   if (l.inmsg) {
     $("phone").classList.add("on");
-    $("tgnm").textContent = l.chat; $("tgava").textContent = l.chat[0]; $("tgst").textContent = "в сети"; $("tgst").className = "st";
+    $("tgnm").textContent = l.chat; $("tgava").textContent = l.chat[0]; $("tgava").style.background = ""; $("tgst").textContent = "в сети"; $("tgst").className = "st";
     const m = document.createElement("div");
     m.className = "msg from"; m.textContent = l.inmsg;
     $("msgs").appendChild(m);
@@ -2210,6 +2212,7 @@ function step() {
     return;
   }
   if (l.battle) return startBattle(l.battle, l.win, l.lose, l);
+  if (l.npcShow) showNpc(null, l.npcShow);
   if (l.fx === "punch") punchFx();
   if (l.fx === "timer") { $("timer").classList.remove("on"); void $("timer").offsetWidth; $("timer").classList.add("on"); setTimeout(() => $("timer").classList.remove("on"), 2200); }
   if (l.fx === "freeze") { $("stage").classList.add("frozen"); music.rewind(); }
