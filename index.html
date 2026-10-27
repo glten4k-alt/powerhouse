@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280135") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280137") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -403,11 +403,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280135" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280135" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280137" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280137" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280135) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280137) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -794,7 +794,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280135"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280137"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -912,7 +912,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280135`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280137`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -939,7 +939,7 @@ function drawCafe() {
   c.fillStyle = "#ffb04018"; c.beginPath(); c.arc(W * .5, H * .62, Math.min(W, H) * .35, 0, 7); c.fill();
 }
 
-// ---------- Локация: квартира Вити на Юго-Западной — окно на МГУ, одна лампа ----------
+// ---------- Локация: квартира Вити на Юго-Западной — окно на панельки, одна лампа ----------
 function drawFlat() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
   const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
@@ -947,10 +947,8 @@ function drawFlat() {
   const wx = portrait ? W * .08 : W * .45, ww = portrait ? W * .84 : W * .5, wy = H * .08, wh = H * .5;
   const g = c.createLinearGradient(0, wy, 0, wy + wh); g.addColorStop(0, "#0a1030"); g.addColorStop(1, "#2a2a50");
   c.fillStyle = g; c.fillRect(wx, wy, ww, wh);
-  // МГУ на горизонте
-  const mx = wx + ww * .6, my = wy + wh;
-  R(mx - 3, my - wh * .62, 6, wh * .62, "#3a3a5a"); R(mx - 1, my - wh * .78, 2, wh * .16, "#4a4a6a"); R(mx, my - wh * .82, 1, 3, "#ffd060");
-  R(mx - 16, my - wh * .38, 32, wh * .38, "#34345a"); R(mx - 26, my - wh * .22, 52, wh * .22, "#30305a");
+  // панельки напротив
+  for (let i = 0; i < 5; i++) { const bx = wx + ww * (.04 + i * .2), bh = wh * (.35 + (i * 37 % 30) / 100); R(bx, wy + wh - bh, ww * .14, bh, i % 2 ? "#2e2e4a" : "#34345a"); }
   // окна города
   for (let i = 0; i < 40; i++) R(wx + (i * 29) % ww, wy + wh * .55 + (i * 13) % (wh * .42), 2, 2, i % 5 ? "#3a3a60" : "#ffd88a");
   R(wx, wy + wh / 2, ww, 2, "#14141c"); R(wx + ww / 2, wy, 2, wh, "#14141c");
@@ -968,12 +966,13 @@ function drawBalcony() {
   const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#080c24"); g.addColorStop(.7, "#2a2850");
   c.fillStyle = g; c.fillRect(0, 0, W, H);
   for (let i = 0; i < 30; i++) R((i * 47) % W, (i * 19) % (H * .3), 1, 1, "#c8d0ff");
-  // МГУ, светится
-  const mx = W * .7, my = H * .62;
-  c.fillStyle = "#ffd06022"; c.beginPath(); c.arc(mx, my - H * .2, H * .2, 0, 7); c.fill();
-  R(mx - 4, my - H * .4, 8, H * .4, "#4a4a70"); R(mx - 1, my - H * .48, 2, H * .08, "#5a5a80"); R(mx, my - H * .5, 1, 3, "#ffd060");
-  R(mx - 22, my - H * .22, 44, H * .22, "#40406a");
-  for (let y = 0; y < 8; y++) for (let x = 0; x < 6; x++) if ((x * 3 + y) % 4) R(mx - 20 + x * 7, my - H * .2 + y * 3, 2, 1, "#ffd88a");
+  // панельки Юго-Западной с окнами
+  const my = H * .62;
+  for (let i = 0; i < 4; i++) {
+    const bx = W * (.06 + i * .25), bw = W * .18, bh = H * (.22 + (i * 37 % 20) / 100);
+    R(bx, my - bh, bw, bh, i % 2 ? "#3a3a60" : "#40406a");
+    for (let y = 0; y < bh / 5 - 1; y++) for (let x = 0; x < bw / 6 - 1; x++) if ((x * 3 + y + i) % 4 === 0) R(bx + 3 + x * 6, my - bh + 3 + y * 5, 2, 2, "#ffd88a");
+  }
   // город внизу
   for (let i = 0; i < 70; i++) R((i * 23) % W, my + 4 + (i * 11) % (H * .2), 2, 1, i % 4 ? "#ffd88a" : "#8ab0ff");
   // перила
@@ -2244,10 +2243,10 @@ const scenes = {
     bg: "flat", place: "Витя · Юго-Западная · 23:10", noSprites: true, music: "sad",
     lines: [
       { skip: "Витя" },
-      { npcShow: "npc_viktor", who: null, t: "Юго-Западная. Девятнадцатый этаж. Из окна видно МГУ и ни одного знакомого окна." },
+      { npcShow: "npc_viktor", who: null, t: "Юго-Западная. Девятнадцатый этаж. Из окна панельки, тысяча окон и ни одного знакомого." },
       { who: "Витя", t: "Одна квартира. Ипотека на двадцать лет. И в ней никого, кроме меня и банка." },
       { who: null, t: "На столе остывший доширак и ипотечный договор. Я перечитываю его третий раз, просто чтобы что-то читать." },
-      { who: "Витя", t: "Аня ушла к бариста. Лера — к бывшему. Катя — в Дубай, с запиской «ты слишком юрист». Что это вообще значит." }
+      { who: "Витя", t: "Полина ушла к бариста. Алёна — к бывшему. Катя — в Дубай, с запиской «ты слишком юрист». Что это вообще значит." }
     ],
     choices: () => [
       { icon: "write", t: "Написать Кате", sub: "«Как Дубай?» Ничего же страшного.", go: "v_ex" },
@@ -2294,7 +2293,7 @@ const scenes = {
   v_ambush: {
     bg: "flat", place: "Витя · прихожая", noSprites: true, music: "tense", next: "v_fight",
     lines: [
-      { who: null, t: "Я открываю дверь и сразу замахиваюсь сковородкой. Тефаль. Подарок Леры. Хоть на что-то сгодился." }
+      { who: null, t: "Я открываю дверь и сразу замахиваюсь сковородкой. Тефаль. Подарок Алёны. Хоть на что-то сгодился." }
     ]
   },
   v_fight: {
@@ -2319,9 +2318,9 @@ const scenes = {
   v_smoke: {
     bg: "balcony", place: "Витя · балкон · 00:05", noSprites: true, music: "reggae",
     lines: [
-      { npcShow: "npc_petya", who: null, t: "Балкон. Две сигареты. Внизу Юго-Западная, вверху МГУ светится, как торт." },
+      { npcShow: "npc_petya", who: null, t: "Балкон. Две сигареты. Внизу Юго-Западная, напротив панельки горят окнами, как новогодняя гирлянда." },
       { who: "Петя", t: "Ну рассказывай. Кто на этот раз?" },
-      { who: "Витя", t: "Все. Аня, Лера, Катя. Каждая уходила и забирала по куску меня. Скоро от меня останется только ипотека." }
+      { who: "Витя", t: "Все. Полина, Катя, Алёна. Каждая уходила и забирала по куску меня. Скоро от меня останется только ипотека." }
     ],
     choices: () => [
       { icon: "talk", t: "Рассказать всё", sub: "Как есть, без юридических формулировок", go: "v_end_open" },
@@ -3664,13 +3663,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280135`, talk: `img/${n}_talk.png?v=10280135`, blink: `img/${n}_blink.png?v=10280135` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280137`, talk: `img/${n}_talk.png?v=10280137`, blink: `img/${n}_blink.png?v=10280137` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280135" : `img/${n}_spartan.png?v=10280135`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280137" : `img/${n}_spartan.png?v=10280137`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3699,7 +3698,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280135`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280137`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3708,7 +3707,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280135`; el.alt = who;
+  el.src = `img/${n}.png?v=10280137`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3897,7 +3896,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280135) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280137) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
