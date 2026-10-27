@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280139") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280149") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -403,11 +403,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280139" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280139" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280149" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280149" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280139) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280149) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -794,7 +794,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280139"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280149"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -912,7 +912,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280139`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280149`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -2469,6 +2469,15 @@ const scenes = {
       { who: "", t: "Можно перемотать. Но тогда я опять выберу то же самое. Нужно думать лучше, а не быстрее." }
     ]
   },
+  h_cut: {
+    halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · день 5 · рассвет", spartanAll: true, noSprites: true, music: "scifi_war", next: "h_final",
+    lines: [
+      { skip: "Последний бой" },
+      { who: null, t: "Рассвет горит, как в 1812-м. Корабль ложится брюхом на поле. Из всех щелей лезут пришельцы." },
+      { who: null, t: "Егор с пулемётом и улыбкой, будто это Reach и он наконец его спасает. Петя в маскхалате, со снайперкой на валу, гаражный король на позиции. Витя в шляпе отстреливается из пистолета, как будто это юридическая формальность." },
+      { who: "", t: "А я между ними. Это мы. Это наше поле." }
+    ]
+  },
   h_final: {
     halo: true, bg: "war", place: "Бородинское поле · день 5", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
     linesFn: () => [
@@ -2484,7 +2493,7 @@ const scenes = {
   h_end_full: {
     halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · закат", spartanAll: true, noSprites: true, music: "scifi_war",
     lines: [
-      { who: null, t: "Мы деремся все вместе. Петя с пулемётом, Витя с пистолетом и в шляпе, Егор в маскхалате на высоте." },
+      { who: null, t: "Мы деремся все вместе. Егор с пулемётом, Петя в маскхалате со снайперкой, Витя с пистолетом и в шляпе." },
       { who: null, t: "Корабль горит и уходит за облака. Пришельцы бегут через Колочу." },
       { who: "Старик", t: "Вот так и тогда было. Говорили — не удержим. Удержали." },
       { who: "", t: "Великое поле стоит. И мы на нём стоим." }
@@ -3663,13 +3672,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280139`, talk: `img/${n}_talk.png?v=10280139`, blink: `img/${n}_blink.png?v=10280139` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280149`, talk: `img/${n}_talk.png?v=10280149`, blink: `img/${n}_blink.png?v=10280149` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280139" : `img/${n}_spartan.png?v=10280139`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280149" : `img/${n}_spartan.png?v=10280149`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3698,7 +3707,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280139`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280149`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3707,7 +3716,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280139`; el.alt = who;
+  el.src = `img/${n}.png?v=10280149`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3783,7 +3792,7 @@ const H_EVENTS = [
 let sv = { food: 0, ammo: 0, wall: 0, people: 0, day: 0, camp: "" };
 function hScore() { return sv.wall * 2 + sv.ammo + (sv.people ? 2 : 0) + (sv.food > 0 ? 1 : 0); }
 // после дневного дела: ночная атака на 2-й и 4-й день, финал на 5-й
-function hAfterDay() { return sv.day >= 5 ? "h_final" : sv.day % 2 === 0 ? "h_night" : "h_day"; }
+function hAfterDay() { return sv.day >= 5 ? "h_cut" : sv.day % 2 === 0 ? "h_night" : "h_day"; }
 function hEndChoices() {
   return [
     { icon: "rewind", t: "Заново", sub: "Пять дней с начала", go: "h_intro", rewind: true, cls: "rewind" },
@@ -3896,7 +3905,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280139) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280149) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
