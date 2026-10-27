@@ -178,30 +178,28 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280241") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    z-index:10; cursor:pointer; transition:opacity .8s; }
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10280257") center 30%/cover;
+    display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
+    overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
-  #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
-  #title h1 { margin:10px 0 24px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.08em;
+  #title .hero small { color:var(--dim); letter-spacing:.2em; text-transform:uppercase; font-size:12px; }
+  #title h1 { margin:10px 0 16px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.06em;
     text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
   #title p { color:var(--dim); font-size:14px; }
-  #saveBtns { display:flex; flex-direction:column; gap:10px; align-items:center; margin-top:6px; }
-  #saveBtns button { width:220px; padding:12px; border-radius:10px; font:inherit; font-size:16px; cursor:pointer; color:var(--text);
-    border:1px solid var(--accent); background:#f0b35e22; }
-  #saveBtns #mBrawl { border-color:#ffffff33; background:none; color:var(--dim); }
-  #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
-  #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
-  #saveBtns #mC { border-color:#f0b35e; background:#f0b35e22; }
-  #saveBtns #mPe { border-color:#e07a2a; background:#e07a2a22; }
-  #saveBtns #mSe { border-color:#b56cff; background:#b56cff22; }
-  #saveBtns #mS { border-color:#ff4fa8; background:#ff4fa822; }
-  #saveBtns #mM { border-color:#9aa0b0; background:#9aa0b022; }
-  #saveBtns #mV { border-color:#8ad0a0; background:#8ad0a022; }
-  #saveBtns #mH { border-color:#5ab0ff; background:#5ab0ff22; }
-  #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
-  #saveBtns small:empty { display:none; }
-  #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
-  #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
+  #title p.cupid { color:var(--accent); font-size:17px; margin:0; }
+  #saveBtns { display:flex; flex-direction:column; gap:8px; max-height:100%; }
+  #saveBtns h3 { margin:10px 0 0; font:bold 11px "Courier New", monospace; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); }
+  #saveBtns .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px; }
+  #saveBtns button { --c:var(--accent); text-align:left; padding:10px 12px; border-radius:10px; font:inherit; cursor:pointer; color:var(--text);
+    border:1px solid #ffffff1a; border-left:3px solid var(--c); background:rgba(14,12,24,.82); backdrop-filter:blur(4px);
+    display:flex; flex-direction:column; gap:2px; transition:transform .15s, background .15s; }
+  #saveBtns button:hover { transform:translateY(-2px); background:color-mix(in srgb, var(--c) 18%, rgba(14,12,24,.9)); }
+  #saveBtns button b { font-size:15px; }
+  #saveBtns button span { font-size:12px; color:var(--dim); }
+  #saveBtns .cont button { width:100%; border:1px solid var(--accent); border-left:3px solid var(--accent); background:#f0b35e26; }
+  #saveBtns .cont button b { font-size:17px; color:var(--accent); }
+  #saveBtns .cont:has(#mCont[style*="none"]) { display:none; }
+  #saveInfo:empty { display:none; }
   @keyframes neon { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.4; } 95% { opacity:1; } 97% { opacity:.6; } }
 
   #bg { object-fit:cover; }
@@ -392,7 +390,12 @@
   #hint.on { display:block; }
 
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
-  @media (max-aspect-ratio: 1/1) { #title { background:linear-gradient(#0006,#000c 55%,#000e),#000 url("img/menu_bg.jpg?v=10280241") center calc(env(safe-area-inset-top) + 4%) / 100% auto no-repeat; } }
+  @media (max-aspect-ratio: 1/1) {
+    #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10280257") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+    #title .hero { padding-top:34vw; text-align:center; }
+    #saveBtns .grid { grid-template-columns:1fr 1fr; }
+  }
   /* ---------- Телефон вертикально (и Telegram) ---------- */
   @media (max-aspect-ratio: 1/1) {
     html, body { font-size:16px; }
@@ -431,11 +434,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280241" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280241" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280257" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280257" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280241) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280257) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -488,7 +491,33 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mSe">Глава · Сергей</button><button id="mS">Глава · «Сахар»</button><button id="mM">Глава · Мобилизация</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title">
+    <div class="hero"><small>Сборник историй · Глеб, Егор, Петя, Витя</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p></div>
+    <div id="saveBtns">
+      <div class="cont"><button id="mCont"><b>▶ Продолжить</b><span id="saveInfo"></span></button></div>
+      <h3>Основная история</h3>
+      <div class="grid">
+        <button id="mStory" style="--c:#ff4f7e"><b>Глава 1 · Powerhouse</b><span>Виски, Telegram и сообщение Юле</span></button>
+        <button id="mC" style="--c:#f0b35e"><b>Глава 2 · Кофейня</b><span>Она ответила. С любой концовки</span></button>
+      </div>
+      <h3>Главы друзей</h3>
+      <div class="grid">
+        <button id="mPe" style="--c:#e07a2a"><b>Петя</b><span>Пелевин, бардо и первый ряд</span></button>
+        <button id="mV" style="--c:#8ad0a0"><b>Витя</b><span>Юго-Западная, суд и балкон</span></button>
+        <button id="mSe" style="--c:#b56cff"><b>Сергей</b><span>Зачем ты со мной общаешься?</span></button>
+        <button id="mS" style="--c:#ff4fa8"><b>«Сахар»</b><span>Клуб, которым владеет Глеб</span></button>
+        <button id="mM" style="--c:#9aa0b0"><b>Мобилизация</b><span>Самолёт, лес и указание свыше</span></button>
+      </div>
+      <h3>Режимы</h3>
+      <div class="grid">
+        <button id="mH" style="--c:#5ab0ff"><b>Halo · Бородино</b><span>Стройка базы и слэшер</span></button>
+        <button id="mP" style="--c:#7a9aff"><b>Бонус · Цикл 47</b><span>Гараж, Ока и буря</span></button>
+        <button id="mX" style="--c:#b56cff"><b>Изнанка · 18+</b><span>Магия, молнии, Дьявол</span></button>
+        <button id="mL" style="--c:#c41a2a"><b>Лилит · 18+</b><span>Двенадцать платежей</span></button>
+        <button id="mBrawl" style="--c:#8a8a96"><b>Режим драки</b><span>Три волны в Powerhouse</span></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -826,7 +855,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280241"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280257"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -945,7 +974,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280241`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280257`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -3462,8 +3491,26 @@ const scenes = {
     linesFn: () => [
       { skip: "Ночь " + sv.day },
       { who: null, t: "Корабль выпускает десант. Фиолетовые огни идут цепью через поле прямо на базу." },
-      { who: "Витя", t: `Защита ${hDef()}. ${sv.b.radar ? "Волна — " + hWave(sv.day) + "." : "Волну не видно."} Каждого, кого ты снимешь сам, — плюс к обороне!` },
-      { battle: "shoot", foe: "Десант", tlabel: "пришелец", tlabel2: "элит", tip: "Стреляй по пришельцам! Победа в перестрелке даёт +4 к защите базы этой ночью.", win: "h_night_win", lose: "h_night_res" }
+      { who: "Витя", t: `Защита ${hDef()}. ${sv.b.radar ? "Волна — " + hWave(sv.day) + "." : "Волну не видно."} Каждого, кого снимем сами, — плюс к обороне!` },
+      { who: "Егор", t: sv.day >= 4 ? "Среди них элитные. С плазменными мечами. Глеб, ты точно хочешь в рукопашную?" : "Мелкие идут первыми. С баллонами на спинах. Их много." }
+    ],
+    choices: () => [
+      { icon: "fight", t: "Клинки наголо", sub: "Встретить их в поле. Слэшер: вчетвером против волны", go: "h_night_blade" },
+      { icon: "spark", t: "Огонь с вала", sub: "Стрелять по целям", go: "h_night_gun" }
+    ]
+  },
+  h_night_blade: {
+    halo: true, bg: "field", place: "Бородинское поле · ночь · рукопашная", spartanAll: true, noSprites: true, music: "scifi_war",
+    linesFn: () => [
+      { fx: "magic", who: null, t: "Я выхожу за вал. Клинок загорается холодным светом. Егор, Петя и Витя — рядом, плечом к плечу. Как на флешах в 1812-м." },
+      { who: "Глеб", t: "За Бородино!" },
+      { brawl: true, halo: true, waves: hBladeWaves(sv.day), win: "h_night_win", lose: "h_night_res" }
+    ]
+  },
+  h_night_gun: {
+    halo: true, bg: "war", place: "Аванпост · ночь · вал", egor: true, spartanAll: true, music: "scifi_war",
+    lines: [
+      { battle: "shoot", foe: "Десант", tlabel: "пришелец", tlabel2: "элит", tip: "Стреляй по пришельцам! Победа даёт +4 к защите базы этой ночью.", win: "h_night_win", lose: "h_night_res" }
     ]
   },
   h_night_win: { halo: true, bg: "war", place: "Аванпост · ночь", spartanAll: true, music: "scifi_war", sv: { bonus: 4 }, next: "h_night_res", lines: [{ who: null, t: "Передовую цепь сняли сами. Остальное — на вал и турели." }] },
@@ -3485,10 +3532,26 @@ const scenes = {
     halo: true, bg: "war", place: "Бородинское поле · армада", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
     linesFn: () => [
       { skip: "Армада" },
-      { who: null, t: "Корабль садится прямо на поле. Из него идут все, кто остался." },
+      { who: null, t: "Корабль садится прямо на поле. Из него идут все, кто остался. Мелкие, элитные, и один огромный — с молотом размером с Петин гараж." },
       { who: "Витя", t: `Итог: защита ${hDef()} против армады ${H_ARMADA}. Вал ${sv.b.wall}, турели ${sv.b.turret}, патронов ${sv.ammo}, людей ${sv.people}.` },
-      { who: "Петя", t: "Пацаны, если что — было охуенно." },
-      { who: "Глеб", t: "Огонь!" },
+      { who: "Петя", t: "Пацаны, если что — было охуенно." }
+    ],
+    choices: () => [
+      { icon: "fight", t: "Всё поле — в рукопашную", sub: "Четыре волны и брут-вожак. Победа: +4 к защите", go: "h_final_blade" },
+      { icon: "spark", t: "Огонь со всех стволов", sub: "Перестрелка. Победа: +4 к защите", go: "h_final_gun" }
+    ]
+  },
+  h_final_blade: {
+    halo: true, bg: "field", place: "Бородинское поле · последний бой", spartanAll: true, noSprites: true, music: "scifi_war",
+    lines: [
+      { fx: "magic", who: null, t: "Мы бежим навстречу армаде. Четверо. Через всё поле. Двести сорок лет назад тут бежали так же." },
+      { who: "Егор", t: "Как в Reach. Только в этот раз — до конца." },
+      { brawl: true, halo: true, waves: [["grunt", "grunt", "grunt", "grunt"], ["elite", "grunt", "grunt", "elite"], ["elite", "elite", "elite"], ["brute", "elite", "grunt", "grunt"]], win: "h_final_win", lose: "h_final_res" }
+    ]
+  },
+  h_final_gun: {
+    halo: true, bg: "war", place: "Бородинское поле · армада", spartanAll: true, noSprites: true, music: "scifi_war",
+    lines: [
       { battle: "shoot", foe: "Армада", tlabel: "пришелец", tlabel2: "элит", tip: "Последний бой! Победа в перестрелке даёт +4 к защите.", win: "h_final_win", lose: "h_final_res" }
     ]
   },
@@ -4419,30 +4482,40 @@ const FIGHTER = {
   egor:   { hair: "#c0662a", hairH: 4, curly: false, skin: "#e8b48a", top: "jacket", topA: "#3a2a24", topB: "#6a6a70", legs: "#262632", w: 10, hp: 100, name: "Егор" },
   bouncer:{ hair: null, skin: "#d8a07a", top: "tee", topA: "#141416", topB: "#f0c040", legs: "#18181c", w: 13, hp: 40, dmg: 7, speed: .45 },
   techno: { hair: "#5fd16a", hairH: 6, mohawk: true, skin: "#e8b48a", top: "tank", topA: "#ff4f9e", topB: "#ff4f9e", legs: "#3a5a8a", w: 9, hp: 28, dmg: 5, speed: .7 },
-  boss:   { hair: null, skin: "#c8906a", top: "tee", topA: "#101012", topB: "#d8d8d8", legs: "#101012", w: 16, hp: 110, dmg: 10, speed: .38, shades: true, big: true }
+  boss:   { hair: null, skin: "#c8906a", top: "tee", topA: "#101012", topB: "#d8d8d8", legs: "#101012", w: 16, hp: 110, dmg: 10, speed: .38, shades: true, big: true },
+  // Бородино-слэшер: четверо в броне и пришельцы
+  sp_gleb:  { armor: "#4a5a7a", trim: "#9aa8c8", w: 11, hp: 100, name: "Глеб" },
+  sp_egor:  { armor: "#6a6a4a", trim: "#b8a870", w: 11, hp: 100, name: "Егор" },
+  sp_petya: { armor: "#3a5a2a", trim: "#7a9a4a", w: 11, hp: 100, name: "Петя" },
+  sp_vitya: { armor: "#3a4a6a", trim: "#c8c8d8", w: 11, hp: 100, name: "Витя", hat: true },
+  grunt:  { alien: "grunt", w: 9,  hp: 22,  dmg: 5,  speed: .7,  blood: "#4aa0ff" },
+  elite:  { alien: "elite", w: 11, hp: 55,  dmg: 9,  speed: .55, blood: "#7a5aff", sword: true },
+  brute:  { alien: "brute", w: 16, hp: 150, dmg: 13, speed: .4,  blood: "#9a5aff", big: true }
 };
 const WAVES = [["bouncer", "bouncer"], ["techno", "techno", "techno"], ["boss", "bouncer"]];
 
-function brawlNew(win, lose) {
+function brawlNew(win, lose, opt = {}) {
   const W = 320;
   BR.win = win; BR.lose = lose; BR.wave = 0; BR.done = false; BR.t = 0;
-  BR.ents = [
-    { kind: "gleb", x: 70, y: 140, hp: 100, dir: 1, cd: 0, act: 0, hurt: 0, ko: 0, player: true },
-    { kind: "egor", x: 50, y: 155, hp: 100, dir: 1, cd: 0, act: 0, hurt: 0, ko: 0, ally: true }
-  ];
+  BR.halo = !!opt.halo; BR.waves = opt.waves || WAVES;
+  const mk = (kind, x, y, extra) => Object.assign({ kind, x, y, hp: FIGHTER[kind].hp, dir: 1, cd: 0, act: 0, hurt: 0, ko: 0 }, extra);
+  BR.ents = BR.halo
+    ? [mk("sp_gleb", 80, 140, { player: true }), mk("sp_egor", 56, 156, { ally: true }), mk("sp_petya", 40, 128, { ally: true }), mk("sp_vitya", 30, 168, { ally: true })]
+    : [mk("gleb", 70, 140, { player: true }), mk("egor", 50, 155, { ally: true })];
   BR.blood = []; BR.drops = []; BR.msg = ""; BR.msgT = 0;
   brawlWave();
 }
 function brawlWave() {
-  const list = WAVES[BR.wave];
+  const list = BR.waves[BR.wave];
   const edge = Math.min(330, (BR.cam || 0) + (BR.vw || 320) + 10);
   list.forEach((k, i) => BR.ents.push({ kind: k, x: edge + i * 22, y: 128 + (i % 3) * 14, hp: FIGHTER[k].hp, dir: -1, cd: 60 + i * 30, act: 0, hurt: 0, ko: 0, enemy: true }));
-  brawlSay(BR.wave === 2 ? "ГЛАВНЫЙ ВЫШИБАЛА!" : "ВОЛНА " + (BR.wave + 1) + " / " + WAVES.length);
+  const last = BR.wave === BR.waves.length - 1 && list.some(k => k === "boss" || k === "brute");
+  brawlSay(last ? (BR.halo ? "БРУТ-ВОЖАК!" : "ГЛАВНЫЙ ВЫШИБАЛА!") : "ВОЛНА " + (BR.wave + 1) + " / " + BR.waves.length);
 }
 function brawlSay(t) { BR.msg = t; BR.msgT = 90; }
 
-function brawlStart(win, lose) {
-  brawlNew(win, lose);
+function brawlStart(win, lose, opt) {
+  brawlNew(win, lose, opt);
   BR.on = true;
   $("box").style.display = "none";
   $("brawl").classList.add("on");
@@ -4456,7 +4529,7 @@ function brawlStart(win, lose) {
 }
 function brawlEnd(won) {
   BR.done = true;
-  brawlSay(won ? "БАР НАШ!" : "НАС ВЫНЕСЛИ…");
+  brawlSay(BR.halo ? (won ? "ПОЛЕ НАШЕ!" : "ОТСТУПАЕМ К ВАЛУ…") : won ? "БАР НАШ!" : "НАС ВЫНЕСЛИ…");
   setTimeout(() => {
     BR.on = false; cancelAnimationFrame(BR.raf);
     $("brawl").classList.remove("on"); $("box").style.display = "";
@@ -4464,25 +4537,26 @@ function brawlEnd(won) {
   }, 1600);
 }
 
-function bleed(x, y, n) {
-  for (let i = 0; i < n; i++) BR.blood.push({ x, y, vx: (Math.random() - .5) * 1.6, vy: -Math.random() * 1.8, life: 40, floor: y + 18 + Math.random() * 6 });
+function bleed(x, y, n, col) {
+  for (let i = 0; i < n; i++) BR.blood.push({ x, y, col, vx: (Math.random() - .5) * 1.6, vy: -Math.random() * 1.8, life: 40, floor: y + 18 + Math.random() * 6 });
 }
 function hit(att, tgt, dmg) {
   if (tgt.ko) return;
   tgt.hp -= dmg; tgt.hurt = 12; tgt.x += att.dir * 6;
-  bleed(tgt.x, tgt.y - 26, 3 + (Math.random() * 3 | 0));
+  bleed(tgt.x, tgt.y - 26, 3 + (Math.random() * 3 | 0) + (BR.halo && att.player ? 4 : 0), FIGHTER[tgt.kind].blood);
   music.punch();
   if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred("light");
-  if (tgt.hp <= 0) { tgt.hp = 0; tgt.ko = 1; if (tgt.enemy) brawlSay(["ВЫРУБИЛСЯ!", "ОТДЫХАЕТ!", "СЕЛ НА ПОЛ!"][Math.random() * 3 | 0]); }
+  if (tgt.hp <= 0) { tgt.hp = 0; tgt.ko = 1; if (tgt.enemy) brawlSay(BR.halo ? ["РАЗРУБЛЕН!", "МИНУС ОДИН!", "ЗА БОРОДИНО!", "КЛИНКОМ!"][Math.random() * 4 | 0] : ["ВЫРУБИЛСЯ!", "ОТДЫХАЕТ!", "СЕЛ НА ПОЛ!"][Math.random() * 3 | 0]); }
 }
 function attack(f) {
   if (f.act > 0 || f.ko) return;
   f.act = 14;
-  const reach = f.kind === "boss" ? 24 : 20;
+  if (BR.halo && f.player) f.slash = 10;
+  const reach = f.kind === "boss" || f.kind === "brute" ? 24 : BR.halo && f.player ? 30 : 20;
   const targets = BR.ents.filter(e => !e.ko && (f.enemy ? !e.enemy : e.enemy));
   for (const t of targets) {
     const dx = (t.x - f.x) * f.dir;
-    if (dx > 0 && dx < reach && Math.abs(t.y - f.y) < 9) hit(f, t, f.enemy ? FIGHTER[f.kind].dmg : (f.player ? 9 : 7));
+    if (dx > 0 && dx < reach && Math.abs(t.y - f.y) < (BR.halo && f.player ? 13 : 9)) hit(f, t, f.enemy ? FIGHTER[f.kind].dmg : (f.player ? (BR.halo ? 14 : 9) : 7));
   }
 }
 
@@ -4490,7 +4564,7 @@ function brawlStep() {
   if (BR.done) { BR.msgT && BR.msgT--; return; }
   BR.t++;
   const k = BR.keys, p = BR.ents[0];
-  for (const f of BR.ents) { if (f.cd > 0) f.cd--; if (f.act > 0) f.act--; if (f.hurt > 0) f.hurt--; if (f.ko) f.ko++; }
+  for (const f of BR.ents) { if (f.cd > 0) f.cd--; if (f.act > 0) f.act--; if (f.hurt > 0) f.hurt--; if (f.ko) f.ko++; if (f.slash > 0) f.slash--; }
   // Глеб — под управлением игрока
   if (!p.ko) {
     let vx = 0, vy = 0;
@@ -4516,24 +4590,26 @@ function brawlStep() {
   }
   for (const f of BR.ents) { f.x = Math.max(8, Math.min(312, f.x)); f.y = Math.max(118, Math.min(172, f.y)); }
   // кровь: капли летят и остаются на полу
-  for (const b of BR.blood) { b.x += b.vx; b.y += b.vy; b.vy += .15; if (b.y >= b.floor) { BR.drops.push({ x: b.x, y: b.floor, a: 1 }); b.life = 0; } else b.life--; }
+  for (const b of BR.blood) { b.x += b.vx; b.y += b.vy; b.vy += .15; if (b.y >= b.floor) { BR.drops.push({ x: b.x, y: b.floor, a: 1, col: b.col }); b.life = 0; } else b.life--; }
   BR.blood = BR.blood.filter(b => b.life > 0);
   BR.drops.forEach(d => d.a = Math.max(.25, d.a - .002));
   if (BR.drops.length > 120) BR.drops.splice(0, BR.drops.length - 120);
   // вырубленные противники через время уходят
   BR.ents = BR.ents.filter(f => !(f.enemy && f.ko > 90));
   // Егор встаёт: нокаут, а не смерть
-  for (const f of BR.ents) if (!f.enemy && f.ko > 120 && !f.player) { f.ko = 0; f.hp = 30; brawlSay("ЕГОР ВСТАЁТ!"); }
+  for (const f of BR.ents) if (!f.enemy && f.ko > 120 && !f.player) { f.ko = 0; f.hp = 30; brawlSay((FIGHTER[f.kind].name || "ЕГОР").toUpperCase() + " ВСТАЁТ!"); }
   if (BR.msgT) BR.msgT--;
   if (p.ko) return brawlEnd(false);
-  if (!BR.ents.some(f => f.enemy)) { BR.wave++; if (BR.wave >= WAVES.length) return brawlEnd(true); brawlWave(); }
+  if (!BR.ents.some(f => f.enemy)) { BR.wave++; if (BR.wave >= BR.waves.length) return brawlEnd(true); brawlWave(); }
   $("brG").style.width = Math.max(0, p.hp) + "%";
-  $("brE").style.width = Math.max(0, BR.ents[1] && BR.ents[1].kind === "egor" ? BR.ents[1].hp : 0) + "%";
-  $("brW").textContent = "Волна " + Math.min(BR.wave + 1, WAVES.length) + "/" + WAVES.length;
+  $("brE").style.width = Math.max(0, BR.ents[1] && /egor/.test(BR.ents[1].kind) ? BR.ents[1].hp : 0) + "%";
+  $("brW").textContent = "Волна " + Math.min(BR.wave + 1, BR.waves.length) + "/" + BR.waves.length;
 }
 
 function drawFighter(c, f) {
-  const d = FIGHTER[f.kind], s = d.big ? 1.25 : 1, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  const d = FIGHTER[f.kind];
+  if (d.armor || d.alien) return drawHaloFighter(c, f, d);
+  const s = d.big ? 1.25 : 1, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
   const x = f.x, y = f.y, dir = f.dir;
   c.fillStyle = "#0006"; c.beginPath(); c.ellipse(x, y, 9 * s, 2.5, 0, 0, 7); c.fill();
   if (f.ko) { // лежит на полу
@@ -4566,6 +4642,52 @@ function drawFighter(c, f) {
   else R(x + dir * 2 * s - .5, top + 5 * s, 1.5, 1.5, "#1a1010");
 }
 
+// Бородино: спартанцы в броне с клинком и пришельцы трёх видов
+function drawHaloFighter(c, f, d) {
+  const s = d.big ? 1.35 : d.alien === "grunt" ? .8 : 1, R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  const x = f.x, y = f.y, dir = f.dir, flash = f.hurt && (f.hurt >> 1) % 2;
+  c.fillStyle = "#0006"; c.beginPath(); c.ellipse(x, y, 9 * s, 2.5, 0, 0, 7); c.fill();
+  if (f.ko) {
+    if (f.enemy && f.ko > 60 && (f.ko >> 2) % 2) return;
+    R(x - 14 * s, y - 6, 28 * s, 6, d.armor || ({ grunt: "#c07a2a", elite: "#3a4ab0", brute: "#5a4a3a" })[d.alien]); return;
+  }
+  const step = Math.sin((f.walk || 0) * .35) * 3, H = 36 * s, w = d.w * s, top = y - H;
+  if (d.armor) {
+    const A = flash ? "#fff" : d.armor;
+    R(x - w / 2 + 1, y - 12 * s, 4 * s, 12 * s + step, "#2a2a30"); R(x + w / 2 - 5 * s, y - 12 * s, 4 * s, 12 * s - step, "#2a2a30");
+    R(x - w / 2 - 1, top + 11 * s, w + 2, 14 * s, A); R(x - w / 2, top + 12 * s, w, 2, d.trim);
+    R(x - w / 2 - 3, top + 11 * s, 4, 5 * s, d.trim); R(x + w / 2 - 1, top + 11 * s, 4, 5 * s, d.trim);   // наплечники
+    R(x - 5 * s, top + 1 * s, 10 * s, 10 * s, A); R(x + dir * 1 * s - 3 * s, top + 4 * s, 7 * s, 3 * s, "#f0b040");   // шлем и золотой визор
+    if (d.hat) { R(x - 7 * s, top - 1 * s, 14 * s, 2 * s, "#1a1a20"); R(x - 4 * s, top - 4 * s, 8 * s, 4 * s, "#1a1a20"); }
+    const swing = f.act > 6;
+    if (f.player) {   // клинок: в замахе вытянут, иначе за плечом
+      c.save(); c.translate(x + dir * w / 2, top + 15 * s); c.rotate(swing ? 0 : -dir * 1.1);
+      R(dir > 0 ? 0 : -22 * s, -1.5, 22 * s, 3, "#bfe8ff"); R(dir > 0 ? 0 : -4, -3, 4, 6, "#3a3a46"); c.restore();
+    } else R(x + dir * w / 2 - (dir < 0 ? 12 * s : 0), top + 15 * s, 12 * s, 3, "#202024");   // винтовка
+    return;
+  }
+  const col = flash ? "#fff" : ({ grunt: "#c07a2a", elite: "#3a4ab0", brute: "#5a4a3a" })[d.alien];
+  if (d.alien === "grunt") {
+    R(x - 5, y - 10, 3, 10 + step * .5, "#4a3a2a"); R(x + 2, y - 10, 3, 10 - step * .5, "#4a3a2a");
+    R(x - w / 2, top + 14 * s, w, 12 * s, col); R(x - dir * (w / 2 + 3) - 2, top + 12 * s, 5, 10 * s, "#5ab0ff");   // баллон с метаном
+    R(x - 3, top + 9 * s, 7, 6, "#8a7a6a"); R(x + dir * 2, top + 11 * s, 2, 2, "#ff4040");
+  } else if (d.alien === "elite") {
+    R(x - 4, y - 14, 4, 14 + step, "#2a2a4a"); R(x + 1, y - 14, 4, 14 - step, "#2a2a4a");
+    R(x - w / 2, top + 9 * s, w, 16 * s, col); R(x - w / 2, top + 10 * s, w, 2, "#8a9aff");
+    R(x - 3 + dir * 2, top + 1 * s, 7, 9 * s, "#6a6a5a"); R(x + dir * 4, top + 5 * s, 2, 2, "#ff8a2a");   // голова-крокодил
+    const swing = f.act > 6;
+    c.fillStyle = "#9ad8ff"; c.shadowColor = "#5ab0ff"; c.shadowBlur = 6;
+    if (swing) c.fillRect(Math.round(x + dir * 4 - (dir < 0 ? 16 : 0)), Math.round(top + 15 * s), 16, 2);
+    else c.fillRect(Math.round(x + dir * 6), Math.round(top + 8 * s), 2, 12);
+    c.shadowBlur = 0;
+  } else {
+    R(x - 6, y - 14 * s, 6 * s, 14 * s + step, "#3a2a20"); R(x + 2, y - 14 * s, 6 * s, 14 * s - step, "#3a2a20");
+    R(x - w / 2, top + 10 * s, w, 16 * s, col); R(x - w / 2, top + 10 * s, w, 3, "#8a6a4a");
+    R(x - 5 * s, top + 2 * s, 10 * s, 8 * s, "#6a5a4a"); R(x + dir * 3 * s, top + 5 * s, 2, 2, "#ffd040");
+    R(x + dir * w / 2 - (dir < 0 ? 14 : 0), top + 14 * s, 14, 5, "#7a7a80");   // молот
+  }
+}
+
 function brawlDraw() {
   const c = $("brawlCv").getContext("2d"), vw = BR.vw || 320, vh = BR.vh || 180;
   c.setTransform(1, 0, 0, 1, 0, 0);
@@ -4574,10 +4696,16 @@ function brawlDraw() {
   BR.cam = Math.max(0, Math.min(320 - vw, (p ? p.x : 160) - vw / 2));
   c.translate(-Math.round(BR.cam), -(180 - vh));
   // пол с плиткой, чтобы было видно, где можно ходить
-  c.fillStyle = "#00000055"; c.fillRect(0, 112, 320, 68);
-  for (const d of BR.drops) { c.fillStyle = `rgba(170,20,30,${d.a})`; c.fillRect(Math.round(d.x), Math.round(d.y), 2, 1); }
+  c.fillStyle = BR.halo ? "#1a140855" : "#00000055"; c.fillRect(0, 112, 320, 68);
+  for (const d of BR.drops) { c.globalAlpha = d.a; c.fillStyle = d.col || "#aa141e"; c.fillRect(Math.round(d.x), Math.round(d.y), 2, 1); }
+  c.globalAlpha = 1;
   [...BR.ents].sort((a, b) => a.y - b.y).forEach(f => drawFighter(c, f));
-  for (const b of BR.blood) { c.fillStyle = "#c01a28"; c.fillRect(Math.round(b.x), Math.round(b.y), 2, 2); }
+  for (const b of BR.blood) { c.fillStyle = b.col || "#c01a28"; c.fillRect(Math.round(b.x), Math.round(b.y), 2, 2); }
+  // след клинка: светящаяся дуга перед Глебом
+  for (const f of BR.ents) if (f.slash > 0) {
+    c.strokeStyle = `rgba(190,232,255,${f.slash / 10})`; c.lineWidth = 3; c.beginPath();
+    c.arc(f.x + f.dir * 6, f.y - 22, 20, f.dir > 0 ? -1.2 : Math.PI - .6, f.dir > 0 ? .6 : Math.PI + 1.2); c.stroke();
+  }
   if (BR.msgT) {
     c.setTransform(1, 0, 0, 1, 0, 0);
     c.save(); c.font = `bold ${vw < 200 ? 12 : 16}px 'Courier New', monospace`; c.textAlign = "center";
@@ -4690,13 +4818,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280241`, talk: `img/${n}_talk.png?v=10280241`, blink: `img/${n}_blink.png?v=10280241` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280257`, talk: `img/${n}_talk.png?v=10280257`, blink: `img/${n}_blink.png?v=10280257` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280241" : `img/${n}_spartan.png?v=10280241`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280257" : `img/${n}_spartan.png?v=10280257`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -4725,7 +4853,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280241`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280257`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -4734,7 +4862,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280241`; el.alt = who;
+  el.src = `img/${n}.png?v=10280257`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -4833,6 +4961,17 @@ const BUILD = {
   kitchen: { name: "Полевая кухня", max: 2, cost: l => ({ mat: 2 + l }),          desc: "Люди съедают на 1 еду в день меньше." }
 };
 function hWave(day) { return 3 + day * 2; }
+// волны слэшера: с каждой ночью больше и злее
+function hBladeWaves(day) {
+  return [
+    [["grunt", "grunt", "grunt"]],
+    [["grunt", "grunt", "grunt"], ["grunt", "elite"]],
+    [["grunt", "grunt", "elite"], ["elite", "grunt", "grunt"]],
+    [["elite", "grunt", "grunt", "grunt"], ["elite", "elite"]],
+    [["grunt", "grunt", "grunt", "elite"], ["elite", "elite", "grunt"], ["brute", "grunt"]],
+    [["elite", "elite", "grunt", "grunt"], ["elite", "elite", "elite"], ["brute", "elite"]]
+  ][Math.max(0, Math.min(5, day - 1))];
+}
 function hDef() {
   const b = sv.b, perTurret = sv.ammo > 0 ? 4 : 2;           // без патронов турели бьют вполсилы
   return b.wall * 3 + b.turret * perTurret + b.radar * 2 + Math.floor(sv.people / 4) + (sv.camp === "hill" ? 2 : 0) + sv.bonus;
@@ -5028,7 +5167,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280241) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280257) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -5113,7 +5252,7 @@ function step() {
   if (l.fx === "glitch") { const st = $("stage"); st.classList.remove("glitch"); void st.offsetWidth; st.classList.add("glitch"); music.rewind(); }
   if (l.fx === "magic") magicFx();
   if (l.addClass) $("stage").classList.add(l.addClass);
-  if (l.brawl) return brawlStart(l.win, l.lose);
+  if (l.brawl) return brawlStart(l.win, l.lose, l);
   if (l.fx === "rewind") { $("stage").classList.add("rewinding"); music.rewind(); $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on"); setTimeout(() => $("stage").classList.remove("rewinding"), 1300); }
   if (l.fx === "punch") punchFx();
   if (l.fx === "timer") { $("timer").classList.remove("on"); void $("timer").offsetWidth; $("timer").classList.add("on"); setTimeout(() => $("timer").classList.remove("on"), 2200); }
