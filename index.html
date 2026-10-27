@@ -382,11 +382,11 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272234" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10272234" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10272239" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10272239" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272234) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10272239) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -772,7 +772,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272234"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10272239"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1413,14 +1413,78 @@ const scenes = {
     lines: [
       { fx: "magic", who: null, t: "Последний бес лопается, как лампочка. Дьявол смеётся и растворяется в моём отражении в зеркале." },
       { who: "Дьявол", t: "Магию оставь себе. Посмотрим, на что ты её потратишь." },
-      { who: "Егор", t: "Глеб, что это было?.. Ладно. Неважно. Я сам ей напишу." },
+      { who: "Егор", t: "Глеб, что это было?.. Ладно. Неважно. Я выйду покурю и сам ей напишу." }
+    ],
+    choices: () => [
+      { icon: "go", t: "Пойти с Егором", sub: "Проследить, чтобы он правда написал", go: "x_light" },
+      { icon: "let", t: "Остаться у стойки", sub: "Выпить одному в тишине", go: "x_lilith" }
+    ]
+  },
+  x_light: {
+    x: true, place: "Изнанка · Гончарная · 00:15", egor: true, music: "hope",
+    lines: [
       { tg: "Добрый вечер. У меня не хватает уверенности сказать вам это вживую. Я бы хотел пригласить вас попить со мной кофе в аутентичной монастырской кофейне. Как вы на это смотрите?", sayWho: "", sayText: "Без магии. Без сделок. Сам." },
       { tgStatus: "печатает…" },
-      { who: "", t: "Вывеска за окном снова читается правильно: POWERHOUSE." }
+      { who: "", t: "Вывеска над входом снова читается правильно: POWERHOUSE." }
     ],
     ending: "Изнанка · концовка «Свет»",
     choices: () => [
       { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  x_lilith: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:20", music: "eerie",
+    lines: [
+      { npcShow: "npc_lilith", who: null, t: "На соседний стул садится девушка. Рыжие волосы до пояса, маленькие рожки, красные глаза. Пахнет корицей и горелой спичкой." },
+      { who: "Лилит", t: "Ты первый за сто лет, кто послал его нахуй. Мне понравилось." },
+      { who: "Глеб", t: "Ты кто?" },
+      { who: "Лилит", t: "Лилит. Его помощница. Скорее бывшая жена. Неважно." },
+      { who: "Лилит", t: "У меня своя сделка. Твой друг получит её «да». А ты получишь меня. Одну ночь. Душу — потом, в рассрочку, без процентов." },
+      { who: "", t: "Она смотрит так, будто уже знает мой ответ. И, кажется, знает его лучше меня." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Согласиться", sub: "Одна ночь. Душа в рассрочку.", go: "x_night" },
+      { icon: "let", t: "Отказаться", sub: "«Спасибо. Я как-нибудь сам.»", go: "x_lilith_no" },
+      { icon: "spark", t: "Прочитать её мысли", sub: "Чего она хочет на самом деле", magic: 1, cls: "magic", go: "x_lilith_mind" }
+    ]
+  },
+  x_lilith_mind: {
+    x: true, inferno: true, place: "Изнанка · Powerhouse · 00:22", music: "sad",
+    lines: [
+      { npcShow: "npc_lilith", who: "", t: "Её мысли тихие, как пустой бар под утро." },
+      { who: null, t: "«Он откажется. Они всегда сначала отказываются. Хоть бы кто-нибудь однажды не отпустил.»" },
+      { who: "", t: "Ей одиноко. Даже ей." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Согласиться", sub: "Одна ночь. Душа в рассрочку.", go: "x_night" },
+      { icon: "let", t: "Отказаться", sub: "«Тебе не я нужен. И мне не ты.»", go: "x_lilith_no" }
+    ]
+  },
+  x_night: {
+    x: true, place: "Изнанка · Powerhouse · утро", music: "eerie",
+    lines: [
+      { npcShow: "npc_lilith", who: "Лилит", t: "Пойдём. Здесь слишком светло." },
+      { fx: "glitch", skip: "…" },
+      { who: null, t: "Утро. Я просыпаюсь за стойкой Powerhouse. Бар пустой, стулья подняты на столы." },
+      { who: "", t: "Что было ночью, не помню. Только запах корицы и чей-то смех у самого уха." },
+      { who: null, t: "На запястье, там где обычно часы, тонкая красная линия и цифры: 1/12." },
+      { inmsg: "ГЛЕБ", chat: "Егор" },
+      { inmsg: "она ответила", chat: "Егор" },
+      { inmsg: "она сказала да!!!", chat: "Егор" },
+      { who: "", t: "Один платёж из двенадцати. Интересно, что будет на двенадцатом." }
+    ],
+    ending: "Изнанка · концовка «Рассрочка»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать ночь", sub: "Вернуться к стойке", go: "x_lilith", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "Глава 1 и сохранения там", menu: true, go: "" }
+    ]
+  },
+  x_lilith_no: {
+    x: true, place: "Изнанка · Powerhouse · 00:25", music: "hope", next: "x_light",
+    lines: [
+      { npcShow: "npc_lilith", who: "Лилит", t: "Жаль. Ты бы мне понравился ещё больше." },
+      { who: null, t: "Она исчезает, будто её и не было. На стойке остаётся длинный рыжий волос и чек: «за счёт заведения»." },
+      { who: "", t: "Иду к Егору. Он уже стоит с телефоном у входа." }
     ]
   },
   x_lose: {
@@ -2483,13 +2547,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10272234`, talk: `img/${n}_talk.png?v=10272234`, blink: `img/${n}_blink.png?v=10272234` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10272239`, talk: `img/${n}_talk.png?v=10272239`, blink: `img/${n}_blink.png?v=10272239` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272234" : `img/${n}_spartan.png?v=10272234`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10272239" : `img/${n}_spartan.png?v=10272239`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -2516,9 +2580,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Витя": "npc_viktor"
+  "Петя": "npc_petya", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272234`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10272239`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -2527,7 +2591,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10272234`; el.alt = who;
+  el.src = `img/${n}.png?v=10272239`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -2617,7 +2681,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10272234) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10272239) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
