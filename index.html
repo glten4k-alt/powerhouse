@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280153") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280206") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -178,6 +178,7 @@
   #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
   #saveBtns #mC { border-color:#f0b35e; background:#f0b35e22; }
   #saveBtns #mPe { border-color:#e07a2a; background:#e07a2a22; }
+  #saveBtns #mM { border-color:#9aa0b0; background:#9aa0b022; }
   #saveBtns #mV { border-color:#8ad0a0; background:#8ad0a022; }
   #saveBtns #mH { border-color:#5ab0ff; background:#5ab0ff22; }
   #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
@@ -218,6 +219,12 @@
   #line.devil { color:#ffb3b3; }
 
   /* Драка beat 'em up */
+  #flight { position:absolute; inset:0; z-index:8; display:none; flex-direction:column; background:#0a0e1a; }
+  #flight.on { display:flex; }
+  #flight canvas { flex:1; width:100%; min-height:0; object-fit:contain; image-rendering:pixelated; }
+  #flight .tip { text-align:center; font:bold 14px "Courier New", monospace; color:#ffd060; padding:6px 10px; }
+  #flight .pad { display:flex; justify-content:space-between; gap:10px; padding:8px 14px calc(env(safe-area-inset-bottom) + 10px); }
+  #flight .pad button { flex:1; height:64px; border-radius:12px; border:2px solid #000; background:#2a2a36; color:#fff; font:bold 18px "Courier New", monospace; box-shadow:0 3px 0 #000; touch-action:none; }
   #brawl { position:absolute; inset:0; z-index:8; display:none; flex-direction:column; }
   #brawl.on { display:flex; }
   #brawlCv { flex:1; width:100%; min-height:0; image-rendering:pixelated; object-fit:contain; }
@@ -400,15 +407,15 @@
     .bam { font-size:40px; }
   }
 </style>
-<style>#mL,#mBrawl{display:none!important}</style></head>
+<style>#mL,#mM,#mBrawl{display:none!important}</style></head>
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280153" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280153" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280206" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280206" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280153) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280206) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -434,6 +441,8 @@
   </div></div>
   <div id="hint"></div>
   <div id="explore"><div id="exTip">Пройдись по бару: нажимай на людей</div><div id="exSpots"></div><button id="exGo">Сесть за стойку и ждать Егора →</button></div>
+  <div id="flight"><canvas id="flightCv" width="320" height="180"></canvas><div class="tip" id="flTip"></div>
+    <div class="pad"><button id="flUp">▲ ВВЕРХ</button><button id="flDn">▼ ВНИЗ</button></div></div>
   <div id="brawl">
     <div class="hud"><div class="b">Глеб<div class="bar"><i id="brG"></i></div></div><div class="b">Егор<div class="bar"><i id="brE"></i></div></div><span id="brW">Волна 1/3</span></div>
     <canvas id="brawlCv" width="320" height="180"></canvas>
@@ -458,7 +467,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mM">Глава · Мобилизация</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -476,7 +485,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -795,7 +804,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280153"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280206"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -913,7 +922,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280153`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280206`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1011,6 +1020,96 @@ function drawPflat() {
     // дымка
     c.fillStyle = "#e8e0d00c"; for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse(W * (.2 + i * .15), H * (.4 + (i % 2) * .1), W * .18, H * .05, 0, 0, 7); c.fill(); }
   }
+}
+
+// ---------- Локация: ночной ангар аэропорта ----------
+function drawHangar() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#10141c");
+  for (let x = 0; x < W; x += 20) R(x, 0, 2, H * .5, "#1c222c");
+  c.fillStyle = "#1a2030"; c.beginPath(); c.moveTo(0, H * .15); c.quadraticCurveTo(W / 2, -H * .1, W, H * .15); c.lineTo(W, 0); c.lineTo(0, 0); c.fill();
+  for (let i = 0; i < 3; i++) { R(W * (.2 + i * .3), H * .05, 10, 3, "#f0f4ff"); c.fillStyle = "#e0e8ff10"; c.beginPath(); c.moveTo(W * (.2 + i * .3), H * .07); c.lineTo(W * (.2 + i * .3) + 10, H * .07); c.lineTo(W * (.26 + i * .3), H * .7); c.lineTo(W * (.14 + i * .3), H * .7); c.fill(); }
+  R(0, H * .7, W, H * .3, "#2a2e36"); for (let x = 0; x < W; x += 30) R(x, H * .82, 16, 2, "#e8c040");
+  // самолёт
+  const px = W * .2, py = H * .55, pw = W * .6;
+  R(px, py, pw, H * .1, "#c8ccd8"); R(px + pw - 6, py + 2, 10, H * .06, "#9aa0b0"); R(px - 8, py - H * .12, 14, H * .14, "#b8bcc8");
+  R(px + pw * .35, py + H * .03, pw * .3, 4, "#9aa0b0");
+  for (let i = 0; i < 8; i++) R(px + 20 + i * pw / 10, py + 4, 4, 3, "#2a3a5a");
+  R(px + pw * .3, py + H * .1, 4, H * .05, "#3a3a3a"); R(px + pw * .7, py + H * .1, 4, H * .05, "#3a3a3a");
+}
+// ---------- Локация: северный лес, лагерь у костра; снег и свет — по флагам сцены ----------
+function drawForest() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, sc = scene || {};
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, sc.holy ? "#3a3a5a" : sc.snow ? "#1a2030" : "#2a3a4a"); g.addColorStop(1, sc.snow ? "#3a4450" : "#3a4a3a");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  if (sc.holy) { const lg = c.createRadialGradient(W * .5, H * .35, 4, W * .5, H * .35, H * .7); lg.addColorStop(0, "#fff8e0"); lg.addColorStop(.3, "#ffe8a088"); lg.addColorStop(1, "#ffe8a000"); c.fillStyle = lg; c.fillRect(0, 0, W, H); }
+  // ели в три ряда
+  for (let row = 0; row < 3; row++) for (let x = -10 + row * 7; x < W + 10; x += 18 + row * 4) {
+    const h = H * (.3 + row * .12) + (x * 7 % 13), base = H * (.5 + row * .1), col = ["#1a2a22", "#14221a", "#0e1a12"][row];
+    c.fillStyle = col; c.beginPath(); c.moveTo(x, base - h); c.lineTo(x - 9 - row * 2, base); c.lineTo(x + 9 + row * 2, base); c.fill();
+    if (sc.snow) { c.fillStyle = "#e8eef4"; c.beginPath(); c.moveTo(x, base - h); c.lineTo(x - 3, base - h + 6); c.lineTo(x + 3, base - h + 6); c.fill(); }
+  }
+  R(0, H * .78, W, H * .22, sc.snow ? "#d8e0e8" : "#2a3a24");
+  // костёр и обломок крыла
+  const fx = W * .5, fy = H * .86, fl = 5 + Math.sin(Date.now() / 150) * 2;
+  c.fillStyle = "#ff8a2a33"; c.beginPath(); c.arc(fx, fy - 4, 22, 0, 7); c.fill();
+  R(fx - 8, fy, 16, 2, "#4a2a18"); R(fx - 3, fy - fl, 6, fl, "#ff8a2a"); R(fx - 1, fy - fl - 3, 3, fl, "#ffd060");
+  R(W * .72, H * .8, W * .2, 5, "#9aa0b0"); R(W * .9, H * .74, 4, 10, "#c41a2a");
+  if (sc.snow) for (let i = 0; i < 50; i++) R((i * 41 + Date.now() / 60 * (i % 3 + 1) * .3) % W, (i * 29 + Date.now() / 40) % H, 1, 1, "#ffffff");
+}
+
+// ---------- Мини-игра: полёт. Уходим от истребителя, уворачиваемся от ракет; в конце нас всё равно сбивают ----------
+const FL = { on: false, raf: 0 };
+function flightStart(next) {
+  Object.assign(FL, { on: true, next, y: 90, vy: 0, hp: 5, t: 0, inv: 0, ms: [], cl: [], jy: 90, up: false, dn: false, done: false });
+  for (let i = 0; i < 8; i++) FL.cl.push({ x: Math.random() * 320, y: Math.random() * 150, w: 20 + Math.random() * 30 });
+  $("box").style.display = "none"; $("flight").classList.add("on");
+  cancelAnimationFrame(FL.raf);
+  const loop = () => { if (!FL.on) return; flightStep(); flightDraw(); FL.raf = requestAnimationFrame(loop); };
+  loop();
+}
+const FL_TIME = 60 * 25;   // 25 секунд держимся, потом финальная ракета
+function flightStep() {
+  if (FL.done) return;
+  FL.t++;
+  FL.vy += (FL.dn ? .28 : 0) - (FL.up ? .28 : 0); FL.vy *= .9; FL.y = Math.max(12, Math.min(168, FL.y + FL.vy));
+  FL.jy += (FL.y - FL.jy) * .03;                       // истребитель тянется за нами
+  for (const c of FL.cl) { c.x -= 1.4; if (c.x < -60) { c.x = 330; c.y = Math.random() * 150; } }
+  const every = FL.t < 600 ? 80 : FL.t < 1100 ? 55 : 40;
+  if (FL.t % every === 0 && FL.t < FL_TIME) { FL.ms.push({ x: 70, y: FL.jy, vy: 0 }); music.shot(); }
+  for (const m of FL.ms) { m.x += 3.2; m.vy += Math.sign(FL.y - m.y) * .015; m.vy *= .97; m.y += m.vy; }
+  FL.ms = FL.ms.filter(m => m.x < 340);
+  if (FL.inv > 0) FL.inv--;
+  for (const m of FL.ms) if (!FL.inv && Math.abs(m.x - 230) < 12 && Math.abs(m.y - FL.y) < 8) {
+    m.x = 999; FL.hp--; FL.inv = 60; music.punch(); $("hurt").classList.remove("on"); void $("hurt").offsetWidth; $("hurt").classList.add("on");
+    if (FL.hp <= 0) return flightEnd();
+  }
+  if (FL.t === FL_TIME) { FL.big = { x: 60, y: FL.jy }; }
+  if (FL.big) { FL.big.x += 4; FL.big.y += (FL.y - FL.big.y) * .12; if (FL.big.x >= 226) return flightEnd(); }
+  $("flTip").textContent = FL.t < FL_TIME ? `Уходим! Осталось ${Math.ceil((FL_TIME - FL.t) / 60)} с · корпус ${"■".repeat(FL.hp)}${"□".repeat(5 - FL.hp)}` : "Ракета с захватом. Не уйти…";
+}
+function flightDraw() {
+  const cv = $("flightCv"), c = cv.getContext("2d");
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const g = c.createLinearGradient(0, 0, 0, 180); g.addColorStop(0, "#1a2a5a"); g.addColorStop(1, "#6a8ac0");
+  c.fillStyle = g; c.fillRect(0, 0, 320, 180);
+  for (const cl of FL.cl) { c.fillStyle = "#e8eef866"; c.beginPath(); c.ellipse(cl.x, cl.y, cl.w, cl.w * .3, 0, 0, 7); c.fill(); }
+  R(0, 170, 320, 10, "#2a4a2a"); for (let x = (-FL.t * 2) % 12; x < 320; x += 12) R(x, 168, 6, 3, "#1a3a1a");
+  // истребитель
+  const jy = FL.jy; R(30, jy - 2, 30, 4, "#5a5a66"); R(26, jy - 1, 6, 2, "#ff8a2a"); R(44, jy - 8, 8, 6, "#4a4a56"); R(44, jy + 2, 8, 6, "#4a4a56"); R(54, jy - 3, 6, 2, "#9ad0ff");
+  // ракеты
+  for (const m of FL.ms) { R(m.x, m.y - 1, 8, 2, "#e8e8e8"); R(m.x - 4, m.y - 1, 4, 2, FL.t % 4 < 2 ? "#ffb040" : "#ff6020"); }
+  if (FL.big) { R(FL.big.x, FL.big.y - 2, 12, 4, "#ff4040"); R(FL.big.x - 6, FL.big.y - 1, 6, 2, "#ffd040"); }
+  // наш самолёт (мигает при попадании)
+  if (!(FL.inv % 10 > 5)) { const y = FL.y; R(214, y - 3, 34, 6, "#e8e8f0"); R(246, y - 2, 4, 4, "#9ad0ff"); R(226, y - 10, 10, 8, "#c8c8d8"); R(226, y + 3, 10, 8, "#c8c8d8"); R(214, y - 8, 4, 6, "#c41a2a"); }
+  if (FL.done) { c.fillStyle = "#ffb040"; c.beginPath(); c.arc(232, FL.y, 20, 0, 7); c.fill(); c.fillStyle = "#fff4c0"; c.beginPath(); c.arc(232, FL.y, 10, 0, 7); c.fill(); }
+}
+function flightEnd() {
+  FL.done = true; music.shot(); music.punch(); flightDraw();
+  $("flTip").textContent = "Попадание! Падаем!";
+  setTimeout(() => { FL.on = false; cancelAnimationFrame(FL.raf); $("flight").classList.remove("on"); $("box").style.display = ""; show(FL.next); }, 1600);
 }
 
 // ---------- Локация: гараж Пети, ночь ----------
@@ -2311,6 +2410,174 @@ const scenes = {
     ending: "Глава 2 · концовка «Монастырский кофе»",
     choices: () => [
       { icon: "rewind", t: "Сначала главы", sub: "Выбрать концовку главы 1", go: "c2_start", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  // ================= Глава · Мобилизация (побег, самолёт, лес) =================
+  m_news: {
+    bg: "garage", place: "Мобилизация · гараж Пети · 21:40", egor: true, music: "suspense",
+    lines: [
+      { skip: "Мобилизация" },
+      { who: null, t: "Четвёртый гараж Пети. Мы вчетвером: я, Егор, Петя, Витя. Шашлык почти готов." },
+      { fx: "glitch", who: null, t: "У всех одновременно вибрируют телефоны. Новость одна и та же. Объявлена мобилизация." },
+      { who: "Егор", t: "Нет. Нет-нет-нет. Глеб, это же не про нас? Скажи, что не про нас." },
+      { inmsg: "Егор, ты где?? Мама плачет. Позвони срочно", chat: "Регина" },
+      { who: "Витя", t: "У меня бронь, я юрист в госкомпании. А вам надо валить. Сегодня. Я прикрою, сколько смогу." },
+      { who: "Петя", t: "У меня в четвёртом гараже лежит пропуск на лётное поле. Не спрашивайте откуда." }
+    ],
+    choices: () => [
+      { icon: "go", t: "В аэропорт", sub: "Петин пропуск, ночь, пустой ангар", go: "m_airport" },
+      { icon: "metro", t: "На машине к границе", sub: "Как все", go: "m_border" }
+    ]
+  },
+  m_border: {
+    bg: "drive", place: "Мобилизация · граница · день 5", egor: true, music: "sad",
+    lines: [
+      { who: null, t: "Очередь из машин до горизонта. Пятый день. Еда кончилась на третий." },
+      { who: null, t: "На шестой нас разворачивают. Без объяснений." },
+      { who: "Егор", t: "Надо было слушать Петю. Первый раз в жизни надо было слушать Петю." }
+    ],
+    ending: "Мобилизация · концовка «Очередь»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать в гараж", sub: "Довериться Пете", go: "m_news", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  m_airport: {
+    bg: "hangar", place: "Мобилизация · ангар · 03:10", egor: true, music: "tense",
+    lines: [
+      { who: null, t: "Ночной ангар. Пустой грузовой самолёт, без экипажа и пассажиров. Петя прикладывает пропуск — дверь открывается." },
+      { who: "Петя", t: "Я триста часов налетал в симуляторе. Это почти как настоящий. Наверное." },
+      { who: "Егор", t: "Я в Halo летал на Фальконе. Я буду штурманом." },
+      { who: "Глеб", t: "Господи, помоги." },
+      { who: null, t: "Это я сказал впервые всерьёз. Двигатели взвывают. Мы катимся по полосе." },
+      { fx: "shot", who: null, t: "Взлёт. А через десять минут на радаре точка. Она идёт за нами. Истребитель." },
+      { flight: true, next: "m_crash" }
+    ]
+  },
+  m_crash: {
+    bg: "forest", forest: true, place: "Мобилизация · лес · утро", egor: true, music: "sad", svSet: { food: 3, wood: 2, mind: 3, day: 0, camp: "forest" }, next: "m_day",
+    lines: [
+      { fx: "punch", who: null, t: "Мы падаем на сосны. Крылья складываются, как бумажные. Тишина." },
+      { who: null, t: "Живы. Все трое. Синяки, кровь из носа у Егора, у Пети разбиты очки, которых у него не было." },
+      { who: "Петя", t: "Посадка на троечку. Но посадка." },
+      { who: null, t: "Вокруг лес до горизонта. Из самолёта успеваем вытащить ящик консервов, топор и спички." },
+      { who: "", t: "Теперь считать. Еду, дрова и рассудок. Последнего меньше всего." }
+    ]
+  },
+  m_day: {
+    bg: "forest", forest: true, place: "Мобилизация · лес", egor: true, music: "sad", msDay: true,
+    linesFn: () => [
+      { skip: "День " + sv.day + " в лесу" },
+      ...M_DAYS[Math.max(1, Math.min(sv.day, M_DAYS.length)) - 1],
+      ...(sv.food <= 0 ? [{ who: null, t: "Еды нет. Мы делим последнюю банку на троих и врём друг другу, что сыты." }] : []),
+      ...(sv.wood <= 0 ? [{ who: null, t: "Дров нет. Ночью было так холодно, что Егор перестал плакать: сил не хватало." }] : []),
+      { who: "Глеб", t: "Что делаем сегодня?" }
+    ],
+    choices: () => [
+      { icon: "go", t: "Грибы и ягоды", sub: "Еда +2", go: "m_food" },
+      { icon: "grab", t: "Рубить дрова", sub: "Дрова +2", go: "m_wood" },
+      { icon: "spark", t: "Молиться", sub: "Глеб у сосны. Рассудок +1", go: "m_pray" },
+      { icon: "stop", t: "Отобрать у Пети траву", sub: "Рассудок +2, Петя обидится", go: "m_weed" },
+      { icon: "talk", t: "Посидеть с Егором", sub: "Рассудок +1", go: "m_egor" }
+    ]
+  },
+  m_food: {
+    bg: "forest", forest: true, place: "Мобилизация · лес", egor: true, music: "reggae", sv: { food: 2 }, nextFn: () => mAfterDay(),
+    lines: [
+      { who: null, t: "Брусника, подберёзовики и что-то, что Петя назвал «точно съедобным, я читал у Пелевина»." },
+      { who: "Егор", t: "Пелевин не про грибы, Петя." },
+      { who: "Петя", t: "Пелевин про всё." }
+    ]
+  },
+  m_wood: {
+    bg: "forest", forest: true, place: "Мобилизация · лес", egor: true, music: "sad", sv: { wood: 2 }, nextFn: () => mAfterDay(),
+    lines: [
+      { who: null, t: "Рубим сухостой. Егор рубит молча, со злостью, будто каждое полено — это кто-то." },
+      { who: "Егор", t: "Это Рус. Это Рус. А это — тот, кто меня обманул. А это… это я." }
+    ]
+  },
+  m_pray: {
+    bg: "forest", forest: true, place: "Мобилизация · лес · рассвет", egor: true, music: "hope", sv: { mind: 1 }, nextFn: () => mAfterDay(),
+    lines: [
+      { who: null, t: "Я встаю раньше всех. Крещусь у старой сосны, как бабушка учила. Слов почти не помню, говорю свои." },
+      { who: "Глеб", t: "Господи. Я не знаю, как правильно. Просто сохрани их. Петю, Егора. И Витю там, в Москве." },
+      { who: "", t: "Ответа нет. Но руки перестают дрожать." }
+    ]
+  },
+  m_weed: {
+    bg: "forest", forest: true, place: "Мобилизация · лес", egor: true, music: "tense", sv: { mind: 2 }, nextFn: () => mAfterDay(),
+    lines: [
+      { who: null, t: "Я забираю у Пети пакет. Он выхватывает обратно. Мы катаемся по мху, как идиоты." },
+      { who: "Петя", t: "Это единственное, что держит меня в этом слое, Глеб!" },
+      { who: "Глеб", t: "Тебя держим мы. Отдай." },
+      { who: null, t: "Он отдаёт. Отворачивается к костру. Через час тихо говорит: «спасибо»." }
+    ]
+  },
+  m_egor: {
+    bg: "forest", forest: true, place: "Мобилизация · лес · вечер", egor: true, music: "sad", sv: { mind: 1 }, nextFn: () => mAfterDay(),
+    lines: [
+      { who: "Егор", t: "Я всё время думаю о Русе. Мы так и не поговорили. И Витя там один остался. А Регина пишет, а я не могу ответить, сети нет." },
+      { who: null, t: "Он плачет. Долго. Я просто сижу рядом и подкидываю дрова." },
+      { who: "Егор", t: "Прости. Я ною и злюсь на всех. Я не знаю, что ещё делать." },
+      { who: "Глеб", t: "Ной. Я рядом." }
+    ]
+  },
+  m_night: {
+    bg: "forest", forest: true, snow: true, place: "Мобилизация · лес · последняя ночь", egor: true, music: "eerie",
+    linesFn: () => [
+      { skip: "Пятая ночь" },
+      { who: null, t: "Пошёл снег. Костёр еле живой. Петя третий час разговаривает с ёлкой и называет её «Виктор Олегович»." },
+      { who: null, t: "Егор сидит, обхватив колени. Телефон поймал одну палочку сети." },
+      { inmsg: "Егор, мы тебя любим. Живи, пожалуйста. Регина", chat: "Регина" },
+      { who: "Егор", t: "Глеб… я больше не могу." },
+      { who: "", t: sv.mind >= 4 ? "Я молился каждый день. Сегодня — последний раз, но по-настоящему." : "Я почти не молился. Но сейчас больше некому." }
+    ],
+    choices: () => [
+      { icon: "spark", t: "Молиться", sub: "Встать на колени в снег", go: "m_jesus" },
+      { icon: "let", t: "Ждать утра", sub: "Как-нибудь переживём", go: "m_bad" }
+    ]
+  },
+  m_bad: {
+    bg: "forest", forest: true, snow: true, place: "Мобилизация · лес · утро", music: "sad",
+    lines: [
+      { who: null, t: "Утро. Костёр погас. Следы Пети уходят в лес и обрываются у ёлки." },
+      { who: null, t: "Егор молчит. Даже не плачет. Это хуже." },
+      { who: "", t: "Надо было встать на колени. Хотя бы попробовать." }
+    ],
+    ending: "Мобилизация · концовка «Лес»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать ночь", sub: "Помолиться", go: "m_night", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  m_jesus: {
+    bg: "forest", forest: true, snow: true, holy: true, place: "Мобилизация · лес · 04:00", egor: true, music: "hope",
+    lines: [
+      { who: null, t: "Я встаю на колени в снег. Снег тёплый. Это первое, что странно." },
+      { fx: "magic", who: null, t: "Между соснами становится светло. Не как от фонаря. Как будто утро пришло раньше, только для нас." },
+      { who: "Иисус", t: "Привет, друг." },
+      { who: "Глеб", t: "Да… спасибо. Привет. Можешь, пожалуйста… нам всем помочь?" },
+      { who: "Иисус", t: "Петя. Тебе не нужна трава, чтобы видеть свет. Он и так рядом." },
+      { who: null, t: "Петя роняет пакет в костёр и впервые за неделю смотрит прямо." },
+      { who: "Иисус", t: "Егор. Плакать не стыдно. Позвони сестре. И Русу тоже напиши." },
+      { who: "Иисус", t: "Идите на восток, к дороге. Всё уже хорошо." },
+      { who: null, t: "Свет гаснет. Костёр горит ровно, хотя дров никто не подкладывал." }
+    ],
+    next: "m_end"
+  },
+  m_end: {
+    bg: "summer", place: "Мобилизация · трасса · утро", egor: true, music: "reggae",
+    lines: [
+      { who: null, t: "К обеду выходим к трассе. Дальнобойщик подбирает нас и ничего не спрашивает." },
+      { inmsg: "Пацаны!!! Вас вычеркнули из всех списков. Всех троих. Я ничего не делал. Сказали — указание свыше.", chat: "Витя" },
+      { who: "Егор", t: "Свыше. Глеб. Свыше." },
+      { who: null, t: "Егор звонит Регине и плачет, но по-другому. Петя спит, прижавшись к окну, и улыбается без травы." },
+      { who: "", t: "Я смотрю на небо. Там никого не видно. Но я знаю, что там есть друг." }
+    ],
+    ending: "Мобилизация · концовка «Свыше»",
+    choices: () => [
+      { icon: "rewind", t: "Сначала", sub: "Гараж, 21:40", go: "m_news", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
@@ -3870,13 +4137,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280153`, talk: `img/${n}_talk.png?v=10280153`, blink: `img/${n}_blink.png?v=10280153` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280206`, talk: `img/${n}_talk.png?v=10280206`, blink: `img/${n}_blink.png?v=10280206` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280153" : `img/${n}_spartan.png?v=10280153`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280206" : `img/${n}_spartan.png?v=10280206`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3905,7 +4172,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280153`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280206`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3914,7 +4181,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280153`; el.alt = who;
+  el.src = `img/${n}.png?v=10280206`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3986,6 +4253,19 @@ const H_EVENTS = [
          { who: "Егор", t: "Записываю. Свидетели есть." }]
 ];
 
+// ---------- Мобилизация: дни в лесу. С каждым днём Петя курит больше, Егор плачет чаще ----------
+const M_DAYS = [
+  [{ who: null, t: "Первое утро. Петя уже курит. Говорит, «для адаптации к новому слою»." },
+   { who: null, t: "Егор злится на всё: на сосны, на самолёт, на меня. Потом извиняется и злится снова." }],
+  [{ who: null, t: "Петя курит с утра до ночи. Дым висит над лагерем, как над Пелевиным." },
+   { who: "Егор", t: "Регина сейчас, наверное, с ума сходит. А я тут. Как трус." }],
+  [{ who: null, t: "Петя сидит у костра и шепчется с огнём. Огонь, по его словам, отвечает." },
+   { who: null, t: "Егор плачет в спальник. Думает, что я не слышу. Я слышу." }],
+  [{ who: "Петя", t: "Глеб, мы не в лесу. Мы в бардо. Я это понял ещё в квартире." },
+   { who: "Егор", t: "Я бы сейчас всё отдал, чтобы просто посидеть с Витей в баре. Даже если он опять про квартиры." }]
+];
+function mAfterDay() { return sv.day >= 4 ? "m_night" : "m_day"; }
+
 // ---------- Halo · Бородино: состояние выживания ----------
 let sv = { food: 0, ammo: 0, wall: 0, people: 0, day: 0, camp: "" };
 function hScore() { return sv.wall * 2 + sv.ammo + (sv.people ? 2 : 0) + (sv.food > 0 ? 1 : 0); }
@@ -4000,6 +4280,7 @@ function hEndChoices() {
 function svApply(sc) {
   if (sc.svSet) Object.assign(sv, sc.svSet);
   if (sc.svDay) { sv.day++; sv.food = Math.max(0, sv.food - 1); }
+  if (sc.msDay) { sv.day++; for (const k of ["food", "wood", "mind"]) sv[k] = Math.max(0, (sv[k] || 0) - 1); }
   if (sc.sv) for (const k in sc.sv) sv[k] = Math.max(0, sv[k] + sc.sv[k]);
 }
 
@@ -4010,10 +4291,10 @@ function markTimeline(id) {
   if (!sc.choices || sc.ending || id.startsWith("brawl")) return;
   let i = back === null ? -1 : timeline[back] && timeline[back].id === id ? back : timeline.map(p => p.id).lastIndexOf(id);
   if (i >= 0) { timeline = timeline.slice(0, i + 1); timeline[i].pick = null; if (timeline[i].sv) Object.assign(sv, timeline[i].sv); }
-  else timeline.push({ id, place: sc.halo && sv.camp ? sc.place + " · день " + (sv.day + (sc.svDay ? 1 : 0)) : sc.place, sv: sc.halo ? { ...sv } : null });
+  else timeline.push({ id, place: (sc.halo || sc.forest) && sv.camp ? sc.place + " · день " + (sv.day + (sc.svDay || sc.msDay ? 1 : 0)) : sc.place, sv: sc.halo || sc.forest ? { ...sv } : null });
 }
 function openTimeline() {
-  if (B || BR.on) return;
+  if (B || BR.on || FL.on) return;
   const cur = timeline.length - 1;
   $("tlMem").innerHTML = known.size ? [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
     : `<div class="sub" style="margin:0">Глеб пока ничего особенного не узнал.</div>`;
@@ -4033,6 +4314,7 @@ function closeTimeline() { $("tl").classList.remove("on"); }
 function renderMemory() {
   $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
     + (scene && scene.x ? `<div class="mem mana">✦ магия: ${mana}</div>` : "")
+    + (scene && scene.forest && sv.camp === "forest" ? `<div class="mem">еда ${sv.food} · дрова ${sv.wood} · рассудок ${sv.mind}</div>` : "")
     + (scene && scene.halo && sv.camp ? `<div class="mem">еда ${sv.food} · патроны ${sv.ammo} · вал ${sv.wall} · люди ${sv.people}</div>` : "");
 }
 function boltFx() {
@@ -4103,7 +4385,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280153) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280206) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -4182,6 +4464,7 @@ function step() {
     return;
   }
   if (l.battle) return startBattle(l.battle, l.win, l.lose, l);
+  if (l.flight) return flightStart(l.next);
   if (l.npcShow) showNpc(null, l.npcShow, l.npcClass);
   if (l.setMana !== undefined) { mana = l.setMana; renderMemory(); }
   if (l.fx === "glitch") { const st = $("stage"); st.classList.remove("glitch"); void st.offsetWidth; st.classList.add("glitch"); music.rewind(); }
@@ -4374,6 +4657,18 @@ $("mPe").onclick = e => {
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("pe_home");
 };
+$("mM").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("m_news");
+};
+// управление самолётом: кнопки (зажать) и стрелки / W S
+for (const [id, k] of [["flUp", "up"], ["flDn", "dn"]]) {
+  $(id).addEventListener("pointerdown", e => { e.preventDefault(); FL[k] = true; });
+  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) $(id).addEventListener(ev, () => { FL[k] = false; });
+}
+document.addEventListener("keydown", e => { if (!FL.on) return; if (["ArrowUp", "w", "ц"].includes(e.key)) FL.up = true; if (["ArrowDown", "s", "ы"].includes(e.key)) FL.dn = true; });
+document.addEventListener("keyup", e => { if (["ArrowUp", "w", "ц"].includes(e.key)) FL.up = false; if (["ArrowDown", "s", "ы"].includes(e.key)) FL.dn = false; });
 $("mV").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
