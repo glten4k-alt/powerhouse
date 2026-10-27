@@ -152,6 +152,21 @@
 
   #bg { object-fit:cover; }
 
+
+  /* Экран «Как играть» и подсказки */
+  #howto { position:absolute; inset:0; z-index:11; background:#000d; display:none; align-items:center; justify-content:center; padding:4%; }
+  #howto.on { display:flex; animation:fadein .5s ease-out; }
+  #howto .in { max-width:560px; background:var(--box); border:1px solid #ffffff22; border-radius:16px; padding:22px 24px; }
+  #howto h2 { margin:0 0 12px; font-size:22px; color:var(--accent); }
+  #howto p { margin:0 0 10px; font-size:15px; line-height:1.45; }
+  #howto b.c { color:var(--cold); }
+  #howto button { margin-top:8px; width:100%; padding:12px; border-radius:10px; border:1px solid var(--accent); background:#f0b35e22;
+    color:var(--text); font:inherit; font-size:16px; cursor:pointer; }
+  #hint { position:absolute; left:50%; top:16%; transform:translateX(-50%); z-index:6; max-width:min(90%, 520px); text-align:center;
+    background:#0b1a2ef0; border:1px solid var(--cold); color:var(--cold); border-radius:12px; padding:10px 16px; font-size:14px;
+    display:none; animation:pop .3s ease-out; }
+  #hint.on { display:block; }
+
   /* ---------- Телефон вертикально (и Telegram) ---------- */
   @media (max-aspect-ratio: 1/1) {
     html, body { font-size:16px; }
@@ -203,6 +218,16 @@
   <div id="flash"></div>
   <div id="skip"></div>
   <div id="rw"><svg viewBox="0 0 100 100"><path d="M20 50a30 30 0 1 0 9-21"/><path d="M18 18v14h14"/></svg></div>
+  <div id="howto"><div class="in">
+    <h2>Как играть</h2>
+    <p>Нажимай на окно с текстом (или пробел), чтобы читать дальше.</p>
+    <p>В важные моменты появляются карточки с выбором. От них зависит, чем кончится вечер.</p>
+    <p><b class="c">Глеб умеет перематывать время.</b> После концовки можно вернуться назад, и Глеб запомнит, что узнал. Это видно по синей плашке «Глеб помнит» наверху.</p>
+    <p>Знания открывают новые варианты, они подсвечены синим. Хорошая концовка без перемотки не открывается.</p>
+    <p>«♫ звук» справа вверху выключает музыку (или клавиша M).</p>
+    <button id="howtoOk">Понятно</button>
+  </div></div>
+  <div id="hint"></div>
   <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p>щёлкни, чтобы начать</p></div>
 </div>
 
@@ -576,10 +601,45 @@ const ICON = {
 // who: "Егор" / "Глеб" — реплика вслух, "" — мысли Глеба, null — описание
 // tg: сообщение Егора в Telegram, tgStatus: строка под именем Юлии
 const scenes = {
+  s0: {
+    place: "Powerhouse · Таганка · 20:30", egor: true,
+    lines: [
+      { who: null, t: "Пятница. Powerhouse на Гончарной. Кирпич, винил, бас в груди." },
+      { who: "Глеб", t: "Ты где был всю неделю? Ни в чате, ни на парах." },
+      { who: "Егор", t: "Reach. Легендарная сложность. Один." },
+      { who: "Глеб", t: "Один. Всю неделю." },
+      { who: "Егор", t: "Там всё честно: умер — вернулся к чекпоинту и пробуешь ещё раз. В жизни так нельзя." },
+      { who: "", t: "Знал бы он." },
+      { who: "Глеб", t: "Только давай сегодня не как в Black Swan." },
+      { who: "Егор", t: "Да понял я, понял. Сегодня максимум два." },
+      { who: "", t: "В Black Swan тоже было «максимум два». Я тогда пообещал себе, что больше не дам ему так напиться." },
+      { who: "Егор", t: "Кстати. Видел вчера Руса у корпуса. Сделал вид, что не заметил." }
+    ],
+    choices: () => [
+      { icon: "talk", t: "Спросить про Руса", sub: "«Что у вас вообще случилось?»", go: "s0_rus" },
+      { icon: "let", t: "Не лезть", sub: "«Ну и ладно.»", go: "s0_skip" }
+    ]
+  },
+  s0_rus: {
+    place: "Powerhouse · 20:35", egor: true, next: "s1",
+    lines: [
+      { who: "Егор", t: "Он общался с тем, кто меня кинул. И молчал. Я узнал сам, не от него." },
+      { who: "Глеб", t: "А ты с ним говорил?" },
+      { who: "Егор", t: "Зачем? Я просто перестал ему писать. Так проще." },
+      { who: "", t: "Проще — это когда не больно сейчас. Потом он месяц сидел один с Reach." }
+    ]
+  },
+  s0_skip: {
+    place: "Powerhouse · 20:35", egor: true, next: "s1",
+    lines: [
+      { who: "Егор", t: "Вот и правильно." },
+      { who: "", t: "Он опять ушёл от разговора. И я ему в этом помог." }
+    ]
+  },
   s1: {
     place: "Powerhouse · Таганка · 21:10", egor: true,
     lines: [
-      { who: null, t: "Пятница. Powerhouse на Гончарной. Кирпич, винил, бас в груди." },
+      { who: null, t: "Третий трек спустя Егор вдруг ставит стакан и смотрит на меня." },
       { who: "Егор", t: "Глеб. Мне надо тебе кое-что сказать. Только не ржи." },
       { who: "Глеб", t: "Ну?" },
       { who: "Егор", t: "У меня есть план. Пункт первый: влюбиться. Выполнено." },
@@ -608,10 +668,7 @@ const scenes = {
     lines: [
       { who: null, t: "Егор долго молчит. Бас заполняет паузу." },
       { who: "Егор", t: "Может. Меня один раз уже подвели." },
-      { who: "Глеб", t: "Это ты про Руса?" },
-      { who: "Егор", t: "Он общался с тем, кто меня кинул. И молчал. Я узнал сам, не от него." },
-      { who: "Егор", t: "Я не стал ничего выяснять. Просто перестал ему писать. Так проще." },
-      { who: "", t: "Проще — это когда не больно сейчас. Потом он месяц сидел один." },
+      { who: "Егор", t: "Я тогда просто исчез. С Русом так и не поговорил. Так проще." },
       { who: "Егор", t: "А тут… если она скажет нет, мне что, вышку бросать?" },
       { who: "", t: "Впервые за вечер он говорит без шуток." }
     ]
@@ -619,9 +676,6 @@ const scenes = {
   s1b: {
     place: "Powerhouse · 21:13", egor: true,
     lines: [
-      { who: "Егор", t: "Только давай сегодня не как в Black Swan." },
-      { who: "Глеб", t: "Это ты мне говоришь?" },
-      { who: "", t: "В Black Swan он тоже начал «для смелости». Я тогда пообещал себе, что больше не дам ему так напиться." },
       { who: "Егор", t: "Короче. Что мне делать?" }
     ],
     choices: () => [
@@ -706,7 +760,7 @@ const scenes = {
     ending: "Конец главы 1 · драка",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться до драки", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
     ]
   },
   riot: {
@@ -786,7 +840,7 @@ const scenes = {
     ending: "Конец главы 1 · восемь лет спустя",
     choices: () => [
       { icon: "rewind", t: "Перемотать восемь лет", sub: "Вернуться в Powerhouse, в 00:40", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
     ]
   },
   s3: {
@@ -805,7 +859,7 @@ const scenes = {
     ending: "Конец главы 1 · отправлено",
     choices: () => [
       { icon: "rewind", t: "Перемотать назад", sub: "Вернуться за минуту до сообщения", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
     ]
   },
   s3b: {
@@ -822,7 +876,7 @@ const scenes = {
     ending: "Конец главы 1 · трезвая версия",
     choices: () => [
       { icon: "rewind", t: "Перемотать ещё раз", sub: "Попробовать по-другому", go: "s2", rewind: true, cls: "rewind" },
-      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s1", reset: true }
+      { icon: "again", t: "Начать главу заново", sub: "Память сотрётся", go: "s0", reset: true }
     ]
   }
 };
@@ -1002,6 +1056,9 @@ function showChoices() {
     box.appendChild(el);
   }
   box.classList.add("on");
+  const cs = scene.choices();
+  if (cs.some(c => c.rewind)) hint("rewind", "⟲ Это перемотка. Глеб вернётся назад, но запомнит то, что узнал.");
+  else if (cs.some(c => c.cls === "new")) hint("new", "Синяя карточка открылась, потому что Глеб помнит прошлую попытку.");
 }
 
 function choose(c) {
@@ -1027,12 +1084,24 @@ document.addEventListener("keydown", e => {
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
   if (!$("title").classList.contains("gone")) return start();
+  if ($("howto").classList.contains("on")) return closeHowto();
   if ($("skip").classList.contains("on")) return closeSkip();
   if ($("box").style.display !== "none") advance();
 });
 
 // браузер разрешает звук только после щелчка, поэтому музыка стартует с заставки
-function start() { $("title").classList.add("gone"); music.start(); show("s1"); }
+function start() { $("title").classList.add("gone"); music.start(); $("howto").classList.add("on"); }
+function closeHowto() { $("howto").classList.remove("on"); show("s0"); }
+$("howtoOk").onclick = closeHowto;
+
+// подсказки: каждая показывается один раз за игру
+const hinted = new Set();
+function hint(key, text) {
+  if (hinted.has(key)) return;
+  hinted.add(key);
+  $("hint").textContent = text; $("hint").classList.add("on");
+  clearTimeout(hint.t); hint.t = setTimeout(() => $("hint").classList.remove("on"), 6000);
+}
 $("title").onclick = start;
 // ---------- Telegram Mini App ----------
 // Внутри Telegram: развернуть на весь экран, не закрываться свайпом вниз, тёмная шапка.
