@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280149") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280153") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -177,6 +177,7 @@
   #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
   #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
   #saveBtns #mC { border-color:#f0b35e; background:#f0b35e22; }
+  #saveBtns #mPe { border-color:#e07a2a; background:#e07a2a22; }
   #saveBtns #mV { border-color:#8ad0a0; background:#8ad0a022; }
   #saveBtns #mH { border-color:#5ab0ff; background:#5ab0ff22; }
   #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
@@ -399,15 +400,15 @@
     .bam { font-size:40px; }
   }
 </style>
-<style>#mL,#mBrawl{display:none!important}</style></head>
+<style>#mL,#mPe,#mBrawl{display:none!important}</style></head>
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280149" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280149" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280153" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280153" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280149) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280153) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -457,7 +458,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -475,7 +476,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -794,7 +795,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280149"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280153"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -912,7 +913,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280149`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280153`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -981,6 +982,35 @@ function drawBalcony() {
   const t = Date.now() / 400;
   R(W * .3, H * .78, 2, 2, Math.sin(t) > 0 ? "#ff6020" : "#c04010"); R(W * .52, H * .76, 2, 2, Math.sin(t + 2) > 0 ? "#ff6020" : "#c04010");
   c.fillStyle = "#c8c8d822"; c.fillRect(W * .3, H * .7, 3, 8); c.fillRect(W * .52, H * .68, 3, 8);
+}
+
+// ---------- Локация: квартира Пети — матрас, стопки Пелевина, дымка; в бардо — свечи и мандала ----------
+function drawPflat() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W, rite = scene && scene.rite;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, rite ? "#140c1c" : "#3a3428");
+  // окно
+  const wx = portrait ? W * .15 : W * .58, ww = portrait ? W * .7 : W * .3;
+  R(wx, H * .1, ww, H * .32, rite ? "#0a0814" : "#b8c8d8"); R(wx + ww / 2 - 1, H * .1, 2, H * .32, "#2a241c"); R(wx, H * .26, ww, 2, "#2a241c");
+  // стопки книг (оранжевые корешки)
+  for (let k = 0; k < 3; k++) for (let i = 0; i < 5 + k; i++) R(W * (.06 + k * .08), H * .72 - i * 5, W * .06, 4, ["#e07a2a", "#c85a20", "#f0a040"][(i + k) % 3]);
+  // матрас и пол
+  R(0, H * .76, W, H * .24, rite ? "#1c1424" : "#4a3a2a");
+  R(W * .35, H * .7, W * .4, H * .08, rite ? "#2a2034" : "#8a7a6a");
+  // лава-лампа
+  R(W * .85, H * .6, 6, 16, "#ff5a8a"); R(W * .85 + 2, H * .62 + Math.sin(Date.now() / 900) * 3, 2, 3, "#ffd060");
+  if (rite) {
+    // мандала из формул и свечи по кругу
+    const cx = W * .5, cy = H * .6, rr = Math.min(W, H) * .22;
+    c.strokeStyle = "#e8e0ff55"; c.lineWidth = 1; c.beginPath(); c.ellipse(cx, cy, rr, rr * .35, 0, 0, 7); c.stroke();
+    c.fillStyle = "#e8e0ff88"; c.font = `${portrait ? 6 : 7}px monospace`; c.fillText("lim n→∞", cx - 14, cy + 2); c.fillText("∫", cx - rr * .6, cy); c.fillText("∑", cx + rr * .5, cy);
+    for (let i = 0; i < 8; i++) { const a = i / 8 * 6.283, x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr * .35;
+      R(x - 1, y - 5, 3, 5, "#f0e8d0"); R(x, y - 8 + Math.sin(Date.now() / 200 + i), 1, 3, "#ffb040");
+      c.fillStyle = "#ffb04022"; c.beginPath(); c.arc(x, y - 6, 8, 0, 7); c.fill(); }
+  } else {
+    // дымка
+    c.fillStyle = "#e8e0d00c"; for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse(W * (.2 + i * .15), H * (.4 + (i % 2) * .1), W * .18, H * .05, 0, 0, 7); c.fill(); }
+  }
 }
 
 // ---------- Локация: гараж Пети, ночь ----------
@@ -1101,7 +1131,7 @@ const music = {
     // Изнанка: музыкальная шкатулка, гул, редкий стук
     mystic:     { kind: "mystic", bpm: 66, prog: "mystic", f: 2200, vol: .9, lfo: 160 },
     // Петя: регги — офбит-аккорды, «one drop», качающийся бас
-    reggae:     { kind: "reggae", bpm: 150, prog: "reggae", f: 2600, vol: .9, lfo: 0 }
+    reggae:     { kind: "reggae", bpm: 76, prog: "reggae", f: 3000, vol: 1, lfo: 0 }
   },
   // Аккорды: «королевская» последовательность аниме (IV–V–iii–vi), грустная и тревожная
   progs: {
@@ -1117,8 +1147,8 @@ const music = {
       mel: [[587.3, 0, 0, 0, 698.5, 0, 880, 0], [932.3, 0, 0, 0, 880, 0, 698.5, 0], [880, 0, 0, 0, 698.5, 0, 523.3, 0], [659.3, 0, 0, 0, 0, 0, 0, 0]] },
     mystic: { ch: [[220, 261.6, 329.6], [174.6, 220, 261.6], [164.8, 207.7, 246.9], [146.8, 174.6, 220]], bass: [110, 87.3, 82.4, 73.4],   // Am F E Dm
       mel: [[880, 0, 0, 1046.5, 0, 987.8, 0, 0], [698.5, 0, 0, 880, 0, 0, 830.6, 0], [659.3, 0, 830.6, 0, 987.8, 0, 0, 0], [587.3, 0, 0, 698.5, 0, 659.3, 0, 0]] },
-    reggae: { ch: [[196, 246.9, 293.7], [261.6, 329.6, 392], [293.7, 370, 440], [261.6, 329.6, 392]], bass: [98, 130.8, 146.8, 130.8],   // G C D C
-      mel: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]] }
+    reggae: { ch: [[220, 261.6, 329.6, 392], [220, 293.7, 370], [196, 246.9, 293.7], [164.8, 196, 246.9]], bass: [110, 146.8, 98, 82.4],   // Am7 D G Em
+      mel: [[659.3, 0, 0, 587.3, 0, 523.3, 0, 0], [587.3, 0, 0, 0, 659.3, 0, 0, 0], [493.9, 0, 0, 587.3, 0, 0, 493.9, 0], [440, 0, 0, 0, 0, 0, 0, 0]] }
   },
   chords: {
     sad:  [[220, 261.6, 329.6], [174.6, 220, 261.6], [261.6, 329.6, 392], [196, 246.9, 293.7]],   // Am F C G
@@ -1255,15 +1285,55 @@ const music = {
     if (s === 6 || s === 14) this.piano(t, ch[(s + bar) % 3], 1.8, .035);
     if (s === 0 && bar === 3) this.kick(t, .35);
   },
-  // Регги: аккорд на офбит (скэнк), «one drop» на третью долю, бас с паузами
+  // Регги: one drop. Гитарный «чак» на 2 и 4 с эхом, органный «пузырь», бочка с римом на третью долю,
+  // глубокий бас с паузами, мелодика через такт.
   reggaeStep(s, bar, t, P, m) {
-    const ch = P.ch[bar];
-    if (s % 4 === 2) for (const f of ch) this.synth(t, f * 2, .09, .025, "square");
-    if (s % 4 === 3) this.piano(t, ch[1] * 2, .12, .03);                         // органный «пузырь»
-    const bl = { 0: 1, 3: 1.5, 6: 1, 10: 2, 12: 1.5 }[s];
-    if (bl) this.piano(t, P.bass[bar] / 2 * (bl === 2 ? 2 : 1) * (bl === 1.5 ? 1.335 : 1), .4, .12);
-    if (s === 8) { this.kick(t, .55); this.noiseHit(t, "bandpass", 2400, .2, .08); }
-    if (s % 2 === 0) this.hat(t, .035, .02);
+    const ch = P.ch[bar], r = P.bass[bar], beat = 60 / m.bpm;
+    if (s === 4 || s === 12) { this.skank(t, ch, .045); this.skank(t + beat * .75, ch, .015); }
+    if (s === 6 || s === 14) this.organ(t, ch, .16);
+    if (s === 8) { this.kick(t, .7); this.noiseHit(t, "bandpass", 3200, .22, .05); }
+    if (s % 2 === 0 && s !== 8) this.hat(t, .025, .02);
+    if (s === 15) this.hat(t, .04, .08);
+    const line = { 0: [r, .55], 3: [r * 1.5, .2], 6: [r * 2, .2], 10: [r * 1.782, .25], 11: [r, .45] }[s];
+    if (line) this.dubBass(t, line[0] / 2, line[1]);
+    if (bar % 2 === 1 && s % 2 === 0) { const f = P.mel[bar][s / 2]; if (f) this.melodica(t, f, .5); }
+  },
+  // гитарный «чак»: короткая пила через полосовой фильтр
+  skank(t, freqs, v) {
+    for (const f of freqs) {
+      const o = this.ac.createOscillator(), bp = this.ac.createBiquadFilter(), g = this.ac.createGain();
+      o.type = "sawtooth"; o.frequency.value = f * 2; bp.type = "bandpass"; bp.frequency.value = 1700; bp.Q.value = 1.2;
+      g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + .08);
+      o.connect(bp); bp.connect(g); g.connect(this.filt); o.start(t); o.stop(t + .1);
+    }
+  },
+  // орган: два синуса, мягко
+  organ(t, freqs, len) {
+    for (const f of freqs) for (const mul of [1, 2]) {
+      const o = this.ac.createOscillator(), g = this.ac.createGain();
+      o.type = "sine"; o.frequency.value = f * mul;
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(mul === 1 ? .018 : .008, t + .01);
+      g.gain.exponentialRampToValueAtTime(.0001, t + len);
+      o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + len + .05);
+    }
+  },
+  // даб-бас: синус с саб-октавой, круглый и низкий
+  dubBass(t, f, len) {
+    for (const [mul, v] of [[1, .2], [.5, .12]]) {
+      const o = this.ac.createOscillator(), g = this.ac.createGain();
+      o.type = "sine"; o.frequency.value = f * mul;
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(v, t + .02);
+      g.gain.setValueAtTime(v, t + len * .6); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+      o.connect(g); g.connect(this.filt); o.start(t); o.stop(t + len + .05);
+    }
+  },
+  // мелодика: треугольник с вибрато и мягкой атакой
+  melodica(t, f, len) {
+    const o = this.ac.createOscillator(), g = this.ac.createGain(), vib = this.ac.createOscillator(), vg = this.ac.createGain();
+    o.type = "triangle"; o.frequency.value = f; vib.frequency.value = 5; vg.gain.value = f * .008;
+    vib.connect(vg); vg.connect(o.frequency);
+    g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.035, t + .06); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+    o.connect(g); g.connect(this.filt); o.start(t); vib.start(t); o.stop(t + len + .05); vib.stop(t + len + .05);
   },
   setStyle(st) { this.style = st; this.mood(this.curName); },
 
@@ -2081,7 +2151,8 @@ const scenes = {
     lines: [
       { who: "Глеб", t: "План такой. Витя достал наушник. Я сижу через два столика и подсказываю." },
       { who: "Егор", t: "Как в шпионском фильме. Только шпион трясётся." },
-      { who: null, t: "Мы репетируем. Я играю Юлю. Получается плохо, но Егор смеётся." },
+      { who: "Петя", t: "Штаб — в моём втором гараже. Там тонированная девятка, вай-фай и кальян. Гаражный король всё предусмотрел." },
+      { who: null, t: "Мы репетируем. Я играю Юлю, Петя — официанта, который всё время роняет поднос. Получается плохо, но Егор смеётся." },
       { fx: "glitch", inmsg: "Привет. Видел тебя в сторис. Ты в Москве теперь?", chat: "Рус" },
       { who: null, t: "Егор смотрит на экран долго. Года три он не видел это имя." },
       { who: "Егор", t: "Не буду отвечать. Не сейчас. У меня суббота." }
@@ -2108,7 +2179,8 @@ const scenes = {
       { tg: "Бро, ты где? Всё в силе?", time: "12:01", chat: "Егор", sayWho: "Глеб", sayText: "Пишу Егору." },
       { tgStatus: "был(а) давно" },
       { who: "", t: "Он не сбежал от Юли. Он сбежал от того, что может не понравиться ей. Это разные вещи." },
-      { who: "", t: "Где он может быть? Там, где есть чем заняться и не надо всё время говорить." }
+      { who: "", t: "Где он может быть? Там, где есть чем заняться и не надо всё время говорить." },
+      { who: "Петя", t: "Я на машине. Говори куда — гаражный король довезёт." }
     ],
     choices: () => [
       { icon: "metro", t: "Электричка до Бородино", sub: "Он оттуда вернулся счастливым", go: "c2_borodino" },
@@ -2121,6 +2193,7 @@ const scenes = {
       { npcShow: "npc_yulia", who: null, t: "Юля сидит у окна. Два капучино. Один остывает." },
       { who: null, t: "Я стою на улице и не захожу. Это не моё свидание." },
       { fx: "glitch", inmsg: "Я подождала. Наверное, не судьба. Всё хорошо, Егор.", chat: "Юлия" },
+      { who: "Петя", t: "Бро, мы могли за ним поехать. Машина в гараже стояла." },
       { who: "", t: "Можно было поехать за ним. Я знал, где его искать." }
     ],
     ending: "Глава 2 · концовка «Остывший капучино»",
@@ -2161,8 +2234,8 @@ const scenes = {
       { who: null, t: "Он долго молчит. Потом кивает." },
       { who: "Егор", t: "Если она узнает меня нормально, а не пьяного в Telegram, — может, я ей не понравлюсь." },
       { who: "Глеб", t: "Может. Но тогда это будет про тебя настоящего. Это честнее, чем не прийти." },
-      { who: "Егор", t: "…Такси до Москвы стоит как крыло от самолёта." },
-      { who: "Глеб", t: "Я купидон. У купидонов кэшбэк." }
+      { who: "Егор", t: "…До Москвы на такси стоит как крыло от самолёта." },
+      { who: "Петя", t: "Какое такси, епта. Машина у флешей. Гаражный король довезёт до кофейни за час, если Витя не узнает про скорость." }
     ]
   },
   c2_sat: {
@@ -2171,6 +2244,7 @@ const scenes = {
       ...(known.has("late") ? [{ who: null, t: "Мы опаздываем на сорок минут. Егор пишет ей из такси: «Опаздываю. Это из-за меня, не из-за вас.»" }] : []),
       { npcShow: "npc_yulia", who: null, t: "Юля у окна. Без «вы» и без строгости, просто в свитере. Егор садится напротив." },
       { who: "", t: "Я через два столика. В ухе у Егора наушник. Мой микрофон в рукаве." },
+      { who: "Петя", t: "Я рядом с Глебом. Ем чизкейк для конспирации. Давай, Егорка." },
       { who: "Юля", t: known.has("sober") && !known.has("late") ? "Привет. Мне правда понравилось, что ты написал трезвым. Ну, рассказывай." : known.has("late") ? "Я уже думала, ты не придёшь. Рада, что пришёл." : "Привет. Ну, рассказывай, кто такой Егор без виски?" },
       { who: "Егор", t: "Э-э…" },
       { who: "", t: "Он смотрит на меня. Пауза затягивается." }
@@ -2198,7 +2272,8 @@ const scenes = {
     lines: [
       { who: "Егор", t: "Да. Это Глеб. Мой друг. Он купидон. Я очень боялся, что сам всё испорчу." },
       { who: null, t: "Юля смеётся. Не над ним, а с ним. Машет мне. Я машу в ответ, как идиот." },
-      { who: "Юля", t: "Глеб, садись к нам. А в следующий раз, Егор, без суфлёра. Договорились?" },
+      { who: "Юля", t: "Глеб, и ты, с чизкейком, садитесь к нам. А в следующий раз, Егор, без суфлёра. Договорились?" },
+      { who: "Петя", t: "Петя. Гаражный король. Очень приятно." },
       { who: "", t: "«В следующий раз». Она сказала «в следующий раз»." }
     ],
     ending: "Глава 2 · концовка «Суфлёр»",
@@ -2230,11 +2305,134 @@ const scenes = {
       { who: null, t: "И он рассказывает. Час. Она слушает. Задаёт вопросы. Дважды смеётся." },
       ...(known.has("rus") ? [{ who: "Егор", t: "Мы с другом в Siege так играли. Рус. Мы три года не общались, а в четверг он мне написал." }, { who: "Юля", t: "Это хорошо. Значит, ты умеешь возвращаться." }] : []),
       { who: "Юля", t: "Знаешь, в субботу у нас лекция про Бородино в музее. Пойдёшь?" },
-      { who: "", t: "Я ухожу, не дожидаясь конца. Купидон тут больше не нужен." }
+      { who: "", t: "Я ухожу, не дожидаясь конца. Купидон тут больше не нужен." },
+      { who: "Петя", t: "Пойдём, купидон. Я тебя подвезу. И чизкейк с собой взял." }
     ],
     ending: "Глава 2 · концовка «Монастырский кофе»",
     choices: () => [
       { icon: "rewind", t: "Сначала главы", sub: "Выбрать концовку главы 1", go: "c2_start", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  // ================= Глава · Петя (квартира, Пелевин, бардо) =================
+  pe_home: {
+    bg: "pflat", place: "Петя · квартира · 11:20", noSprites: true, music: "reggae",
+    lines: [
+      { skip: "Петя" },
+      { npcShow: "npc_petya", who: null, t: "Одиннадцать двадцать. Пары начались в девять. Я опять «выхожу через пять минут»." },
+      { who: "Петя", t: "Четыре гаража. Две квартиры. А выйти из одной не могу." },
+      { who: null, t: "Саша ушла на службу в семь. Куда именно — не говорит. Я не спрашиваю. В её ведомстве вопросы не любят." },
+      { who: null, t: "На подоконнике стопка Пелевина. На столе — то, что Саша просила убрать ещё в прошлом месяце." },
+      { who: "Петя", t: "Три года на экономическом. Ни разу не был. Репетитор по матану смотрит на меня как на интеграл без пределов." }
+    ],
+    choices: () => [
+      { icon: "go", t: "Собраться в вуз", sub: "Сегодня точно. Ну почти точно.", go: "pe_try" },
+      { icon: "let", t: "Ещё одну главу Пелевина", sub: "Для вдохновения", go: "pe_book" }
+    ]
+  },
+  pe_try: {
+    bg: "pflat", place: "Петя · прихожая · 11:40", noSprites: true, music: "suspense", next: "pe_days",
+    lines: [
+      { who: null, t: "Куртка. Один кроссовок. Второй кроссовок. Рука на ручке двери." },
+      { who: null, t: "Сердце начинает стучать, как будто за дверью не подъезд, а экзамен." },
+      { who: "Петя", t: "…Завтра. Завтра с утра. Сегодня уже поздно, всё равно к третьей паре." },
+      { who: "", t: "Я снимаю кроссовки. Это тоже упражнение. Я в нём чемпион." }
+    ]
+  },
+  pe_book: {
+    bg: "pflat", place: "Петя · диван · 13:10", noSprites: true, music: "mystic", next: "pe_days",
+    lines: [
+      { who: null, t: "Пелевин говорит, что мир — иллюзия. Отличная новость для человека, который пропустил три года иллюзий." },
+      { who: "Петя", t: "Если вуз — иллюзия, то я туда и так хожу. Просто в другом слое." },
+      { who: "", t: "Звучит как гениальная мысль. Через час она звучит как диагноз." }
+    ]
+  },
+  pe_days: {
+    bg: "pflat", place: "Петя · день 214", noSprites: true, music: "eerie",
+    lines: [
+      { skip: "Неделя. Месяц. Ещё месяц." },
+      { who: null, t: "Каждое утро я собираюсь в вуз. Каждое утро квартира становится чуть меньше." },
+      { who: null, t: "Стены придвинулись. Холодильник гудит голосом репетитора: «пре-дел, пре-дел»." },
+      { inmsg: "Петь, ты сегодня был на парах?", chat: "Саша" },
+      { who: "Петя", t: "Был. В астральном смысле." },
+      { who: "", t: "Я схожу с ума. Медленно, в тапочках, под регги из колонки." },
+      { who: null, t: "В последней книге закладка на странице про бардо. Состояние между. Как раз моё." }
+    ],
+    choices: () => [
+      { icon: "spark", t: "Провести обряд", sub: "Позвать того, кто скажет правду в лицо", go: "pe_rite" },
+      { icon: "let", t: "Лечь спать", sub: "Завтра с утра в вуз", go: "pe_loop" }
+    ]
+  },
+  pe_loop: {
+    bg: "pflat", place: "Петя · день 215", noSprites: true, music: "eerie",
+    lines: [
+      { fx: "glitch", who: null, t: "Утро. Одиннадцать двадцать. Пары начались в девять." },
+      { who: "", t: "Знакомо. Слишком знакомо." }
+    ],
+    ending: "Петя · концовка «День 215»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать", sub: "Вернуться к закладке", go: "pe_days", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  pe_rite: {
+    bg: "pflat", rite: true, place: "Петя · бардо · 03:33", noSprites: true, music: "mystic",
+    lines: [
+      { who: null, t: "Свечи по кругу. Поющая чаша от Саши на день рождения. Мандала из формул по матану, мелом на полу." },
+      { who: "Петя", t: "Ом. Предел эн стремится к бесконечности. Ом. Пусть придёт тот, кто скажет правду." },
+      { fx: "magic", who: null, t: "Чаша звенит сама. Свечи вытягиваются до потолка. В дыму кто-то выходит." }
+    ],
+    next: "pe_gleb"
+  },
+  pe_gleb: {
+    bg: "pflat", rite: true, place: "Петя · бардо · 03:34", music: "tense",
+    lines: [
+      { who: "Глеб", t: "Ты чё, за хуйню сделал?" },
+      { who: "Глеб", t: "Зачем ты это натворил? Ты понимаешь, чем это может закончиться?" },
+      { who: "Петя", t: "Глеб?! Я звал правду, а не тебя." },
+      { who: "Глеб", t: "Это одно и то же, бро." },
+      { fx: "magic", who: null, t: "Глеб достаёт из дыма клинок длиной с мой коридор." },
+      { battle: "melee", me: "Петя", foe: "Глеб с клинком", hp: 45, tip: "Попробуй устоять. «УДАР» — бить, «БЛОК» — когда Глеб замахнётся.", lost: "Петя на полу…", win: "pe_lesson", lose: "pe_lesson" }
+    ]
+  },
+  pe_lesson: {
+    bg: "pflat", rite: true, place: "Петя · бардо · 03:35", music: "sad",
+    lines: [
+      { fx: "punch", who: null, t: "Бой длится секунд десять. Что бы я ни делал, клинок уже у моего горла." },
+      { who: "Глеб", t: "Петя. Если ты всё так оставишь, ты никогда не пойдёшь в вуз." },
+      { who: "Глеб", t: "Займись собой." },
+      { fx: "glitch", who: null, t: "Свечи гаснут разом." }
+    ],
+    next: "pe_wake"
+  },
+  pe_wake: {
+    bg: "pflat", place: "Петя · пол · 07:10", noSprites: true, music: "sad",
+    lines: [
+      { who: null, t: "Я лежу на полу. Свечи — огарки. Мандала размазана. Никакого клинка." },
+      { who: "Петя", t: "…Бэд-трип. Это был просто бэд-трип." },
+      { who: "Петя", t: "Но он прав. Он, блин, прав. Я всё делаю не так." }
+    ],
+    choices: () => [
+      { icon: "stop", t: "Выбросить траву", sub: "Всю. Сейчас.", go: "pe_end" },
+      { icon: "let", t: "Оставить на чёрный день", sub: "Мало ли", go: "pe_loop" }
+    ]
+  },
+  pe_end: {
+    bg: "lecture", place: "Петя · экономический факультет · 09:00", noSprites: true, music: "reggae",
+    lines: [
+      { who: null, t: "Унитаз. Слив. Окно настежь. Пелевин — на полку, корешками к стене." },
+      { skip: "Следующее утро" },
+      { npcShow: "npc_petya", who: null, t: "Девять утра. Аудитория. Я сижу в первом ряду, как турист в музее." },
+      { who: "Преподаватель", t: "Вы кто?" },
+      { who: "Петя", t: "Студент. Третий курс. Ну… первый день." },
+      { who: null, t: "Вечером Саша приходит со службы. Видит пустой стол, открытое окно и конспект по матану." },
+      { who: "Саша", t: "Ты правда был на парах?" },
+      { who: "Петя", t: "Был. В физическом смысле." },
+      { who: null, t: "Она меня целует. Долго. А из колонки играет регги, как будто специально." }
+    ],
+    ending: "Петя · концовка «Первый ряд»",
+    choices: () => [
+      { icon: "rewind", t: "Сначала", sub: "Одиннадцать двадцать", go: "pe_home", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
@@ -3339,7 +3537,7 @@ function endBattle(won) {
   setTimeout(() => { $("battle").classList.remove("on"); B = null; $("box").style.display = ""; show(next); }, 1200);
 }
 function startBattle(type, win, lose, opt = {}) {
-  B = { type, win, lose, hp: 100, en: 100, timers: [], done: false, lost: opt.lost };
+  B = { type, win, lose, hp: opt.hp || 100, en: 100, timers: [], done: false, lost: opt.lost };
   $("hpE").querySelector("span").textContent = opt.me || "Егор";
   $("box").style.display = "none";
   $("battle").classList.add("on");
@@ -3672,13 +3870,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280149`, talk: `img/${n}_talk.png?v=10280149`, blink: `img/${n}_blink.png?v=10280149` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280153`, talk: `img/${n}_talk.png?v=10280153`, blink: `img/${n}_blink.png?v=10280153` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280149" : `img/${n}_spartan.png?v=10280149`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280153" : `img/${n}_spartan.png?v=10280153`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3707,7 +3905,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280149`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280153`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3716,7 +3914,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280149`; el.alt = who;
+  el.src = `img/${n}.png?v=10280153`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3905,7 +4103,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280149) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280153) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -4170,6 +4368,11 @@ $("mC").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("c2_start");
+};
+$("mPe").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("pe_home");
 };
 $("mV").onclick = e => {
   e.stopPropagation();
