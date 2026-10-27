@@ -163,7 +163,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280119") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280133") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -177,6 +177,7 @@
   #saveBtns #mX { border-color:#b56cff; background:#b56cff22; }
   #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
   #saveBtns #mC { border-color:#f0b35e; background:#f0b35e22; }
+  #saveBtns #mV { border-color:#8ad0a0; background:#8ad0a022; }
   #saveBtns #mH { border-color:#5ab0ff; background:#5ab0ff22; }
   #saveBtns #mL { border-color:#c41a2a; background:#c41a2a22; }
   #saveBtns small:empty { display:none; }
@@ -398,15 +399,15 @@
     .bam { font-size:40px; }
   }
 </style>
-<style>#mX,#mL,#mBrawl{display:none!important}</style></head>
+<style>#mL,#mV,#mBrawl{display:none!important}</style></head>
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280119" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280119" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280133" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280133" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280119) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280133) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -456,7 +457,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -474,7 +475,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "photo") drawPhoto(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -793,7 +794,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280119"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280133"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -865,13 +866,53 @@ function drawField() {
   for (let i = 0; i < 6; i++) R((i * 47 + 20) % W, hy + 6 + (i * 11) % 20, 2, 2, i % 2 ? "#ffb040" : "#c070ff");
 }
 
+// ---------- Катсцена: битва за поле — четверо в броне держат вал, на них идёт армада ----------
+let warRAF = 0, warT = 0;
+function drawWar() {
+  drawField();
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const hy = H * .62, t = warT;
+  // пришельцы идут цепью из глубины поля
+  for (let i = 0; i < 9; i++) {
+    const x = (i * 37 + t * .25) % (W + 20) - 10, y = hy + 4 + (i % 3) * 7;
+    R(x, y - 8, 4, 8, "#3a1a50"); R(x + 1, y - 10, 3, 3, "#5a2a80"); R(x + 3, y - 9, 1, 1, "#e070ff");
+  }
+  // наши четверо за валом: силуэты в броне с золотыми визорами
+  const base = H * .84;
+  for (let i = 0; i < 4; i++) {
+    const x = W * (.12 + i * .22), bob = Math.sin(t * .1 + i) * .6;
+    R(x, base - 14 + bob, 8, 12, ["#6a7a5a", "#4a4a5a", "#5a6a3a", "#4a5a7a"][i]);
+    R(x + 1, base - 19 + bob, 6, 5, "#3a3a46"); R(x + 2, base - 17 + bob, 4, 2, "#f0b040");
+    R(x + 7, base - 11 + bob, 7, 2, "#202024");
+    // трассеры
+    if ((t + i * 13) % 26 < 3) {
+      c.strokeStyle = "#ffd060"; c.lineWidth = 1; c.beginPath();
+      c.moveTo(x + 14, base - 10); c.lineTo(x + 14 + 40 + (i * 9) % 30, hy + 2 + (i % 3) * 6); c.stroke();
+      R(x + 13, base - 11, 3, 3, "#fff0a0");
+    }
+  }
+  // плазма в ответ и вспышки
+  for (let i = 0; i < 3; i++) {
+    const p = ((t * 2 + i * 70) % 120) / 120;
+    const sx = W * (.2 + i * .3), sy = hy + 6, ex = W * (.15 + i * .25), ey = base - 8;
+    R(sx + (ex - sx) * p, sy + (ey - sy) * p, 3, 2, "#c070ff");
+  }
+  if (t % 90 < 5) { c.fillStyle = "#ffb04044"; c.beginPath(); c.arc(W * .7, hy + 8, 14 + (t % 90) * 3, 0, 7); c.fill(); }
+}
+function startWar() {
+  cancelAnimationFrame(warRAF);
+  const loop = () => { if (!scene || scene.bg !== "war") return; warT++; drawWar(); warRAF = requestAnimationFrame(loop); };
+  loop();
+}
+
 // ---------- Локация: картинка во весь экран (scene.photo — файл из «картинки») ----------
 const PHOTO = {};
 function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (name !== "menu_bg") { scene.photo = "menu_bg"; redraw(); } }; im.src = `img/${name}.jpg?v=10280119`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280133`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -896,6 +937,51 @@ function drawCafe() {
   for (let i = 0; i < 3; i++) { const tx = W * (.08 + i * .32); R(tx, H * .66, W * .2, 4, "#7a5030"); R(tx + W * .09, H * .67, 3, H * .1, "#4a3020");
     R(tx + 6, H * .63, 6, 5, "#f0e8dc"); R(tx + W * .14, H * .6, 2, 8, "#f0e0c0"); R(tx + W * .14, H * .58, 2, 2, "#ffc040"); }
   c.fillStyle = "#ffb04018"; c.beginPath(); c.arc(W * .5, H * .62, Math.min(W, H) * .35, 0, 7); c.fill();
+}
+
+// ---------- Локация: квартира Вити на Юго-Западной — окно на МГУ, одна лампа ----------
+function drawFlat() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, portrait = H > W;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#1c1e26");
+  const wx = portrait ? W * .08 : W * .45, ww = portrait ? W * .84 : W * .5, wy = H * .08, wh = H * .5;
+  const g = c.createLinearGradient(0, wy, 0, wy + wh); g.addColorStop(0, "#0a1030"); g.addColorStop(1, "#2a2a50");
+  c.fillStyle = g; c.fillRect(wx, wy, ww, wh);
+  // МГУ на горизонте
+  const mx = wx + ww * .6, my = wy + wh;
+  R(mx - 3, my - wh * .62, 6, wh * .62, "#3a3a5a"); R(mx - 1, my - wh * .78, 2, wh * .16, "#4a4a6a"); R(mx, my - wh * .82, 1, 3, "#ffd060");
+  R(mx - 16, my - wh * .38, 32, wh * .38, "#34345a"); R(mx - 26, my - wh * .22, 52, wh * .22, "#30305a");
+  // окна города
+  for (let i = 0; i < 40; i++) R(wx + (i * 29) % ww, wy + wh * .55 + (i * 13) % (wh * .42), 2, 2, i % 5 ? "#3a3a60" : "#ffd88a");
+  R(wx, wy + wh / 2, ww, 2, "#14141c"); R(wx + ww / 2, wy, 2, wh, "#14141c");
+  // комната: пол, диван, стол с дошираком, лампа
+  R(0, H * .72, W, H * .28, "#2a2420");
+  R(W * .05, H * .64, W * .4, H * .1, "#3a3048"); R(W * .05, H * .6, W * .4, H * .05, "#443a56");
+  R(W * .55, H * .68, W * .25, 3, "#5a4a3a"); R(W * .62, H * .64, 8, 6, "#e8e0d0"); R(W * .7, H * .655, 14, 4, "#f0f0f0");
+  c.fillStyle = "#ffd88a22"; c.beginPath(); c.arc(W * .85, H * .55, Math.min(W, H) * .25, 0, 7); c.fill();
+  R(W * .85, H * .5, 2, H * .22, "#3a3a3a"); R(W * .83, H * .48, 8, 4, "#ffd88a");
+}
+// ---------- Локация: балкон Вити — ночь, перила, огоньки сигарет ----------
+function drawBalcony() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#080c24"); g.addColorStop(.7, "#2a2850");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  for (let i = 0; i < 30; i++) R((i * 47) % W, (i * 19) % (H * .3), 1, 1, "#c8d0ff");
+  // МГУ, светится
+  const mx = W * .7, my = H * .62;
+  c.fillStyle = "#ffd06022"; c.beginPath(); c.arc(mx, my - H * .2, H * .2, 0, 7); c.fill();
+  R(mx - 4, my - H * .4, 8, H * .4, "#4a4a70"); R(mx - 1, my - H * .48, 2, H * .08, "#5a5a80"); R(mx, my - H * .5, 1, 3, "#ffd060");
+  R(mx - 22, my - H * .22, 44, H * .22, "#40406a");
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 6; x++) if ((x * 3 + y) % 4) R(mx - 20 + x * 7, my - H * .2 + y * 3, 2, 1, "#ffd88a");
+  // город внизу
+  for (let i = 0; i < 70; i++) R((i * 23) % W, my + 4 + (i * 11) % (H * .2), 2, 1, i % 4 ? "#ffd88a" : "#8ab0ff");
+  // перила
+  R(0, H * .82, W, 3, "#5a5a66"); for (let x = 4; x < W; x += 10) R(x, H * .82, 2, H * .18, "#4a4a56");
+  // огоньки сигарет
+  const t = Date.now() / 400;
+  R(W * .3, H * .78, 2, 2, Math.sin(t) > 0 ? "#ff6020" : "#c04010"); R(W * .52, H * .76, 2, 2, Math.sin(t + 2) > 0 ? "#ff6020" : "#c04010");
+  c.fillStyle = "#c8c8d822"; c.fillRect(W * .3, H * .7, 3, 8); c.fillRect(W * .52, H * .68, 3, 8);
 }
 
 // ---------- Локация: гараж Пети, ночь ----------
@@ -1882,20 +1968,113 @@ const scenes = {
     ]
   },
   // ================= Глава 2 · Кофейня (продолжение: Юля ответила) =================
-  c2_morning: {
-    bg: "home", place: "Глава 2 · квартира Егора · 11:40", egor: true, music: "sad",
+  // ---------- Глава 2: старт с любой концовки главы 1 ----------
+  c2_start: {
+    bg: "home", place: "Глава 2 · Кофейня", music: "radio", noSprites: true,
     lines: [
       { skip: "Глава 2 · Кофейня" },
-      { who: null, t: "Утро после Powerhouse. Голова гудит, как бас из-за стены. Егор лежит лицом в подушку." },
-      { who: "Егор", t: "Скажи, что я ничего не отправил." },
-      { who: "Глеб", t: "Ты отправил. Красиво, кстати. Про монастырскую кофейню." },
-      { fx: "glitch", inmsg: "Егор, это было неожиданно. И смело. Давайте кофе в субботу. Только без виски.", chat: "Юлия" },
-      { who: "Егор", t: "Она согласилась. Глеб. Она согласилась. Я умру до субботы." },
+      { who: null, t: "С какой концовки главы 1 продолжаем? Отмеченные ✓ ты уже видел." }
+    ],
+    choices: () => C1_ENDS.map(e => ({ icon: e.icon, t: e.t + (c1Seen().includes(e.key) ? " ✓" : ""), sub: e.sub, go: e.go }))
+  },
+  c2o_sober: {
+    bg: "home", place: "Глава 2 · квартира Егора · 11:40", egor: true, music: "hope", learn: "sober", next: "c2_after",
+    lines: [
+      { who: null, t: "Утро. Егор не спал. Сидит на кухне и смотрит в телефон, как в прицел." },
+      { fx: "glitch", inmsg: "Егор, спасибо, что написали честно и трезво. Это редкость. Давайте кофе в субботу?", chat: "Юлия" },
+      { who: "Егор", t: "Трезво. Она заметила, что трезво. Глеб, это лучший день в моей жизни. И я умру до субботы." }
+    ]
+  },
+  c2o_fight: {
+    bg: "home", place: "Глава 2 · квартира Егора · 12:10", egor: true, music: "sad", next: "c2_after",
+    lines: [
+      { who: null, t: "У Егора фингал размером с Таганку. У меня разбита губа. Голосовое на 47 секунд всё ещё висит в чате." },
+      { fx: "glitch", inmsg: "Я прослушала. Половину не поняла. Вторую половину — поняла. Кофе в субботу. Без голосовых и без драк.", chat: "Юлия" },
+      { who: "Егор", t: "Она поняла вторую половину. Глеб. Там было «я вас люблю»." },
+      { who: "Глеб", t: "Там было ещё «держи его, Глеб, он с бутылкой». Но будем верить в лучшее." }
+    ]
+  },
+  c2o_run: {
+    bg: "street", place: "Глава 2 · метро · 01:20", egor: true, music: "suspense", next: "c2_after",
+    lines: [
+      { who: null, t: "Последний вагон. Мы в розыске. Егор держит телефон двумя руками." },
+      { fx: "glitch", inmsg: "Если вы живы — кофе в субботу. Если нет — тоже напишите.", chat: "Юлия" },
+      { inmsg: "Я договорился. Вы свидетели, а не подозреваемые. Это стоило мне нервов и полквартиры. Пиво с вас.", chat: "Витя" },
+      { who: "Егор", t: "Нас отпустили, и она согласилась. В одну минуту. Так не бывает." },
+      { who: "Глеб", t: "Бывает, если у тебя друг юрист с недвижимостью." }
+    ]
+  },
+  c2o_door: {
+    bg: "street", place: "Глава 2 · подъезд Юли · 00:40", egor: true, music: "sad", next: "c2_after",
+    lines: [
+      { npcShow: "npc_yulia", who: null, t: "Юля на пороге. Розы, кольцо, Егор. Пауза длиной в жизнь." },
+      { who: "Юля", t: "Егор. Кольцо — это очень слишком. Розы я оставлю." },
+      { who: "Юля", t: "А кофе — в субботу. Трезвыми. И без колец. Договорились?" },
+      { who: null, t: "Дверь закрывается. Егор стоит с кольцом в руке и не дышит." },
+      { who: "Егор", t: "Это было «да»? Глеб, это было «да»?" }
+    ]
+  },
+  c2o_prov: {
+    bg: "drive", place: "Глава 2 · такси с дачи · утро", egor: true, music: "radio", learn: "sober", next: "c2_after",
+    lines: [
+      { who: null, t: "После той ночи Егор так ничего Юле и не отправил. Ни пьяного, ни трезвого." },
+      { who: "Глеб", t: "Давай сейчас. Трезвым. Своими словами. Я рядом, но печатаешь ты." },
+      { tg: "Юля, привет. Это Егор. Я давно хочу позвать вас на кофе, но всё боялся. Может, в субботу?", time: "09:14", chat: "Юлия", sayWho: "Глеб", sayText: "Он печатает сам. Я только держу кофе." },
+      { fx: "glitch", inmsg: "Привет, Егор. Давайте. Суббота подходит.", chat: "Юлия" }
+    ]
+  },
+  c2o_prison: {
+    bg: "street", place: "Глава 2 · восемь лет спустя", music: "sad",
+    lines: [
+      { who: null, t: "Егор открывает сообщение, которому восемь лет." },
+      { inmsg: "Егор, давайте кофе в субботу?", chat: "Юлия" },
+      { who: "Егор", t: "Суббота была четыреста суббот назад." },
+      { who: "", t: "Я встречаю его у ворот. Мы оба старше. Он смотрит на экран и не знает, можно ли так." }
+    ],
+    choices: () => [
+      { icon: "write", t: "Написать ей сейчас", sub: "«Простите, что опоздал на восемь лет»", go: "c2_prison_write" },
+      { icon: "let", t: "Не писать", sub: "Пусть останется той субботой", go: "c2_prison_keep" }
+    ]
+  },
+  c2_prison_write: {
+    bg: "cafe", place: "Монастырская кофейня · восемь лет спустя", egor: true, music: "hope",
+    lines: [
+      { tg: "Юля, простите, что опоздал на восемь лет. Кофе ещё в силе?", time: "16:02", chat: "Юлия", sayWho: "Глеб", sayText: "Он пишет. Пальцы помнят." },
+      { fx: "glitch", inmsg: "Егор?! Я замужем, у меня сын. Но кофе — давай. Как старые знакомые. Мне правда интересно, как ты.", chat: "Юлия" },
+      { npcShow: "npc_yulia", who: null, t: "Кофейня та же. Юля другая. Егор другой. Они говорят два часа, и никому не неловко." },
+      { who: "", t: "Иногда «да» приходит не вовремя. Но всё равно приходит." }
+    ],
+    ending: "Глава 2 · концовка «Восемь лет и один кофе»",
+    choices: () => c2EndChoices()
+  },
+  c2_prison_keep: {
+    bg: "street", place: "У ворот · восемь лет спустя", egor: true, music: "sad",
+    lines: [
+      { who: "Егор", t: "Пусть будет так. Она сказала «да». Мне этого хватит." },
+      { who: null, t: "Он кладёт телефон в карман. Мы идём к метро. Москва стала громче." }
+    ],
+    ending: "Глава 2 · концовка «Та суббота»",
+    choices: () => c2EndChoices()
+  },
+  c2_after: {
+    bg: "home", place: "Глава 2 · квартира Егора", egor: true, music: "sad",
+    lines: [
+      { who: "Егор", t: "Она согласилась. Я умру до субботы." },
       { who: "", t: "Я его знаю. Когда ему страшно, он не спорит. Он исчезает." }
     ],
     choices: () => [
       { icon: "help", t: "Готовить его к свиданию", sub: "Три дня тренировок. Купидон на смене.", go: "c2_prep" },
       { icon: "let", t: "Дать ему побыть одному", sub: "Сам разберётся. Он взрослый.", go: "c2_gone" }
+    ]
+  },
+  c2_morning: {
+    bg: "home", place: "Глава 2 · квартира Егора · 11:40", egor: true, music: "sad", next: "c2_after",
+    lines: [
+      { who: null, t: "Утро после Powerhouse. Голова гудит, как бас из-за стены. Егор лежит лицом в подушку." },
+      { who: "Егор", t: "Скажи, что я ничего не отправил." },
+      { who: "Глеб", t: "Ты отправил. Красиво, кстати. Про монастырскую кофейню." },
+      { fx: "glitch", inmsg: "Егор, это было неожиданно. И смело. Давайте кофе в субботу. Только без виски.", chat: "Юлия" },
+      { who: "Егор", t: "Она согласилась. Глеб. Она согласилась." }
     ]
   },
   c2_prep: {
@@ -1993,7 +2172,7 @@ const scenes = {
       ...(known.has("late") ? [{ who: null, t: "Мы опаздываем на сорок минут. Егор пишет ей из такси: «Опаздываю. Это из-за меня, не из-за вас.»" }] : []),
       { npcShow: "npc_yulia", who: null, t: "Юля у окна. Без «вы» и без строгости, просто в свитере. Егор садится напротив." },
       { who: "", t: "Я через два столика. В ухе у Егора наушник. Мой микрофон в рукаве." },
-      { who: "Юля", t: known.has("late") ? "Я уже думала, ты не придёшь. Рада, что пришёл." : "Привет. Ну, рассказывай, кто такой Егор без виски?" },
+      { who: "Юля", t: known.has("sober") && !known.has("late") ? "Привет. Мне правда понравилось, что ты написал трезвым. Ну, рассказывай." : known.has("late") ? "Я уже думала, ты не придёшь. Рада, что пришёл." : "Привет. Ну, рассказывай, кто такой Егор без виски?" },
       { who: "Егор", t: "Э-э…" },
       { who: "", t: "Он смотрит на меня. Пауза затягивается." }
     ],
@@ -2056,9 +2235,121 @@ const scenes = {
     ],
     ending: "Глава 2 · концовка «Монастырский кофе»",
     choices: () => [
-      { icon: "rewind", t: "Сначала главы", sub: "Утро после Powerhouse", go: "c2_morning", reset: true, cls: "rewind" },
+      { icon: "rewind", t: "Сначала главы", sub: "Выбрать концовку главы 1", go: "c2_start", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
+  },
+  // ================= Глава · Витя (Юго-Западная) =================
+  v_home: {
+    bg: "flat", place: "Витя · Юго-Западная · 23:10", noSprites: true, music: "sad",
+    lines: [
+      { skip: "Витя" },
+      { npcShow: "npc_viktor", who: null, t: "Юго-Западная. Девятнадцатый этаж. Из окна видно МГУ и ни одного знакомого окна." },
+      { who: "Витя", t: "Две квартиры. Одна сдаётся, во второй живу я. И в обеих никого." },
+      { who: null, t: "На столе остывший доширак и договор аренды. Я перечитываю его третий раз, просто чтобы что-то читать." },
+      { who: "Витя", t: "Аня ушла к бариста. Лера — к бывшему. Катя — в Дубай, с запиской «ты слишком юрист». Что это вообще значит." }
+    ],
+    choices: () => [
+      { icon: "write", t: "Написать Кате", sub: "«Как Дубай?» Ничего же страшного.", go: "v_ex" },
+      { icon: "let", t: "Заказать шаурму", sub: "Шаурма не уходит к бариста", go: "v_food" }
+    ]
+  },
+  v_ex: {
+    bg: "flat", place: "Витя · 23:18", noSprites: true, music: "sad", next: "v_door",
+    lines: [
+      { tg: "Привет. Как Дубай?", time: "23:17", chat: "Катя", sayWho: "Витя", sayText: "Я пишу и сразу жалею." },
+      { tgStatus: "была давно" },
+      { who: "Витя", t: "Одна галочка. Даже не доставлено. Меня заблокировали в другом часовом поясе." }
+    ]
+  },
+  v_food: {
+    bg: "flat", place: "Витя · 23:25", noSprites: true, music: "radio", next: "v_door",
+    lines: [
+      { who: null, t: "Курьер пишет «буду через 40 минут». Это самые предсказуемые отношения в моей жизни." },
+      { who: "Витя", t: "Хоть кто-то придёт." }
+    ]
+  },
+  v_door: {
+    bg: "flat", place: "Витя · 23:41", noSprites: true, music: "suspense",
+    lines: [
+      { fx: "timer", who: null, t: "Звонок в дверь. Долгий. Требовательный." },
+      { who: null, t: "В глазок: парень в капюшоне. В руках толстая папка. Лицо не видно." },
+      { who: "Голос за дверью", t: "Виктор? Открывай. Я по поводу твоих квартир." },
+      { who: "Витя", t: "…Инвестбанк. Это инвестбанк. Я знал, что за второй квартирой придут." },
+      { who: "Витя", t: "Папка. У них всегда папка. Там мой договор, мой залог и моя жизнь." }
+    ],
+    choices: () => [
+      { icon: "grab", t: "Взять сковородку", sub: "Встретить банкира как положено", go: "v_ambush" },
+      { icon: "talk", t: "Открыть и требовать документы", sub: "Я юрист. Я знаю свои права.", go: "v_open" }
+    ]
+  },
+  v_open: {
+    bg: "flat", place: "Витя · прихожая", noSprites: true, music: "tense", next: "v_fight",
+    lines: [
+      { who: "Витя", t: "Предъявите доверенность и выписку из ЕГРН. Иначе разговор окончен." },
+      { who: "Голос за дверью", t: "Какую выписку, епта? Пусти, тут холодно." },
+      { who: null, t: "Он шагает внутрь. Без доверенности. Это нападение на собственность." }
+    ]
+  },
+  v_ambush: {
+    bg: "flat", place: "Витя · прихожая", noSprites: true, music: "tense", next: "v_fight",
+    lines: [
+      { who: null, t: "Я открываю дверь и сразу замахиваюсь сковородкой. Тефаль. Подарок Леры. Хоть на что-то сгодился." }
+    ]
+  },
+  v_fight: {
+    bg: "flat", place: "Витя · прихожая · 23:43", noSprites: true, music: "tense",
+    lines: [
+      { battle: "melee", me: "Витя", foe: "Инвестбанкир?", tip: "Жми «УДАР». Когда «банкир» замахнётся — «БЛОК»!", lost: "Витя на полу…", win: "v_reveal", lose: "v_reveal" }
+    ]
+  },
+  v_reveal: {
+    bg: "flat", place: "Витя · прихожая · 23:45", noSprites: true, music: "reggae",
+    lines: [
+      { fx: "punch", who: null, t: "Мы катимся по прихожей. Папка лопается. По полу разлетаются листы с интегралами." },
+      { npcShow: "npc_petya", who: "Петя", t: "Бро! Бро, это я, епта! Петя!" },
+      { who: null, t: "Он скидывает капюшон. Петя. С синяком. С папкой по матанализу." },
+      { who: "Витя", t: "Ты… не инвестбанк?" },
+      { who: "Петя", t: "Я гаражный король, Вить. У меня четыре гаража и две квартиры. Зачем мне твоя?" },
+      { who: "Петя", t: "Я просто подумал, что тебе тут одному херово. Приехал с репетитора. Три года в универ не ходил, теперь матан догоняю." },
+      { who: null, t: "И где-то у соседей, как специально, включается регги." }
+    ],
+    next: "v_smoke"
+  },
+  v_smoke: {
+    bg: "balcony", place: "Витя · балкон · 00:05", noSprites: true, music: "reggae",
+    lines: [
+      { npcShow: "npc_petya", who: null, t: "Балкон. Две сигареты. Внизу Юго-Западная, вверху МГУ светится, как торт." },
+      { who: "Петя", t: "Ну рассказывай. Кто на этот раз?" },
+      { who: "Витя", t: "Все. Аня, Лера, Катя. Каждая уходила и забирала по куску меня. Скоро будет как с квартирой — одна сдаётся, во второй пусто." }
+    ],
+    choices: () => [
+      { icon: "talk", t: "Рассказать всё", sub: "Как есть, без юридических формулировок", go: "v_end_open" },
+      { icon: "forget", t: "Отшутиться", sub: "«Да ладно, я в порядке. Просто доширак остыл.»", go: "v_end_joke" }
+    ]
+  },
+  v_end_open: {
+    bg: "balcony", place: "Витя · балкон · 00:40", noSprites: true, music: "reggae",
+    lines: [
+      { who: "Витя", t: "Мне не квартиру страшно потерять. Мне страшно, что я так и буду один. И что я сам в этом виноват." },
+      { npcShow: "npc_petya", who: "Петя", t: "Вить. Ты только что чуть не убил меня сковородкой, защищая квартиру. Представь, как ты будешь защищать человека." },
+      { who: null, t: "Мы смеёмся. Сигарета догорает. Регги у соседей играет по третьему кругу." },
+      { who: "Петя", t: "Короче. В субботу едем в мой третий гараж. Там шашлык и пацаны. Это не свидание, но лучше, чем доширак." },
+      { who: "", t: "Впервые за месяц мне не хочется перечитывать договор." }
+    ],
+    ending: "Витя · концовка «Регги на балконе»",
+    choices: () => vEndChoices()
+  },
+  v_end_joke: {
+    bg: "balcony", place: "Витя · балкон · 00:20", noSprites: true, music: "sad",
+    lines: [
+      { who: "Витя", t: "Да ладно, я в порядке. Просто доширак остыл." },
+      { npcShow: "npc_petya", who: "Петя", t: "Ну… ок. Если что — пиши." },
+      { who: null, t: "Он уходит. Дверь закрывается. В квартире снова тихо. Две квартиры, ноль людей." },
+      { who: "", t: "Он же приехал. Сам. Ночью. А я ему про доширак." }
+    ],
+    ending: "Витя · концовка «Две квартиры, ноль людей»",
+    choices: () => vEndChoices()
   },
   // ================= Halo · Бородино: выживание (sv — припасы, патроны, вал, люди) =================
   h_intro: {
@@ -2110,7 +2401,7 @@ const scenes = {
     ]
   },
   h_supply: {
-    halo: true, bg: "street", place: "Можайск · руины", egor: true, spartanAll: true, music: "scifi", sv: { food: 3, ammo: 1 }, nextFn: () => hAfterDay(),
+    halo: true, bg: "street", place: "Можайск · руины", egor: true, spartanAll: true, music: "scifi", sv: { food: 3, ammo: 1 }, nextFn: () => "h_event",
     lines: [
       { who: null, t: "Можайск пустой. Витрины целые, людей нет. Как будто все вышли на минутку." },
       { who: "Егор", t: "Тушёнка. Вода. И почему-то ящик виски. Беру, для морали." },
@@ -2118,7 +2409,7 @@ const scenes = {
     ]
   },
   h_boat: {
-    halo: true, bg: "oka", place: "Ока · лодка", egor: true, spartanAll: true, music: "reggae", sv: { ammo: 3 }, nextFn: () => hAfterDay(),
+    halo: true, bg: "oka", place: "Ока · лодка", egor: true, spartanAll: true, music: "reggae", sv: { ammo: 3 }, nextFn: () => "h_event",
     lines: [
       { who: null, t: "Петя ведёт лодку вдоль берега, не глядя на карту." },
       { who: "Петя", t: "Не смотрите на тот берег. Там иногда кто-то кричит. Это не наши." },
@@ -2126,7 +2417,7 @@ const scenes = {
     ]
   },
   h_convoy: {
-    halo: true, bg: "drive", place: "Трасса на Гжатск", egor: true, spartanAll: true, music: "scifi_war", sv: { ammo: 3, food: -1 }, nextFn: () => hAfterDay(),
+    halo: true, bg: "drive", place: "Трасса на Гжатск", egor: true, spartanAll: true, music: "scifi_war", sv: { ammo: 3, food: -1 }, nextFn: () => "h_event",
     lines: [
       { who: null, t: "Колонна из двух машин и одного Пети, который поёт в рацию." },
       { fx: "shot", who: null, t: "Засада у моста. Отстреливаемся, не останавливаясь." },
@@ -2134,7 +2425,7 @@ const scenes = {
     ]
   },
   h_refugees: {
-    halo: true, bg: "field", place: "Семёновское", egor: true, spartanAll: true, music: "scifi_calm", sv: { people: 12, food: -1 }, nextFn: () => hAfterDay(),
+    halo: true, bg: "field", place: "Семёновское", egor: true, spartanAll: true, music: "scifi_calm", sv: { people: 12, food: -1 }, nextFn: () => "h_event",
     lines: [
       { who: null, t: "В подвале старой церкви двенадцать человек. Дети, старик с картой 1812 года." },
       { who: "Старик", t: "Вы откуда, сынки? Броня новая, а лица — как у наших студентов." },
@@ -2143,12 +2434,16 @@ const scenes = {
     ]
   },
   h_wall: {
-    halo: true, bg: "field", place: "Багратионовы флеши", egor: true, spartanAll: true, music: "scifi", sv: { wall: 2 }, nextFn: () => hAfterDay(),
+    halo: true, bg: "field", place: "Багратионовы флеши", egor: true, spartanAll: true, music: "scifi", sv: { wall: 2 }, nextFn: () => "h_event",
     lines: [
       { who: null, t: "Копаем там же, где копали в 1812-м. Земля мягкая, будто ждала." },
       { who: "Петя", t: "Двести сорок лет прошло, а флеши всё те же. Только пушки у нас лучше." },
       { who: "", t: "Я нахожу в земле старую пуговицу с орлом. Кладу в карман брони." }
     ]
+  },
+  h_event: {
+    halo: true, bg: "field", place: "Аванпост · вечер", egor: true, spartanAll: true, music: "scifi_calm", nextFn: () => hAfterDay(),
+    linesFn: () => H_EVENTS[Math.max(0, sv.day - 1) % H_EVENTS.length]()
   },
   h_night: {
     halo: true, bg: "field", place: "Аванпост · ночь", egor: true, spartanAll: true, music: "scifi_war",
@@ -2176,7 +2471,7 @@ const scenes = {
     ]
   },
   h_final: {
-    halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · день 5", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
+    halo: true, bg: "war", place: "Бородинское поле · день 5", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
     linesFn: () => [
       { skip: "День 5" },
       { who: null, t: "Корабль садится прямо на поле. Из него идут все, кто остался." },
@@ -2184,7 +2479,7 @@ const scenes = {
       { who: "Петя", t: "Пацаны, если что — было охуенно." },
       { who: "Егор", t: "Как в Reach. Только в этот раз мы спасём планету." },
       { who: "Глеб", t: "Не в этот раз. Прямо сейчас. Огонь!" },
-      { battle: "shoot", foe: "Армада", tlabel: "пришелец", tlabel2: "элит", tip: "Последний бой! Тапай по пришельцам. Каждый — за поле.", win: hScore() >= 13 ? "h_end_full" : "h_end_cost", lose: "h_end_lose" }
+      { battle: "shoot", foe: "Армада", tlabel: "пришелец", tlabel2: "элит", tip: "Последний бой! Тапай по пришельцам. Каждый — за поле.", win: hScore() >= 10 ? "h_end_full" : "h_end_cost", lose: "h_end_cost" }
     ]
   },
   h_end_full: {
@@ -3030,13 +3325,14 @@ function hitEnemy(n, x, y) {
 function endBattle(won) {
   B.done = true;
   B.timers.forEach(t => { clearTimeout(t); clearInterval(t); });
-  $("bTip").className = ""; $("bTip").textContent = won ? "Победа!" : "Егор ранен…";
+  $("bTip").className = ""; $("bTip").textContent = won ? "Победа!" : B.lost || "Егор ранен…";
   $("bArena").innerHTML = ""; $("bBtns").innerHTML = "";
   const next = won ? B.win : B.lose;
   setTimeout(() => { $("battle").classList.remove("on"); B = null; $("box").style.display = ""; show(next); }, 1200);
 }
 function startBattle(type, win, lose, opt = {}) {
-  B = { type, win, lose, hp: 100, en: 100, timers: [], done: false };
+  B = { type, win, lose, hp: 100, en: 100, timers: [], done: false, lost: opt.lost };
+  $("hpE").querySelector("span").textContent = opt.me || "Егор";
   $("box").style.display = "none";
   $("battle").classList.add("on");
   $("bArena").innerHTML = ""; $("bBtns").innerHTML = ""; $("bTip").className = "";
@@ -3060,8 +3356,8 @@ function startBattle(type, win, lose, opt = {}) {
     // полиция стреляет в ответ резиновыми
     bEvery(1300, () => { if (Math.random() < .55) { music.shot(); hurtEgor(14); } });
   } else {
-    $("enName").textContent = "Зэк с заточкой";
-    $("bTip").textContent = "Жми «УДАР». Когда появится ⚠ — сразу «БЛОК»!";
+    $("enName").textContent = opt.foe || "Зэк с заточкой";
+    $("bTip").textContent = opt.tip || "Жми «УДАР». Когда появится ⚠ — сразу «БЛОК»!";
     $("bBtns").innerHTML = '<button class="blk" id="bBlk">БЛОК</button><button class="hit" id="bHit">УДАР</button>';
     let cool = 0;
     B.strike = () => {
@@ -3334,7 +3630,7 @@ function closeGPhone() {
 
 // ---------- Движок ----------
 const known = new Set();          // что Глеб знает; переживает перемотку
-const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии", gun: "травмат в кармане — плохая идея", address: "где живёт Юля", brave: "страх отдан Лилит", rus: "Егор ответил Русу", late: "разговор на Бородинском поле", silence: "как тихо без Егора" };
+const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии", gun: "травмат в кармане — плохая идея", address: "где живёт Юля", brave: "страх отдан Лилит", rus: "Егор ответил Русу", sober: "Егор писал Юле трезвым", late: "разговор на Бородинском поле", silence: "как тихо без Егора" };
 
 // выстрел: резкая вспышка, «БАХ!», звук
 function shotFx() {
@@ -3368,13 +3664,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280119`, talk: `img/${n}_talk.png?v=10280119`, blink: `img/${n}_blink.png?v=10280119` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280133`, talk: `img/${n}_talk.png?v=10280133`, blink: `img/${n}_blink.png?v=10280133` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280119" : `img/${n}_spartan.png?v=10280119`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280133" : `img/${n}_spartan.png?v=10280133`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -3403,7 +3699,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280119`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280133`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -3412,7 +3708,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280119`; el.alt = who;
+  el.src = `img/${n}.png?v=10280133`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -3438,6 +3734,52 @@ function focus(who) {
 
 // Магия Глеба (только в главе «Изнанка»): каждое заклинание тратит ✦
 let mana = 0;
+// ---------- Глава 2: концовки главы 1, с которых можно продолжить ----------
+const C1_ENDS = [
+  { key: "отправлено", t: "«Отправлено»", sub: "Пьяное сообщение ушло. Она печатает.", go: "c2_morning", icon: "write" },
+  { key: "трезвая версия", t: "«Трезвая версия»", sub: "Он написал своими словами", go: "c2o_sober", icon: "talk" },
+  { key: "драка", t: "«Драка»", sub: "Голосовое на 47 секунд", go: "c2o_fight", icon: "fight" },
+  { key: "в бегах", t: "«В бегах»", sub: "Последний вагон, мы в розыске", go: "c2o_run", icon: "metro" },
+  { key: "на пороге", t: "«На пороге»", sub: "Розы, кольцо, её дверь", go: "c2o_door", icon: "party" },
+  { key: "восемь лет спустя", t: "«Восемь лет спустя»", sub: "Одно непрочитанное", go: "c2o_prison", icon: "stop" },
+  { key: "Провидение", t: "«Провидение»", sub: "Егор так и не написал", go: "c2o_prov", icon: "rewind" }
+];
+const C1_KEY = "powerhouse-c1-ends";
+function c1Seen() { try { return JSON.parse(localStorage.getItem(C1_KEY)) || []; } catch (e) { return []; } }
+function c1Mark(ending) {
+  const e = C1_ENDS.find(e => ending.includes(e.key)); if (!e) return;
+  const seen = c1Seen(); if (seen.includes(e.key)) return;
+  try { localStorage.setItem(C1_KEY, JSON.stringify([...seen, e.key])); } catch (er) {}
+}
+function vEndChoices() {
+  return [
+    { icon: "rewind", t: "Перемотать на балкон", sub: "Сказать иначе", go: "v_smoke", rewind: true, cls: "rewind" },
+    { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+  ];
+}
+function c2EndChoices() {
+  return [
+    { icon: "rewind", t: "Другая концовка главы 1", sub: "Начать главу 2 иначе", go: "c2_start", reset: true, cls: "rewind" },
+    { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+  ];
+}
+
+// ---------- Halo · Бородино: вечерние события, по одному на день ----------
+const H_EVENTS = [
+  () => [{ who: null, t: "Вечер у костра. Петя крутит ручку трофейной рации и ловит станцию из 2026-го. Регги." },
+         { who: "Петя", t: "Пацаны, я гаражный король даже в 2552-м. Четыре гаража там, аванпост тут." },
+         { who: "Витя", t: "Юридически аванпост не гараж." }, { who: "Петя", t: "Юридически я и в универе три года не был. И чё?" }],
+  () => [{ who: null, t: "Егор сидит на валу с прицелом и молчит. Потом говорит, не оборачиваясь." },
+         { who: "Егор", t: "В Reach все знали, что проиграют. Мы — не знаем. Это даже хуже. Есть надежда." }],
+  () => [{ who: null, t: "Старик из Семёновского рисует палкой на земле схему 1812 года." },
+         { who: "Старик", t: "Вот тут Багратион стоял. Вот тут вы. Ничего не меняется, сынки. Поле само выбирает, кому его держать." }],
+  () => [{ who: "Витя", t: "Я составил договор с пришельцами. Пункт первый: они уходят. Пункт второй: см. пункт первый." },
+         { who: "Глеб", t: "И что они?" }, { who: "Витя", t: "Не подписали. Неграмотные." }],
+  () => [{ who: null, t: "Последний вечер. Корабль висит прямо над памятником. Завтра всё решится." },
+         { who: "Петя", t: "Если выживем — пойду наконец к репетитору по матану. Обещаю." },
+         { who: "Егор", t: "Записываю. Свидетели есть." }]
+];
+
 // ---------- Halo · Бородино: состояние выживания ----------
 let sv = { food: 0, ammo: 0, wall: 0, people: 0, day: 0, camp: "" };
 function hScore() { return sv.wall * 2 + sv.ammo + (sv.people ? 2 : 0) + (sv.food > 0 ? 1 : 0); }
@@ -3456,13 +3798,13 @@ function svApply(sc) {
 }
 
 // ---------- Таймлайн перемотки: каждая развилка — точка, к ней можно вернуться ----------
-let timeline = [];
+let timeline = [], rewindTo = null;   // rewindTo — номер точки, куда перематываем (null — обычный переход)
 function markTimeline(id) {
-  const sc = scenes[id];
+  const sc = scenes[id], back = rewindTo; rewindTo = null;
   if (!sc.choices || sc.ending || id.startsWith("brawl")) return;
-  const i = timeline.findIndex(p => p.id === id);
+  let i = back === null ? -1 : timeline[back] && timeline[back].id === id ? back : timeline.map(p => p.id).lastIndexOf(id);
   if (i >= 0) { timeline = timeline.slice(0, i + 1); timeline[i].pick = null; if (timeline[i].sv) Object.assign(sv, timeline[i].sv); }
-  else timeline.push({ id, place: sc.place, sv: sc.halo ? { ...sv } : null });
+  else timeline.push({ id, place: sc.halo && sv.camp ? sc.place + " · день " + (sv.day + (sc.svDay ? 1 : 0)) : sc.place, sv: sc.halo ? { ...sv } : null });
 }
 function openTimeline() {
   if (B || BR.on) return;
@@ -3477,7 +3819,7 @@ function openTimeline() {
     const p = timeline[+b.dataset.i];
     if (b.classList.contains("now")) return closeTimeline();
     closeTimeline();
-    choose({ go: p.id, rewind: true });
+    choose({ go: p.id, rewind: true, tlIndex: +b.dataset.i });
   });
   $("tl").classList.add("on");
 }
@@ -3555,7 +3897,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280119) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280133) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -3671,7 +4013,7 @@ function say(who, text, quiet) {
 function showChoices() {
   $("box").style.display = "none";
   focus(null);
-  if (scene.ending) { $("ending").textContent = scene.ending; $("ending").style.display = "block"; }
+  if (scene.ending) { $("ending").textContent = scene.ending; $("ending").style.display = "block"; c1Mark(scene.ending); }
   const box = $("choices");
   box.innerHTML = "";
   for (const c of scene.choices().filter(c => !c.magic || mana >= c.magic)) {
@@ -3699,6 +4041,7 @@ function choose(c) {
   if (c.phone) return openGPhone(c.go);
   if (c.reset) { known.clear(); timeline = []; }
   if (!c.rewind) return show(c.go);
+  rewindTo = c.tlIndex !== undefined ? c.tlIndex : -1;
   $("choices").classList.remove("on");
   $("stage").classList.add("rewinding");
   music.rewind();
@@ -3818,7 +4161,12 @@ $("mX").onclick = e => {
 $("mC").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
-  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("c2_morning");
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("c2_start");
+};
+$("mV").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("v_home");
 };
 $("mH").onclick = e => {
   e.stopPropagation();
