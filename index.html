@@ -148,6 +148,11 @@
   #title h1 { margin:10px 0 24px; font:bold 64px/1 "Courier New", monospace; color:#ff4f7e; letter-spacing:.08em;
     text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
   #title p { color:var(--dim); font-size:14px; }
+  #saveBtns { display:none; flex-direction:column; gap:10px; align-items:center; margin-top:6px; }
+  #saveBtns button { width:220px; padding:12px; border-radius:10px; font:inherit; font-size:16px; cursor:pointer; color:var(--text);
+    border:1px solid var(--accent); background:#f0b35e22; }
+  #saveBtns #bNew { border-color:#ffffff33; background:none; color:var(--dim); }
+  #saveBtns small { letter-spacing:0; text-transform:none; font-size:12px; color:var(--dim); }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0 0 18px; text-align:center; padding:0 16px; }
   @keyframes neon { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.4; } 95% { opacity:1; } 97% { opacity:.6; } }
 
@@ -313,7 +318,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p>щёлкни, чтобы начать</p></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><p id="tapStart">щёлкни, чтобы начать</p><div id="saveBtns"><button id="bCont">Продолжить</button><button id="bNew">Новая игра</button><small id="saveInfo"></small></div></div>
 </div>
 
 <script>
@@ -1472,6 +1477,7 @@ function renderMemory() {
 
 function show(id) {
   scene = scenes[id]; idx = 0;
+  saveGame(id);
   paint(scene.years || 0);
   $("stage").classList.toggle("siren", !!scene.siren);
   if (scene.siren) music.siren();
@@ -1617,7 +1623,7 @@ document.addEventListener("keydown", e => {
   if (e.key !== " " && e.key !== "Enter") return;
   e.preventDefault();
   if (!$("dedic").classList.contains("gone")) return;   // посвящение не пропускается
-  if (!$("title").classList.contains("gone")) return start();
+  if (!$("title").classList.contains("gone")) return loadSave() ? continueGame() : start();
   if ($("howto").classList.contains("on")) return closeHowto();
   if ($("skip").classList.contains("on")) return closeSkip();
   if ($("box").style.display !== "none") advance();
@@ -1649,7 +1655,34 @@ function hint(key, text) {
   $("hint").textContent = text; $("hint").classList.add("on");
   clearTimeout(hint.t); hint.t = setTimeout(() => $("hint").classList.remove("on"), 6000);
 }
-$("title").onclick = start;
+// ---------- Сохранение ----------
+// Игра запоминает последнюю сцену и то, что Глеб знает после перемоток. Хранится в браузере этого телефона.
+const SAVE_KEY = "powerhouse-save-v1";
+function saveGame(id) {
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify({ scene: id, known: [...known], place: scenes[id].place, t: Date.now() })); } catch (e) {}
+}
+function loadSave() {
+  try { const d = JSON.parse(localStorage.getItem(SAVE_KEY)); return d && scenes[d.scene] ? d : null; } catch (e) { return null; }
+}
+function continueGame() {
+  const d = loadSave(); if (!d) return start();
+  $("title").classList.add("gone"); music.start();
+  known.clear(); d.known.forEach(k => known.add(k));
+  show(d.scene);
+}
+function newGame() {
+  try { localStorage.removeItem(SAVE_KEY); } catch (e) {}
+  known.clear(); start();
+}
+(function initTitle() {
+  const d = loadSave();
+  if (!d) { $("title").onclick = start; return; }
+  $("tapStart").style.display = "none";
+  $("saveBtns").style.display = "flex";
+  $("saveInfo").textContent = "Сохранено: " + d.place;
+  $("bCont").onclick = e => { e.stopPropagation(); continueGame(); };
+  $("bNew").onclick = e => { e.stopPropagation(); newGame(); };
+})();
 // ---------- Telegram Mini App ----------
 // Внутри Telegram: развернуть на весь экран, не закрываться свайпом вниз, тёмная шапка.
 const tg = window.Telegram && window.Telegram.WebApp;
