@@ -35,6 +35,7 @@
   #egor { animation-delay:-1.1s; }
   @keyframes breathe { 50% { scale:1 1.012; } }
   .sprite.on { opacity:1; transform:translateY(0); }
+  #stage.spartan #egor { filter:hue-rotate(75deg) saturate(1.6) brightness(1.05) drop-shadow(0 0 12px #e8c25a) drop-shadow(0 12px 18px #000a); }
   .sprite.dim { filter:brightness(.5) saturate(.6) drop-shadow(0 12px 18px #000a); }
   .sprite.speak { transform:translateY(0) rotate(var(--lean)); }
   .sprite.hop { animation:hop .28s steps(3), breathe 2.4s steps(1) infinite; }
@@ -303,6 +304,7 @@
     <p><b class="c">Глеб умеет перематывать время.</b> После концовки можно вернуться назад, и Глеб запомнит, что узнал. Это видно по синей плашке «Глеб помнит» наверху.</p>
     <p>Знания открывают новые варианты, они подсвечены синим. Хорошая концовка без перемотки не открывается.</p>
     <p>«♫ звук» справа вверху выключает музыку (или клавиша M).</p>
+    <p style="color:var(--dim);font-style:italic">Говорят, иногда лучший ход — вообще ничего не делать…</p>
     <button id="howtoOk">Понятно</button>
   </div></div>
   <div id="hint"></div>
@@ -334,7 +336,7 @@ function fitCanvas() {
 // рисует фон текущей сцены
 function paint(years) {
   const b = scene && scene.bg;
-  if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else drawBar(!!(scene && scene.drunk));
+  if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -544,6 +546,31 @@ function drawCourt() {
   // пол
   R(0, floorY, W, H - floorY, "#2a1a10");
   for (let x = 0; x < W; x += 24) R(x, floorY, 1, H, "#1f130b");
+}
+
+// ---------- Локация: кольцо в космосе (секретная концовка) ----------
+function drawRing() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  let seed = 31; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, "#02030a"); g.addColorStop(1, "#0b1530");
+  c.fillStyle = g; c.fillRect(0, 0, W, H);
+  for (let i = 0; i < W * H / 120; i++) { c.fillStyle = rnd() < .8 ? "#ffffff88" : "#9fc9ff"; c.fillRect(Math.floor(rnd() * W), Math.floor(rnd() * H), 1, 1); }
+  // газовый гигант
+  const pg = c.createRadialGradient(W * .8, H * .2, 4, W * .8, H * .2, H * .25);
+  pg.addColorStop(0, "#e8b878"); pg.addColorStop(1, "#5a3a20"); c.fillStyle = pg;
+  c.beginPath(); c.arc(W * .8, H * .2, H * .18, 0, 7); c.fill();
+  // кольцо: внешняя металлическая кромка и внутренняя поверхность с землёй и морем
+  c.save(); c.translate(W / 2, H * .62); c.rotate(-.18);
+  const rx = W * .7, ry = H * .16;
+  c.lineWidth = 7; c.strokeStyle = "#8a96a8"; c.beginPath(); c.ellipse(0, 0, rx, ry, 0, Math.PI * 1.02, Math.PI * 1.98); c.stroke();
+  c.lineWidth = 4; c.strokeStyle = "#4f8f5a"; c.beginPath(); c.ellipse(0, 3, rx - 2, ry - 2, 0, Math.PI * 1.04, Math.PI * 1.96); c.stroke();
+  c.lineWidth = 2; c.strokeStyle = "#3d7dd8"; c.beginPath(); c.ellipse(0, 5, rx - 4, ry - 4, 0, Math.PI * 1.1, Math.PI * 1.6); c.stroke();
+  c.lineWidth = 8; c.strokeStyle = "#5a6474"; c.beginPath(); c.ellipse(0, 0, rx, ry, 0, Math.PI * .02, Math.PI * .98); c.stroke();
+  c.restore();
+  // земля под ногами: скалы и трава
+  const gy = Math.round(H * .78);
+  c.fillStyle = "#1c2a1c"; c.fillRect(0, gy, W, H - gy);
+  for (let x = 0; x < W; x += 6) { c.fillStyle = rnd() < .5 ? "#2f4a2a" : "#3d5a34"; c.fillRect(x, gy - Math.floor(rnd() * 4), 6, 4); }
 }
 
 // ---------- Техно на фоне (синтезируется в браузере, без файлов) ----------
@@ -775,6 +802,36 @@ const scenes = {
     choices: () => [
       { icon: "talk", t: "Спросить про Руса", sub: "«Что у вас вообще случилось?»", go: "s0_rus" },
       { icon: "let", t: "Не лезть", sub: "«Ну и ладно.»", go: "s0_skip" }
+    ]
+  },
+  secret: {
+    place: "Powerhouse · 20:31", egor: true, music: "suspense",
+    lines: [
+      { who: null, t: "Глеб ничего не делает. Егор ничего не делает. Бас играет сам по себе." },
+      { who: "Егор", t: "Слушай… А если бы можно было вообще не выбирать?" },
+      { who: "Егор", t: "Я всю неделю думал. Не только про Halo. Про машину времени, епта." },
+      { who: null, t: "Егор достаёт из рюкзака коробку из-под Xbox. Внутри провода, паяльник и чья-то микроволновка." },
+      { who: "Егор", t: "Если её включить, можно уйти туда, где всё честно. Где есть чекпоинты." },
+      { who: "Глеб", t: "Ты пидарнулся?" },
+      { who: "Егор", t: "Возможно. Нажимаю." },
+      { fx: "shot", who: null, t: "Вспышка. Powerhouse складывается, как экран загрузки." },
+      { skip: "2552 год" }
+    ],
+    next: "secret2"
+  },
+  secret2: {
+    bg: "ring", place: "Reach · 2552 год", egor: true, spartan: true, music: "hope",
+    lines: [
+      { who: null, t: "Зелёная броня. Золотой визор. Где-то над головой поёт хор." },
+      { who: "Егор", t: "Глеб. Я Спартанец. Нобл-шесть, епта." },
+      { who: "Егор", t: "Здесь не надо писать Юле. Здесь надо просто держать оборону." },
+      { who: "Егор", t: "Передай Русу: пусть заходит. Я на легендарной." },
+      { who: "", t: "Он навсегда остаётся в Halo. Там, где у каждой ошибки есть чекпоинт." },
+      { who: "", t: "А я остаюсь в Powerhouse с двумя виски. Похоже, это и есть мой чекпоинт." }
+    ],
+    ending: "Секретная концовка · Спартанец",
+    choices: () => [
+      { icon: "again", t: "Начать главу заново", sub: "Теперь попробуй что-нибудь сделать", go: "s0", reset: true }
     ]
   },
   s0_rus: {
@@ -1529,7 +1586,13 @@ function renderMemory() {
   $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("");
 }
 
+// Секрет: если в самом начале ничего не нажимать 25 секунд, Егор уходит в Halo.
+let idleT = null;
+function clearIdle() { clearTimeout(idleT); idleT = null; }
+
 function show(id) {
+  clearIdle();
+  if (id === "s0") idleT = setTimeout(() => { if (scene === scenes.s0) show("secret"); }, 25000);
   scene = scenes[id]; idx = 0;
   saveGame(id);
   paint(scene.years || 0);
@@ -1537,6 +1600,7 @@ function show(id) {
   if (scene.siren) music.siren();
   $("stage").classList.toggle("drunk", !!scene.drunk);
   $("stage").classList.toggle("fight", !!scene.fight);
+  $("stage").classList.toggle("spartan", !!scene.spartan);
   music.mood(scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
   $("place").textContent = scene.place;
   $("gleb").classList.add("on");
@@ -1567,6 +1631,7 @@ function step() {
     $("skip").textContent = l.skip;
     $("skip").classList.add("on");
     if (l.years !== undefined) drawCell(l.years);
+    if (!l.place && scene === scenes.secret) $("place").textContent = "…";
     if (l.place) $("place").textContent = l.place;
     return;
   }
@@ -1649,6 +1714,7 @@ function showChoices() {
 }
 
 function choose(c) {
+  clearIdle();
   if (c.phone) return openGPhone(c.go);
   if (c.reset) known.clear();
   if (!c.rewind) return show(c.go);
@@ -1661,6 +1727,7 @@ function choose(c) {
 }
 
 function advance() {
+  clearIdle();
   if (typing) { clearInterval(typing); typing = null; talk(null); $("line").textContent = $("line").dataset.full; return; }
   step();
 }
