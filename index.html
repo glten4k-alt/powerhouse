@@ -72,6 +72,18 @@
   #mute { position:absolute; top:3%; right:3%; z-index:7; background:var(--box); border:1px solid #ffffff22; color:var(--text);
     border-radius:20px; padding:4px 12px; font-family:inherit; font-size:13px; cursor:pointer; }
   #mute:hover, #menuBtn:hover, #tlBtn:hover { border-color:var(--accent); }
+  #base { position:absolute; inset:0; z-index:9; background:rgba(6,10,18,.95); display:none; flex-direction:column; padding:4% 5%; overflow:auto; gap:8px; }
+  #base.on { display:flex; }
+  #base h2 { margin:0; color:#5ab0ff; font:bold 20px "Courier New", monospace; letter-spacing:.1em; }
+  #base .sub { color:var(--text); font-size:13px; }
+  #bMap { width:100%; max-width:640px; image-rendering:pixelated; border:1px solid #5ab0ff55; border-radius:6px; }
+  #bList { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px; }
+  .bItem { background:var(--box); border:1px solid #ffffff1a; border-radius:10px; padding:8px 10px; display:flex; flex-direction:column; gap:4px; }
+  .bItem b { font-size:14px; } .bItem b i { font-style:normal; color:#5ab0ff; margin-left:6px; letter-spacing:2px; }
+  .bItem small { color:var(--dim); font-size:12px; }
+  .bItem button { margin-top:auto; background:#5ab0ff22; border:1px solid #5ab0ff; color:var(--text); border-radius:8px; padding:6px; cursor:pointer; font:inherit; font-size:13px; }
+  .bItem button:disabled { opacity:.4; cursor:default; }
+  #base .close { align-self:flex-start; background:none; border:1px solid #ffffff33; color:var(--text); border-radius:8px; padding:6px 14px; cursor:pointer; font:inherit; }
   #tl { position:absolute; inset:0; z-index:9; background:rgba(6,8,18,.92); display:none; flex-direction:column; padding:5% 6%; overflow:auto; }
   #tl.on { display:flex; }
   #tl h2 { margin:0 0 4px; color:var(--cold); font:bold 22px "Courier New", monospace; letter-spacing:.1em; }
@@ -163,7 +175,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280221") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  #title { position:absolute; inset:0; background:linear-gradient(#000a,#000c 60%,#000e),#000 url("img/menu_bg.jpg?v=10280238") center 30%/cover; display:flex; flex-direction:column; align-items:center; justify-content:center;
     z-index:10; cursor:pointer; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
   #title small { color:var(--dim); letter-spacing:.3em; text-transform:uppercase; font-size:14px; }
@@ -178,6 +190,7 @@
   #saveBtns #mP { border-color:#7a9aff; background:#7a9aff22; }
   #saveBtns #mC { border-color:#f0b35e; background:#f0b35e22; }
   #saveBtns #mPe { border-color:#e07a2a; background:#e07a2a22; }
+  #saveBtns #mSe { border-color:#b56cff; background:#b56cff22; }
   #saveBtns #mS { border-color:#ff4fa8; background:#ff4fa822; }
   #saveBtns #mM { border-color:#9aa0b0; background:#9aa0b022; }
   #saveBtns #mV { border-color:#8ad0a0; background:#8ad0a022; }
@@ -412,15 +425,16 @@
 <body>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280221" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10280221" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10280238" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10280238" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280221) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10280238) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="memory"></div>
+  <div id="base"><h2>КАРТА БАЗЫ</h2><div class="sub" id="bRes"></div><canvas id="bMap" width="320" height="150"></canvas><div id="bList"></div><button class="close" id="bClose">Готово, к делам дня</button></div>
   <div id="tl"><h2>⟲ ПЕРЕМОТКА</h2><div class="sub">Нажми на момент, чтобы вернуться. Всё, что Глеб узнал, останется с ним.</div><div class="memo" id="tlMem"></div><div class="pts" id="tlPts"></div><button class="close" id="tlClose">Закрыть</button></div>
   <div id="topR"><button id="tlBtn" title="Клавиша T">⟲ время</button><button id="menuBtn">≡ меню</button><button id="mute" title="Клавиша M">♫ звук: вкл</button></div>
   <div id="ending"></div>
@@ -468,7 +482,7 @@
   </div>
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic"><p>Егору.</p><p>В память о 3 ноября 2025 года.</p></div>
-  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mS">Глава · «Сахар»</button><button id="mM">Глава · Мобилизация</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
+  <div id="title"><small>Глава 1</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p><div id="saveBtns"><button id="mCont">Продолжить</button><small id="saveInfo"></small><button id="mStory">Глава 1 · Powerhouse</button><button id="mX">Изнанка · 18+ · эксперимент</button><button id="mL">Лилит · 12 платежей · 18+</button><button id="mC">Глава 2 · Кофейня</button><button id="mP">Бонус · Цикл 47</button><button id="mPe">Глава · Петя</button><button id="mSe">Глава · Сергей</button><button id="mS">Глава · «Сахар»</button><button id="mM">Глава · Мобилизация</button><button id="mV">Глава · Витя</button><button id="mH">Halo · Бородино · выживание</button><button id="mBrawl">Режим драки</button></div></div>
 </div>
 
 <script>
@@ -486,7 +500,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -805,7 +819,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280221"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10280238"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -923,7 +937,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280221`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10280238`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1143,6 +1157,51 @@ function drawClub() {
   // лучи прожекторов
   c.fillStyle = dm ? "#ff204018" : "#ff4fa814"; c.beginPath(); c.moveTo(W * .3, 0); c.lineTo(W * .1, H * .7); c.lineTo(W * .35, H * .7); c.fill();
   c.fillStyle = dm ? "#ff602018" : "#8fc3ff14"; c.beginPath(); c.moveTo(W * .7, 0); c.lineTo(W * .65, H * .7); c.lineTo(W * .9, H * .7); c.fill();
+}
+
+// ---------- Локация: комната Сергея — свечи, кристаллы, звёздная карта, календарь 2009 ----------
+function drawSeroom() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#1a1226");
+  for (let y = 0; y < H * .7; y += 8) R(0, y, W, 1, "#20182e");
+  // звёздная карта
+  R(W * .08, H * .1, W * .34, H * .3, "#0c0c24"); for (let i = 0; i < 26; i++) R(W * .09 + (i * 37) % (W * .32), H * .11 + (i * 13) % (H * .28), 1, 1, "#e8e0ff");
+  c.strokeStyle = "#8fc3ff55"; c.beginPath(); c.moveTo(W * .12, H * .2); c.lineTo(W * .2, H * .15); c.lineTo(W * .3, H * .25); c.lineTo(W * .38, H * .18); c.stroke();
+  // календарь 2009
+  R(W * .62, H * .12, W * .14, H * .2, "#e8e0d0"); R(W * .62, H * .12, W * .14, H * .05, "#c41a2a");
+  c.fillStyle = "#3a2a2a"; c.font = "7px monospace"; c.fillText("2009", W * .64, H * .27);
+  // стол, свечи, кристаллы
+  R(0, H * .7, W, H * .3, "#2a1c20"); R(W * .2, H * .64, W * .6, H * .06, "#4a2e26");
+  const t = Date.now() / 300;
+  for (let i = 0; i < 5; i++) { const x = W * (.26 + i * .12); R(x, H * .58, 3, H * .06, "#f0e8d0"); R(x, H * .55 + Math.sin(t + i) * 1, 2, 4, "#ffb040"); c.fillStyle = "#ffb04018"; c.beginPath(); c.arc(x + 1, H * .56, 14, 0, 7); c.fill(); }
+  for (let i = 0; i < 3; i++) { const x = W * (.3 + i * .2); c.fillStyle = ["#b56cff", "#5ab0ff", "#ff8ac8"][i]; c.beginPath(); c.moveTo(x, H * .58); c.lineTo(x - 3, H * .64); c.lineTo(x + 3, H * .64); c.fill(); }
+  // пустой стул «того, кто был до тебя»
+  R(W * .82, H * .55, W * .1, 3, "#5a3a2a"); R(W * .82, H * .4, 3, H * .15, "#5a3a2a"); R(W * .82, H * .58, 2, H * .12, "#5a3a2a"); R(W * .91, H * .58, 2, H * .12, "#5a3a2a");
+}
+
+// ---------- Локация: военный аэродром / блокпост — сетка, вышка, прожекторы, БТР, ряды грузовиков ----------
+function drawMilbase() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#0a0e14"); R(0, H * .62, W, H * .38, "#1c2018");
+  for (let i = 0; i < 20; i++) R((i * 53) % W, (i * 17) % (H * .4), 1, 1, "#8a90a0");
+  // ангары на горизонте
+  for (let i = 0; i < 3; i++) { c.fillStyle = "#1a2028"; c.beginPath(); c.ellipse(W * (.2 + i * .3), H * .62, W * .1, H * .1, 0, Math.PI, 0); c.fill(); }
+  // вышка и прожектор
+  const tx = W * .78; R(tx, H * .25, 3, H * .37, "#3a3a40"); R(tx + 14, H * .25, 3, H * .37, "#3a3a40"); R(tx - 4, H * .22, 26, 6, "#4a4a50"); R(tx + 6, H * .19, 6, 4, "#f0f4ff");
+  const a = Math.sin(Date.now() / 1200) * .5;
+  c.fillStyle = "#f0f4ff1a"; c.beginPath(); c.moveTo(tx + 9, H * .2); c.lineTo(W * (.3 + a * .3), H); c.lineTo(W * (.55 + a * .3), H); c.fill();
+  // грузовики с тентами и БТР
+  for (let i = 0; i < 4; i++) { const x = W * (.05 + i * .13); R(x, H * .64, W * .1, H * .07, "#3a4a2a"); R(x + W * .07, H * .66, W * .03, H * .05, "#2a3a1e"); R(x + 3, H * .71, 5, 4, "#101010"); R(x + W * .08, H * .71, 5, 4, "#101010"); }
+  R(W * .58, H * .7, W * .16, H * .06, "#4a5a3a"); R(W * .62, H * .66, W * .06, H * .04, "#3a4a2a"); R(W * .68, H * .67, W * .07, 2, "#2a2a2a");
+  for (let x = W * .58; x < W * .74; x += 7) R(x, H * .76, 5, 4, "#101010");
+  // сетка с колючкой
+  for (let x = 0; x < W; x += 6) R(x, H * .8, 1, H * .14, "#6a6a70");
+  R(0, H * .8, W, 1, "#8a8a90"); R(0, H * .87, W, 1, "#6a6a70");
+  for (let x = 0; x < W; x += 5) R(x, H * .79 - (x % 10 ? 1 : 0), 2, 1, "#9a9aa0");
+  // мигалка
+  if (Date.now() % 800 < 400) R(W * .66, H * .65, 3, 2, "#ff3030");
 }
 
 // ---------- Локация: гараж Пети, ночь ----------
@@ -2490,6 +2549,116 @@ const scenes = {
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
+  // ================= Глава · Сергей (мистический разговор) =================
+  se_1: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic",
+    lines: [
+      { skip: "Сергей" },
+      { npcShow: "npc_sergey", who: null, t: "Комната пахнет ладаном и гречкой. На стенах — карта звёздного неба и календарь за 2009 год." },
+      { who: "Сергей", t: "Садись. Нет, не туда. Туда сидит тот, кто был до тебя." },
+      { who: "Сергей", t: "Скажи мне. Зачем ты со мной общаешься?" }
+    ],
+    choices: () => [
+      { icon: "talk", t: "«Мне Петя посоветовал»", sub: "Честно", go: "se_2" },
+      { icon: "spark", t: "«Я не знаю»", sub: "Ещё честнее", go: "se_2b" },
+      { icon: "let", t: "«А вы зачем со мной общаетесь?»", sub: "Ответить вопросом", go: "se_2c" }
+    ]
+  },
+  se_2: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", next: "se_3",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Петя. Петя приводит ко мне всех, кого боится потерять. Значит, ты ему дорог." },
+      { who: "Сергей", t: "Но Петя — это причина. А я спросил — зачем." }
+    ]
+  },
+  se_2b: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", learn: "se_honest", next: "se_3",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Вот. Вот это правильный ответ. Его почти никто не даёт." },
+      { who: "Сергей", t: "Люди приходят ко мне с ответами и уходят с вопросами. Ты пришёл уже с вопросом. Экономишь время." }
+    ]
+  },
+  se_2c: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", next: "se_3",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Хитрый. Я с тобой общаюсь, потому что ты сейчас — единственный, кто сидит на этом стуле." },
+      { who: "Сергей", t: "Если бы на нём сидел холодильник, я бы спрашивал холодильник. Но он не отвечает. Уже лет пять." }
+    ]
+  },
+  se_3: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Следующий вопрос. Какого цвета твоя тишина?" },
+      { who: "", t: "Странный вопрос. Но я почему-то начинаю об этом думать всерьёз." }
+    ],
+    choices: () => [
+      { icon: "spark", t: "«Серая, как подъезд»", sub: "", go: "se_4" },
+      { icon: "spark", t: "«Тёплая. Без цвета»", sub: "", go: "se_4h" },
+      { icon: "let", t: "«У меня нет тишины»", sub: "", go: "se_4" }
+    ]
+  },
+  se_4h: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", learn: "se_warm", next: "se_5",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Тёплая. Значит, тебе есть, к кому возвращаться. Береги это. Это дороже двух квартир Пети." }
+    ]
+  },
+  se_4: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", next: "se_5",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Понятно. Ты в тишине включаешь что-нибудь, лишь бы не слышать себя. Все так делают. Я тоже. Радио «Маяк», с 1998 года." }
+    ]
+  },
+  se_5: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "eerie",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "Если бы ты был мебелью — кто бы на тебе сидел?" },
+      { who: null, t: "Свеча на столе гаснет сама. Потом снова загорается. Сергей даже не смотрит на неё." },
+      { who: "Сергей", t: "Не торопись. Мебель не торопится." }
+    ],
+    choices: () => [
+      { icon: "talk", t: "«Друзья»", sub: "Егор, Петя, Витя", go: "se_6h" },
+      { icon: "let", t: "«Никто. Я табуретка в углу»", sub: "", go: "se_6" },
+      { icon: "spark", t: "«Вы»", sub: "", go: "se_6x" }
+    ]
+  },
+  se_6h: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic", learn: "se_friends", next: "se_end",
+    lines: [{ npcShow: "npc_sergey", who: "Сергей", t: "Диван, значит. Большой, продавленный, на нём спят после вечеринок. Хорошая судьба для мебели." }]
+  },
+  se_6: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "sad", next: "se_end",
+    lines: [{ npcShow: "npc_sergey", who: "Сергей", t: "Табуретка в углу. На неё встают, когда надо достать что-то сверху. Ты помогаешь всем дотянуться. А сам стоишь в углу." }]
+  },
+  se_6x: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "eerie", next: "se_end",
+    lines: [
+      { npcShow: "npc_sergey", who: "Сергей", t: "…" },
+      { fx: "glitch", who: "Сергей", t: "Интересно. Ты первый, кто это заметил." }
+    ]
+  },
+  se_end: {
+    bg: "seroom", place: "Сергей", noSprites: true, music: "mystic",
+    linesFn: () => {
+      const score = ["se_honest", "se_warm", "se_friends"].filter(k => known.has(k)).length;
+      return score >= 2 ? [
+        { npcShow: "npc_sergey", who: "Сергей", t: "Последний вопрос. Нет, я передумал. Вопросов больше нет." },
+        { who: "Сергей", t: "Ты общаешься со мной, потому что тебе нужно было, чтобы кто-то спросил, как ты. По-настоящему. Я спросил." },
+        { who: "Сергей", t: "Иди. И передай Пете, чтобы вернул мне поющую чашу." },
+        { who: "", t: "Я выхожу на улицу. Тишина — тёплая. Без цвета." }
+      ] : [
+        { npcShow: "npc_sergey", who: "Сергей", t: "Последний вопрос. Ты уверен, что вошёл в эту комнату один?" },
+        { fx: "glitch", who: null, t: "Я оборачиваюсь. На стуле, где «сидит тот, кто был до меня», вмятина. Тёплая." },
+        { who: "Сергей", t: "Приходи ещё. Ты пока отвечаешь, а не слышишь. Это лечится." }
+      ];
+    },
+    endingFn: () => ["se_honest", "se_warm", "se_friends"].filter(k => known.has(k)).length >= 2 ? "Сергей · концовка «Тёплая тишина»" : "Сергей · концовка «Кто-то был до тебя»",
+    ending: "Сергей",
+    choices: () => [
+      { icon: "rewind", t: "Ещё раз", sub: "Сесть не на тот стул", go: "se_1", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
   // ================= Глава · «Сахар» (стрип-клуб, которым владеет Глеб) =================
   su_ride: {
     bg: "drive", place: "«Сахар» · такси · 23:30", egor: true, music: "club",
@@ -2536,7 +2705,11 @@ const scenes = {
   su_hall: {
     bg: "club", demon: true, place: "«Сахар» · зал · 00:30", egor: true, music: "club",
     lines: [
-      { who: null, t: "Танцовщицы в блёстках на шестах, бас бьёт в грудь, всё как надо. Только что-то не так." },
+      { who: null, t: "Танцовщицы в блёстках на шестах, бас бьёт в грудь, всё как надо." },
+      { npcShow: "npc_dancer1", who: "Мила", t: "Босс! Вы с друзьями? Ой, а кто из них Петя-гаражный-король? Он нам в отзывах пять звёзд поставил." },
+      { npcShow: "npc_dancer2", who: "Ника", t: "Глеб, свет опять мигает. И у меня в зеркале гримёрки кто-то стоит за спиной. Без отражения." },
+      { npcShow: "npc_dancer3", who: "Ева", t: "А мне нравится. Чаевые оставляют огнём. Тёплые." },
+      { who: "", t: "Что-то не так. Очень не так." },
       { fx: "glitch", who: null, t: "Неон на секунду становится красным. У тени танцовщицы на стене — рога. Через миг обычная тень." },
       { who: null, t: "В зеркальном потолке отражается зал. Только в отражении вместо зала — огонь, и все в нём улыбаются." },
       { who: "Петя", t: "Пацаны, я сегодня чистый, клянусь. Это не трава. Вы тоже это видите?" },
@@ -2575,7 +2748,29 @@ const scenes = {
     ],
     choices: () => [
       { icon: "talk", t: "«Она лучший управляющий в Москве»", sub: "Чистая правда", go: "su_fight" },
-      { icon: "let", t: "«Она взрослая, это её решение»", sub: "Тоже правда", go: "su_fight" }
+      { icon: "let", t: "«Она взрослая, это её решение»", sub: "Тоже правда", go: "su_fight" },
+      { icon: "spark", t: "Подсыпать Вите яд", sub: "Флакон эзотерика в кармане. Витя мешает тебе и Регине.", cls: "magic", go: "su_poison" }
+    ]
+  },
+  su_poison: {
+    bg: "club", demon: true, place: "«Сахар» · бар · 00:55", egor: true, music: "mystic",
+    lines: [
+      { who: null, t: "Флакон от Сергея. «На крайний случай. Не открывать». Я открываю. Три капли Вите в виски." },
+      { who: "Витя", t: "Ты мне ещё и наливаешь?! Ладно. За сестру." },
+      { fx: "glitch", who: null, t: "Витя пьёт. Зеленеет. Медленно садится на пол и смотрит в потолок, как будто там кино." },
+      { who: "Регина", t: "Вить?! Глеб, что ты сделал?!" },
+      { fx: "magic", who: null, t: "Музыка в зале глохнет. Все замирают. Из зеркального потолка спускается знакомое лицо в круглых очках." },
+      { npcShow: "npc_sergey", who: "Сергей", t: "Зачем ты это сделал?" },
+      { who: "Глеб", t: "Я хочу быть с его сестрой. А он против." },
+      { who: "Сергей", t: "Я же тебя учил этому. Не надо так делать." },
+      { who: "Сергей", t: "Управляй своей силой. И с умом. Сила без ума — это просто яд в чужом стакане." },
+      { who: null, t: "Он щёлкает пальцами. Витя кашляет, розовеет и садится. Ничего не помнит. Регина помнит всё." },
+      { who: "Регина", t: "Если ты хотел позвать меня на свидание, можно было просто спросить. Без яда." }
+    ],
+    ending: "«Сахар» · концовка «Яд»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать", sub: "Вернуться к бару и решить с умом", go: "su_regina", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
   su_fight: {
@@ -2668,7 +2863,7 @@ const scenes = {
       { who: null, t: "Витя остался. Последнее, что я вижу, — как он поднимает руки и идёт к солдатам, чтобы задержать их своим «я юрист»." }
     ],
     choices: () => [
-      { icon: "go", t: "В аэропорт", sub: "Петин пропуск, ночь, пустой ангар", go: "m_airport" },
+      { icon: "go", t: "На аэродром", sub: "Петин пропуск, ночь, пустой ангар", go: "m_checkpoint" },
       { icon: "metro", t: "На машине к границе", sub: "Как все", go: "m_border" }
     ]
   },
@@ -2685,10 +2880,59 @@ const scenes = {
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
+  m_checkpoint: {
+    bg: "milbase", place: "Мобилизация · трасса · блокпост · 23:40", egor: true, music: "military",
+    lines: [
+      { who: null, t: "На выезде из города — блокпост. Бетонные блоки, БТР поперёк дороги, солдаты проверяют каждую машину." },
+      { who: "Солдат", t: "Колонна, стоп! Мужчины от восемнадцати — из машины, документы!" },
+      { who: "Петя", t: "Глеб. У меня в багажнике канистра и прожектор. У меня всегда всё есть в багажнике." }
+    ],
+    choices: () => [
+      { icon: "fight", t: "Прорваться", sub: "Ослепить их и газ в пол", go: "m_ram" },
+      { icon: "go", t: "В объезд через поле", sub: "Без фар, по грязи", go: "m_field" }
+    ]
+  },
+  m_ram: {
+    bg: "milbase", place: "Мобилизация · блокпост", egor: true, music: "tense",
+    lines: [
+      { who: null, t: "Петя врубает прожектор прямо им в глаза. Я гашу их фонари, Егор держит руль." },
+      { battle: "shoot", foe: "Блокпост", tip: "Гаси фонари и мигалки — тапай по ним! Проскочим в темноте.", win: "m_base", lose: "m_caught" }
+    ]
+  },
+  m_field: {
+    bg: "milbase", place: "Мобилизация · поле у трассы", egor: true, music: "military", next: "m_base",
+    lines: [
+      { fx: "timer", who: null, t: "Без фар, по колее. Машина ревёт, грязь до окон. Сзади светит прожектор блокпоста — шарит по полю." },
+      { who: "Егор", t: "Он идёт на нас. Он идёт прямо на нас…" },
+      { who: null, t: "Луч проходит в метре от бампера. Солдат на вышке что-то кричит в рацию. Мы уже за лесополосой." }
+    ]
+  },
+  m_base: {
+    bg: "milbase", place: "Мобилизация · военный аэродром · 01:30", egor: true, music: "military",
+    lines: [
+      { who: "Петя", t: "Гражданский аэропорт закрыли. Летим с военного. Пропуск у меня, но вышки — не мои." },
+      { who: null, t: "Сетка с колючкой, вышки, прожекторы. Ряды грузовиков, палатки, солдаты строятся под фонарями. Кто-то через громкоговоритель зачитывает фамилии." },
+      { who: "Егор", t: "Там читают списки. Глеб… там, наверное, и мы." },
+      { who: "", t: "До ангара двести метров открытого поля. Прожекторы надо погасить." },
+      { battle: "shoot", foe: "Прожекторы базы", tip: "Гаси прожекторы и мигалки — тапай по ним! Иначе нас увидят с вышек.", win: "m_airport", lose: "m_caught" }
+    ]
+  },
+  m_caught: {
+    bg: "milbase", place: "Мобилизация · гауптвахта", egor: true, music: "sad",
+    lines: [
+      { fx: "shot", who: null, t: "Сирена. Нас кладут лицом в бетон. Повестки вручают прямо на земле." },
+      { who: "Петя", t: "Четыре гаража. И ни одного, чтобы спрятаться." }
+    ],
+    ending: "Мобилизация · концовка «Гауптвахта»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать", sub: "Попробовать ещё раз", go: "m_checkpoint", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
   m_airport: {
     bg: "hangar", place: "Мобилизация · ангар · 03:10", egor: true, music: "military",
     lines: [
-      { who: null, t: "Ночной ангар. Пустой грузовой самолёт, без экипажа и пассажиров. Петя прикладывает пропуск — дверь открывается." },
+      { who: null, t: "Мы в ангаре. Пустой грузовой самолёт, без экипажа и пассажиров. Петя прикладывает пропуск — рампа опускается." },
       { who: "Петя", t: "Я триста часов налетал в симуляторе. Это почти как настоящий. Наверное." },
       { who: "Егор", t: "Я в Halo летал на Фальконе. Я буду штурманом." },
       { who: "Глеб", t: "Господи, помоги." },
@@ -3070,7 +3314,7 @@ const scenes = {
       { who: "Петя", t: "Епта. Это же Бородино. Вон памятник на батарее Раевского." },
       { who: null, t: "Над полем висит корабль пришельцев. Они ищут что-то под землёй. Под тем самым полем." },
       { who: "Егор", t: "Если они его заберут, поле исчезнет. И всё, что тут было в 1812-м, тоже." },
-      { who: "Глеб", t: "Значит, держим поле. Пять дней, пока не подойдёт флот. Где ставим аванпост?" }
+      { who: "Глеб", t: "Значит, держим поле. Шесть дней, пока не подойдёт флот. Строим базу. Где ставим аванпост?" }
     ],
     choices: () => [
       { icon: "go", t: "У реки Оки", sub: "Вода и рыба: припасов больше, вал слабее", go: "h_camp_oka" },
@@ -3078,108 +3322,100 @@ const scenes = {
     ]
   },
   h_camp_oka: {
-    halo: true, bg: "oka", place: "Аванпост · берег Оки", egor: true, spartanAll: true, music: "scifi_calm", svSet: { food: 5, ammo: 3, wall: 1, people: 0, day: 0, camp: "oka" }, next: "h_day",
+    halo: true, bg: "oka", place: "Аванпост · берег Оки", egor: true, spartanAll: true, music: "scifi_calm", next: "h_day",
+    svSet: { food: 6, ammo: 4, mat: 3, people: 0, day: 0, bonus: 0, camp: "oka", b: { wall: 0, turret: 0, med: 0, radar: 0, kitchen: 1 } },
     lines: [
-      { who: null, t: "Ставим палатки у воды. Петя смотрит на лес и молчит." },
-      { who: "Петя", t: "Знакомое место. Не спрашивайте." }
+      { who: null, t: "Ставим палатки у воды. Рыба есть, полевая кухня уже дымит. Но вала нет — поле открыто со всех сторон." },
+      { who: "Петя", t: "Знакомое место. Не спрашивайте." },
+      { who: "Витя", t: "Открываю карту базы. Строим днём, отбиваемся ночью. Каждое здание — плюс к защите." }
     ]
   },
   h_camp_hill: {
-    halo: true, bg: "field", place: "Аванпост · батарея Раевского", egor: true, spartanAll: true, music: "scifi", svSet: { food: 3, ammo: 3, wall: 3, people: 0, day: 0, camp: "hill" }, next: "h_day",
+    halo: true, bg: "field", place: "Аванпост · батарея Раевского", egor: true, spartanAll: true, music: "scifi", next: "h_day",
+    svSet: { food: 4, ammo: 4, mat: 3, people: 0, day: 0, bonus: 0, camp: "hill", b: { wall: 1, turret: 0, med: 0, radar: 0, kitchen: 0 } },
     lines: [
-      { who: null, t: "Окапываемся на высоте. Земля тут помнит пушки." },
-      { who: "Егор", t: "Как в Reach. Все знают, что планета падёт, и всё равно держат холм." }
+      { who: null, t: "Окапываемся на высоте. Старый вал 1812 года уже есть, высота сама даёт защиту. Еды мало." },
+      { who: "Егор", t: "Как в Reach. Все знают, что планета падёт, и всё равно держат холм." },
+      { who: "Витя", t: "Открываю карту базы. Строим днём, отбиваемся ночью. Каждое здание — плюс к защите." }
     ]
   },
   h_day: {
     halo: true, bg: "field", place: "Аванпост · утро", egor: true, spartanAll: true, music: "scifi", svDay: true,
     linesFn: () => [
-      { skip: "День " + sv.day + " из 5" },
-      { who: null, t: sv.food <= 0 ? "Еды нет. Люди смотрят на нас, а мы делаем вид, что не голодные." : "Утро. Над лесом дым. Корабль опустился ниже, чем вчера." },
-      ...(sv.people ? [{ who: "Витя", t: `У нас ${sv.people} человек гражданских. Я завёл на каждого карточку. Привычка.` }] : []),
-      { who: "Глеб", t: "Совет у костра. Что делаем сегодня?" }
+      { skip: "День " + sv.day + " из " + H_DAYS },
+      ...(sv.starve ? [{ who: null, t: "Еды не хватило. Трое гражданских ушли ночью в лес. Мы их не останавливали." }] : [{ who: null, t: "Утро. Над лесом дым. Корабль опустился ниже, чем вчера." }]),
+      { who: "Витя", t: sv.b.radar ? `Радар видит волну: сила около ${hWave(sv.day)}. Наша защита сейчас ${hDef()}.` : `Наша защита сейчас ${hDef()}. Сколько их придёт ночью — без радара не узнать.` },
+      ...(sv.b.turret && sv.ammo < 2 ? [{ who: "Петя", t: "Патронов почти нет. Турели без них — просто железо. Надо за патронами." }] : []),
+      { who: "Глеб", t: "Стройка — на карте базы. А сами куда идём сегодня?" }
     ],
     choices: () => [
-      { icon: "go", t: "Вылазка в Можайск", sub: "Склады с едой. Еда +3, патроны +1", go: "h_supply" },
+      { icon: "stop", t: "Карта базы", sub: "Строить и улучшать. День не тратится", base: true, go: "" },
+      { icon: "go", t: "Склады Можайска", sub: "Еда +3, материалы +2", go: "h_supply" },
+      { icon: "grab", t: "Руины Семёновского", sub: "Материалы +5", go: "h_ruins" },
       sv.camp === "oka"
-        ? { icon: "metro", t: "Лодка по Оке", sub: "Петя знает фарватер. Патроны +3", go: "h_boat" }
-        : { icon: "metro", t: "Колонна в Гжатск", sub: "Далеко и опасно. Патроны +3, еда −1", go: "h_convoy" },
-      { icon: "help", t: "Спасти беженцев из Семёновского", sub: "Люди +12, еда −1", go: "h_refugees" },
-      { icon: "stop", t: "Укрепить флеши", sub: "Вал +2", go: "h_wall" }
+        ? { icon: "metro", t: "Лодка по Оке", sub: "Петя знает фарватер. Патроны +4", go: "h_boat" }
+        : { icon: "metro", t: "Колонна в Гжатск", sub: "Патроны +4, еда −1", go: "h_convoy" },
+      { icon: "help", t: "Спасти беженцев", sub: "Люди +6: защита и материалы каждое утро. Еда −1", go: "h_refugees" }
     ]
   },
   h_supply: {
-    halo: true, bg: "street", place: "Можайск · руины", egor: true, spartanAll: true, music: "scifi", sv: { food: 3, ammo: 1 }, nextFn: () => "h_event",
+    halo: true, bg: "street", place: "Можайск · руины", egor: true, spartanAll: true, music: "scifi", sv: { food: 3, mat: 2 }, next: "h_event",
     lines: [
       { who: null, t: "Можайск пустой. Витрины целые, людей нет. Как будто все вышли на минутку." },
-      { who: "Егор", t: "Тушёнка. Вода. И почему-то ящик виски. Беру, для морали." },
-      { who: "Витя", t: "Ничего не трогаем без описи. Ладно, трогаем. Быстро." }
+      { who: "Егор", t: "Тушёнка. Вода. Листы железа для вала. И почему-то ящик виски. Беру, для морали." }
+    ]
+  },
+  h_ruins: {
+    halo: true, bg: "field", place: "Семёновское · руины", egor: true, spartanAll: true, music: "scifi", sv: { mat: 5 }, next: "h_event",
+    lines: [
+      { who: null, t: "Разбираем сгоревший ангар. Балки, броневые листы, кабель." },
+      { who: "Витя", t: "Юридически это мародёрство. Фактически — стройматериалы. Запишу как «пожертвование»." }
     ]
   },
   h_boat: {
-    halo: true, bg: "oka", place: "Ока · лодка", egor: true, spartanAll: true, music: "reggae", sv: { ammo: 3 }, nextFn: () => "h_event",
+    halo: true, bg: "oka", place: "Ока · лодка", egor: true, spartanAll: true, music: "reggae", sv: { ammo: 4 }, next: "h_event",
     lines: [
-      { who: null, t: "Петя ведёт лодку вдоль берега, не глядя на карту." },
-      { who: "Петя", t: "Не смотрите на тот берег. Там иногда кто-то кричит. Это не наши." },
+      { who: null, t: "Петя ведёт лодку вдоль берега, не глядя на карту. Из трофейной рации играет регги." },
+      { who: "Петя", t: "Гаражный король и речной король — одно и то же, просто воды больше." },
       { who: null, t: "Ящики с патронами в затопленном доке. Грузим молча." }
     ]
   },
   h_convoy: {
-    halo: true, bg: "drive", place: "Трасса на Гжатск", egor: true, spartanAll: true, music: "scifi_war", sv: { ammo: 3, food: -1 }, nextFn: () => "h_event",
+    halo: true, bg: "drive", place: "Трасса на Гжатск", egor: true, spartanAll: true, music: "scifi_war", sv: { ammo: 4, food: -1 }, next: "h_event",
     lines: [
-      { who: null, t: "Колонна из двух машин и одного Пети, который поёт в рацию." },
       { fx: "shot", who: null, t: "Засада у моста. Отстреливаемся, не останавливаясь." },
       { who: "Витя", t: "Груз цел. Мои нервы — нет." }
     ]
   },
   h_refugees: {
-    halo: true, bg: "field", place: "Семёновское", egor: true, spartanAll: true, music: "scifi_calm", sv: { people: 12, food: -1 }, nextFn: () => "h_event",
+    halo: true, bg: "field", place: "Семёновское · подвал церкви", egor: true, spartanAll: true, music: "scifi_calm", sv: { people: 6, food: -1, mat: 1 }, next: "h_event",
     lines: [
-      { who: null, t: "В подвале старой церкви двенадцать человек. Дети, старик с картой 1812 года." },
+      { who: null, t: "В подвале шесть человек. Дети, старик с картой 1812 года." },
       { who: "Старик", t: "Вы откуда, сынки? Броня новая, а лица — как у наших студентов." },
-      { who: "Егор", t: "Мы из Чебоксар. Ну, почти." },
-      { who: null, t: "Ведём их на аванпост. Еды теперь меньше. Зато есть ради кого держать поле." }
-    ]
-  },
-  h_wall: {
-    halo: true, bg: "field", place: "Багратионовы флеши", egor: true, spartanAll: true, music: "scifi", sv: { wall: 2 }, nextFn: () => "h_event",
-    lines: [
-      { who: null, t: "Копаем там же, где копали в 1812-м. Земля мягкая, будто ждала." },
-      { who: "Петя", t: "Двести сорок лет прошло, а флеши всё те же. Только пушки у нас лучше." },
-      { who: "", t: "Я нахожу в земле старую пуговицу с орлом. Кладу в карман брони." }
+      { who: "", t: "Ещё шесть ртов. Зато шесть пар рук на валу." }
     ]
   },
   h_event: {
-    halo: true, bg: "field", place: "Аванпост · вечер", egor: true, spartanAll: true, music: "scifi_calm", nextFn: () => hAfterDay(),
+    halo: true, bg: "field", place: "Аванпост · вечер", egor: true, spartanAll: true, music: "scifi_calm", next: "h_night",
     linesFn: () => H_EVENTS[Math.max(0, sv.day - 1) % H_EVENTS.length]()
   },
   h_night: {
-    halo: true, bg: "field", place: "Аванпост · ночь", egor: true, spartanAll: true, music: "scifi_war",
+    halo: true, bg: "war", place: "Аванпост · ночь", egor: true, spartanAll: true, music: "scifi_war",
     linesFn: () => [
       { skip: "Ночь " + sv.day },
-      { who: null, t: "Корабль выпускает десант. Фиолетовые огни идут цепью через поле." },
-      { who: "Витя", t: sv.ammo >= 3 ? "Патронов хватит. Держим!" : "Патронов мало. Каждый выстрел — по делу!" },
-      { who: "Егор", t: "Я на фланге. Если что — не геройствуй, Глеб." },
-      { battle: "shoot", foe: "Десант пришельцев", tlabel: "пришелец", tlabel2: "элит", tip: "Стреляй по пришельцам — тапай по ним! Не пусти их к аванпосту.", win: "h_night_win", lose: "h_night_lose" }
+      { who: null, t: "Корабль выпускает десант. Фиолетовые огни идут цепью через поле прямо на базу." },
+      { who: "Витя", t: `Защита ${hDef()}. ${sv.b.radar ? "Волна — " + hWave(sv.day) + "." : "Волну не видно."} Каждого, кого ты снимешь сам, — плюс к обороне!` },
+      { battle: "shoot", foe: "Десант", tlabel: "пришелец", tlabel2: "элит", tip: "Стреляй по пришельцам! Победа в перестрелке даёт +4 к защите базы этой ночью.", win: "h_night_win", lose: "h_night_res" }
     ]
   },
-  h_night_win: {
-    halo: true, bg: "field", place: "Аванпост · рассвет", egor: true, spartanAll: true, music: "scifi_calm", sv: { ammo: -1 }, next: "h_day",
-    lines: [
-      { who: null, t: "Отбились. Поле дымится, но наше." },
-      { who: "Петя", t: "Ещё одна ночь, епта. Записываю в резюме." }
-    ]
-  },
-  h_night_lose: {
-    halo: true, bg: "field", place: "Аванпост · рассвет", egor: true, spartanAll: true, music: "scifi_calm", sv: { ammo: -1, wall: -1 }, nextFn: () => { if (sv.people) sv.people = Math.max(0, sv.people - 4); return "h_day"; },
-    lines: [
-      { who: null, t: "Они прорвались к валу. Отошли только под утро." },
-      { who: "Витя", t: "Вал пробит. И… не все гражданские успели в подвал." },
-      { who: "", t: "Можно перемотать. Но тогда я опять выберу то же самое. Нужно думать лучше, а не быстрее." }
-    ]
+  h_night_win: { halo: true, bg: "war", place: "Аванпост · ночь", spartanAll: true, music: "scifi_war", sv: { bonus: 4 }, next: "h_night_res", lines: [{ who: null, t: "Передовую цепь сняли сами. Остальное — на вал и турели." }] },
+  h_night_res: {
+    halo: true, bg: "field", place: "Аванпост · рассвет", egor: true, spartanAll: true, music: "scifi_calm",
+    linesFn: () => hNight(),
+    nextFn: () => sv.day >= H_DAYS ? "h_cut" : "h_day"
   },
   h_cut: {
-    halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · день 5 · рассвет", spartanAll: true, noSprites: true, music: "scifi_war", next: "h_final",
+    halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · рассвет", spartanAll: true, noSprites: true, music: "scifi_war", next: "h_final",
     lines: [
       { skip: "Последний бой" },
       { who: null, t: "Рассвет горит, как в 1812-м. Корабль ложится брюхом на поле. Из всех щелей лезут пришельцы." },
@@ -3188,22 +3424,37 @@ const scenes = {
     ]
   },
   h_final: {
-    halo: true, bg: "war", place: "Бородинское поле · день 5", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
+    halo: true, bg: "war", place: "Бородинское поле · армада", egor: true, spartanAll: true, noSprites: true, music: "scifi_war",
     linesFn: () => [
-      { skip: "День 5" },
+      { skip: "Армада" },
       { who: null, t: "Корабль садится прямо на поле. Из него идут все, кто остался." },
-      { who: "Витя", t: `Итог: вал ${sv.wall}, патроны ${sv.ammo}, гражданских ${sv.people}. Юридически мы обречены. Фактически — посмотрим.` },
+      { who: "Витя", t: `Итог: защита ${hDef()} против армады ${H_ARMADA}. Вал ${sv.b.wall}, турели ${sv.b.turret}, патронов ${sv.ammo}, людей ${sv.people}.` },
       { who: "Петя", t: "Пацаны, если что — было охуенно." },
-      { who: "Егор", t: "Как в Reach. Только в этот раз мы спасём планету." },
-      { who: "Глеб", t: "Не в этот раз. Прямо сейчас. Огонь!" },
-      { battle: "shoot", foe: "Армада", tlabel: "пришелец", tlabel2: "элит", tip: "Последний бой! Тапай по пришельцам. Каждый — за поле.", win: hScore() >= 10 ? "h_end_full" : "h_end_cost", lose: "h_end_cost" }
+      { who: "Глеб", t: "Огонь!" },
+      { battle: "shoot", foe: "Армада", tlabel: "пришелец", tlabel2: "элит", tip: "Последний бой! Победа в перестрелке даёт +4 к защите.", win: "h_final_win", lose: "h_final_res" }
     ]
+  },
+  h_final_win: { halo: true, bg: "war", place: "Бородинское поле · армада", spartanAll: true, noSprites: true, music: "scifi_war", sv: { bonus: 4 }, next: "h_final_res", lines: [{ who: null, t: "Мы сами выбиваем первую волну армады. Остальное решит то, что мы построили." }] },
+  h_final_res: {
+    halo: true, bg: "war", place: "Бородинское поле", spartanAll: true, noSprites: true, music: "scifi_war",
+    lines: [{ fx: "shot", who: null, t: "Вал. Турели. Люди. Всё, что мы строили шесть дней, работает сейчас." }],
+    nextFn: () => hFinalEnd()
+  },
+  h_end_fort: {
+    halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · закат", spartanAll: true, noSprites: true, music: "scifi_war",
+    lines: [
+      { who: null, t: "Армада разбивается о нашу базу, как волна о бетон. Турели поют. Вал не дрогнул ни разу." },
+      { who: null, t: "Егор с пулемётом, Петя в маскхалате со снайперкой, Витя в шляпе с пистолетом. И все, кого мы спасли, — за нашими спинами." },
+      { who: "Старик", t: "Вот это крепость, сынки. Багратион бы плакал." },
+      { who: "", t: "Флот приходит и видит: им тут делать нечего. Мы сами." }
+    ],
+    ending: "Бородино · концовка «Крепость Бородино»",
+    choices: () => hEndChoices()
   },
   h_end_full: {
     halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · закат", spartanAll: true, noSprites: true, music: "scifi_war",
     lines: [
-      { who: null, t: "Мы деремся все вместе. Егор с пулемётом, Петя в маскхалате со снайперкой, Витя с пистолетом и в шляпе." },
-      { who: null, t: "Корабль горит и уходит за облака. Пришельцы бегут через Колочу." },
+      { who: null, t: "Мы деремся все вместе. Корабль горит и уходит за облака. Пришельцы бегут через Колочу." },
       { who: "Старик", t: "Вот так и тогда было. Говорили — не удержим. Удержали." },
       { who: "", t: "Великое поле стоит. И мы на нём стоим." }
     ],
@@ -3214,9 +3465,8 @@ const scenes = {
     halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле · закат", spartanAll: true, noSprites: true, music: "scifi_calm",
     lines: [
       { who: null, t: "Мы деремся до последнего патрона. Вал горит. Нас прижали к памятнику." },
-      { who: null, t: "Флот приходит в последний момент. Корабль уходит. Поле наше. Но дорого." },
-      { who: "Егор", t: "Мы удержали. Это главное. Остальное перемотаешь как-нибудь." },
-      { who: "", t: "Я мог подготовиться лучше. В следующий раз — больше вала и патронов." }
+      { who: null, t: "Флот приходит в последний момент. Поле наше. Но база — в руинах." },
+      { who: "", t: "Можно было строить больше. Турели, вал, радар — в следующий раз всё будет иначе." }
     ],
     ending: "Бородино · концовка «Дорогой ценой»",
     choices: () => hEndChoices()
@@ -3224,10 +3474,11 @@ const scenes = {
   h_end_lose: {
     halo: true, bg: "photo", photo: "borodino_battle", place: "Бородинское поле", spartanAll: true, noSprites: true, music: "scifi_calm",
     lines: [
-      { who: null, t: "Нас окружили. Последнее, что я вижу, — как Егор встаёт перед всеми нами. Как всегда." },
-      { fx: "rewind", who: "", t: "Нет. Не так. Я знаю, что делать." }
+      { who: null, t: "Базу прорвали с трёх сторон. Мы отходим к лесу, уводим людей. Поле остаётся им." },
+      { who: "Егор", t: "Как в Reach. Мы проиграли планету. Но людей вытащили." },
+      { fx: "rewind", who: "", t: "Нет. Не так. Я знаю, что строить." }
     ],
-    ending: "Бородино · поле потеряно",
+    ending: "Бородино · концовка «Последний редут»",
     choices: () => hEndChoices()
   },
   // ================= Превью главы 2: «Сохранение» (сюжет Глеба) =================
@@ -4381,13 +4632,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10280221`, talk: `img/${n}_talk.png?v=10280221`, blink: `img/${n}_blink.png?v=10280221` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10280238`, talk: `img/${n}_talk.png?v=10280238`, blink: `img/${n}_blink.png?v=10280238` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280221" : `img/${n}_spartan.png?v=10280221`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10280238" : `img/${n}_spartan.png?v=10280238`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -4414,9 +4665,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Витя": "npc_viktor", "Лилит": "npc_lilith"
+  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Витя": "npc_viktor", "Лилит": "npc_lilith"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280221`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = `img/${n}.png?v=10280238`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -4425,7 +4676,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = `img/${n}.png?v=10280221`; el.alt = who;
+  el.src = `img/${n}.png?v=10280238`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed");
   if (cls) el.classList.add(cls);
@@ -4492,7 +4743,9 @@ const H_EVENTS = [
          { who: "Старик", t: "Вот тут Багратион стоял. Вот тут вы. Ничего не меняется, сынки. Поле само выбирает, кому его держать." }],
   () => [{ who: "Витя", t: "Я составил договор с пришельцами. Пункт первый: они уходят. Пункт второй: см. пункт первый." },
          { who: "Глеб", t: "И что они?" }, { who: "Витя", t: "Не подписали. Неграмотные." }],
-  () => [{ who: null, t: "Последний вечер. Корабль висит прямо над памятником. Завтра всё решится." },
+  () => [{ who: null, t: "Ночью кто-то из беженцев поёт старую песню про Бородино. Петя подыгрывает на ведре." },
+         { who: "Егор", t: "Я в первый раз за долгое время не думаю о том, что будет. Только о том, что есть." }],
+  () => [{ who: null, t: "Последний вечер. Корабль висит прямо над памятником. Завтра армада." },
          { who: "Петя", t: "Если выживем — пойду наконец к репетитору по матану. Обещаю." },
          { who: "Егор", t: "Записываю. Свидетели есть." }]
 ];
@@ -4511,21 +4764,109 @@ const M_DAYS = [
 function mAfterDay() { return sv.day >= 4 ? "m_night" : "m_day"; }
 
 // ---------- Halo · Бородино: состояние выживания ----------
-let sv = { food: 0, ammo: 0, wall: 0, people: 0, day: 0, camp: "" };
-function hScore() { return sv.wall * 2 + sv.ammo + (sv.people ? 2 : 0) + (sv.food > 0 ? 1 : 0); }
-// после дневного дела: ночная атака на 2-й и 4-й день, финал на 5-й
-function hAfterDay() { return sv.day >= 5 ? "h_cut" : sv.day % 2 === 0 ? "h_night" : "h_day"; }
+let sv = { food: 0, ammo: 0, mat: 0, wall: 0, people: 0, day: 0, bonus: 0, camp: "", b: { wall: 0, turret: 0, med: 0, radar: 0, kitchen: 0 } };
+const H_DAYS = 6, H_ARMADA = 22;
+// постройки базы: стоимость следующего уровня зависит от текущего
+const BUILD = {
+  wall:    { name: "Вал",           max: 3, cost: l => ({ mat: 2 + l }),          desc: "+3 к защите за уровень. Первым принимает удар." },
+  turret:  { name: "Турели",        max: 3, cost: l => ({ mat: 2 + l, ammo: 1 }), desc: "+4 к защите (без патронов +2). Ночь стоит 1 патрон." },
+  radar:   { name: "Радар",         max: 1, cost: () => ({ mat: 3 }),             desc: "+2 к защите, утром видно силу волны." },
+  med:     { name: "Лазарет",       max: 2, cost: l => ({ mat: 2 + l }),          desc: "Ночью погибает на 3 человека меньше." },
+  kitchen: { name: "Полевая кухня", max: 2, cost: l => ({ mat: 2 + l }),          desc: "Люди съедают на 1 еду в день меньше." }
+};
+function hWave(day) { return 3 + day * 2; }
+function hDef() {
+  const b = sv.b, perTurret = sv.ammo > 0 ? 4 : 2;           // без патронов турели бьют вполсилы
+  return b.wall * 3 + b.turret * perTurret + b.radar * 2 + Math.floor(sv.people / 4) + (sv.camp === "hill" ? 2 : 0) + sv.bonus;
+}
+// ночь: сравниваем защиту и волну, считаем потери, возвращаем строки для сцены
+function hNight() {
+  const W = hWave(sv.day), D = hDef(), b = sv.b, out = [];
+  if (b.turret) sv.ammo = Math.max(0, sv.ammo - 1);
+  if (D >= W) {
+    out.push({ who: null, t: `Защита ${D} против волны ${W}. Цепь пришельцев разбилась о вал.` });
+    out.push({ who: "Петя", t: b.turret ? "Турели отработали как часы. Гаражный король доволен." : "Отбились. Но без турелей это было на нервах, епта." });
+  } else {
+    const diff = W - D, hits = Math.ceil(diff / 5);
+    let lost = 0;
+    for (let i = 0; i < hits; i++) { if (b.wall) b.wall--; else if (b.turret) b.turret--; else if (b.kitchen) b.kitchen--; }
+    if (sv.people) { lost = Math.max(0, Math.min(sv.people, diff - b.med * 3)); sv.people -= lost; }
+    out.push({ fx: "shot", who: null, t: `Защита ${D} против волны ${W}. Они прорвались. Разрушено построек: ${hits}.` });
+    out.push({ who: "Витя", t: lost ? `Мы потеряли ${lost} человек. ${b.med ? "Лазарет спас остальных." : "Лазарета нет — спасать было негде."}` : "Людей не потеряли. Но базу надо чинить." });
+  }
+  sv.bonus = 0;
+  return out;
+}
+function hFinalEnd() {
+  const D = hDef(), all = Object.values(sv.b).every(l => l >= 1);
+  sv.bonus = 0;
+  return D >= H_ARMADA + 4 && all ? "h_end_fort" : D >= H_ARMADA ? "h_end_full" : D >= H_ARMADA - 7 ? "h_end_cost" : "h_end_lose";
+}
 function hEndChoices() {
   return [
-    { icon: "rewind", t: "Заново", sub: "Пять дней с начала", go: "h_intro", rewind: true, cls: "rewind" },
+    { icon: "rewind", t: "Заново", sub: "Шесть дней с начала", go: "h_intro", rewind: true, cls: "rewind" },
     { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
   ];
 }
 function svApply(sc) {
-  if (sc.svSet) Object.assign(sv, sc.svSet);
-  if (sc.svDay) { sv.day++; sv.food = Math.max(0, sv.food - 1); }
+  if (sc.svSet) Object.assign(sv, JSON.parse(JSON.stringify(sc.svSet)));
+  if (sc.svDay) {
+    sv.day++;
+    sv.mat += 1 + Math.floor(sv.people / 6);                     // каждое утро люди что-то находят и чинят
+    const eat = Math.max(0, 1 + Math.floor(sv.people / 8) - ((sv.b && sv.b.kitchen) || 0));
+    sv.starve = sv.food < eat && sv.people > 0;
+    if (sv.starve) sv.people = Math.max(0, sv.people - 3);
+    sv.food = Math.max(0, sv.food - eat);
+  }
   if (sc.msDay) { sv.day++; for (const k of ["food", "wood", "mind"]) sv[k] = Math.max(0, (sv[k] || 0) - 1); }
-  if (sc.sv) for (const k in sc.sv) sv[k] = Math.max(0, sv[k] + sc.sv[k]);
+  if (sc.sv) for (const k in sc.sv) sv[k] = Math.max(0, (sv[k] || 0) + sc.sv[k]);
+}
+
+// ---------- Карта базы: стройка поверх сцены, день не тратится ----------
+function openBase() { renderBase(); $("base").classList.add("on"); }
+function closeBase() { $("base").classList.remove("on"); renderMemory(); }
+function canPay(c) { return (c.mat || 0) <= sv.mat && (c.ammo || 0) <= sv.ammo; }
+function renderBase() {
+  $("bRes").textContent = `День ${sv.day} из ${H_DAYS} · еда ${sv.food} · патроны ${sv.ammo} · материалы ${sv.mat} · люди ${sv.people} · защита ${hDef()}${sv.b.radar ? " · волна ночью " + hWave(sv.day) : ""}`;
+  $("bList").innerHTML = Object.entries(BUILD).map(([k, B]) => {
+    const l = sv.b[k], max = l >= B.max, c = B.cost(l);
+    const price = max ? "максимум" : [c.mat ? c.mat + " мат." : "", c.ammo ? c.ammo + " патр." : ""].filter(Boolean).join(" + ");
+    return `<div class="bItem"><b>${B.name} <i>${"■".repeat(l)}${"□".repeat(B.max - l)}</i></b><small>${B.desc}</small>
+      <button data-k="${k}" ${max || !canPay(c) ? "disabled" : ""}>${max ? "Готово" : "Строить · " + price}</button></div>`;
+  }).join("");
+  $("bList").querySelectorAll("button[data-k]").forEach(btn => btn.onclick = e => {
+    e.stopPropagation();
+    const k = btn.dataset.k, c = BUILD[k].cost(sv.b[k]);
+    if (!canPay(c)) return;
+    sv.mat -= c.mat || 0; sv.ammo -= c.ammo || 0; sv.b[k]++;
+    music.punch(); renderBase(); renderMemory();
+  });
+  drawBaseMap();
+}
+// схема базы: поле, река или холм, постройки по уровням
+function drawBaseMap() {
+  const cv = $("bMap"), c = cv.getContext("2d"), W = 320, H = 150, b = sv.b;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), w, h); };
+  R(0, 0, W, H, "#4a5a2a"); for (let i = 0; i < 80; i++) R((i * 37) % W, (i * 23) % H, 2, 1, "#5a6a32");
+  if (sv.camp === "oka") { R(0, H - 26, W, 26, "#2a4a7a"); for (let x = 0; x < W; x += 14) R(x, H - 20, 8, 1, "#4a6a9a"); }
+  else { c.fillStyle = "#6a5a32"; c.beginPath(); c.ellipse(W / 2, H / 2 + 10, 120, 50, 0, 0, 7); c.fill(); R(W / 2 - 2, H / 2 - 30, 4, 18, "#2a2018"); R(W / 2 - 3, H / 2 - 33, 6, 4, "#c89a40"); }
+  const cx = W / 2, cy = H / 2 + 6;
+  // вал: кольцо, толщина по уровню
+  if (b.wall) { c.strokeStyle = "#8a7a5a"; c.lineWidth = 2 + b.wall * 2; c.beginPath(); c.ellipse(cx, cy, 92, 46, 0, 0, 7); c.stroke(); }
+  else { c.setLineDash([4, 6]); c.strokeStyle = "#ffffff44"; c.lineWidth = 1; c.beginPath(); c.ellipse(cx, cy, 92, 46, 0, 0, 7); c.stroke(); c.setLineDash([]); }
+  // турели по кругу
+  const tp = [[-80, -26], [80, -26], [0, 44], [-80, 26], [80, 26], [0, -46]];
+  for (let i = 0; i < b.turret * 2; i++) { const [x, y] = tp[i]; R(cx + x - 4, cy + y - 4, 8, 8, "#3a3a46"); R(cx + x, cy + y - 2, 7, 2, "#202024"); }
+  // штаб-палатка с флагом
+  R(cx - 10, cy - 6, 20, 12, "#6a6a5a"); R(cx - 1, cy - 20, 1, 14, "#ddd"); R(cx, cy - 20, 8, 5, "#c41a2a");
+  // лазарет, радар, кухня
+  if (b.med) { R(cx - 52, cy - 10, 18, 14, "#e8e8e8"); R(cx - 45, cy - 8, 4, 10, "#c41a2a"); R(cx - 48, cy - 5, 10, 4, "#c41a2a"); if (b.med > 1) R(cx - 52, cy + 6, 18, 10, "#d8d8d8"); }
+  if (b.radar) { R(cx + 40, cy - 4, 2, 14, "#9aa0b0"); c.strokeStyle = "#c8ccd8"; c.lineWidth = 2; c.beginPath(); c.arc(cx + 41, cy - 6, 8, Math.PI * 1.1, Math.PI * 1.9); c.stroke(); }
+  if (b.kitchen) { R(cx + 12, cy + 14, 14, 10, "#7a4a2a"); for (let i = 0; i < b.kitchen; i++) R(cx + 16 + i * 4, cy + 6 - i * 3, 3, 6, "#c8c8c899"); }
+  // люди — точки
+  for (let i = 0; i < Math.min(sv.people, 30); i++) R(cx - 30 + (i % 10) * 6, cy + 20 + Math.floor(i / 10) * 5, 2, 3, "#f0d0a0");
+  // стрелки угрозы
+  c.fillStyle = "#c070ff"; for (const [x, y] of [[8, 20], [W - 16, 30], [W / 2 - 4, 4]]) { c.beginPath(); c.moveTo(x, y); c.lineTo(x + 8, y + 4); c.lineTo(x, y + 8); c.fill(); }
 }
 
 // ---------- Таймлайн перемотки: каждая развилка — точка, к ней можно вернуться ----------
@@ -4534,8 +4875,8 @@ function markTimeline(id) {
   const sc = scenes[id], back = rewindTo; rewindTo = null;
   if (!sc.choices || sc.ending || id.startsWith("brawl")) return;
   let i = back === null ? -1 : timeline[back] && timeline[back].id === id ? back : timeline.map(p => p.id).lastIndexOf(id);
-  if (i >= 0) { timeline = timeline.slice(0, i + 1); timeline[i].pick = null; if (timeline[i].sv) Object.assign(sv, timeline[i].sv); }
-  else timeline.push({ id, place: (sc.halo || sc.forest) && sv.camp ? sc.place + " · день " + (sv.day + (sc.svDay || sc.msDay ? 1 : 0)) : sc.place, sv: sc.halo || sc.forest ? { ...sv } : null });
+  if (i >= 0) { timeline = timeline.slice(0, i + 1); timeline[i].pick = null; if (timeline[i].sv) Object.assign(sv, JSON.parse(JSON.stringify(timeline[i].sv))); }
+  else timeline.push({ id, place: (sc.halo || sc.forest) && sv.camp ? sc.place + " · день " + (sv.day + (sc.svDay || sc.msDay ? 1 : 0)) : sc.place, sv: sc.halo || sc.forest ? JSON.parse(JSON.stringify(sv)) : null });
 }
 function openTimeline() {
   if (B || BR.on || FL.on) return;
@@ -4559,7 +4900,7 @@ function renderMemory() {
   $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
     + (scene && scene.x ? `<div class="mem mana">✦ магия: ${mana}</div>` : "")
     + (scene && scene.forest && sv.camp === "forest" ? `<div class="mem">еда ${sv.food} · дрова ${sv.wood} · рассудок ${sv.mind}</div>` : "")
-    + (scene && scene.halo && sv.camp ? `<div class="mem">еда ${sv.food} · патроны ${sv.ammo} · вал ${sv.wall} · люди ${sv.people}</div>` : "");
+    + (scene && scene.halo && sv.camp ? `<div class="mem">еда ${sv.food} · патроны ${sv.ammo} · материалы ${sv.mat} · люди ${sv.people} · защита ${hDef()}</div>` : "");
 }
 function boltFx() {
   const fl = $("flash"); fl.classList.remove("magic", "on"); void fl.offsetWidth; fl.classList.add("on");
@@ -4629,7 +4970,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10280221) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10280238) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -4746,7 +5087,7 @@ function say(who, text, quiet) {
 function showChoices() {
   $("box").style.display = "none";
   focus(null);
-  if (scene.ending) { $("ending").textContent = scene.ending; $("ending").style.display = "block"; c1Mark(scene.ending); }
+  if (scene.ending) { $("ending").textContent = scene.endingFn ? scene.endingFn() : scene.ending; $("ending").style.display = "block"; c1Mark(scene.ending); }
   const box = $("choices");
   box.innerHTML = "";
   for (const c of scene.choices().filter(c => !c.magic || mana >= c.magic)) {
@@ -4766,6 +5107,7 @@ let loopDay = 1;
 function choose(c) {
   clearIdle();
   if (c.menu) return goMenu();
+  if (c.base) return openBase();
   if (timeline.length && !c.reset) timeline[timeline.length - 1].pick = c.t;
   if (c.magic) { mana = Math.max(0, mana - c.magic); magicFx(); }
   if (c.loop) loopDay++;
@@ -4901,6 +5243,11 @@ $("mPe").onclick = e => {
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("pe_home");
 };
+$("mSe").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("se_1");
+};
 $("mS").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
@@ -4953,6 +5300,8 @@ function goMenu() {
   music.mood("hope");
 }
 $("menuBtn").onclick = e => { e.stopPropagation(); goMenu(); };
+$("bClose").onclick = e => { e.stopPropagation(); closeBase(); };
+$("base").onclick = e => e.stopPropagation();
 $("tlBtn").onclick = e => { e.stopPropagation(); $("tl").classList.contains("on") ? closeTimeline() : openTimeline(); };
 $("tlClose").onclick = e => { e.stopPropagation(); closeTimeline(); };
 $("tl").onclick = e => e.stopPropagation();
