@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282212") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282231") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -188,6 +188,8 @@
   #title p { color:var(--dim); font-size:14px; }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0; }
   #title .hero small { font:600 15px/1 Georgia, serif; letter-spacing:.32em; color:#f0e6d8; text-transform:uppercase; }
+  #title .hero h1 { font-size:46px; line-height:1.05; }
+  @media (max-aspect-ratio: 1/1) { #title .hero h1 { font-size:32px; } }
   #title p.stats { margin:0; font:15px Georgia, serif; color:#cfc6b8; letter-spacing:.04em; }
   #title p.stats b { font:700 22px Georgia, serif; color:#f0b35e; margin-right:4px; } #title p.stats i { color:#ffffff40; margin:0 8px; font-style:normal; }
   #saveBtns { display:flex; flex-direction:column; gap:8px; max-height:100%; }
@@ -425,7 +427,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282212") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282231") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -524,6 +526,18 @@
   @keyframes trip { 0% { filter:saturate(1.8) hue-rotate(0deg); transform:skewX(0); } 50% { filter:saturate(1.8) hue-rotate(180deg) blur(.6px); transform:skewX(1.5deg) scale(1.02); } 100% { filter:saturate(1.8) hue-rotate(360deg); transform:skewX(0); } }
   #saveBtns #mPg { background:repeating-linear-gradient(0deg, #00000040 0 5px, #0000 5px 9px), linear-gradient(135deg, #6a3a1a, #2a1608); border-color:#e07a2a88; }
   #saveBtns #mPg b { font:700 16px 'Comfortaa', sans-serif; color:#ffcf8a; }
+  /* подход в зале */
+  #rep { position:absolute; inset:0; z-index:7; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#000a; cursor:pointer; touch-action:none; user-select:none; }
+  #rep.on { display:flex; }
+  #repEx { font:22px 'Russo One', sans-serif; color:#f0e8d8; letter-spacing:.06em; text-transform:uppercase; }
+  #repBar { position:relative; width:min(80%, 520px); height:30px; background:#2a2a30; border:2px solid #ffffff44; border-radius:15px; overflow:hidden; }
+  #repBar i { position:absolute; left:39%; width:22%; top:0; bottom:0; background:#3a8a4a; }
+  #repMark { position:absolute; top:-2px; bottom:-2px; width:6px; margin-left:-3px; background:#f0b35e; box-shadow:0 0 10px #f0b35e; }
+  #repMsg { font:700 26px Georgia, serif; color:#fff; min-height:32px; } #repCount { font:15px Georgia, serif; color:#cfc6b8; } #repTap { font:13px system-ui; color:#ffffff88; }
+  #rep.ok #repMsg { color:#7ad07a; animation:repPop .3s; } #rep.bad #repMsg { color:#e06060; animation:repShake .3s; }
+  @keyframes repPop { 50% { transform:scale(1.25); } } @keyframes repShake { 25% { translate:-6px 0; } 75% { translate:6px 0; } }
+  #saveBtns #mTr { background:radial-gradient(circle at 85% 50%, #1a1a1a 10px, #8a8a90 11px 13px, #1a1a1a 14px 18px, #0000 19px), linear-gradient(135deg, #3a3a42, #16161a); border-color:#c8c8d088; }
+  #saveBtns #mTr b { font:15px 'Russo One', sans-serif; text-transform:uppercase; color:#e8e8f0; letter-spacing:.06em; }
   /* кино-драка */
   #qte { position:absolute; inset:0; z-index:7; display:none; } #qte.on { display:block; }
   #qteCv { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
@@ -555,16 +569,17 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282212" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282212" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282231" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282231" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282212) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282231) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
   <div id="toast"></div>
+  <div id="rep"><div id="repEx"></div><div id="repBar"><i></i><b id="repMark"></b></div><div id="repMsg"></div><div id="repCount"></div><div id="repTap">Жми сюда или пробел</div></div>
   <div id="walk"><canvas id="walkCv"></canvas><div id="walkHint">◀ ▶ — идти · можно нажать прямо на человека</div><div id="walkPad"><button id="walkL">◀</button><button id="walkAct">E</button><button id="walkR">▶</button></div></div>
   <div id="inv"></div>
   <div id="qte"><div id="qteCam"><img id="qteEgor" alt=""><canvas id="qteFoe"></canvas></div><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
@@ -621,7 +636,7 @@
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic" class="gone" style="display:none"></div>
   <div id="title">
-    <div class="hero"><small>Сборник историй</small><h1>POWERHOUSE</h1><p class="stats" id="menuStats"></p></div>
+    <div class="hero"><h1>Сборник историй</h1><p class="stats" id="menuStats"></p></div>
     <div id="saveBtns">
       <div class="cont"><button id="mCont"><b>▶ Продолжить</b><span id="saveInfo"></span></button></div>
       <h3>Основная история</h3>
@@ -637,6 +652,7 @@
         <button id="mS" style="--c:#ff4fa8"><b>«Сахар»</b><span>Клуб, которым владеет Глеб</span></button>
         <button id="mM" style="--c:#9aa0b0"><b>Мобилизация</b><span>Самолёт, лес и указание свыше</span></button>
         <button id="mPa" style="--c:#d8d8d8"><b>Пепел · Париж</b><span>Ч/б нуар. Ален, Сергей и плёнка 18+</span></button>
+        <button id="mTr" style="--c:#c8c8d0"><b>Тренировка</b><span>Петя, Глеб и тренер Александр</span></button>
         <button id="mPg" style="--c:#e07a2a"><b>Гаражи Пети</b><span>Пятница, четыре гаража и Claude Code</span></button>
         <button id="mSt" style="--c:#f0a868"><b>Дым над Волгой</b><span>Эксперимент. Чебоксары, лето 2023</span></button>
       </div>
@@ -671,7 +687,7 @@ function paint(years) {
   if (cv.width !== (pt ? 180 : 320) * hi) { cv.width = (pt ? 180 : 320) * hi; cv.height = (pt ? 320 : 180) * hi; }
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b && b.startsWith("cheb")) paintCheb(b); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b && b.startsWith("cheb")) paintCheb(b); else if (b === "gym") drawGym(); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -990,7 +1006,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282212"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282231"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1109,7 +1125,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282212`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282231`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1480,7 +1496,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282212";
+  $("qteEgor").src = "img/egor_px.png?v=10282231";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -1582,6 +1598,53 @@ function qteDraw() {
   if (QF.phase === "prompt" || QF.phase === "tele") { const g = c.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .9); g.addColorStop(0, "#0000"); g.addColorStop(1, "#000a"); c.fillStyle = g; c.fillRect(0, 0, W, H); }
   for (let i = 0; i < 3; i++) { c.fillStyle = i < 3 - QF.fails ? "#f0b35e" : "#ffffff33"; c.beginPath(); c.arc(W / 2 - 30 + i * 30, H * .14, 9, 0, 7); c.fill(); }
   if (QF.phase === "prompt") { const b = QF.beats[QF.i], k = 1 - QF.t / (b.time || 1.8); $("qteBtns").style.setProperty("--k", k.toFixed(3)); }
+}
+
+// ---------- «Тренировка»: зал, подходы-в-такт и трек на заставке главы ----------
+const TR = { form: 0, sets: 0, pain: 0, last: 0 };
+// Локация: зал — кирпич, зеркала, стойка со штангой, гантели, скамья, плакат
+function drawGym() {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  R(0, 0, W, H, "#2a2628"); for (let y = 0; y < H * .62; y += 6) for (let x = (y / 6 % 2) * 7; x < W; x += 14) R(x, y, 13, 5, "#342e30");
+  R(W * .05, H * .14, W * .5, H * .4, "#5a6a78"); R(W * .06, H * .15, W * .48, H * .38, "#7a8a98"); c.fillStyle = "#ffffff22"; c.fillRect(W * .1, H * .16, W * .06, H * .36);
+  R(W * .62, H * .1, W * .2, H * .22, "#c83a2a"); c.fillStyle = "#f0e8d8"; c.font = "bold 8px sans-serif"; c.fillText("ЖЕЛЕЗО", W * .64, H * .23);
+  for (let i = 0; i < 4; i++) R(W * .02 + i * W * .25, H * .02, W * .12, 3, "#f0f0e0");
+  R(0, H * .62, W, H * .38, "#1c1a1c"); for (let x = 0; x < W; x += 20) R(x, H * .62, 1, H * .38, "#262426");
+  R(W * .66, H * .3, 4, H * .34, "#8a8a90"); R(W * .9, H * .3, 4, H * .34, "#8a8a90"); R(W * .6, H * .4, W * .38, 3, "#c8c8d0");
+  R(W * .6, H * .34, 5, H * .14, "#1a1a1a"); R(W * .94, H * .34, 5, H * .14, "#1a1a1a");
+  R(W * .2, H * .7, W * .3, 5, "#3a3a44"); R(W * .22, H * .75, 4, H * .12, "#5a5a60"); R(W * .46, H * .75, 4, H * .12, "#5a5a60"); R(W * .16, H * .64, W * .38, 3, "#c8c8d0");
+  for (let i = 0; i < 6; i++) { R(W * (.05 + i * .05), H * .9, 10, 5, "#3a3a3a"); R(W * (.05 + i * .05) + 3, H * .9 - 3, 4, 3, "#5a5a5a"); }
+  R(W * .84, H * .66, 10, 20, "#d8e8f0"); R(W * .845, H * .62, 8, 5, "#5a9aca");
+}
+// подход: маркер бегает по полосе, нажми, когда он в зелёной зоне. 5 повторений, каждое быстрее
+const REP = { on: false };
+function repStart(l) {
+  Object.assign(REP, { on: true, n: 0, good: 0, x: 0, v: .9, next: l.next, lock: 0 });
+  $("box").style.display = "none"; $("repEx").textContent = l.ex; $("repMsg").textContent = "Жми, когда метка в зелёном";
+  $("rep").classList.add("on"); repDraw();
+  cancelAnimationFrame(REP.raf);
+  const loop = () => { if (!REP.on) return; REP.x += REP.v; if (REP.x > 100 || REP.x < 0) { REP.v = -REP.v; REP.x = Math.max(0, Math.min(100, REP.x)); } REP.lock = Math.max(0, REP.lock - 1); repDraw(); REP.raf = requestAnimationFrame(loop); };
+  loop();
+}
+function repDraw() { $("repMark").style.left = REP.x + "%"; $("repCount").textContent = `Повтор ${Math.min(REP.n + 1, 5)} / 5 · чисто: ${REP.good}`; }
+function repHit() {
+  if (!REP.on || REP.lock) return;
+  const ok = Math.abs(REP.x - 50) < 11;
+  REP.n++; if (ok) REP.good++; REP.lock = 20; REP.v *= 1.18;
+  $("repMsg").textContent = ok ? ["Чисто!", "Ровно!", "Так держать!", "Александр кивает", "Красота!"][REP.n % 5] : ["Криво…", "Гриф гуляет", "Спина!", "Дыши!", "Колени!"][REP.n % 5];
+  $("rep").classList.remove("ok", "bad"); void $("rep").offsetWidth; $("rep").classList.add(ok ? "ok" : "bad");
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred(ok ? "medium" : "light");
+  if (REP.n >= 5) { REP.lock = 1e9; TR.last = REP.good; TR.form += REP.good; TR.sets++; setTimeout(() => { REP.on = false; $("rep").classList.remove("on", "ok", "bad"); $("box").style.display = ""; show(REP.next); }, 700); }
+}
+$("rep").addEventListener("pointerdown", e => { e.stopPropagation(); e.preventDefault(); repHit(); });
+$("rep").addEventListener("click", e => e.stopPropagation());
+document.addEventListener("keydown", e => { if (REP.on && [" ", "Enter"].includes(e.key)) { e.preventDefault(); repHit(); } });
+// трек главы: играет, пока у сцены стоит mp3; синтезатор на это время затихает
+const TRACK = new Audio("музыка/trener.mp3"); TRACK.loop = true; TRACK.volume = .8;
+function trackSet(on) {
+  if (on && music.on) { TRACK.play().catch(() => {}); if (music.ac) music.out.gain.setTargetAtTime(0, music.ac.currentTime, .3); }
+  else if (!TRACK.paused) { TRACK.pause(); if (music.ac && music.on) music.out.gain.setTargetAtTime(music.vol * (music.cur ? music.cur.vol : 1), music.ac.currentTime, .5); }
 }
 
 // ---------- Локации «Дыма над Волгой»: Чебоксары летом, дымное небо, тёплый выцветший цвет ----------
@@ -2290,6 +2353,7 @@ const music = {
     this.on = !this.on;
     if (this.ac) this.out.gain.setTargetAtTime(this.on ? this.vol * (this.cur ? this.cur.vol : 1) : 0, this.ac.currentTime, .05);
     $("mute").textContent = this.on ? "♫ звук: вкл" : "♫ звук: выкл";
+    trackSet(this.on && scene && scene.mp3);
   }
 };
 $("mute").onclick = e => { e.stopPropagation(); music.toggle(); };
@@ -4508,6 +4572,146 @@ const scenes = {
     ],
     ending: "Гаражи Пети · концовка «Последняя электричка»",
     choices: () => [{ icon: "rewind", t: "Вернуться в гаражи", sub: "Поговорить со всеми", go: "pg_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+  },
+  // ===== «Тренировка»: от лица Пети. Зал, Глеб и огромный тренер Александр. Мысли ("") — Петины =====
+  tr_start: {
+    bg: "gym", place: "Зал «Железо» · Бауманская · 19:00", noSprites: false, mp3: true,
+    linesFn: () => { Object.assign(TR, { form: 0, sets: 0, pain: 0 }); return [
+      { skip: "Тренировка" },
+      { who: "", t: "Я Петя. У меня четыре гаража, две квартиры и ни одного бицепса. Глеб сказал: «Петя, хватит медитировать на диване. Пойдём в зал». Я сказал: «Зал — это тоже иллюзия». Он сказал: «Иллюзия с абонементом. Я уже купил»." },
+      { who: null, t: "Зал на Бауманской. Пахнет железом, резиной и чужими амбициями. Из колонок что-то бьёт так, что дрожит кулер с водой." },
+      { who: "Глеб", t: "Мне надо набрать массу. Три тренировки в неделю. Я обещал. Себе. И одному ноутбуку." },
+      { who: "", t: "Глеб весит семьдесят пять. Я тоже где-то так, но у меня это распределено по-философски." },
+      { npcShow: "npc_trainer", who: null, t: "К нам подходит человек. Нет. Гора. Два метра, плечи как дверной проём в хрущёвке, голова почти касается турника." },
+      { who: "Александр", t: "Александр. Тренер. Новенькие? Отлично. Правило одно: сначала техника, потом вес. Кто нарушит — будет приседать с моей бабушкой на плечах. Она лёгкая. Но очень обидная." }
+    ]; },
+    choices: () => [
+      { icon: "let", t: "«Мы готовы»", sub: "Сказать бодро", go: "tr_warm" },
+      { icon: "talk", t: "«А можно сразу к штанге?»", sub: "Петя рвётся", go: "tr_warm", act: () => { TR.pain++; } },
+      { icon: "spark", t: "«Александр, а вы читали Пелевина?»", sub: "Очень по-Петиному", go: "tr_pelevin" }
+    ]
+  },
+  tr_pelevin: {
+    bg: "gym", place: "Зал «Железо»", mp3: true, next: "tr_warm",
+    lines: [
+      { npcShow: "npc_trainer", who: "Александр", t: "Читал. «Generation П». Там всё про рекламу. А у меня всё про присед. Присед честнее: его нельзя продать, его можно только сделать." },
+      { who: "", t: "Я был готов к чему угодно. Но не к тому, что гора окажется умнее меня." }
+    ]
+  },
+  tr_warm: {
+    bg: "gym", place: "Зал «Железо» · разминка", music: "military",
+    lines: [
+      { npcShow: "npc_trainer", who: "Александр", t: "Разминка. Десять минут дорожки, суставы, планка. Петя, ты почему уже лежишь?" },
+      { who: "Петя", t: "Я в планке." },
+      { who: "Александр", t: "Ты на полу. Планка — это когда тело прямое и тебе тяжело. А у тебя тело кривое и тебе хорошо." },
+      { who: null, t: "Глеб рядом стоит в планке ровно, как линейка. Он вообще всё делает ровно, когда не играет в игры." }
+    ],
+    choices: () => [
+      { icon: "go", t: "К жиму лёжа", sub: "Первое упражнение", go: "tr_bench" }
+    ]
+  },
+  tr_bench: {
+    bg: "gym", place: "Скамья · жим лёжа", music: "military",
+    lines: [
+      { npcShow: "npc_trainer", who: "Александр", t: "Жим лёжа. Пустой гриф — двадцать кило. Лопатки сведены, ноги в пол, гриф на середину груди. Вниз — медленно, вверх — мощно. Я страхую." },
+      { who: "", t: "Двадцать кило. У меня кальян столько весит. Ничего, справлюсь." },
+      { rep: true, ex: "Жим лёжа", next: "tr_bench_after" }
+    ]
+  },
+  tr_bench_after: {
+    bg: "gym", place: "Скамья · жим лёжа", music: "military", next: "tr_squat",
+    linesFn: () => TR.last >= 4 ? [
+      { npcShow: "npc_trainer", who: "Александр", t: "Хорошо. Ровно. Петя, у тебя есть потенциал. Он глубоко. Но есть." },
+      { who: "", t: "Меня похвалила гора. Я записываю это в дневник. У меня нет дневника. Заведу." }
+    ] : [
+      { npcShow: "npc_trainer", who: "Александр", t: "Гриф ходил как маятник. Ты не жал, ты дирижировал. Ничего. Все с этого начинают. Кроме меня. Я начал с бабушки." },
+      { who: "Глеб", t: "Петь, дыши. Выдох на усилии. Мне Александр это вчера в переписке объяснил." }
+    ]
+  },
+  tr_squat: {
+    bg: "gym", place: "Стойка · присед", music: "military",
+    lines: [
+      { who: null, t: "Глеб приседает первым. Сорок кило. Медленно, глубоко, спина как у памятника. Александр кивает. Глеб делает вид, что ему не приятно. Ему приятно." },
+      { npcShow: "npc_trainer", who: "Александр", t: "Петя. Тридцать. Пятки в пол, колени по носкам, таз назад, будто садишься на невидимый стул. Ты же любишь сидеть. Вот и садись." },
+      { rep: true, ex: "Присед", next: "tr_squat_after" }
+    ]
+  },
+  tr_squat_after: {
+    bg: "gym", place: "Стойка · присед", music: "military",
+    linesFn: () => TR.last >= 4 ? [
+      { npcShow: "npc_trainer", who: "Александр", t: "Вот. Вот это присед. Ты сел на невидимый стул и встал с него. Это и есть вся философия, Петя." },
+      { who: "", t: "Кажется, я понял Пелевина. Нет. Я понял присед. Это лучше." }
+    ] : [
+      { fx: "punch", who: null, t: "На последнем повторении у меня подкашиваются колени. Александр одной рукой снимает штангу со всеми блинами, как пакет из «Пятёрочки»." },
+      { npcShow: "npc_trainer", who: "Александр", t: "Стоп. Ты присел, а встать забыл. Бывает. Ноги — это не диван. Их надо уговаривать." }
+    ],
+    choices: () => [
+      { icon: "fight", t: "Ещё подход!", sub: "Петя вошёл во вкус", go: "tr_extra", act: () => { TR.pain++; } },
+      { icon: "let", t: "К турнику", sub: "Как сказал тренер", go: "tr_pullup" },
+      { icon: "soul", t: "Сбегать к кулеру", sub: "Вода. И пять минут тишины", go: "tr_water" }
+    ]
+  },
+  tr_extra: {
+    bg: "gym", place: "Стойка · ещё подход", music: "tense",
+    lines: [
+      { npcShow: "npc_trainer", who: "Александр", t: "Петя. Я сказал — три подхода. Ты делаешь четвёртый, потому что хочешь мне понравиться. Не надо мне нравиться. Надо завтра встать с кровати." },
+      { rep: true, ex: "Лишний присед", next: "tr_pullup" }
+    ]
+  },
+  tr_water: {
+    bg: "gym", place: "Кулер", next: "tr_pullup",
+    lines: [
+      { who: null, t: "Кулер. Пластиковый стаканчик. Я пью и смотрю на нас в зеркале: Глеб, красный, сосредоточенный. И я — красный, рассеянный, но живой." },
+      { who: "Глеб", t: "Петь. Спасибо, что пошёл. Один я бы опять не дошёл. Я каждый раз «завтра»." },
+      { who: "Петя", t: "Брат. Завтра — иллюзия. Есть только сегодня и вот этот стаканчик." },
+      { who: "", t: "Впервые моя фраза про иллюзию кому-то реально помогла. Я горжусь. И у меня трясутся ноги." }
+    ]
+  },
+  tr_pullup: {
+    bg: "gym", place: "Турник · подтягивания", music: "military",
+    lines: [
+      { npcShow: "npc_trainer", who: "Александр", t: "Турник. Глеб — сколько сможешь. Петя — сколько сможешь, умноженное на твою веру в себя." },
+      { who: null, t: "Глеб подтягивается шесть раз. Ровно. На седьмом дёргает ногами, как будто плывёт брассом, и спрыгивает." },
+      { rep: true, ex: "Подтягивания", next: "tr_end_check" }
+    ]
+  },
+  tr_end_check: {
+    bg: "gym", place: "Зал «Железо»",
+    nextFn: () => TR.pain >= 2 ? "tr_end_sick" : TR.form >= 11 ? "tr_end_zen" : "tr_end_first",
+    lines: [{ who: null, t: "Конец тренировки. Пот, гул колонок, запах резины. Александр смотрит на нас, как скульптор на два куска глины." }]
+  },
+  tr_end_first: {
+    bg: "gym", place: "Раздевалка · 21:10", music: "hope",
+    linesFn: () => [
+      { npcShow: "npc_trainer", who: "Александр", t: "Неплохо. Для первого раза — неплохо. Четверг, девятнадцать ноль-ноль. Не придёте — приду к вам сам. Я знаю, где гаражи." },
+      { who: "", t: "Откуда он знает про гаражи? Неважно. Я ему верю. Ему все верят." },
+      { who: "Глеб", t: "Петь. Четверг. Записываю. В «Обязательства». Ты тоже записывай." },
+      { who: "", t: "Я не веду записей. Но четверг я запомню. Потому что завтра я не смогу поднять руку, чтобы что-то записать." }
+    ],
+    ending: "Тренировка · концовка «Первая тренировка»",
+    choices: () => [{ icon: "rewind", t: "Ещё раз", sub: "Снова в зал", go: "tr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+  },
+  tr_end_zen: {
+    bg: "gym", place: "Зал · планка · 21:00", music: "mystic",
+    lines: [
+      { who: null, t: "В конце Александр ставит нас в планку. Минута. Две. На третьей я перестаю думать." },
+      { who: "", t: "Нет гаражей. Нет квартир. Нет Пелевина. Есть руки, пол и дыхание. Это и есть то, что я искал в дыме. Оно было тут. В зале на Бауманской. За две тысячи в месяц." },
+      { npcShow: "npc_trainer", who: "Александр", t: "…Петя. Ты в планке четыре минуты. Это рекорд зала для новичков. Ты что, медитируешь?" },
+      { who: "Петя", t: "Я десять лет медитировал. Просто не на том." }
+    ],
+    ending: "Тренировка · концовка «Дзен в планке»",
+    choices: () => [{ icon: "rewind", t: "Ещё раз", sub: "Снова в зал", go: "tr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+  },
+  tr_end_sick: {
+    bg: "gym", place: "Зал · у мусорки · 20:40", music: "drunk",
+    lines: [
+      { who: null, t: "Лишние подходы догоняют меня у мусорки. Зал плывёт. Кулер смотрит на меня с осуждением." },
+      { fx: "punch", who: null, t: "Меня тошнит. Красиво, в урну, под бит из колонок. Мужик у гантелей аплодирует. Видимо, у них так принято." },
+      { npcShow: "npc_trainer", who: "Александр", t: "Я же говорил: не надо мне нравиться. Сладкий чай, сесть, ноги вверх. Четверг — то же самое, но без геройства." },
+      { who: "Глеб", t: "Петь, ты как? Я сфоткал. Не для сторис. Для истории." }
+    ],
+    ending: "Тренировка · концовка «Геройство у мусорки»",
+    choices: () => [{ icon: "rewind", t: "Ещё раз", sub: "Без лишних подходов", go: "tr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
   },
   se_1: {
     bg: "seroom", place: "Сергей", noSprites: true, music: "mystic",
@@ -6779,13 +6983,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282212`, talk: `img/${n}_talk.png?v=10282212`, blink: `img/${n}_blink.png?v=10282212` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282231`, talk: `img/${n}_talk.png?v=10282231`, blink: `img/${n}_blink.png?v=10282231` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282212" : `img/${n}_spartan.png?v=10282212`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282231" : `img/${n}_spartan.png?v=10282231`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6812,9 +7016,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic"
+  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic", "Александр": "npc_trainer"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282212`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282231`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6823,7 +7027,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282212`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282231`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7139,6 +7343,7 @@ function show(id) {
   if (id.startsWith("pg_") && scene.lines.length) { const m = pgMood(id); if (m) scene.lines = [m, ...(scene.linesFn ? scene.lines : (scene._base || (scene._base = scene.lines)))]; else if (!scene.linesFn && scene._base) scene.lines = scene._base; }
   paHud(id.startsWith("pa_"));
   music.mood(scene.x && scene.music !== "tense" ? "mystic" : scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
+  trackSet(!!scene.mp3);
   $("place").textContent = scene.place;
   $("gleb").classList.toggle("on", !scene.noSprites);
   $("egor").classList.toggle("on", !!scene.egor);
@@ -7146,7 +7351,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282212) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282231) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -7160,7 +7365,7 @@ function show(id) {
 }
 
 function step() {
-  if (B || BR.on || QF.on) return;              // идёт бой — текст стоит
+  if (B || BR.on || QF.on || REP.on) return;              // идёт бой — текст стоит
   const l = scene.lines[idx];
   if (!l) {
     if (scene.explore) return showExplore();
@@ -7235,6 +7440,7 @@ function step() {
   if (l.addClass) $("stage").classList.add(l.addClass);
   if (l.brawl) return brawlStart(l.win, l.lose, l);
   if (l.qte) return qteStart(l);
+  if (l.rep) return repStart(l);
   if (l.fx === "rewind") { $("stage").classList.add("rewinding"); music.rewind(); $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on"); setTimeout(() => $("stage").classList.remove("rewinding"), 1300); }
   if (l.fx === "punch") punchFx();
   if (l.fx === "timer") { $("timer").classList.remove("on"); void $("timer").offsetWidth; $("timer").classList.add("on"); setTimeout(() => $("timer").classList.remove("on"), 2200); }
@@ -7659,6 +7865,11 @@ document.addEventListener("keydown", e => {
 });
 document.addEventListener("keyup", e => { if (["ArrowLeft", "a", "ф"].includes(e.key)) WALK.keys.l = false; if (["ArrowRight", "d", "в"].includes(e.key)) WALK.keys.r = false; });
 
+$("mTr").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("tr_start");
+};
 $("mPg").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
@@ -7716,6 +7927,8 @@ function goMenu() {
   if (BR.on) { BR.on = false; cancelAnimationFrame(BR.raf); $("brawl").classList.remove("on"); }
   if (QF.on || $("qte").classList.contains("on")) qteStop();
   if (WALK.on) walkStop();
+  if (REP.on) { REP.on = false; $("rep").classList.remove("on"); }
+  trackSet(false);
   ["gphone", "howto", "op", "skip", "choices", "phone"].forEach(id => $(id).classList.remove("on"));
   $("box").style.display = "";
   $("title").classList.remove("gone");
