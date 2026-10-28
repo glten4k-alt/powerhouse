@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10281916") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282011") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -392,7 +392,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10281916") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282011") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -431,6 +431,7 @@
   /* «Пепел»: чёрно-белая плёнка — зерно, царапины, мерцание, виньетка */
   #stage.noir #bg, #stage.noir .sprite:not(.dim):not(.aged) { filter:grayscale(1) contrast(1.25) drop-shadow(0 12px 18px #000a) !important; }
   #stage.noir .sprite.dim { filter:grayscale(1) brightness(.45) !important; }
+  #stage.noir .sprite.ghost { filter:grayscale(1) brightness(1.3) contrast(.9) drop-shadow(0 0 14px #ffffffaa) !important; opacity:.82 !important; animation:possess 2.4s ease-in-out infinite !important; }
   #stage.noir .sprite.aged { filter:grayscale(1) sepia(.35) brightness(.7) contrast(.8) !important; }
   #stage.noir #box, #stage.noir #choices, #stage.noir #place, #stage.noir #ending { filter:grayscale(1); }
   #stage.noir::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
@@ -458,11 +459,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10281916" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10281916" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282011" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282011" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10281916) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282011) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -884,7 +885,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10281916"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282011"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1003,7 +1004,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10281916`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282011`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -3081,6 +3082,15 @@ const scenes = {
       { fx: "glitch", who: null, t: "Свечи гаснут разом. И снова загораются — все, кроме одной." },
       { who: null, t: "В луче прожектора, за спиной Алена, стоит тень. Шинель. Прямой пробор. Маленькие усы. Она не отбрасывает тени сама." },
       { who: "Сергей", t: "…не останавливаем… не останавливаем…" },
+      { npcShow: "npc_ghost", npcClass: "ghost", who: null, t: "Тень делает шаг из луча. У неё появляется лицо. Бледное, с чёлкой набок и щёткой усов. Лицо из учебника истории." },
+      { who: "Егор", t: "Блять. Глеб. Это Гитлер. Это, сука, настоящий Гитлер." },
+      { who: "Гитлер", t: "Wo bin ich?.. Париж. Снова Париж. Я вернулся. Вы все будете…" },
+      { npcShow: "npc_sergey", who: "Сергей", t: "Стоп. Ты в кадре. Говори громче, тебя не слышно. И встань в свет, ты бледный." },
+      { npcShow: "npc_ghost", npcClass: "ghost", who: "Гитлер", t: "Как ты смеешь! Я — фюрер! Передо мной трепетала Европа!" },
+      { npcShow: "npc_margo", who: "Марго", t: "Он ниже, чем на фотографиях. И голос как у моего бывшего." },
+      { npcShow: "npc_ghost", npcClass: "ghost", who: "Гитлер", t: "Почему вы не боитесь?! Почему никто не боится?!" },
+      { npcShow: "npc_alain", who: "Ален", t: "Потому что ты проиграл. Восемьдесят лет назад. Ты пепел. Мой отец поставил на пепел и всю жизнь потом стыдился." },
+      { npcShow: "npc_ghost", npcClass: "ghost", who: null, t: "Призрак кричит что-то по-немецки, брызгая слюной. Но слова снова читаются губами Алена, и тень становится плотнее. Обряд ещё идёт." },
       { npcShow: "npc_alain", who: "Ален", t: "Глеб. Ты умеешь возвращать время. Я это видел ещё в Москве: ты моргнул, и разговор пошёл иначе." },
       { who: "Ален", t: "Я не могу остановиться сам. Слова читаются без меня. Останови меня. Пожалуйста." }
     ],
@@ -3390,6 +3400,16 @@ const scenes = {
       { icon: "rewind", t: "Начать заново", sub: "Пить меньше. Или закусывать", go: "pa_start", reset: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
+  },
+  pa_crave_fix: {
+    get bg() { return scenes[PA.back].bg; }, place: "Париж · ломка", egor: true, noir: true, music: "tense", calm: true,
+    linesFn: () => { PA.smoke++; PA.crave = 0; return [
+      { fx: "glitch", who: null, t: "Меня накрывает. Руки ходят ходуном, в ушах звон, я роняю камеру и сажусь прямо на асфальт." },
+      { who: "Егор", t: "Всё, всё. Держи. Открой рот. Затягивайся, блять, я не шучу." },
+      { fx: "smoke", who: null, t: "Он прикуривает и вставляет сигарету мне в губы. Первая затяжка — и мир собирается обратно. Лёгкие за это платят." },
+      { who: "Егор", t: "Не доводи так больше. Я в Чебоксарах насмотрелся." }
+    ]; },
+    nextFn: () => PA.smoke >= 10 ? "pa_end_lungs" : PA.after
   },
   pa_end_crave: {
     get bg() { return scenes[PA.back].bg; }, place: "Париж · 4:00", egor: true, noir: true, music: "tense",
@@ -5599,7 +5619,7 @@ function paPrepare(id) {
   if (PA.ret && id === PA.back) { PA.ret = false; lines = []; }
   else if (!scene.calm && !["pa_smoke", "pa_drink", "pa_vodka", "pa_start"].includes(id)) PA.crave += PA.smoke >= 4 ? 2 : 1;
   if (scene.choices && !scene.ending) PA.back = id;
-  if (lines.length && PA.crave >= 3 && id !== "pa_smoke") { const k = lines[0].skip ? 1 : 0; lines = [...lines.slice(0, k), PA.crave >= 5 ? { who: "", t: "Меня трясёт так, что я роняю всё из рук. Если я сейчас не покурю — я сорвусь. По-настоящему." } : PA_WITHDRAW[PA.crave % PA_WITHDRAW.length], ...lines.slice(k)]; }
+  if (lines.length && PA.crave >= 4 && id !== "pa_smoke" && id !== "pa_crave_fix") { const k = lines[0].skip ? 1 : 0; lines = [...lines.slice(0, k), PA.crave >= 5 ? { who: "", t: "Меня трясёт так, что я роняю всё из рук. Если я сейчас не покурю — я сорвусь. По-настоящему." } : PA_WITHDRAW[PA.crave % PA_WITHDRAW.length], ...lines.slice(k)]; }
   if (scene.ending && lines.length) lines = [...lines, paHealthLine()];
   scene.lines = lines;
 }
@@ -5670,13 +5690,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10281916`, talk: `img/${n}_talk.png?v=10281916`, blink: `img/${n}_blink.png?v=10281916` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282011`, talk: `img/${n}_talk.png?v=10282011`, blink: `img/${n}_blink.png?v=10282011` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10281916" : `img/${n}_spartan.png?v=10281916`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282011" : `img/${n}_spartan.png?v=10282011`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -5703,9 +5723,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo"
+  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281916`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282011`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -5714,9 +5734,10 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281916`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282011`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
-  el.classList.remove("devil", "possessed", "aged");
+  el.classList.remove("devil", "possessed", "aged", "ghost");
+  if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
   if (cls) el.classList.add(cls);
   el.classList.add("on");
 }
@@ -5995,7 +6016,7 @@ function showExplore() {
 let curId = "";
 function show(id) {
   // «Пепел»: слишком долго без сигареты — срыв
-  if (id.startsWith("pa_") && PA.crave >= 7 && !scenes[id].ending && !["pa_smoke", "pa_drink", "pa_vodka", "pa_start"].includes(id)) id = "pa_end_crave";
+  if (id.startsWith("pa_") && PA.crave >= 7 && !scenes[id].ending && !["pa_smoke", "pa_drink", "pa_vodka", "pa_start", "pa_crave_fix"].includes(id)) { PA.after = id; id = "pa_crave_fix"; }
   clearIdle();
   if (id === "s0") idleT = setTimeout(() => { if (scene === scenes.s0) show("secret"); }, 25000);
   scene = scenes[id]; idx = 0;
@@ -6026,7 +6047,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10281916) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282011) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
