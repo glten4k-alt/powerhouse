@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282142") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282152") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -425,7 +425,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282142") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282152") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -508,11 +508,13 @@
   #inv span:first-child { background:none; color:#f8efe2; box-shadow:none; rotate:0deg; }
   /* прогулка по гаражам */
   #walk { position:absolute; inset:0; z-index:6; display:none; background:#000; } #walk.on { display:block; }
-  #walkCv { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; image-rendering:pixelated; }
+  #walkCv { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:url(#paintFx) sepia(.12); touch-action:none; }
   #walkHint { position:absolute; top:12px; left:50%; translate:-50% 0; font:12px "Courier New", monospace; color:#ffffffaa; background:#0008; padding:4px 10px; border-radius:6px; }
   #walkPad { position:absolute; left:0; right:0; bottom:4%; display:flex; justify-content:space-between; padding:0 4%; gap:10px; }
   #walkPad button { font:bold 22px system-ui; color:#fff; background:#0009; border:1px solid #ffffff44; border-radius:14px; padding:12px 22px; cursor:pointer; touch-action:none; user-select:none; }
-  #walkAct { margin-left:auto; font-size:16px !important; opacity:.5; } #walkAct.ready { opacity:1; border-color:#f0b35e !important; color:#f0b35e !important; }
+  #walkAct { margin-left:auto; font:700 18px 'Caveat', cursive !important; opacity:.6; }
+  @media (max-aspect-ratio: 1/1) { #walkHint { top:58px; font-size:11px; } }
+  @media (pointer:coarse) { #walkL, #walkR { display:none; } #walkPad { bottom:calc(env(safe-area-inset-bottom) + 18px); } #walkAct { margin:0 auto; font-size:22px !important; padding:14px 26px !important; } } #walkAct.ready { opacity:1; border-color:#f0b35e !important; color:#f0b35e !important; }
   #stage.high2 #walkCv, #stage.high2 #bg { filter:saturate(1.5) hue-rotate(15deg); }
   #stage.high3 #walkCv, #stage.high3 #bg { animation:trip 7s linear infinite; }
   @keyframes trip { 0% { filter:saturate(1.8) hue-rotate(0deg); transform:skewX(0); } 50% { filter:saturate(1.8) hue-rotate(180deg) blur(.6px); transform:skewX(1.5deg) scale(1.02); } 100% { filter:saturate(1.8) hue-rotate(360deg); transform:skewX(0); } }
@@ -549,17 +551,17 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282142" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282142" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282152" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282152" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282142) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282152) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
   <div id="toast"></div>
-  <div id="walk"><canvas id="walkCv"></canvas><div id="walkHint">← → идти · E — подойти</div><div id="walkPad"><button id="walkL">◀</button><button id="walkR">▶</button><button id="walkAct">E</button></div></div>
+  <div id="walk"><canvas id="walkCv"></canvas><div id="walkHint">Нажми, куда идти · на человека — поговорить</div><div id="walkPad"><button id="walkL">◀</button><button id="walkR">▶</button><button id="walkAct">E</button></div></div>
   <div id="inv"></div>
   <div id="qte"><div id="qteCam"><img id="qteEgor" alt=""><canvas id="qteFoe"></canvas></div><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
   <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
@@ -984,7 +986,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282142"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282152"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1103,7 +1105,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282142`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282152`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1474,7 +1476,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282142";
+  $("qteEgor").src = "img/egor_px.png?v=10282152";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -3218,7 +3220,7 @@ const scenes = {
     ]
   },
   pa_drink: {
-    get bg() { return scenes[PA.back].bg; }, get place() { return scenes[PA.back].place; }, egor: true, noir: true, music: "paris",
+    get bg() { return scenes[PA.back].bg; }, get place() { return scenes[PA.back].place; }, egor: true, noir: true, get music() { return PA.drink >= 4 ? "cancan" : "paris"; },
     get drunk() { return PA.drink >= 2; },
     linesFn: () => { PA.drink++; PA.ret = true; const n = PA.drink; return [
       n === 1 ? { who: "Егор", t: "За кино, блять. И за то, что мы не на парах." } :
@@ -3642,7 +3644,7 @@ const scenes = {
     }
   },
   pa_vodka: {
-    get bg() { return scenes[PA.back].bg; }, get place() { return scenes[PA.back].place; }, egor: true, noir: true, music: "paris",
+    get bg() { return scenes[PA.back].bg; }, get place() { return scenes[PA.back].place; }, egor: true, noir: true, get music() { return PA.drink >= 4 ? "cancan" : "paris"; },
     get drunk() { return PA.drink >= 2; },
     linesFn: () => { PA.drink += 2; PA.vodka++; PA.ret = true; const n = PA.vodka; return [
       n === 1 ? { who: "Егор", t: "Фляжка из «Ашана» на Таганке. Французы пусть пьют своё вино. Мы — люди простые. За «Пепел»!" } :
@@ -4198,7 +4200,7 @@ const scenes = {
   // ===== «Гаражи Пети»: пьянка в ГСК «Рассвет». Ходить по гаражам, курить с Петей, говорить с Claude Code на ноутбуке =====
   pg_start: {
     bg: "garage", place: "ГСК «Рассвет» · пятница · 22:40", egor: true, music: "reggae", next: "pg_walk",
-    linesFn: () => { Object.assign(PG, { zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 }); return [
+    linesFn: () => { Object.assign(PG, { moodSeen: new Set(), zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 }); return [
       { skip: "Гаражи Пети" },
       { tg: "пацаны. гаражи. все четыре открыты. приходите. будет всё. даже то чего не будет", time: "21:58", chat: "Петя", sayWho: null, sayText: "Петя пишет без заглавных букв. Значит, уже начал." },
       { who: null, t: "ГСК «Рассвет», между МКАДом и железкой. Четыре гаража Пети подряд — один бар, один чилл, одна мастерская и один, который всегда закрыт." },
@@ -4334,7 +4336,7 @@ const scenes = {
       { who: null, t: "Только имя. И долгий взгляд. Через три секунды мне становится неуютно. Через пять — хочется извиниться, не знаю за что." },
       { who: "Ален", t: "Петя позвал. Я пришёл. Не делай из этого событие." }
     ] : [{ npcShow: "npc_alain", who: "Ален", t: "Ты опять подошёл. У тебя это входит в привычку. Не уверен, что одобряю." }]; },
-    choices: () => [
+    choices: () => PG.high >= 2 ? [{ icon: "let", t: "Отойти", sub: "Он ждёт, когда ты протрезвеешь", go: "pg_walk" }] : [
       ...(!PG.q.has("a_why") ? [{ icon: "talk", t: "«Зачем вы на самом деле пришли?»", sub: "", go: "pg_a_why" }] : []),
       ...(!PG.q.has("a_love") ? [{ icon: "soul", t: "«Вам здесь нравится? С нами?»", sub: "Подойти ближе", go: "pg_a_love" }] : []),
       ...(!PG.q.has("a_legacy") ? [{ icon: "spark", t: "«Что от вас останется?»", sub: "Спросить прямо", go: "pg_a_legacy" }] : []),
@@ -4370,11 +4372,11 @@ const scenes = {
     bg: "garage", place: "ГСК «Рассвет» · Жора", music: "drunk",
     linesFn: () => { const first = !PG.met.has("zhora"); PG.met.add("zhora"); return first ? [
       { npcShow: "npc_comic", who: null, t: "Из темноты между гаражами выходит силуэт в очках. Очки ловят свет гирлянды. Больше ничего не видно — только очки и улыбка в голосе." },
-      { who: "Жора", t: "Пацаны! Это же вы! Я Жора. Комик. Ну, был комиком. Сейчас скорее… свободный художник. От слова «свободный». От меня жена ушла. К фитнес-тренеру. Ха-ха. Ну, смешно же." },
-      { who: "Егор", t: "(из первого гаража) Это кто вообще? Петя, ты его звал?" },
+      { who: "Жора Куколд", t: "Пацаны! Это же вы! Я Жора. Комик. Ну, был комиком. Сейчас скорее… свободный художник. От слова «свободный». От меня жена ушла. К фитнес-тренеру. Ха-ха. Ну, смешно же." },
+      { who: "Егор", t: "(из первого гаража) А, это Жора Куколд. Я его так назвал в прошлую пятницу. Он не обиделся. Он вообще не умеет обижаться, это его проблема." },
       { who: "Петя", t: "(из второго) Он сам пришёл! Третью пятницу подряд! Я не знаю, как его выгнать, он слишком добрый!" },
-      { who: "Жора", t: "Можно я с вами? Я пиво принёс. Своё! И шутки. Много шуток. Вот: «Жена ушла к тренеру — теперь у неё личный, а у меня — личная драма». А? А?" }
-    ] : [{ npcShow: "npc_comic", who: "Жора", t: [
+      { who: "Жора Куколд", t: "Можно я с вами? Я пиво принёс. Своё! И шутки. Много шуток. Вот: «Жена ушла к тренеру — теперь у неё личный, а у меня — личная драма». А? А?" }
+    ] : [{ npcShow: "npc_comic", who: "Жора Куколд", t: [
       "Глеб! Ты куда? Я с тобой. Я просто рядом постою. Я тихо. Я умею тихо, я три года был женат.",
       "А давай селфи? Для сторис. Пусть бывшая видит, что у меня теперь есть друзья. Ты же друг? Скажи, что друг.",
       "Я придумал новый материал! «Я не куколд, я просто хорошо делегирую». Не смешно? Ну и ладно. Мне тоже не смешно.",
@@ -4389,20 +4391,20 @@ const scenes = {
   pg_zhora_tease: {
     bg: "garage", place: "ГСК «Рассвет» · Жора", music: "drunk", next: "pg_walk",
     linesFn: () => { const n = PG.tease = (PG.tease || 0) + 1; return [
-      [{ who: "Глеб", t: "Жора, а тренер хоть хороший? Может, и нам абонемент возьмёшь? Со скидкой для бывших." }, { who: "Жора", t: "Ха! Ха-ха. Нет, он дорогой. Она мне тоже дорого обошлась. Ха. Это шутка. Почти." }],
-      [{ who: "Егор", t: "(издалека) Жора, ты как кальян у Пети — все пользуются, никто не помнит, откуда взялся!" }, { who: "Жора", t: "Это обидно. Но смешно. Запишу. Можно я это у себя в стендапе возьму?" }],
-      [{ who: "Глеб", t: "Жора, ты в нашей компании на позиции «запасной». Как скамейка. Как Витя в FIFA." }, { who: "Жора", t: "Запасной — это тоже в команде! Я согласен! Я на всё согласен, это, видимо, моя проблема." }],
-      [{ who: "Петя", t: "(из второго) Жора, по Пелевину ты не куколд, ты просто наблюдатель в чужой иллюзии!" }, { who: "Жора", t: "Петя, это лучшее, что мне говорили за год. Можно я тебя обниму? Нет? Ладно." }],
-      [{ who: "Витя", t: "Жора, ты как банк. Ты от нас что-то хочешь, а мы тебе ничего не должны." }, { who: "Жора", t: "Витя… это было жёстко. Я даже не нашёл, что пошутить. Это со мной впервые." }]
+      [{ who: "Глеб", t: "Жора, а тренер хоть хороший? Может, и нам абонемент возьмёшь? Со скидкой для бывших." }, { who: "Жора Куколд", t: "Ха! Ха-ха. Нет, он дорогой. Она мне тоже дорого обошлась. Ха. Это шутка. Почти." }],
+      [{ who: "Егор", t: "(издалека) Жора, ты как кальян у Пети — все пользуются, никто не помнит, откуда взялся!" }, { who: "Жора Куколд", t: "Это обидно. Но смешно. Запишу. Можно я это у себя в стендапе возьму?" }],
+      [{ who: "Глеб", t: "Жора, ты в нашей компании на позиции «запасной». Как скамейка. Как Витя в FIFA." }, { who: "Жора Куколд", t: "Запасной — это тоже в команде! Я согласен! Я на всё согласен, это, видимо, моя проблема." }],
+      [{ who: "Петя", t: "(из второго) Жора, по Пелевину ты не куколд, ты просто наблюдатель в чужой иллюзии!" }, { who: "Жора Куколд", t: "Петя, это лучшее, что мне говорили за год. Можно я тебя обниму? Нет? Ладно." }],
+      [{ who: "Витя", t: "Жора, ты как банк. Ты от нас что-то хочешь, а мы тебе ничего не должны." }, { who: "Жора Куколд", t: "Витя… это было жёстко. Я даже не нашёл, что пошутить. Это со мной впервые." }]
     ][(n - 1) % 5]; }
   },
   pg_zhora_real: {
     bg: "garage", place: "ГСК «Рассвет» · Жора", music: "lonely", next: "pg_walk",
     linesFn: () => { PG.q.add("z_real"); return [
-      { npcShow: "npc_comic", who: "Жора", t: "Без шуток… Ну. Без шуток я, оказывается, не очень умею. Восемь лет шутил. Она говорила, что ей плохо, — я шутил. Думал, это помогает." },
-      { who: "Жора", t: "А она ушла. И сказала подругам… ну, неважно. Сказала, что я ни разу её не услышал. И я сижу и думаю: а вдруг правда." },
+      { npcShow: "npc_comic", who: "Жора Куколд", t: "Без шуток… Ну. Без шуток я, оказывается, не очень умею. Восемь лет шутил. Она говорила, что ей плохо, — я шутил. Думал, это помогает." },
+      { who: "Жора Куколд", t: "А она ушла. И сказала подругам… ну, неважно. Сказала, что я ни разу её не услышал. И я сижу и думаю: а вдруг правда." },
       { who: null, t: "Очки на силуэте больше не блестят. Он отвернулся от гирлянды." },
-      { who: "Жора", t: "Я к вам хожу, потому что вы шутите друг над другом — и всё равно друг друга не бросаете. Я так не умел. Хочу научиться. Ладно. Всё. Ха. Вот, пошутил." }
+      { who: "Жора Куколд", t: "Я к вам хожу, потому что вы шутите друг над другом — и всё равно друг друга не бросаете. Я так не умел. Хочу научиться. Ладно. Всё. Ха. Вот, пошутил." }
     ]; }
   },
   pg_claude: {
@@ -6782,13 +6784,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282142`, talk: `img/${n}_talk.png?v=10282142`, blink: `img/${n}_blink.png?v=10282142` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282152`, talk: `img/${n}_talk.png?v=10282152`, blink: `img/${n}_blink.png?v=10282152` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282142" : `img/${n}_spartan.png?v=10282142`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282152" : `img/${n}_spartan.png?v=10282152`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6815,9 +6817,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic"
+  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282142`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282152`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6826,7 +6828,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282142`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282152`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7139,6 +7141,7 @@ function show(id) {
   if (scene.linesFn) scene.lines = scene.linesFn();
   curId = id;
   if (id.startsWith("pa_")) paPrepare(id);
+  if (id.startsWith("pg_") && scene.lines.length) { const m = pgMood(id); if (m) scene.lines = [m, ...(scene.linesFn ? scene.lines : (scene._base || (scene._base = scene.lines)))]; else if (!scene.linesFn && scene._base) scene.lines = scene._base; }
   paHud(id.startsWith("pa_"));
   music.mood(scene.x && scene.music !== "tense" ? "mystic" : scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
   $("place").textContent = scene.place;
@@ -7148,7 +7151,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282142) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282152) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -7172,6 +7175,7 @@ function step() {
   }
   idx++;
   if (l.music) music.mood(l.music);   // реплика может сменить настроение музыки
+  else if (l.who === "Ален" || (l.npcShow || "").startsWith("npc_alain")) music.mood("cancan");   // у Алена своя тема — галоп
   // пропуск времени: чёрный экран с надписью, стена перерисовывается
   if (l.skip) {
     $("box").style.display = "none";
@@ -7448,7 +7452,7 @@ $("mS").onclick = e => {
 };
 // ---------- Прогулка по гаражам Пети: Глеб ходит влево-вправо, подходит к людям и вещам, «E» — поговорить ----------
 // Мир 1400×180 в пикселях, камера едет за Глебом. Объект: { x, label, go, if? } — go уводит в сцену, сцена возвращается в "pg_walk".
-const PG = { zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 };
+const PG = { moodSeen: new Set(), zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 };
 const WALK = { on: false, keys: {}, near: null };
 const PG_OBJS = [
   { x: 150, label: "Егор", go: "pg_egor", who: "egor" },
@@ -7458,79 +7462,144 @@ const PG_OBJS = [
   { x: 560, label: "Петя", go: "pg_petya", who: "petya" },
   { x: 655, label: "Холодильник", go: "pg_fridge" },
   { x: 712, label: "Ален", go: "pg_alain", who: "alain" },
-  { get x() { return PG.zx; }, label: "Жора", go: "pg_zhora", who: "comic" },
+  { get x() { return PG.zx; }, label: "Жора Куколд", go: "pg_zhora", who: "comic" },
   { x: 800, label: "«Волга»", go: "pg_volga" },
   { x: 915, label: "Ноутбук · Claude Code", go: "pg_claude" },
   { x: 1120, label: () => PG.open ? "Четвёртый гараж" : "Замок на гараже", go: () => PG.open ? "pg_secret" : "pg_lock", who: () => PG.open ? "sergey" : null },
   { x: 1340, label: "Уйти к трассе", go: "pg_exit" }
 ];
+// Гаражи рисуются «красками»: неподвижный мир один раз собирается в панораму 1400×180, растягивается в 4 раза и покрывается мазками.
+// Каждый кадр поверх панорамы рисуются живые вещи (гирлянда, костёр, люди) в маленьком слое, который растягивается с мягким сглаживанием.
+// На телефоне — тап: куда нажал, туда Глеб и идёт; нажал на человека — дойдёт и заговорит.
+// «Гаражи Пети»: первая реплика зависит от состояния Глеба — выпил (пиво 3+), курнул (2+), или всё вместе
+const PG_MOOD = {
+  pg_egor:   { tipsy: ["Егор", "О, ты уже хороший. Глаза блестят, как у Пети в первую пятницу месяца."], high: ["Егор", "Глеб, ты пахнешь вторым гаражом. Я ничего не говорю. Я просто констатирую, как Ален."], both: ["Егор", "Брат, ты и пил, и курил. Ты сейчас как Halo на легендарке: всё медленно и всё болит. Садись."] },
+  pg_vitya:  { tipsy: ["Витя", "Ты выпил? Хорошо. Выпивший человек меньше спрашивает про суд."], both: ["Витя", "Глеб, у тебя руки трясутся. Или это у меня. Давай оба посидим."] },
+  pg_ded:    { tipsy: ["Дед Михалыч", "О, уже тёпленький. Садись, только себя в костёр не урони."], high: ["Дед Михалыч", "Чую, Петькино курил. Я, сынок, в восемьдесят седьмом участковым был. Шучу. Или нет. Сиди тихо."] },
+  pg_petya:  { tipsy: ["Петя", "Брат, пиво — это иллюзия жидкости. Давай лучше настоящее."] },
+  pg_alain:  { tipsy: ["Ален", "Ты пьян. Говори меньше. Это поможет нам обоим."], high: ["Ален", "У тебя зрачки во всё лицо. Я не разговариваю с теми, кого сейчас нет. Подойди, когда вернёшься."] },
+  pg_claude: { tipsy: ["Claude Code", "⏺ Судя по скорости набора, ты выпил: опечаток втрое больше. Я всё равно понимаю."], high: ["Claude Code", "⏺ Ты уже две минуты смотришь на курсор. Он мигает. Это нормально. Это просто курсор."] },
+  pg_zhora:  { tipsy: ["", "Пьяному мне Жора кажется почти смешным. Почти."], high: ["", "Под травой силуэт Жоры кажется огромным. Как будто это не человек, а тень от человека. Очень одинокая тень."] },
+  pg_secret: { tipsy: ["Сергей", "От тебя пахнет пивом. Пиво — тоже путь. Короткий и мокрый."], high: ["Сергей", "Ты пришёл не один. С тобой пришла Петина трава. Пусть посидит у двери."] }
+};
+function pgMood(id) {
+  const m = PG_MOOD[id]; if (!m) return null;
+  const st = PG.high >= 2 && PG.beer >= 4 ? "both" : PG.high >= 2 ? "high" : PG.beer >= 3 ? "tipsy" : null;
+  const l = st && (m[st] || (st === "both" && (m.high || m.tipsy)));
+  if (!l || PG.moodSeen.has(id + st)) return null;
+  PG.moodSeen.add(id + st); return { who: l[0], t: l[1] };
+}
+const WS = 4, walkPano = document.createElement("canvas"), walkLive = document.createElement("canvas");
+function walkBuildPano() {
+  const lo = document.createElement("canvas"); lo.width = 1400; lo.height = 180;
+  walkWorld(lo.getContext("2d"), 0, Date.now(), true);
+  walkPano.width = 1400 * WS; walkPano.height = 180 * WS;
+  const c = walkPano.getContext("2d"), W = walkPano.width, H = walkPano.height, src = lo.getContext("2d").getImageData(0, 0, 1400, 180).data;
+  c.imageSmoothingEnabled = true; c.filter = "blur(6px) saturate(1.1)"; c.drawImage(lo, -8, -8, W + 16, H + 16); c.filter = "none";
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 16000; i++) {
+    const x = rnd() * W, y = rnd() * H, k = ((y / WS | 0) * 1400 + (x / WS | 0)) * 4;
+    c.save(); c.translate(x, y); c.rotate(-.4 + rnd() * .5 + (y > H * .82 ? .4 : 0)); c.globalAlpha = .3 + rnd() * .35;
+    c.fillStyle = `rgb(${src[k] + (rnd() * 20 - 10)},${src[k + 1] + (rnd() * 20 - 10)},${src[k + 2] + (rnd() * 20 - 10)})`;
+    c.beginPath(); c.ellipse(0, 0, 6 + rnd() * 12, 2 + rnd() * 4, 0, 0, 7); c.fill(); c.restore();
+  }
+  c.globalAlpha = 1; c.fillStyle = "#e8e0d0"; c.font = `bold ${8 * WS}px 'Caveat', cursive`; c.fillText("ГСК «Рассвет»", 10 * WS, 60 * WS);
+  ["1", "2", "3", "4"].forEach((n, i) => c.fillText(n, ([80, 460, 740, 1020][i] + 6) * WS, 92 * WS));
+}
+// мир: stat = только неподвижное (для панорамы), иначе — только живое
+function walkWorld(c, cam, t, stat) {
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x - cam), Math.round(y), Math.round(w), Math.round(h)); };
+  if (stat) {
+    const sky = c.createLinearGradient(0, 0, 0, 120); sky.addColorStop(0, "#0c1030"); sky.addColorStop(1, "#3a2c48"); c.fillStyle = sky; c.fillRect(0, 0, 1400, 180);
+    c.fillStyle = "#f0e8d0"; c.beginPath(); c.arc(1180, 30, 10, 0, 7); c.fill();
+    for (let i = 0; i < 30; i++) R(i * 50, 72 + (i % 4) * 4, 30, 30, "#181834");
+    for (let i = 0; i < 90; i++) if ((i * 7) % 3) R((i * 17) % 1500, 76 + (i * 11) % 24, 2, 2, "#e8c870");
+    R(0, 150, 1400, 30, "#2e2c34"); for (let x = 0; x < 1400; x += 40) R(x, 164, 20, 2, "#55525a");
+    const G = [[80, "#6a5240", "#f0b060"], [460, "#4a6050", "#a0e070"], [740, "#4e4e62", "#e8f0ff"], [1020, "#6a4030", "#ffb050"]];
+    G.forEach(([gx, wall, light], i) => {
+      R(gx, 80, 240, 70, wall); R(gx - 4, 76, 248, 6, "#2a2a2a");
+      if (i < 3) { R(gx + 20, 92, 200, 58, "#1e1610"); const g = c.createRadialGradient(gx + 120, 132, 4, gx + 120, 132, 120); g.addColorStop(0, light + "88"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(gx + 20, 92, 200, 58); }
+      else { R(gx + 20, 92, 200, 58, "#6a4a32"); for (let y = 96; y < 150; y += 6) R(gx + 20, y, 200, 1, "#4a3220"); }
+    });
+    R(280, 128, 14, 22, "#1a1a1a"); R(283, 132, 8, 8, "#3a3a3a");
+    R(370, 146, 30, 4, "#3a2a1a");
+    R(520, 132, 70, 14, "#6a2a6a"); R(520, 124, 70, 8, "#7a3a7a"); R(600, 128, 6, 18, "#3a6a8a"); R(598, 122, 10, 7, "#5a9aba");
+    R(640, 110, 24, 40, "#e8e8e8");
+    R(770, 124, 70, 18, "#e8e0c8"); R(784, 112, 40, 14, "#d8d0b8"); R(788, 114, 32, 9, "#8ab0c8"); c.fillStyle = "#111"; c.beginPath(); c.arc(784, 142, 6, 0, 7); c.arc(828, 142, 6, 0, 7); c.fill();
+    R(880, 128, 70, 4, "#6a5a4a"); R(884, 132, 3, 18, "#6a5a4a"); R(943, 132, 3, 18, "#6a5a4a"); R(902, 116, 26, 12, "#2a2a2a"); R(938, 120, 6, 8, "#4a8a3a");
+    R(1360, 100, 3, 50, "#5a5a5a"); R(1340, 96, 44, 12, "#2a6a3a");
+    return;
+  }
+  for (let i = 0; i < 24; i++) { c.fillStyle = ["#ff4f7e", "#f0c020", "#5ab0ff", "#7ad07a"][(i + (t / 400 | 0)) % 4]; c.beginPath(); c.arc(91 + i * 10 - cam, 95 + Math.sin(i) * 2, 1.8, 0, 7); c.fill(); }
+  if (PG.track) for (let i = 0; i < 3; i++) R(298 + i * 4, 124 - ((t / 120 + i * 3) % 12), 2, 2, "#f0b35e");
+  for (let i = 0; i < 5; i++) { c.fillStyle = ["#ff6020", "#ffb040", "#ffe080"][i % 3]; c.beginPath(); c.moveTo(372 + i * 6 - cam, 146); c.quadraticCurveTo(375 + i * 6 - cam, 136, 375 + i * 6 - cam + Math.sin(t / 150 + i) * 2, 130 - Math.sin(t / 120 + i) * 5); c.quadraticCurveTo(377 + i * 6 - cam, 138, 378 + i * 6 - cam, 146); c.fill(); }
+  const fg = c.createRadialGradient(385 - cam, 140, 2, 385 - cam, 140, 40); fg.addColorStop(0, `rgba(255,150,60,${.35 + Math.sin(t / 90) * .05})`); fg.addColorStop(1, "#0000"); c.fillStyle = fg; c.fillRect(340 - cam, 100, 90, 60);
+  c.fillStyle = "#e8742a"; c.fillRect(904 - cam, 118, 22, 8); if ((t / 500 | 0) % 2) { c.fillStyle = "#fff"; c.fillRect(906 - cam, 120, 3, 2); }
+  if (PG.open) R(1040, 92, 200, 58, "#1c1008");
+  if (PG.open) for (let i = 0; i < 6; i++) R(1060 + i * 30, 140, 2, 6 + (i % 2) * 2, "#f8e8c0");
+  const people = PG_OBJS.filter(o => o.who && (typeof o.who === "function" ? o.who() : o.who));
+  for (const o of people) { const kind = typeof o.who === "function" ? o.who() : o.who; c.save(); c.translate(-cam, 0); drawFighter(c, { kind, x: o.x, y: 152, dir: o.x > PG.x ? -1 : 1, walk: kind === "comic" ? PG.walk : o.x === 560 ? t / 60 : 0, act: 0, hurt: 0, ko: 0 }); c.restore(); }
+  c.save(); c.translate(-cam, 0); drawFighter(c, { kind: "gleb", x: PG.x, y: 160, dir: PG.dir, walk: PG.walk, act: 0, hurt: 0, ko: 0 }); c.restore();
+  if (WALK.near) { const nx = WALK.near.x - cam; c.fillStyle = "#f0b35e"; c.beginPath(); c.moveTo(nx - 4, 104); c.lineTo(nx + 4, 104); c.lineTo(nx, 110 + Math.sin(t / 150) * 2); c.fill(); }
+  if (WALK.tx !== null && WALK.tx !== undefined) { c.strokeStyle = "#f0b35e88"; c.beginPath(); c.ellipse(WALK.tx - cam, 162, 6, 2, 0, 0, 7); c.stroke(); }
+}
 function walkStart() {
-  WALK.on = true; WALK.near = null;
+  WALK.on = true; WALK.near = null; WALK.tx = null;
   $("box").style.display = "none"; $("walk").classList.add("on");
-  const cv = $("walkCv"), pt = innerHeight > innerWidth; cv.width = pt ? 180 : 320; cv.height = 180;
+  const pt = innerHeight > innerWidth, cv = $("walkCv");
+  // на телефоне камера ближе: мир занимает большую часть экрана, снизу остаётся место под кнопку
+  WALK.vh = pt ? 240 : 180; WALK.vw = pt ? Math.round(240 * innerWidth / innerHeight) : 320; WALK.pad = pt ? 34 : 0;
+  cv.width = WALK.vw * WS; cv.height = WALK.vh * WS; walkLive.width = WALK.vw; walkLive.height = 180;
+  if (walkPano.width !== 1400 * WS) walkBuildPano();
   music.mood(PG.track);
   cancelAnimationFrame(WALK.raf);
   const loop = () => { if (!WALK.on) return; walkStep(); walkDraw(); WALK.raf = requestAnimationFrame(loop); };
   loop();
 }
-function walkStop() { WALK.on = false; cancelAnimationFrame(WALK.raf); $("walk").classList.remove("on"); $("box").style.display = ""; }
-function walkAct() {
-  if (!WALK.on || !WALK.near) return;
-  const o = WALK.near, go = typeof o.go === "function" ? o.go() : o.go;
+function walkStop() { WALK.on = false; WALK.tx = null; WALK.auto = null; cancelAnimationFrame(WALK.raf); $("walk").classList.remove("on"); $("box").style.display = ""; }
+function walkAct(o) {
+  o = o || WALK.near;
+  if (!WALK.on || !o) return;
+  const go = typeof o.go === "function" ? o.go() : o.go;
   walkStop(); show(go);
 }
 function walkStep() {
   const k = WALK.keys, sp = PG.high >= 3 ? .9 : 1.4;
   let dx = (k.r ? 1 : 0) - (k.l ? 1 : 0);
+  if (dx) WALK.tx = null;
+  else if (WALK.tx !== null) { const d = WALK.tx - PG.x; if (Math.abs(d) < 2) { WALK.tx = null; if (WALK.auto) { const o = WALK.auto; WALK.auto = null; return walkAct(o); } } else dx = Math.sign(d); }
   if (PG.high >= 3 && dx) dx += Math.sin(Date.now() / 300) * .4;          // обкуренного ведёт
   if (dx) { PG.x = Math.max(20, Math.min(1380, PG.x + dx * sp)); PG.dir = dx > 0 ? 1 : -1; PG.walk++; }
   if (PG.met.has("zhora")) PG.zx += (PG.x - 30 * PG.dir - PG.zx) * .025;   // Жора ходит хвостом
   WALK.near = PG_OBJS.filter(o => Math.abs(o.x - PG.x) < 22).sort((a, b) => Math.abs(a.x - PG.x) - Math.abs(b.x - PG.x))[0] || null;
   const lab = WALK.near ? (typeof WALK.near.label === "function" ? WALK.near.label() : WALK.near.label) : "";
-  $("walkAct").textContent = lab ? "E · " + lab : "E";
+  $("walkAct").textContent = lab ? "Поговорить · " + lab : "Подойди к кому-нибудь";
   $("walkAct").classList.toggle("ready", !!lab);
 }
 function walkDraw() {
-  const cv = $("walkCv"), c = cv.getContext("2d"), vw = cv.width, t = Date.now();
-  const cam = Math.max(0, Math.min(1400 - vw, PG.x - vw / 2));
-  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x - cam), Math.round(y), Math.round(w), Math.round(h)); };
+  const cv = $("walkCv"), c = cv.getContext("2d"), vw = WALK.vw, t = Date.now(), top = (WALK.vh - 180 - WALK.pad) * WS;
+  const cam = WALK.cam = Math.max(0, Math.min(1400 - vw, PG.x - vw / 2));
   c.setTransform(1, 0, 0, 1, 0, 0);
-  const sky = c.createLinearGradient(0, 0, 0, 120); sky.addColorStop(0, "#0a0c22"); sky.addColorStop(1, "#2a2440"); c.fillStyle = sky; c.fillRect(0, 0, vw, 180);
-  for (let i = 0; i < 60; i++) { const sx = (i * 97) % 1400; c.fillStyle = (i + (t / 500 | 0)) % 9 ? "#c8c8e0" : "#fff"; c.fillRect(Math.round(sx - cam * .3), (i * 37) % 70, 1, 1); }
-  for (let i = 0; i < 30; i++) R(i * 50 + cam * .5, 72 + (i % 4) * 4, 30, 30, "#14142a");                  // дальние многоэтажки
-  for (let i = 0; i < 90; i++) if ((i * 7) % 3) R((i * 17) % 1500 + cam * .5, 76 + (i * 11) % 24, 2, 2, "#e8c870aa");
-  R(0, 150, 1400, 30, "#2a2a30"); for (let x = 0; x < 1400; x += 40) R(x, 164, 20, 2, "#4a4a50");      // асфальт
-  // гаражи: [x, цвет стены, свет внутри, открыт?]
-  const G = [[80, "#5a4a3a", "#f0b060", true], [460, "#4a5a4a", "#a0e070", true], [740, "#4a4a5a", "#e8f0ff", true], [1020, "#5a3a2a", "#ffb050", PG.open]];
-  G.forEach(([gx, wall, light, open], i) => {
-    R(gx, 80, 240, 70, wall); R(gx - 4, 76, 248, 6, "#2a2a2a");
-    c.fillStyle = "#e8e0d0"; c.font = "bold 9px monospace"; c.fillText(String(i + 1), Math.round(gx + 6 - cam), 92);
-    if (open) { R(gx + 20, 92, 200, 58, "#1a1410"); const g = c.createRadialGradient(gx + 120 - cam, 130, 4, gx + 120 - cam, 130, 110); g.addColorStop(0, light + "66"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(gx + 20 - cam, 92, 200, 58); }
-    else { R(gx + 20, 92, 200, 58, "#6a4a32"); for (let y = 96; y < 150; y += 6) R(gx + 20, y, 200, 1, "#4a3220"); R(gx + 114, 120, 12, 10, "#c8b040"); R(gx + 116, 114, 8, 7, "#0000"); c.strokeStyle = "#c8b040"; c.beginPath(); c.arc(gx + 120 - cam, 120, 4, Math.PI, 0); c.stroke(); }
-  });
-  for (let i = 0; i < 24; i++) R(90 + i * 10, 94 + Math.sin(i) * 2, 3, 3, ["#ff4f7e", "#f0c020", "#5ab0ff", "#7ad07a"][(i + (t / 400 | 0)) % 4]);   // гирлянда в первом
-  R(280, 128, 14, 22, "#1a1a1a"); R(283, 132, 8, 8, "#3a3a3a"); R(285, 142, 4, 4, "#3a3a3a");                                    // колонка
-  if (PG.track) for (let i = 0; i < 3; i++) R(298 + i * 4, 124 - ((t / 120 + i * 3) % 12), 2, 2, "#f0b35e");
-  R(370, 146, 30, 4, "#3a2a1a"); for (let i = 0; i < 5; i++) { c.fillStyle = ["#ff6020", "#ffb040", "#ffe080"][i % 3]; c.beginPath(); c.moveTo(372 + i * 6 - cam, 146); c.lineTo(375 + i * 6 - cam, 132 - Math.sin(t / 120 + i) * 5); c.lineTo(378 + i * 6 - cam, 146); c.fill(); }   // костёр
-  R(520, 132, 70, 14, "#5a2a5a"); R(520, 124, 70, 8, "#6a3a6a"); R(600, 128, 6, 18, "#3a6a8a"); R(598, 122, 10, 7, "#5a9aba");                 // диван и кальян
-  R(640, 110, 24, 40, "#e8e8e8"); R(642, 112, 20, 2, "#c8c8c8");                                                                      // холодильник
-  R(770, 124, 70, 18, "#e8e0c8"); R(784, 112, 40, 14, "#d8d0b8"); R(788, 114, 32, 9, "#8ab0c8"); c.fillStyle = "#111"; c.beginPath(); c.arc(784 - cam, 142, 6, 0, 7); c.arc(828 - cam, 142, 6, 0, 7); c.fill();   // «Волга»
-  R(880, 128, 70, 4, "#6a5a4a"); R(884, 132, 3, 18, "#6a5a4a"); R(943, 132, 3, 18, "#6a5a4a");                                        // верстак
-  R(902, 116, 26, 12, "#2a2a2a"); R(904, 118, 22, 8, "#d97757"); R(900, 128, 30, 2, "#3a3a3a"); R(938, 120, 6, 8, "#4a8a3a");          // ноутбук и банка огурцов
-  if (PG.open) for (let i = 0; i < 6; i++) R(1060 + i * 30, 140, 2, 6 + (i % 2) * 2, "#f8e8c0");
-  R(1360, 100, 3, 50, "#5a5a5a"); R(1340, 96, 44, 12, "#2a6a3a"); c.fillStyle = "#f0f0f0"; c.font = "7px sans-serif"; c.fillText("ТРАССА", 1344 - cam, 105);
-  c.fillStyle = "#f0e6d0"; c.font = "bold 8px monospace"; c.fillText("ГСК «РАССВЕТ»", Math.round(10 - cam), 60);
-  // люди
-  const people = PG_OBJS.filter(o => o.who && (typeof o.who === "function" ? o.who() : o.who));
-  for (const o of people) { const kind = typeof o.who === "function" ? o.who() : o.who; c.save(); c.translate(-cam, 0); drawFighter(c, { kind, x: o.x, y: 152, dir: o.x > PG.x ? -1 : 1, walk: o.x === 560 ? t / 60 : 0, act: 0, hurt: 0, ko: 0 }); c.restore(); }
-  c.save(); c.translate(-cam, 0); drawFighter(c, { kind: "gleb", x: PG.x, y: 160, dir: PG.dir, walk: PG.walk, act: 0, hurt: 0, ko: 0 }); c.restore();
-  if (WALK.near) { const nx = WALK.near.x - cam; c.fillStyle = "#f0b35e"; c.beginPath(); c.moveTo(nx - 4, 104); c.lineTo(nx + 4, 104); c.lineTo(nx, 110 + Math.sin(t / 150) * 2); c.fill(); }
-  if (PG.high >= 2) { c.globalAlpha = .12 + PG.high * .04; for (let i = 0; i < 5; i++) { c.fillStyle = `hsl(${(t / 20 + i * 70) % 360},80%,60%)`; c.beginPath(); c.arc(((t / 30 + i * 90) % (vw + 60)) - 30, 60 + Math.sin(t / 700 + i) * 40, 30, 0, 7); c.fill(); } c.globalAlpha = 1; }
+  if (top) { const g = c.createLinearGradient(0, 0, 0, top); g.addColorStop(0, "#04061a"); g.addColorStop(1, "#0c1030"); c.fillStyle = g; c.fillRect(0, 0, cv.width, top + 2);
+    for (let i = 0; i < 40; i++) { c.fillStyle = "#c8c8e0"; c.fillRect(((i * 97) % 1400 - cam * .2) * WS % cv.width, (i * 53) % top, 3, 3); } }
+  c.drawImage(walkPano, cam * WS, 0, vw * WS, 180 * WS, 0, top, vw * WS, 180 * WS);
+  if (WALK.pad) { c.fillStyle = "#2a2830"; c.fillRect(0, top + 180 * WS - 2, cv.width, WALK.pad * WS + 2); }
+  const l = walkLive.getContext("2d"); l.clearRect(0, 0, vw, 180); walkWorld(l, cam, t, false);
+  c.imageSmoothingEnabled = true; c.drawImage(walkLive, 0, 0, vw, 180, 0, top, vw * WS, 180 * WS);
+  if (PG.high >= 2) { c.globalAlpha = .1 + PG.high * .04; for (let i = 0; i < 5; i++) { c.fillStyle = `hsl(${(t / 20 + i * 70) % 360},80%,60%)`; c.beginPath(); c.arc((((t / 30 + i * 90) % (vw + 60)) - 30) * WS, top + (60 + Math.sin(t / 700 + i) * 40) * WS, 30 * WS, 0, 7); c.fill(); } c.globalAlpha = 1; }
+  if (PG.beer >= 4) { c.globalAlpha = .25; c.drawImage(cv, 6 + Math.sin(t / 500) * 6, 0); c.globalAlpha = 1; }   // перепил — двоится
 }
 for (const [id, k] of [["walkL", "l"], ["walkR", "r"]]) {
   $(id).addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); WALK.keys[k] = true; });
   for (const ev of ["pointerup", "pointerleave", "pointercancel"]) $(id).addEventListener(ev, () => { WALK.keys[k] = false; });
 }
+// тап по миру: идти туда; если рядом с точкой человек или вещь — дойти и заговорить
+$("walkCv").addEventListener("pointerdown", e => {
+  if (!WALK.on) return;
+  const r = $("walkCv").getBoundingClientRect(), x = WALK.cam + (e.clientX - r.left) / r.width * WALK.vw;
+  const o = PG_OBJS.filter(o => Math.abs(o.x - x) < 26).sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x))[0];
+  WALK.tx = o ? o.x - 8 * Math.sign(o.x - PG.x || 1) : Math.max(20, Math.min(1380, x)); WALK.auto = o || null;
+});
 $("walkAct").addEventListener("click", e => { e.stopPropagation(); walkAct(); });
 $("walk").addEventListener("click", e => e.stopPropagation());
 document.addEventListener("keydown", e => {
