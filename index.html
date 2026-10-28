@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282044") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282102") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -392,7 +392,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282044") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282102") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -451,32 +451,63 @@
   #stage.withdraw #bg { animation:shakeW .3s steps(2) infinite; }
   @keyframes shakeW { 50% { translate:1.5px -1px; } }
   /* «Дым над Волгой»: тёплая выцветшая плёнка, засветы по углам, плашка «запомнит» */
-  #stage.lis #bg { filter:sepia(.3) saturate(.88) contrast(1.04) brightness(1.04); }
-  #stage.lis .sprite:not(.dim) { filter:sepia(.18) saturate(.95) drop-shadow(0 12px 18px #000a); }
+  #stage.lis #bg { image-rendering:auto; filter:sepia(.18) saturate(.95) contrast(1.03); }
+  #stage.lis .sprite { image-rendering:auto; }
+  #stage.lis .sprite:not(.dim) { filter:url(#paintFx) sepia(.2) saturate(1.05) drop-shadow(0 12px 18px #000a); }
+  #stage.lis .sprite.dim { filter:url(#paintFx) sepia(.35) brightness(.55); }
+  /* рукописный текст и выборы на листках из блокнота */
+  #stage.lis #box { left:0; right:0; bottom:0; border:none; border-radius:0; box-shadow:none; padding:30px 9% 30px;
+    background:linear-gradient(180deg, #0000, #0c0806e0 38%); font-family:'Caveat', cursive; font-size:27px; line-height:1.25; color:#f8efe2; }
+  #stage.lis #name { background:none !important; color:#f0b35e !important; font-family:'Caveat', cursive; font-size:25px; top:-4px; left:9%; padding:0; box-shadow:none; }
+  #stage.lis #place { font-family:'Caveat', cursive; font-size:22px; }
+  #stage.lis .card { background:#f3ead6 repeating-linear-gradient(#f3ead6 0 23px, #c8d8e6 23px 24px); color:#2a2420; border:none; border-radius:2px;
+    font-family:'Caveat', cursive; font-size:21px; box-shadow:0 8px 16px #0009; rotate:-1.3deg; }
+  #stage.lis .card:nth-child(2n) { rotate:1.1deg; }
+  #stage.lis .card svg { stroke:#3a2a20; } #stage.lis .card small { color:#6a5444; font-size:17px; }
+  #stage.lis .card.new { background:#e6f0f6 repeating-linear-gradient(#e6f0f6 0 23px, #b8cce0 23px 24px); }
   #stage.lis::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
     background:radial-gradient(circle at 94% 6%, #ffb06055, transparent 38%), radial-gradient(circle at 4% 96%, #ff805a2e, transparent 34%), radial-gradient(transparent 58%, #2a140a80); }
   #toast { position:absolute; top:58px; right:14px; z-index:9; padding:8px 14px; background:#1a1410d8; border-left:3px solid #f0b35e; color:#f8e8d0;
     font:italic 14px Georgia, serif; opacity:0; transform:translateX(16px); transition:opacity .4s, transform .4s; pointer-events:none; }
   #toast.on { opacity:1; transform:none; }
+  #inv { position:absolute; left:12px; top:80px; z-index:5; display:none; gap:8px; align-items:center; }
+  #inv.on { display:flex; } #inv span { font:600 19px 'Caveat', cursive; background:#f3ead6; color:#2a2420; padding:2px 10px; box-shadow:0 3px 8px #0007; rotate:-2deg; }
+  #inv span:first-child { background:none; color:#f8efe2; box-shadow:none; rotate:0deg; }
+  /* кино-драка */
+  #qte { position:absolute; inset:0; z-index:7; display:none; } #qte.on { display:block; }
+  #qteCv { position:absolute; inset:0; width:100%; height:100%; filter:url(#paintFx); }
+  #stage.qteing .sprite, #stage.qteing #box { opacity:0 !important; }
+  #qteTip { position:absolute; top:15%; left:0; right:0; text-align:center; font:700 38px 'Caveat', cursive; color:#fff4e0; text-shadow:0 2px 10px #000; }
+  #qteBtns { position:absolute; bottom:7%; left:0; right:0; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  #qteBtns button { font:700 22px 'Caveat', cursive; padding:10px 20px; border-radius:40px; border:2px solid #ffffff55; background:#000a; color:#f8efe2; cursor:pointer; opacity:.5; transition:transform .15s, opacity .15s; }
+  #qteBtns button b { margin-right:8px; font:700 18px system-ui, sans-serif; }
+  #qteBtns button.need { opacity:1; border-color:#f0b35e; color:#1a1008; transform:scale(1.18); background:conic-gradient(#f0b35e calc(var(--k, 1) * 360deg), #f8efe2 0); }
+  #qteBtns button[data-id=alt] { opacity:1; border-color:#e04848; background:#5a1010d8; }
+  #qteBtns button.ok { background:#7ad07a; color:#102010; }
+  @media (max-aspect-ratio: 1/1) { #stage.lis #place { font-size:17px; } #inv { top:64px; left:8px; } #qteBtns button { font-size:19px; padding:8px 14px; } #qteTip { font-size:30px; top:12%; } }
   .puff { position:absolute; z-index:6; width:70px; height:70px; border-radius:50%; pointer-events:none;
     background:radial-gradient(#ffffff55, #ffffff00 70%); animation:puff 3.2s ease-out forwards; }
   @keyframes puff { from { opacity:.9; transform:translate(0,0) scale(.4); } to { opacity:0; transform:translate(30px,-160px) scale(3.2); } }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>#mX,#mL,#mBrawl{display:none!important}</style></head>
 <body>
+<svg width="0" height="0" style="position:absolute"><filter id="paintFx"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="0.7"/></filter></svg>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282044" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282044" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282102" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282102" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282044) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282102) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
   <div id="toast"></div>
+  <div id="inv"></div>
+  <div id="qte"><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
   <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
     <canvas id="hLiver" width="32" height="28"></canvas><div><b>Печень <em id="hVt"></em></b><i><s id="hV"></s></i></div>
     <canvas id="hCig" width="32" height="28"></canvas><div><b>Тяга <em id="hCt"></em></b><i><s id="hC"></s></i></div></div>
@@ -574,9 +605,12 @@ function fitCanvas() {
 function paint(years) {
   $("photoFit").classList.remove("on");
   const b = scene && scene.bg;
+  // «Дым над Волгой» рисуется в высоком разрешении, остальные главы — в пиксельном
+  const hi = b && b.startsWith("cheb") ? 4 : 1, cv = $("bg"), pt = innerHeight > innerWidth;
+  if (cv.width !== (pt ? 180 : 320) * hi) { cv.width = (pt ? 180 : 320) * hi; cv.height = (pt ? 320 : 180) * hi; }
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b && b.startsWith("cheb")) drawCheb(b); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b && b.startsWith("cheb")) paintCheb(b); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -895,7 +929,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282044"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282102"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1014,7 +1048,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282044`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282102`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1368,9 +1402,137 @@ function drawParis(b) {
   }
 }
 
+// ---------- Кино-драка (QTE) для «Дыма над Волгой»: два рисованных бойца, кнопка появляется — успей нажать ----------
+// Такты: противник замахивается → появляется кнопка с кольцом-таймером (время замедляется) → удачно: Егор уходит/бьёт, нет — пропускает удар.
+// Три пропущенных удара — поражение. У такта может быть «альтернатива» (нож), которая сразу уводит в свою сцену.
+const QF = { on: false };
+const QLOOK = {
+  egor:   { hair: "#c8642a", skin: "#eab48c", top: "#24201e", legs: "#2a2a34", messy: true },
+  shurup: { hair: null, skin: "#d8a27c", top: "#111114", legs: "#1c2c70", chain: true, stripes: true, big: 1.12 }
+};
+const QKEYS = { dodge: { label: "Увернуться", key: "←", codes: ["ArrowLeft", "a", "ф"] }, block: { label: "Блок", key: "↓", codes: ["ArrowDown", "s", "ы"] }, hit: { label: "Удар", key: "→", codes: ["ArrowRight", "d", "в"] } };
+function qteStart(l) {
+  $("stage").classList.add("qteing");
+  Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, foe: l.foe || "shurup",
+    me: { x: .32, pose: "idle", hurt: 0, k: 0 }, en: { x: .66, pose: "idle", hurt: 0, k: 0 }, shake: 0, flash: 0, sparks: [], last: performance.now(), res: null });
+  $("box").style.display = "none";
+  const cv = $("qteCv"), pt = innerHeight > innerWidth; cv.width = pt ? 720 : 1280; cv.height = pt ? 1280 : 720;
+  $("qte").classList.add("on"); qteButtons();
+  cancelAnimationFrame(QF.raf);
+  const loop = now => { if (!QF.on) return; const dt = Math.min(50, now - QF.last) / 1000; QF.last = now; qteStep(dt); qteDraw(); QF.raf = requestAnimationFrame(loop); };
+  QF.raf = requestAnimationFrame(loop);
+}
+function qteStop() { $("stage").classList.remove("qteing"); QF.on = false; cancelAnimationFrame(QF.raf); $("qte").classList.remove("on"); $("box").style.display = ""; }
+function qteButtons() {
+  const b = QF.beats[QF.i] || {}, wrap = $("qteBtns");
+  wrap.innerHTML = "";
+  const mk = (id, label, key) => { const el = document.createElement("button"); el.dataset.id = id; el.innerHTML = `<b>${key}</b>${label}`; el.onclick = e => { e.stopPropagation(); qteInput(id); }; wrap.appendChild(el); };
+  for (const id of ["dodge", "block", "hit"]) mk(id, QKEYS[id].label, QKEYS[id].key);
+  if (b.alt && (!b.alt.need || ST.inv.has(b.alt.need))) mk("alt", b.alt.label, "Q");
+}
+function qteInput(id) {
+  if (!QF.on || QF.phase !== "prompt") return;
+  const b = QF.beats[QF.i];
+  if (id === "alt" && b.alt) { QF.on = false; qteFx(QF.me.x + .08, .5, 18); setTimeout(() => { qteStop(); show(b.alt.go); }, 500); return; }
+  qteResolve(id === b.need);
+}
+document.addEventListener("keydown", e => {
+  if (!QF.on) return;
+  for (const id in QKEYS) if (QKEYS[id].codes.includes(e.key)) return qteInput(id);
+  if (["q", "й"].includes(e.key)) qteInput("alt");
+});
+function qteResolve(ok) {
+  const b = QF.beats[QF.i];
+  QF.phase = "resolve"; QF.t = 0; QF.res = ok;
+  [...$("qteBtns").children].forEach(el => el.classList.toggle("ok", ok && el.dataset.id === b.need));
+  if (ok) {
+    if (b.need === "hit") { QF.me.pose = "punch"; QF.en.pose = "hit"; QF.en.hurt = 1; qteFx(QF.en.x - .04, .42, 14); }
+    else if (b.need === "dodge") { QF.me.pose = "dodge"; QF.en.pose = "punch"; }
+    else { QF.me.pose = "block"; QF.en.pose = "punch"; qteFx(QF.me.x + .05, .45, 6); }
+  } else {
+    QF.fails++; QF.me.pose = "hit"; QF.me.hurt = 1; QF.en.pose = "punch"; qteFx(QF.me.x + .03, .4, 16);
+    music.punch && music.punch();
+  }
+  if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred(ok ? "light" : "heavy");
+}
+function qteFx(x, y, n) { QF.shake = n > 10 ? 1 : .4; QF.flash = n > 10 ? .6 : .3; for (let i = 0; i < n; i++) QF.sparks.push({ x, y, vx: (Math.random() - .5) * .02, vy: (Math.random() - .7) * .02, life: 1 }); }
+function qteStep(dt) {
+  const b = QF.beats[QF.i];
+  const slow = QF.phase === "prompt" ? .35 : 1;          // замедление, пока висит кнопка
+  QF.t += dt * (QF.phase === "prompt" ? 1 : slow);
+  for (const f of [QF.me, QF.en]) { f.k += dt * 3 * slow; f.hurt = Math.max(0, f.hurt - dt * 2); }
+  QF.shake = Math.max(0, QF.shake - dt * 3); QF.flash = Math.max(0, QF.flash - dt * 2.5);
+  QF.sparks.forEach(s => { s.x += s.vx; s.y += s.vy; s.vy += .0006; s.life -= dt * 2; }); QF.sparks = QF.sparks.filter(s => s.life > 0);
+  if (QF.phase === "idle" && QF.t > .7) { QF.phase = "tele"; QF.t = 0; QF.en.pose = b.need === "hit" ? "open" : b.foe === "grab" ? "grab" : "wind"; $("qteTip").textContent = b.tip || ""; }
+  else if (QF.phase === "tele" && QF.t > .45) { QF.phase = "prompt"; QF.t = 0; qteButtons(); [...$("qteBtns").children].forEach(el => el.classList.toggle("need", el.dataset.id === b.need)); }
+  else if (QF.phase === "prompt" && QF.t > (b.time || 1.8)) qteResolve(false);
+  else if (QF.phase === "resolve" && QF.t > .8) {
+    $("qteTip").textContent = "";
+    if (QF.fails >= 3) return qteEnd(false);
+    QF.i++; if (QF.i >= QF.beats.length) return qteEnd(true);
+    QF.phase = "idle"; QF.t = 0; QF.me.pose = "idle"; QF.en.pose = "idle"; qteButtons();
+  }
+}
+function qteEnd(won) {
+  QF.phase = "end"; QF.me.pose = won ? "idle" : "down"; QF.en.pose = won ? "down" : "idle";
+  $("qteTip").textContent = won ? "Шуруп на асфальте" : "Егор на асфальте…";
+  setTimeout(() => { qteStop(); show(won ? QF.win : QF.lose); }, 1600);
+}
+// боец: ноги, корпус, руки из двух отрезков, голова; поза задаёт углы. dir = 1 смотрит вправо
+function qteMan(c, cx, gy, u, look, pose, dir, k, hurt) {
+  const s = u * (look.big || 1), bob = Math.sin(k * 2) * s * .6;
+  let lean = 0, dx = 0, fa = -1.1, fb = 2.2, ba = -1.4, bb = 2.4, stance = 6;
+  if (pose === "wind") { fa = 2.3; fb = 1.2; lean = -.15; }
+  if (pose === "grab") { fa = -.2; fb = .3; ba = -.1; bb = .3; lean = .25; dx = 4; }
+  if (pose === "punch") { fa = -.08; fb = 0; lean = .22; dx = 7; }
+  if (pose === "open") { fa = .6; fb = 1.4; ba = .9; bb = 1.2; lean = -.1; }
+  if (pose === "hit") { fa = .9; fb = 1; lean = -.4; dx = -6; }
+  if (pose === "dodge") { lean = -.55; dx = -9; }
+  if (pose === "block") { fa = -1.5; fb = 2.7; ba = -1.6; bb = 2.8; dx = -2; }
+  c.save(); c.translate(cx + dx * s * dir, gy);
+  if (pose === "down") { c.translate(0, -3 * s); c.rotate(-dir * Math.PI / 2 * .96); }
+  c.scale(dir, 1); c.lineCap = "round"; c.lineJoin = "round";
+  c.fillStyle = "#0005"; c.beginPath(); c.ellipse(0, 0, 13 * s, 2.5 * s, 0, 0, 7); c.fill();
+  const hip = [0, -22 * s + bob], sh = [hip[0] + Math.sin(lean) * 20 * s, hip[1] - Math.cos(lean) * 20 * s];
+  const line = (pts, w, col) => { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (const p of pts.slice(1)) c.lineTo(p[0], p[1]); c.stroke(); };
+  line([hip, [-stance * s * .6, -11 * s], [-stance * s, 0]], 3.6 * s, look.legs);
+  line([hip, [stance * s * .5, -11 * s], [stance * s, 0]], 3.6 * s, look.legs);
+  if (look.stripes) { c.strokeStyle = "#e8e8e8"; c.lineWidth = .6 * s; c.beginPath(); c.moveTo(hip[0] + 1.5 * s, hip[1]); c.lineTo(stance * s + 1.5 * s, 0); c.stroke(); }
+  const arm = (a, bnd, col, w) => { const el = [sh[0] + Math.cos(a) * 8 * s, sh[1] + Math.sin(a) * 8 * s], hd = [el[0] + Math.cos(a + bnd) * 8 * s, el[1] + Math.sin(a + bnd) * 8 * s];
+    line([sh, el, hd], w, col); c.fillStyle = look.skin; c.beginPath(); c.arc(hd[0], hd[1], 1.9 * s, 0, 7); c.fill(); };
+  arm(ba + Math.PI * .02, bb, shade(look.top, -18), 2.8 * s);
+  line([hip, sh], 8.5 * s, look.top);
+  if (look.chain) { c.strokeStyle = "#e8c040"; c.lineWidth = .8 * s; c.beginPath(); c.arc(sh[0], sh[1] + 1.5 * s, 3 * s, .3, Math.PI - .3); c.stroke(); }
+  const hc = [sh[0] + Math.sin(lean) * 7 * s, sh[1] - Math.cos(lean) * 7 * s];
+  c.fillStyle = look.skin; c.beginPath(); c.arc(hc[0], hc[1], 5 * s, 0, 7); c.fill();
+  if (look.hair) { c.fillStyle = look.hair; c.beginPath(); c.arc(hc[0], hc[1] - .5 * s, 5.3 * s, Math.PI * 1.05, Math.PI * 2.05); c.fill();
+    if (look.messy) for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse(hc[0] - 4 * s + i * 2 * s, hc[1] - 4.5 * s, 1.6 * s, 2.6 * s, -.5 + i * .25, 0, 7); c.fill(); } }
+  else { c.fillStyle = "#ffffff44"; c.beginPath(); c.ellipse(hc[0] + 1.5 * s, hc[1] - 3 * s, 1.6 * s, 1 * s, -.4, 0, 7); c.fill(); }
+  c.fillStyle = "#1a1210"; c.fillRect(hc[0] + 2 * s, hc[1] - 1 * s, 1.2 * s, 1.2 * s);
+  arm(fa, fb, look.top, 3 * s);
+  if (hurt > 0) { c.globalAlpha = hurt * .5; c.fillStyle = "#ff3020"; c.beginPath(); c.arc(hc[0], hc[1], 6 * s, 0, 7); c.fill(); c.globalAlpha = 1; }
+  c.restore();
+}
+function shade(hex, d) { const n = parseInt(hex.slice(1), 16), f = v => Math.max(0, Math.min(255, v + d)); return `rgb(${f(n >> 16)},${f(n >> 8 & 255)},${f(n & 255)})`; }
+function qteDraw() {
+  const cv = $("qteCv"), c = cv.getContext("2d"), W = cv.width, H = cv.height, u = H / 100 * (W < H ? .55 : 1);
+  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, W, H);
+  if (QF.shake) c.translate((Math.random() - .5) * QF.shake * 18, (Math.random() - .5) * QF.shake * 12);
+  const gy = H * (W < H ? .62 : .9);
+  qteMan(c, W * QF.me.x, gy, u, QLOOK.egor, QF.me.pose, 1, QF.me.k, QF.me.hurt);
+  qteMan(c, W * QF.en.x, gy, u, QLOOK[QF.foe] || QLOOK.shurup, QF.en.pose, -1, QF.en.k, QF.en.hurt);
+  for (const s of QF.sparks) { c.globalAlpha = s.life; c.fillStyle = "#fff4d0"; c.beginPath(); c.arc(s.x * W, s.y * H * (W < H ? 1.25 : 1.6), 4 + s.life * 4, 0, 7); c.fill(); }
+  c.globalAlpha = 1;
+  if (QF.flash) { c.fillStyle = `rgba(255,250,235,${QF.flash * .5})`; c.fillRect(-20, -20, W + 40, H + 40); }
+  // кольцо-таймер вокруг нужной кнопки рисуется CSS-ом; на холсте — полоса оставшихся сил
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  for (let i = 0; i < 3; i++) { c.fillStyle = i < 3 - QF.fails ? "#f0b35e" : "#ffffff33"; c.beginPath(); c.arc(W / 2 - 34 + i * 34, H * (W < H ? .15 : .07), 11, 0, 7); c.fill(); }
+  if (QF.phase === "prompt") { const b = QF.beats[QF.i], k = 1 - QF.t / (b.time || 1.8); $("qteBtns").style.setProperty("--k", k.toFixed(3)); }
+}
+
 // ---------- Локации «Дыма над Волгой»: Чебоксары летом, дымное небо, тёплый выцветший цвет ----------
-function drawCheb(b) {
-  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+function drawCheb(b, ctx) {
+  const c = ctx || $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
   const sky = (top, mid, low) => { const g = c.createLinearGradient(0, 0, 0, H * .6); g.addColorStop(0, top); g.addColorStop(.6, mid); g.addColorStop(1, low); c.fillStyle = g; c.fillRect(0, 0, W, H * .6); };
   const smoke = (y, a) => { for (let i = 0; i < 7; i++) { c.fillStyle = `rgba(160,140,130,${a})`; c.beginPath(); c.ellipse((i * 61) % W, y + (i % 3) * 6, 40, 8, 0, 0, 7); c.fill(); } };
@@ -1385,7 +1547,6 @@ function drawCheb(b) {
   } else if (b === "cheb_vkusno") {        // парковка фастфуда в сумерках: вывеска, бордюр, «Приора»
     sky("#6a5a78", "#c88a78", "#e8a878"); smoke(H * .2, .25);
     R(W * .08, H * .2, W * .56, H * .42, "#c8b8a8"); R(W * .08, H * .2, W * .56, H * .06, "#2a5a3a");
-    c.fillStyle = "#f8f0e0"; c.font = "bold 8px sans-serif"; c.fillText("ВКУСНО — И ТОЧКА", W * .12, H * .245);
     for (let i = 0; i < 4; i++) R(W * (.12 + i * .13), H * .32, W * .1, H * .14, "#f0d898");
     R(W * .3, H * .48, W * .1, H * .14, "#5a4a3a");
     R(0, H * .62, W, H * .38, "#5a5654"); for (let x = 0; x < W; x += 30) R(x, H * .8, 16, 2, "#e8e0c0");
@@ -1404,7 +1565,6 @@ function drawCheb(b) {
     R(0, H * .6, W, H * .4, "#4a4038");
     R(W * .14, H * .36, W * .72, H * .24, "#8a7a6a"); R(W * .14, H * .36, W * .72, 3, "#a89888"); R(W * .3, H * .22, W * .4, H * .14, "#9a8878");
     for (let i = 0; i < 6; i++) R(W * (.32 + i * .06), H * .26, W * .04, H * .05, "#2a2220");
-    c.fillStyle = "#c8b8a8"; c.font = "bold 7px sans-serif"; c.fillText("ЗАРЯ", W * .18, H * .46);
     for (let i = 0; i < 12; i++) R(W * .14 + i * W * .06, H * .4 + (i % 3) * 3, W * .03, 4, "#7a4a2a88");
     for (let i = 0; i < 5; i++) { c.fillStyle = "#2a2420"; c.beginPath(); c.arc(W * (.08 + i * .21), H * .78 + (i % 2) * 5, 9, 0, 7); c.fill(); c.fillStyle = "#4a4038"; c.beginPath(); c.arc(W * (.08 + i * .21), H * .78 + (i % 2) * 5, 4, 0, 7); c.fill(); }
     R(W * .76, H * .66, W * .2, H * .1, "#6a3a2a"); R(W * .78, H * .62, W * .12, H * .05, "#5a3020");
@@ -1414,7 +1574,6 @@ function drawCheb(b) {
     smoke(H * .32, .45); R(0, H * .56, W, H * .1, "#5a4048");
     R(0, H * .66, W, H * .34, "#7a6a5a"); R(W * .5, H * .7, W * .45, H * .22, "#8a7a6a");
     const t = Date.now() / 900; for (let i = 0; i < 26; i++) R((i * 53 + t * 9 * (1 + i % 3)) % W, (i * 31 + t * 14) % H, 2, 2, "#d8d0c8");
-    if (ST.tag) { c.fillStyle = "#f0f0f0"; c.font = "bold 8px sans-serif"; c.fillText(ST.tag, W * .52, H * .82); }
   } else if (b === "cheb_train") {         // товарняк с брёвнами среди полей, дымное солнце
     sky("#c88a68", "#e8b088", "#f0c8a0"); c.fillStyle = "#f8d8a0"; c.beginPath(); c.arc(W * .8, H * .3, 14, 0, 7); c.fill(); smoke(H * .25, .3);
     R(0, H * .55, W, H * .45, "#a8a060"); for (let i = 0; i < 40; i++) R((i * 37) % W, H * .58 + (i * 7) % (H * .12), 2, 3, "#8a8a48");
@@ -1428,7 +1587,41 @@ function drawCheb(b) {
     R(W * .2, H * .5, 10, 6, "#d8d8d8"); R(W * .3, H * .52, 8, 3, "#f8f8f0"); R(W * .62, H * .56, W * .28, H * .06, "#a8a8a8"); R(W * .7, H * .5, 10, 7, "#c84030"); R(W * .72, H * .48, 6, 2, "#c84030");
   }
 }
-const ST = { bt: 0, dad: "", tag: "" };   // «Дым над Волгой»: счёт словесной дуэли, что сделали с отцом, что написали на «Заре»
+const ST = { bt: 0, dad: "", tag: "", inv: new Set() };
+// «Дым над Волгой» рисуется не пикселями, а «красками»: сцена строится в маленьком холсте,
+// растягивается с размытием на большой и покрывается тысячами мазков цвета из-под кисти, сверху — зерно бумаги.
+const chebOff = document.createElement("canvas");
+// что стало с вещами из рюкзака — в конце главы
+function stInvLines() {
+  const L = [];
+  if (ST.inv.has("gun")) L.push({ who: null, t: "Травмат Шурупа я потом выбросил в Волгу с моста. Он ушёл под воду без брызг. Егор кивнул и ничего не сказал." });
+  if (ST.inv.has("knife")) L.push({ who: null, t: "Отцовский нож Егор оставил себе. Сказал — будет чистить им лещей. Сам. Без него." });
+  return L;
+}
+function paintCheb(b) {
+  const cv = $("bg"), portrait = innerHeight > innerWidth;
+  chebOff.width = portrait ? 180 : 320; chebOff.height = portrait ? 320 : 180;
+  drawCheb(b, chebOff.getContext("2d"));
+  const c = cv.getContext("2d"), W = cv.width, H = cv.height, sw = chebOff.width, sh = chebOff.height;
+  const src = chebOff.getContext("2d").getImageData(0, 0, sw, sh).data;
+  c.imageSmoothingEnabled = true; c.filter = "blur(7px) saturate(1.08)"; c.drawImage(chebOff, -10, -10, W + 20, H + 20); c.filter = "none";
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 4200; i++) {                     // мазки: цвет берётся из исходной картинки в этой точке
+    const x = rnd() * W, y = rnd() * H, k = ((y / H * sh | 0) * sw + (x / W * sw | 0)) * 4;
+    const len = 8 + rnd() * 18, wdt = 3 + rnd() * 5, ang = -.5 + rnd() * .5 + (y < H * .55 ? 0 : .3);
+    c.save(); c.translate(x, y); c.rotate(ang); c.globalAlpha = .35 + rnd() * .35;
+    c.fillStyle = `rgb(${src[k] + (rnd() * 24 - 12)},${src[k + 1] + (rnd() * 24 - 12)},${src[k + 2] + (rnd() * 24 - 12)})`;
+    c.beginPath(); c.ellipse(0, 0, len, wdt, 0, 0, 7); c.fill(); c.restore();
+  }
+  c.globalAlpha = 1;
+  for (let i = 0; i < 2600; i++) { c.fillStyle = rnd() < .5 ? "#ffffff10" : "#00000010"; c.fillRect(rnd() * W, rnd() * H, 2, 2); }   // зерно бумаги
+  // надписи — чёткие, поверх краски
+  const txt = (s, x, y, size, col, font) => { c.fillStyle = col; c.font = `${font || "bold"} ${size * W / 320}px ${font ? "'Caveat', cursive" : "sans-serif"}`; c.fillText(s, x * W, y * H); };
+  if (b === "cheb_vkusno") txt("ВКУСНО — И ТОЧКА", .12, .245, 8, "#f8f0e0");
+  if (b === "cheb_yard") txt("ЗАРЯ", .18, .46, 8, "#d8c8b8");
+  if (b === "cheb_fire" && ST.tag) { c.save(); c.translate(.52 * W, .84 * H); c.rotate(-.04); txt(ST.tag, 0, 0, 13, "#f4f0ea", "700"); c.restore(); }
+}
+   // «Дым над Волгой»: счёт словесной дуэли, что сделали с отцом, что написали на «Заре»
 
 // ---------- Локация: военный аэродром / блокпост — сетка, вышка, прожекторы, БТР, ряды грузовиков ----------
 function drawMilbase() {
@@ -1583,6 +1776,8 @@ const music = {
     paris:      { kind: "paris", bpm: 160, prog: "paris", f: 3000, vol: 1, lfo: 0 },
     cancan:     { kind: "paris", bpm: 172, prog: "paris", galop: true, f: 3400, vol: 1, lfo: 0 },
     // «Дым над Волгой»: гитарный перебор; концерт — с барабанами; грусть — минор и дождь
+    // заставка: медленная эпическая тема — хор, медь, литавры, рояль
+    menu:       { kind: "menu", bpm: 64, prog: "scifi", f: 2600, vol: 1, lfo: 0 },
     folk:       { kind: "folk", bpm: 88, prog: "folk", f: 3000, vol: 1, lfo: 0 },
     folk_rock:  { kind: "folk", bpm: 124, prog: "folk", rock: true, f: 3400, vol: 1, lfo: 0 },
     folk_storm: { kind: "folk", bpm: 72, prog: "folkm", rain: true, f: 1900, vol: 1, lfo: 0 }
@@ -1823,6 +2018,16 @@ const music = {
     bass: [110, 82.4, 110, 82.4],
     mel: [[880, 0, 1108.7, 0, 1318.5, 1108.7, 880, 0], [987.8, 0, 1174.7, 0, 1318.5, 1174.7, 987.8, 0],
           [1108.7, 1318.5, 1760, 1318.5, 1108.7, 1318.5, 1760, 0], [1661.2, 1480, 1318.5, 1174.7, 1108.7, 987.8, 880, 0]]
+  },
+  // заставка: хор на весь такт, медь на сильных тактах, литавры с дробью в конце фразы, рояль восьмыми, мелодия валторной
+  menuStep(s, bar, t, P, m) {
+    const ch = P.ch[bar], len = 16 * 60 / m.bpm / 4;
+    if (s === 0) { this.strings(t, ch.map(f => f / 2), len); this.strings(t, ch, len); }
+    if (s === 0 && bar % 2 === 0) this.brass(t, [ch[0] / 2, ch[2] / 2], len * .9);
+    if (s === 0 || (s === 8 && bar % 2)) { this.kick(t, .55); this.dubBass(t, P.bass[bar] / 2, 1.4); }
+    if (bar === 3 && s >= 12) this.noiseHit(t, "lowpass", 400, .06 + (s - 12) * .03, .2);
+    if (s % 2 === 0) this.piano(t, ch[[0, 1, 2, 1, 0, 2, 1, 2][s / 2]] * 2, 1.4, .025);
+    if (s % 4 === 0) { const f = P.mel[bar][s / 2]; if (f) this.brass(t, [f / 2], 60 / m.bpm * 1.6); }
   },
   // «Дым над Волгой»: инди-фолк — гитарный перебор, мягкий шейкер; на концерте — бочка и малый, в грусти — минор и дождь
   folkStep(s, bar, t, P, m) {
@@ -3537,7 +3742,7 @@ const scenes = {
   // ===== Эксперимент «Дым над Волгой»: Чебоксары, лето 2023, за год до переезда Егора. Тёплая выцветшая картинка, гитара =====
   st_start: {
     bg: "cheb", place: "Чебоксары · вокзал · июль 2023", egor: true, lis: true, music: "folk",
-    linesFn: () => { ST.bt = 0; ST.dad = ""; ST.tag = ""; return [
+    linesFn: () => { ST.bt = 0; ST.dad = ""; ST.tag = ""; ST.inv = new Set(); return [
       { skip: "Дым над Волгой" },
       { who: null, t: "Чебоксары. Июль. Двенадцать часов в плацкарте, и вот я тут. За Волгой третью неделю горит лес, и всё небо — цвета старой фотографии." },
       { who: "", t: "Мы с Егором два года знакомы по Halo. Голос в наушниках, ник, шутки в три ночи. Вживую — первый раз." },
@@ -3625,28 +3830,142 @@ const scenes = {
     linesFn: () => [{ who: null, t: ST.bt >= 2 ? `Счёт дуэли: ${ST.bt} из 3. Шуруп открывает рот, закрывает. Открывает снова.` : `Счёт дуэли: ${ST.bt} из 3. Слова кончились. Шуруп снимает цепочку и наматывает на кулак.` }]
   },
   st_bt_win: {
-    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_words", next: "st_plant",
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_words",
+    choices: () => [
+      { icon: "grab", t: "Подобрать травмат", sub: "Выпал у кого-то из них", go: "st_plant", rem: "Егор это запомнит.", act: () => ST.inv.add("gun") },
+      { icon: "let", t: "Оставить", sub: "Не моё", go: "st_plant" }
+    ],
     lines: [
       { who: "Шуруп", t: "…Да пошли вы. Москвич, блять. Ещё увидимся." },
       { who: null, t: "«Приора» уезжает. Музыка из неё затихает за поворотом. Егор смотрит на меня, как будто я только что прошёл Legendary без смертей." },
       { who: "Егор", t: "Ты его словами уебал. Словами, Глеб. Я пять лет мечтал. Я думал, это можно только кулаком." },
-      { who: "Глеб", t: "Кулаком тоже можно. Но так он запомнит дольше." }
+      { who: "Глеб", t: "Кулаком тоже можно. Но так он запомнит дольше." },
+      { who: null, t: "Когда «Приора» трогается, из её окна на асфальт вываливается чёрный травмат. Видимо, лежал на коленях у кого-то из друзей Шурупа." }
     ]
   },
   st_fight: {
     bg: "cheb_vkusno", place: "«Вкусно — и точка» · драка", egor: true, lis: true, music: "folk_rock",
     lines: [
       { who: "Егор", t: "Всё, Шуруп. Восьмой класс кончился." },
-      { fx: "punch", who: null, t: "Егор бьёт первым. Картошка разлетается по парковке. Охранник «Вкусно — и точка» выходит, смотрит и заходит обратно." },
-      { battle: "melee", me: "Егор", foe: "Дима Шуруп", hp: 60, tip: "Егор дерётся за восьмой класс. «УДАР» — бить, когда Шуруп замахнётся — «БЛОК»!", lost: "Егор на асфальте…", win: "st_fight_win", lose: "st_fight_lose" }
+      { fx: "punch", who: null, t: "Картошка разлетается по парковке. Охранник «Вкусно — и точка» выходит, смотрит и заходит обратно." },
+      { qte: true, foe: "shurup", win: "st_fight_win", lose: "st_fight_lose", beats: [
+        { foe: "swing", need: "dodge", tip: "Шуруп бьёт с размаху!" },
+        { need: "hit", tip: "Он открылся!" },
+        { foe: "swing", need: "block", tip: "Цепочка в кулаке — закройся!" },
+        { foe: "grab", need: "dodge", tip: "Хватает за капюшон!" },
+        { need: "hit", tip: "Сейчас!" },
+        { foe: "swing", need: "dodge", tip: "Последний замах!", time: 1.4 },
+        { need: "hit", tip: "За восьмой класс!", time: 1.4 }
+      ] }
     ]
   },
   st_fight_win: {
-    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_fist", next: "st_plant",
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_fist",
     lines: [
       { who: null, t: "Шуруп сидит на асфальте и держится за нос. Как Егор пять лет назад. Круг замкнулся." },
-      { who: "Егор", t: "Я думал, мне станет легче. Мне не стало. Но и хуже не стало. Пошли отсюда." },
-      { who: null, t: "Костяшки у него разбиты. Я отдаю ему салфетку из пакета. Он заматывает руку, как боксёр, и почему-то улыбается." }
+      { who: "Егор", t: "Я думал, мне станет легче. Мне не стало. Но и хуже не стало." },
+      { who: null, t: "Друзья Шурупа затаскивают его в «Приору». Из кармана его спортивок на асфальт выпадает чёрный травмат. Никто не замечает. Кроме меня." }
+    ],
+    choices: () => [
+      { icon: "grab", t: "Подобрать травмат", sub: "В рюкзак. На всякий случай", go: "st_plant", rem: "Егор это запомнит.", act: () => ST.inv.add("gun") },
+      { icon: "let", t: "Оставить", sub: "Не моё", go: "st_plant" }
+    ]
+  },
+  st_x_knife: {
+    bg: "cheb_yard", place: "«Заря» · ящик", egor: true, lis: true, music: "folk_storm",
+    lines: [
+      { who: null, t: "На ящике из-под снарядов лежит складной нож. Старый, с деревянной ручкой, лезвие сточено от точилки." },
+      { who: "Егор", t: "Отцовский. Он им лещей чистил. Оставил, когда уходил. Как будто это компенсация." }
+    ],
+    choices: () => [
+      { icon: "grab", t: "Взять нож", sub: "В рюкзак", go: "st_yard", act: () => ST.inv.add("knife") },
+      { icon: "let", t: "Положить на место", sub: "Это его вещь", go: "st_yard" }
+    ]
+  },
+  st_revenge: {
+    bg: "cheb_yard", place: "Свалка · фары", egor: true, lis: true, music: "folk_rock",
+    lines: [
+      { who: null, t: "Свалку заливает светом. Фары. Знакомая музыка из колонок, которая бьёт в землю." },
+      { who: "Шуруп", t: "Егорка-а! Москви-ич! Я же сказал — ещё увидимся! Чебоксары маленькие!" },
+      { who: null, t: "Шуруп и двое его друзей идут к «Заре». У одного бита. «Приора» стоит с открытыми дверями, мотор работает." },
+      { who: "Егор", t: "Блять. Он знает про «Зарю». Весь город знает про «Зарю»." }
+    ],
+    choices: () => {
+      const cs = [{ icon: "fight", t: "Выйти и драться", sub: "Втроём против двоих", go: "st_rev_fight" }];
+      if (ST.inv.has("gun")) cs.push({ icon: "stop", t: "Выстрелить из травмата в воздух", sub: "Из рюкзака", go: "st_rev_shot", cls: "new", rem: "Егор это запомнит." });
+      if (ST.inv.has("knife")) cs.push({ icon: "help", t: "Проколоть колёса «Приоры»", sub: "Ножом, пока они орут у борта", go: "st_rev_tires", cls: "new" });
+      cs.push({ icon: "let", t: "Спрятаться в трюме", sub: "Переждать", go: "st_rev_hide" });
+      return cs;
+    }
+  },
+  st_rev_fight: {
+    bg: "cheb_yard", place: "Свалка · драка", egor: true, lis: true, music: "folk_rock",
+    lines: [
+      { who: null, t: "Мы спрыгиваем с борта. Друг Шурупа с битой поскальзывается на мазуте и садится в лужу. Остаётся один Шуруп." },
+      { qte: true, foe: "shurup", win: "st_rev_win", lose: "st_rev_lose", beats: [
+        { foe: "swing", need: "dodge", tip: "Он злой. Он помнит нос." },
+        { foe: "swing", need: "block", tip: "Двойка!" },
+        { need: "hit", tip: "Открылся!", alt: { label: "Нож", need: "knife", go: "st_rev_knife" } },
+        { foe: "grab", need: "dodge", tip: "Тащит к костру!", time: 1.4 },
+        { need: "hit", tip: "Добивай!", time: 1.3 }
+      ] }
+    ]
+  },
+  st_rev_win: {
+    bg: "cheb_yard", place: "Свалка · после", egor: true, lis: true, music: "folk_storm", next: "st_fire",
+    lines: [
+      { who: null, t: "Шуруп лежит в мазуте второй раз за день. Его друзья уже в «Приоре», сигналят, зовут." },
+      { who: "Шуруп", t: "Всё, всё, понял. Ваша свалка. Подавитесь." },
+      { who: "Егор", t: "Дима. Слышь. Восьмой класс — правда кончился. Для обоих. Иди домой." },
+      { who: null, t: "«Приора» уезжает. Шуруп машет из окна. Непонятно — угрожает или прощается. Может, и то и другое." }
+    ]
+  },
+  st_rev_lose: {
+    bg: "cheb_yard", place: "Свалка · после", egor: true, lis: true, music: "folk_storm", next: "st_fire",
+    lines: [
+      { who: null, t: "Мы лежим в мазуте. Шуруп плюёт рядом, но не в нас. Потом смотрит на ржавую «Зарю» и почему-то не трогает её." },
+      { who: "Шуруп", t: "У меня тоже была такая. Лодка. Отец пропил. Ладно. Живите." },
+      { who: null, t: "«Приора» уезжает. Егор смеётся и кашляет одновременно. У него разбита бровь, у меня — колено. Ночь только начинается." }
+    ]
+  },
+  st_rev_shot: {
+    bg: "cheb_yard", place: "Свалка · выстрел", egor: true, lis: true, music: "folk_storm", learn: "st_shot", next: "st_fire",
+    lines: [
+      { fx: "shot", who: null, t: "Я поднимаю травмат вверх и жму на спуск. Хлопок такой, что над затоном взлетают все утки Чувашии." },
+      { who: null, t: "Шуруп и его друзья падают на землю. Потом вскакивают и бегут к «Приоре». Мотор ревёт, гравий летит из-под колёс." },
+      { who: "Егор", t: "Глеб. Ты ебанулся? Ты, блять, ебанулся?! Это его травмат! Там отпечатки! Ты в Москве так делаешь?!" },
+      { who: null, t: "У меня трясутся руки. Сильнее, чем после драки. Егор забирает травмат и долго смотрит на него." },
+      { who: "Егор", t: "Не делай так больше. Я не хочу, чтобы мы стали как он. Ладно? Пообещай." }
+    ]
+  },
+  st_rev_tires: {
+    bg: "cheb_yard", place: "Свалка · «Приора»", egor: true, lis: true, music: "folk_rock", learn: "st_tires", next: "st_fire",
+    lines: [
+      { who: null, t: "Пока Шуруп орёт у борта «Зари», я обхожу «Приору» сзади. Отцовский нож входит в резину с тихим вздохом. Раз. Два. Три. Четыре." },
+      { who: null, t: "Потом я свищу. Шуруп оборачивается, видит меня у машины — и машину, которая медленно оседает на диски." },
+      { who: "Шуруп", t: "Ты чё сделал?! Ты чё сделал, сука?!" },
+      { who: "Егор", t: "Дима, ты пешком отсюда до города часа два. Начинай сейчас — к рассвету будешь." },
+      { who: null, t: "Они уходят пешком, матерясь в темноту. Егор смотрит на нож в моей руке." },
+      { who: "Егор", t: "Отец этим ножом только лещей чистил. Ты первый, кто сделал им что-то полезное." }
+    ]
+  },
+  st_rev_hide: {
+    bg: "cheb_yard", place: "«Заря» · трюм", egor: true, lis: true, music: "folk_storm", next: "st_fire",
+    lines: [
+      { who: null, t: "Мы лежим в трюме, в темноте, в запахе ржавчины и речной воды. Сверху ходят. Бьют битой по борту. «Заря» гудит, как колокол." },
+      { who: null, t: "Егор держит меня за рукав. Сильно. Я чувствую, как у него стучит сердце, — через рукав." },
+      { who: null, t: "Через десять минут им надоедает. «Приора» уезжает. На рубке кто-то из них нацарапал матерное слово. Ну и пусть. Мы его закрасим." }
+    ]
+  },
+  st_rev_knife: {
+    bg: "cheb_yard", place: "Свалка · нож", egor: true, lis: true, music: "folk_storm", learn: "st_knife", next: "st_fire",
+    lines: [
+      { who: null, t: "Я достаю отцовский нож. Щелчок лезвия слышен даже сквозь музыку из «Приоры»." },
+      { who: null, t: "Шуруп замирает. Смотрит на нож. Потом на меня. Он впервые за вечер боится по-настоящему." },
+      { who: "Егор", t: "Глеб. Убери. Убери, пожалуйста." },
+      { who: "Егор", t: "Я не хочу, чтобы мы стали как он. Если ты его порежешь — мы станем хуже него. Убери." },
+      { who: null, t: "Я складываю нож. Шуруп пятится к «Приоре», не поворачиваясь к нам спиной. Уезжает. Тишина такая, что слышно, как горит лес за рекой." },
+      { who: "Егор", t: "Спасибо. Что убрал." }
     ]
   },
   st_fight_lose: {
@@ -3708,9 +4027,10 @@ const scenes = {
       { label: "Фотография на стене", x: 22, y: 34, px: 26, py: 30, go: "st_x_photo" },
       { label: "Кассетный магнитофон", x: 50, y: 62, px: 50, py: 56, go: "st_x_tape" },
       { label: "Тетрадь Егора", x: 78, y: 40, px: 74, py: 44, go: "st_x_book" },
-      { label: "Конверт под матрасом", x: 64, y: 72, px: 66, py: 70, go: "st_x_letter" }
+      { label: "Конверт под матрасом", x: 64, y: 72, px: 66, py: 70, go: "st_x_letter" },
+      { label: "Нож на ящике", x: 34, y: 70, px: 30, py: 62, go: "st_x_knife" }
     ],
-    exploreGo: "st_fire", exploreTip: "Осмотрись в «Заре»: нажимай на вещи", exploreBtn: "Залезть на крышу →"
+    exploreGo: "st_revenge", exploreTip: "Осмотрись в «Заре»: нажимай на вещи", exploreBtn: "Залезть на крышу →"
   },
   st_x_photo: {
     bg: "cheb_yard", place: "«Заря» · фотография", egor: true, lis: true, music: "folk_storm", next: "st_yard",
@@ -3777,12 +4097,13 @@ const scenes = {
   },
   st_end_train: {
     bg: "cheb_train", place: "Товарняк на запад · 5:40", egor: true, lis: true, music: "folk_rock",
-    lines: [
+    linesFn: () => [
       { who: null, t: "Мы бежим по насыпи. Егор запрыгивает первым и протягивает руку. Я цепляюсь за неё, и меня тянет вверх, на платформу с лесом." },
       { who: null, t: "Мы едем на брёвнах. Ветер, дым, солнце. Егор орёт песню «Пожарной тревоги», не зная слов. Я тоже не знаю. Мы орём вместе." },
       { who: null, t: "Через час у Егора звонит телефон. «Мама». Он смотрит на экран. Сбрасывает. Через пять минут — снова. Четырнадцать пропущенных к Канашу." },
       { who: "Егор", t: "Я ей позвоню. Из Москвы. Когда будет что сказать." },
       { who: "", t: "Это самый счастливый и самый неправильный день в его жизни. Я знаю, потому что он держит телефон экраном вниз и не отпускает." }
+      , ...stInvLines()
     ],
     ending: "Дым над Волгой · концовка «Товарняк»",
     choices: () => [
@@ -3801,6 +4122,8 @@ const scenes = {
       { who: "Мама Егора", t: "Только звони. Не как отец. Звони." },
       { who: null, t: "Егор плачет. Первый раз за всю ночь. Как будто всё, что горело за рекой, наконец догорело." },
       ...(known.has("st_hand") || known.has("st_hug") ? [{ who: "Егор", t: "Глеб. Спасибо, что приехал. Ты не представляешь. Ты, блять, не представляешь." }] : []),
+      ...(known.has("st_shot") ? [{ who: "Мама Егора", t: "И ещё. Участковый приходил в шесть. Спрашивал про выстрел на свалке. Я сказала, что ты спал. Больше я так говорить не буду." }] : []),
+      ...stInvLines(),
       { who: "", t: "Через год он переедет. В Москве у него почти никого не будет, кроме меня. Но это уже другая история. Она начинается в Powerhouse." }
     ],
     ending: "Дым над Волгой · концовка «Мама»",
@@ -5993,7 +6316,7 @@ const MEM = { text: "что написал Егор", voice: "драка кон�
 const PA = { drink: 0, smoke: 0, crave: 0, vodka: 0, q: new Set(), loc: new Set(), askIntro: false, cityIntro: false, ret: false, back: "pa_hotel" };   // «Пепел»: сколько выпито и выкурено, куда вернуться
 Object.assign(MEM, { pa_why: "Ален знает про перемотку", pa_age: "Алену восемьдесят один год", pa_brand: "клеймо «14.06.1940» на спине Алена", pa_stairs: "отца Алена расстреляли в 1946-м",
   pa_father: "сюжет фильма Сергею рассказал Ален", pa_box: "коробка с волосами и запиской", pa_petya: "Петя ждёт звонка", pa_egor: "Егор плакал в катакомбах", pa_egor_out: "Егор уснул на лестнице",
-  pa_plea: "Ален просит остановить фильм",
+  pa_plea: "Ален просит остановить фильм", st_shot: "Глеб выстрелил на свалке", st_tires: "колёса «Приоры» проколоты", st_knife: "Глеб достал нож и убрал его",
   st_dad: "отец Егора — звукорежиссёр, ушёл три года назад", st_words: "Шурупа победили словами", st_fist: "Егор подрался с Шурупом у «Вкусно — и точка»", st_letter: "Егора взяли в московский колледж", st_hug: "Глеб обнял Егора на вокзале", st_hand: "рука на плече у пульта", st_number: "отец дал свой номер", pa_louvre: "отец Алена составлял списки для немцев", pa_misha: "Ален каждую ночь пьёт за отца у Миши" });
 // ---------- «Пепел»: здоровье и тяга. Лёгкие темнеют от сигарет, печень желтеет от вина, без затяжки — ломка ----------
 const PA_WITHDRAW = [
@@ -6088,13 +6411,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282044`, talk: `img/${n}_talk.png?v=10282044`, blink: `img/${n}_blink.png?v=10282044` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282102`, talk: `img/${n}_talk.png?v=10282102`, blink: `img/${n}_blink.png?v=10282102` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282044" : `img/${n}_spartan.png?v=10282044`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282102" : `img/${n}_spartan.png?v=10282102`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6123,7 +6446,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282044`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282102`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6132,7 +6455,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282044`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282102`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -6435,6 +6758,8 @@ function show(id) {
   $("stage").classList.toggle("soulless", !!scene.soulless);
   $("stage").classList.toggle("noir", !!scene.noir);
   $("stage").classList.toggle("lis", !!scene.lis);
+  $("inv").classList.toggle("on", !!scene.lis && ST.inv.size > 0);
+  $("inv").innerHTML = "<span>Рюкзак:</span>" + [...ST.inv].map(k => `<span>${{ knife: "нож", gun: "травмат" }[k]}</span>`).join("");
   if (scene.manaStart !== undefined) mana = scene.manaStart;
   $("stage").classList.remove("frozen");
   svApply(scene);
@@ -6450,7 +6775,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282044) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282102) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -6464,7 +6789,7 @@ function show(id) {
 }
 
 function step() {
-  if (B || BR.on) return;                       // идёт бой — текст стоит
+  if (B || BR.on || QF.on) return;              // идёт бой — текст стоит
   const l = scene.lines[idx];
   if (!l) {
     if (scene.explore) return showExplore();
@@ -6536,6 +6861,7 @@ function step() {
   if (l.fx === "magic") magicFx();
   if (l.addClass) $("stage").classList.add(l.addClass);
   if (l.brawl) return brawlStart(l.win, l.lose, l);
+  if (l.qte) return qteStart(l);
   if (l.fx === "rewind") { $("stage").classList.add("rewinding"); music.rewind(); $("rw").classList.remove("on"); void $("rw").offsetWidth; $("rw").classList.add("on"); setTimeout(() => $("stage").classList.remove("rewinding"), 1300); }
   if (l.fx === "punch") punchFx();
   if (l.fx === "timer") { $("timer").classList.remove("on"); void $("timer").offsetWidth; $("timer").classList.add("on"); setTimeout(() => $("timer").classList.remove("on"), 2200); }
@@ -6786,11 +7112,12 @@ function goMenu() {
   clearIdle();
   if (B) { B.done = true; B.timers.forEach(t => { clearTimeout(t); clearInterval(t); }); B = null; $("battle").classList.remove("on"); }
   if (BR.on) { BR.on = false; cancelAnimationFrame(BR.raf); $("brawl").classList.remove("on"); }
+  if (QF.on || $("qte").classList.contains("on")) qteStop();
   ["gphone", "howto", "op", "skip", "choices", "phone"].forEach(id => $(id).classList.remove("on"));
   $("box").style.display = "";
   $("title").classList.remove("gone");
   initMenu();
-  music.mood("hope");
+  music.mood("menu");
 }
 $("menuBtn").onclick = e => { e.stopPropagation(); goMenu(); };
 $("bClose").onclick = e => { e.stopPropagation(); closeBase(); };
