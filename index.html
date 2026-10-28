@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282247") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282305") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -427,7 +427,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282247") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282305") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -533,6 +533,9 @@
     animation:rainFall .5s linear infinite; }
   @keyframes rainFall { to { transform:translateY(20%); } }
   #stage.snow #bg { filter:saturate(.75) brightness(.95); }
+  #npc.girl { transform-origin:50% 100%; animation:girlBreath 4.6s ease-in-out infinite; }
+  #npc.girl.low { animation:girlBreath 6s ease-in-out infinite; translate:0 2.5%; filter:brightness(.85) saturate(.8) drop-shadow(0 12px 18px #000a); }
+  @keyframes girlBreath { 0%, 100% { scale:1 1; rotate:-.4deg; } 50% { scale:1.006 1.016; rotate:.4deg; } }
   #stage.snow::after { content:""; position:absolute; inset:-30% 0 0 0; pointer-events:none; z-index:1;
     background:radial-gradient(circle, #fff 1.2px, #0000 1.8px) 0 0/38px 42px, radial-gradient(circle, #ffffffaa 1px, #0000 1.5px) 17px 9px/27px 31px, radial-gradient(circle, #ffffff77 .8px, #0000 1.2px) 7px 21px/19px 23px;
     animation:snowFall 9s linear infinite; }
@@ -582,11 +585,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282247" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282247" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282305" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282305" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282247) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282305) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -1020,7 +1023,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282247"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282305"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1139,7 +1142,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282247`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282305`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1510,7 +1513,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282247";
+  $("qteEgor").src = "img/egor_px.png?v=10282305";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -1676,6 +1679,11 @@ function gr_hub() {
 }
 function gr_final() { return GR.door && GR.use < 3 ? "gr_end_window" : "gr_end_out"; }
 // планета: бледно-голубой шар со свечением, с каждым днём ближе
+// моргание: раз в 3–6 секунд на 140 мс подменить картинку на закрытые глаза
+(function blink() {
+  setTimeout(() => { const n = $("npc"); if (n.classList.contains("girl") && n.classList.contains("on")) { n.src = "img/npc_girl_blink.png?v=10282305"; setTimeout(() => { if (n.classList.contains("girl")) n.src = "img/npc_girl.png?v=10282305"; }, 140); } blink(); }, 3000 + Math.random() * 3000);
+})();
+new Image().src = "img/npc_girl_blink.png?v=10282305";
 function grPlanet(c, x, y, r) {
   const g = c.createRadialGradient(x, y, r * .2, x, y, r * 2.4); g.addColorStop(0, "#a8d8ff55"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(x - r * 2.5, y - r * 2.5, r * 5, r * 5);
   const b = c.createRadialGradient(x - r * .35, y - r * .35, r * .1, x, y, r); b.addColorStop(0, "#e8f4ff"); b.addColorStop(.6, "#8ab8e0"); b.addColorStop(1, "#4a78a8"); c.fillStyle = b; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
@@ -7204,13 +7212,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282247`, talk: `img/${n}_talk.png?v=10282247`, blink: `img/${n}_blink.png?v=10282247` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282305`, talk: `img/${n}_talk.png?v=10282305`, blink: `img/${n}_blink.png?v=10282305` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282247" : `img/${n}_spartan.png?v=10282247`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282305" : `img/${n}_spartan.png?v=10282305`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -7239,7 +7247,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic", "Александр": "npc_trainer"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282247`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282305`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -7248,9 +7256,9 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282247`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282305`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
-  el.classList.remove("devil", "possessed", "aged", "ghost");
+  el.classList.remove("devil", "possessed", "aged", "ghost", "girl", "low");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
   if (cls) el.classList.add(cls);
   el.classList.add("on");
@@ -7259,7 +7267,7 @@ function showNpc(who, file, cls) {
 function focus(who) {
   if (NPC_IMG[who]) showNpc(who);
   // собеседник в тени, пока говорят Глеб, Егор или мысли
-  $("npc").classList.toggle("dim", (who === "Глеб" || who === "Егор" || who === "") && $("npc").classList.contains("on"));
+  $("npc").classList.toggle("dim", (curId.startsWith("gr_") ? !!who : who === "Глеб" || who === "Егор" || who === "") && $("npc").classList.contains("on"));
   // говорит третий (полицейский, судья) — оба героя в тени
   const other = who && who !== "Глеб" && who !== "Егор";
   $("gleb").classList.toggle("dim", who === "Егор" || other);
@@ -7574,8 +7582,11 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282247) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282305) center/cover";
   $("npc").classList.remove("on", "dim");
+  if (id.startsWith("gr_") && scene.bg !== "grmirror") {   // героиня «Меланхолии» всегда в кадре, кроме зеркала: дышит, моргает, в тяжёлые моменты опускает голову
+    showNpc(null, "npc_girl"); $("npc").classList.add("girl"); $("npc").classList.toggle("low", ["gr_stash", "gr_end_out", "gr_door"].includes(id));
+  }
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
   $("phone").classList.remove("on");
