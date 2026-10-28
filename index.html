@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282236") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282247") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -427,7 +427,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282236") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282247") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -532,7 +532,12 @@
     background:repeating-linear-gradient(100deg, #0000 0 9px, #c8d8ff30 9px 10px, #0000 10px 23px), repeating-linear-gradient(97deg, #0000 0 15px, #c8d8ff22 15px 16px, #0000 16px 31px);
     animation:rainFall .5s linear infinite; }
   @keyframes rainFall { to { transform:translateY(20%); } }
-  #saveBtns #mGr { background:radial-gradient(circle at 18% 70%, #a8582a 3px, #0000 4px), radial-gradient(circle at 72% 30%, #c8882a 3px, #0000 4px), repeating-linear-gradient(100deg, #0000 0 7px, #c8d8ff18 7px 8px), linear-gradient(180deg, #3a4048, #1c2026); border-color:#8a98a888; }
+  #stage.snow #bg { filter:saturate(.75) brightness(.95); }
+  #stage.snow::after { content:""; position:absolute; inset:-30% 0 0 0; pointer-events:none; z-index:1;
+    background:radial-gradient(circle, #fff 1.2px, #0000 1.8px) 0 0/38px 42px, radial-gradient(circle, #ffffffaa 1px, #0000 1.5px) 17px 9px/27px 31px, radial-gradient(circle, #ffffff77 .8px, #0000 1.2px) 7px 21px/19px 23px;
+    animation:snowFall 9s linear infinite; }
+  @keyframes snowFall { to { background-position:40px 420px, 0 310px, 20px 230px; } }
+  #saveBtns #mGr { background:radial-gradient(circle at 82% 35%, #c8e4ff 7px, #8ab8e0 12px, #a8d8ff22 22px, #0000 30px), radial-gradient(circle, #fff 1px, #0000 1.5px) 0 0/13px 15px, linear-gradient(180deg, #1a2440, #0c1020); border-color:#8a98a888; }
   #saveBtns #mGr b { font:italic 600 20px 'Cormorant Garamond', serif; color:#e0e6ee; }
   /* подход в зале */
   #rep { position:absolute; inset:0; z-index:7; display:none; flex-direction:column; align-items:center; justify-content:center; gap:14px; background:#000a; cursor:pointer; touch-action:none; user-select:none; }
@@ -577,11 +582,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282236" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282236" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282247" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282247" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282236) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282247) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -660,7 +665,7 @@
         <button id="mS" style="--c:#ff4fa8"><b>«Сахар»</b><span>Клуб, которым владеет Глеб</span></button>
         <button id="mM" style="--c:#9aa0b0"><b>Мобилизация</b><span>Самолёт, лес и указание свыше</span></button>
         <button id="mPa" style="--c:#d8d8d8"><b>Пепел · Париж</b><span>Ч/б нуар. Ален, Сергей и плёнка 18+</span></button>
-        <button id="mGr" style="--c:#8a98a8"><b>Осень</b><span>Одна девушка, бабушка и песня</span></button>
+        <button id="mGr" style="--c:#8a98a8"><b>Меланхолия</b><span>Девушка, снег и голубая планета</span></button>
         <button id="mTr" style="--c:#c8c8d0"><b>Тренировка</b><span>Петя, Глеб и тренер Александр</span></button>
         <button id="mPg" style="--c:#e07a2a"><b>Гаражи Пети</b><span>Пятница, четыре гаража и Claude Code</span></button>
         <button id="mSt" style="--c:#f0a868"><b>Дым над Волгой</b><span>Эксперимент. Чебоксары, лето 2023</span></button>
@@ -1015,7 +1020,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282236"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282247"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1134,7 +1139,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282236`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282247`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1505,7 +1510,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282236";
+  $("qteEgor").src = "img/egor_px.png?v=10282247";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -1657,33 +1662,91 @@ function trackSet(on) {
   else if (!TRACK.paused) { TRACK.pause(); if (music.ac && music.on) music.out.gain.setTargetAtTime(music.vol * (music.cur ? music.cur.vol : 1), music.ac.currentTime, .5); }
 }
 
-// ---------- «Осень»: Москва за мокрым окном, автобус, деревенский дом. Холодные приглушённые цвета ----------
-const GR = { calls: 0, missed: 0, song: false };
+// ---------- «Меланхолия»: заброшенная комната, зеркало с трещиной, автобус, деревня в снегу; голубая планета растёт день за днём ----------
+const GR = { day: 7, use: 0, gran: false, door: false, mirror: false, out: false, note: false };
+function gr_hub() {
+  if (GR.day <= 0) return [{ icon: "spark", t: "Ночь сближения", sub: "Меланхолия в полнеба", go: gr_final() }];
+  const cs = [{ icon: "let", t: "Лечь обратно", sub: GR.use ? "Достать из-под матраса. Снова" : "Достать из-под матраса", go: "gr_stash" }];
+  if (!GR.mirror) cs.push({ icon: "soul", t: "Подойти к зеркалу", sub: "В прихожей", go: "gr_mirror" });
+  cs.push({ icon: "go", t: "Раздвинуть шторы", sub: "Посмотреть на неё", go: "gr_window" });
+  if (!GR.door && GR.day <= 6) cs.push({ icon: "talk", t: "Открыть дверь", sub: "Стучат уже десять минут", go: "gr_door" });
+  if (!GR.gran && GR.day <= 5) cs.push({ icon: "talk", t: "Взять трубку", sub: "Звонит «Бабушка»", go: "gr_gran", cls: "new" });
+  if (GR.gran && GR.use < 3) cs.push({ icon: "go", t: "Купить билет до Торжка", sub: "Последний рейс перед сближением", go: "gr_bus", cls: "new", act: () => { GR.out = true; } });
+  return cs;
+}
+function gr_final() { return GR.door && GR.use < 3 ? "gr_end_window" : "gr_end_out"; }
+// планета: бледно-голубой шар со свечением, с каждым днём ближе
+function grPlanet(c, x, y, r) {
+  const g = c.createRadialGradient(x, y, r * .2, x, y, r * 2.4); g.addColorStop(0, "#a8d8ff55"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(x - r * 2.5, y - r * 2.5, r * 5, r * 5);
+  const b = c.createRadialGradient(x - r * .35, y - r * .35, r * .1, x, y, r); b.addColorStop(0, "#e8f4ff"); b.addColorStop(.6, "#8ab8e0"); b.addColorStop(1, "#4a78a8"); c.fillStyle = b; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
+  c.strokeStyle = "#ffffff30"; for (let i = -2; i <= 2; i++) { c.beginPath(); c.ellipse(x, y + i * r * .28, r * Math.sqrt(1 - (i * .28) ** 2), r * .06, 0, 0, 7); c.stroke(); }
+}
 function drawGr(b) {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
-  if (b === "grcity") {                     // комната на Нагатинской: окно в дожде, огни многоэтажек, стол с кружкой
-    R(0, 0, W, H, "#2a2e36"); R(W * .12, H * .1, W * .76, H * .52, "#1a2030");
-    for (let i = 0; i < 6; i++) { R(W * (.14 + i * .12), H * (.22 + (i % 3) * .05), W * .09, H * .4, "#262c3a"); for (let k = 0; k < 8; k++) if ((i + k) % 3) R(W * (.15 + i * .12) + (k % 2) * 6, H * (.25 + (i % 3) * .05) + (k >> 1) * 8, 3, 3, "#d8c890aa"); }
-    for (let i = 0; i < 40; i++) R(W * .12 + (i * 37) % (W * .76), H * .1 + (i * 23) % (H * .52), 1, 3 + i % 4, "#a8b8d066");
-    R(W * .12, H * .36, W * .76, 2, "#3a3e48"); R(W * .5 - 1, H * .1, 2, H * .52, "#3a3e48"); R(W * .1, H * .62, W * .8, 4, "#4a4e58");
-    R(0, H * .7, W, H * .3, "#22252c"); R(W * .3, H * .72, W * .4, H * .06, "#3a3430"); R(W * .44, H * .66, 8, 8, "#d8d8d0"); R(W * .52, H * .67, 14, 9, "#5a6a7a");
-  } else if (b === "grbus") {               // окно автобуса: серые поля, столбы, капли
-    R(0, 0, W, H, "#1c1e24"); R(W * .08, H * .12, W * .84, H * .56, "#7a8088");
-    R(W * .08, H * .42, W * .84, H * .26, "#5a6050"); for (let i = 0; i < 18; i++) R(W * .08 + (i * 29) % (W * .84), H * .44 + (i * 7) % (H * .2), 10, 1, "#4a5040");
-    for (let i = 0; i < 4; i++) { R(W * (.15 + i * .22), H * .2, 2, H * .26, "#3a3a3a"); R(W * (.15 + i * .22) - 6, H * .22, 14, 1, "#3a3a3a"); }
-    for (let i = 0; i < 9; i++) { c.fillStyle = "#3a4038"; c.beginPath(); c.arc(W * .08 + i * W * .1, H * .42, 8 + (i % 3) * 3, Math.PI, 0); c.fill(); }
-    for (let i = 0; i < 50; i++) R(W * .08 + (i * 41) % (W * .84), H * .12 + (i * 17) % (H * .56), 1, 2 + i % 3, "#d8e0e8aa");
-    R(W * .08, H * .66, W * .84, H * .04, "#2a2c30"); R(0, H * .72, W, H * .28, "#2a2c34"); R(W * .1, H * .78, W * .3, H * .2, "#3a2a3a");
-  } else {                                   // grvillage: дом с синими наличниками, голые деревья, забор, таз с яблоками
-    R(0, 0, W, H, "#8a9098"); for (let i = 0; i < 5; i++) { c.fillStyle = "#9aa0a8"; c.beginPath(); c.ellipse((i * 83) % W, H * (.1 + (i % 2) * .08), 40, 8, 0, 0, 7); c.fill(); }
-    R(0, H * .62, W, H * .38, "#4a4a3a"); for (let i = 0; i < 30; i++) R((i * 31) % W, H * .64 + (i * 13) % (H * .3), 3, 2, ["#a85a2a", "#c8882a", "#7a3a1a"][i % 3]);
-    R(W * .3, H * .3, W * .42, H * .34, "#6a5038"); for (let y = H * .32; y < H * .64; y += 5) R(W * .3, y, W * .42, 1, "#5a4028");
-    c.fillStyle = "#4a3a2a"; c.beginPath(); c.moveTo(W * .27, H * .31); c.lineTo(W * .51, H * .12); c.lineTo(W * .75, H * .31); c.fill();
-    for (const x of [.36, .58]) { R(W * x - 2, H * .38 - 2, W * .1 + 4, H * .14 + 4, "#3a6aa8"); R(W * x, H * .38, W * .1, H * .14, "#e8d8a8"); R(W * x + W * .05 - 1, H * .38, 2, H * .14, "#3a6aa8"); }
-    for (let x = 0; x < W; x += 8) R(x, H * .58, 4, H * .1, "#5a4a38"); R(0, H * .6, W, 2, "#5a4a38");
-    for (const tx of [.1, .88]) { R(W * tx, H * .2, 3, H * .44, "#2a2420"); c.strokeStyle = "#2a2420"; for (let k = 0; k < 4; k++) { c.beginPath(); c.moveTo(W * tx + 1, H * (.26 + k * .07)); c.lineTo(W * tx + 1 + (k % 2 ? 14 : -14), H * (.2 + k * .07)); c.stroke(); } }
-    R(W * .78, H * .74, 22, 7, "#8a8a8a"); for (let i = 0; i < 5; i++) R(W * .78 + 2 + i * 4, H * .72, 3, 3, i % 2 ? "#6a2a1a" : "#8a4a1a");
+  const pr = W * (.05 + (7 - GR.day) * .018);
+  if (b === "grcity") {                     // заброшенная комната: окно со снегом и планетой, матрас, бардак, лампа, ноутбук, записка на двери
+    R(0, 0, W, H, "#1e2028"); for (let x = 0; x < W; x += 9) R(x, 0, 4, H * .66, "#22242c");                       // обои в полоску
+    for (let i = 0; i < 6; i++) R(W * (.02 + i * .17), H * (.05 + (i % 2) * .3), 6 + i % 3 * 3, 4, "#2a2c34");     // пятна на обоях
+    const wx = W * .36, wy = H * .08, ww = W * .4, wh = H * .44;                                                     // окно
+    const sky = c.createLinearGradient(0, wy, 0, wy + wh); sky.addColorStop(0, "#14203a"); sky.addColorStop(1, "#3a5070"); c.fillStyle = sky; c.fillRect(wx, wy, ww, wh);
+    c.save(); c.beginPath(); c.rect(wx, wy, ww, wh); c.clip(); grPlanet(c, wx + ww * .62, wy + wh * .34, pr);
+    for (let i = 0; i < 5; i++) R(wx + i * ww / 5, wy + wh * (.6 + (i % 2) * .08), ww / 5 - 2, wh, "#161c2a");
+    for (let i = 0; i < 20; i++) if (i % 3) R(wx + (i * 13) % ww, wy + wh * .68 + (i * 7) % (wh * .25), 2, 2, "#e8d8a066");
+    R(wx + ww * .1, wy + wh * .5, 6, wh * .2, "#2a2a30"); for (let i = 0; i < 3; i++) R(wx + ww * .1 + 1, wy + wh * .52 - i * 5, 4, 3, "#c8d8e844");   // труба ТЭЦ и дым
+    for (let i = 0; i < 70; i++) R(wx + (i * 37) % ww, wy + (i * 23) % wh, 1, 1, "#ffffffcc");                      // снег
+    c.restore();
+    R(wx - 3, wy - 3, ww + 6, 3, "#4a4c54"); R(wx - 3, wy + wh, ww + 6, 4, "#5a5c64"); R(wx + ww / 2 - 1, wy, 2, wh, "#4a4c54"); R(wx, wy + wh * .45, ww, 2, "#4a4c54");
+    R(wx + 3, wy + wh - 4, ww - 6, 4, "#e8eef4");                                                                   // снег на отливе
+    R(wx - W * .1, wy - H * .04, W * .1, H * .62, "#3a2a34"); R(wx + ww + W * .02, wy - H * .04, W * .06, H * .62, "#3a2a34");   // шторы: левая задёрнута
+    for (let i = 0; i < 5; i++) R(wx - W * .1 + i * W * .02, wy - H * .04, 1, H * .62, "#2a1e26");
+    const lg = c.createRadialGradient(wx + ww / 2, H * .7, 10, wx + ww / 2, H * .7, W * .45); lg.addColorStop(0, "#6a98c822"); lg.addColorStop(1, "#0000"); c.fillStyle = lg; c.fillRect(0, 0, W, H);   // голубой свет из окна
+    R(0, H * .66, W, H * .34, "#2a2622"); for (let x = 0; x < W; x += 18) R(x, H * .66, 1, H * .34, "#221e1a");          // пол
+    R(W * .08, H * .72, W * .36, H * .1, "#4a4e5a"); R(W * .08, H * .7, W * .36, 4, "#5a5e6a"); R(W * .1, H * .69, W * .08, H * .04, "#6a6e7a");   // матрас, подушка
+    c.fillStyle = "#3a3a4a"; c.beginPath(); c.moveTo(W * .2, H * .72); c.quadraticCurveTo(W * .3, H * .66, W * .42, H * .74); c.lineTo(W * .36, H * .8); c.fill();   // скомканное одеяло
+    for (const [x, y, w, col] of [[.5, .86, 18, "#6a3a2a"], [.56, .9, 22, "#2a4a6a"], [.7, .84, 16, "#5a5a5a"], [.62, .78, 14, "#7a2a3a"], [.86, .9, 20, "#3a3a3a"]]) R(W * x, H * y, w, 5, col);   // одежда на полу
+    for (let i = 0; i < 3; i++) { R(W * (.76 + i * .02), H * (.74 - i * .025), 20, 4, "#c8a868"); R(W * (.76 + i * .02) + 2, H * (.74 - i * .025) + 1, 16, 1, "#a88848"); }   // коробки из-под пиццы
+    for (let i = 0; i < 4; i++) { R(W * (.47 + i * .035), H * .74, 5, 6, ["#d8d8d0", "#c8c0b0", "#e8e0d0", "#b8b0a0"][i]); R(W * (.47 + i * .035) + 1, H * .745, 3, 1, "#4a3a2a"); }   // кружки
+    R(W * .58, H * .8, 4, 7, "#2a8a4a"); R(W * .6, H * .81, 4, 6, "#c82a3a");                                         // банки энергетика
+    R(W * .3, H * .76, W * .1, H * .05, "#2a2a2e"); R(W * .305, H * .7, W * .09, H * .06, "#3a4a6a");                  // ноутбук
+    const ng = c.createRadialGradient(W * .35, H * .73, 2, W * .35, H * .73, W * .12); ng.addColorStop(0, "#8ab0e044"); ng.addColorStop(1, "#0000"); c.fillStyle = ng; c.fillRect(W * .2, H * .6, W * .3, H * .3);
+    R(W * .9, H * .2, W * .08, H * .46, "#3a3230"); R(W * .91, H * .4, 3, 3, "#c8b040"); R(W * .915, H * .26, W * .05, H * .07, "#e8e0c8"); R(W * .92, H * .28, W * .03, 1, "#8a2a2a"); R(W * .92, H * .3, W * .035, 1, "#4a4a4a");   // дверь и записка
+    R(W * .04, H * .5, 3, H * .2, "#3a3a3a"); c.fillStyle = "#d8a050"; c.beginPath(); c.moveTo(W * .025, H * .5); c.lineTo(W * .065, H * .5); c.lineTo(W * .055, H * .44); c.lineTo(W * .035, H * .44); c.fill();   // торшер
+    const tg2 = c.createRadialGradient(W * .045, H * .5, 2, W * .045, H * .5, W * .14); tg2.addColorStop(0, "#ffb05033"); tg2.addColorStop(1, "#0000"); c.fillStyle = tg2; c.fillRect(0, H * .3, W * .25, H * .5);
+    c.fillStyle = "#00000055"; c.fillRect(0, 0, W, H * .04); c.fillRect(0, H * .96, W, H * .04);
+  } else if (b === "grmirror") {            // прихожая: зеркало с трещиной, стикеры, отражение, голубой свет
+    R(0, 0, W, H, "#1a1c22"); for (let x = 0; x < W; x += 9) R(x, 0, 4, H, "#1e2026");
+    const mx = W * .3, my = H * .08, mw = W * .4, mh = H * .78;
+    R(mx - 5, my - 5, mw + 10, mh + 10, "#4a3a2a"); R(mx - 3, my - 3, mw + 6, mh + 6, "#6a5038");
+    const mg = c.createLinearGradient(mx, my, mx + mw, my + mh); mg.addColorStop(0, "#3a4a5a"); mg.addColorStop(.5, "#2a3440"); mg.addColorStop(1, "#1e2630"); c.fillStyle = mg; c.fillRect(mx, my, mw, mh);
+    c.fillStyle = "#14161c"; c.beginPath(); c.ellipse(mx + mw * .5, my + mh * .38, mw * .14, mh * .12, 0, 0, 7); c.fill();          // отражение: голова
+    c.beginPath(); c.moveTo(mx + mw * .22, my + mh); c.quadraticCurveTo(mx + mw * .25, my + mh * .55, mx + mw * .5, my + mh * .52); c.quadraticCurveTo(mx + mw * .75, my + mh * .55, mx + mw * .78, my + mh); c.fill();   // плечи в толстовке
+    c.fillStyle = "#c8d0d830"; c.beginPath(); c.ellipse(mx + mw * .45, my + mh * .38, mw * .05, mh * .08, 0, 0, 7); c.fill();          // бледное лицо в тени
+    grPlanet(c, mx + mw * .8, my + mh * .2, pr * .5);                                                                // планета в отражении окна
+    c.strokeStyle = "#d8e0e8aa"; c.lineWidth = 1; c.beginPath(); c.moveTo(mx + mw, my + mh * .12); c.lineTo(mx + mw * .7, my + mh * .3); c.lineTo(mx + mw * .74, my + mh * .42); c.lineTo(mx + mw * .5, my + mh * .66); c.moveTo(mx + mw * .7, my + mh * .3); c.lineTo(mx + mw * .9, my + mh * .44); c.stroke();   // трещина
+    for (const [x, y, rot] of [[-.12, .1, -.1], [-.14, .32, .08], [1.02, .14, .1], [1.0, .5, -.06], [.06, -.08, 3.0]]) { c.save(); c.translate(mx + mw * x + 10, my + mh * y + 10); c.rotate(rot); c.fillStyle = "#e8d850"; c.fillRect(-10, -9, 20, 18); c.fillStyle = "#3a3020"; c.fillRect(-7, -4, 12, 1); c.fillRect(-7, 0, 9, 1); c.restore(); }   // стикеры
+    c.fillStyle = "#6a98c822"; c.fillRect(0, 0, W, H);
+  } else if (b === "grbus") {               // окно автобуса: поля в снегу и шар над ними
+    R(0, 0, W, H, "#1c1e24"); const bx = W * .08, by = H * .12, bw = W * .84, bh = H * .56;
+    const sky = c.createLinearGradient(0, by, 0, by + bh); sky.addColorStop(0, "#5a6a80"); sky.addColorStop(1, "#a8b0b8"); c.fillStyle = sky; c.fillRect(bx, by, bw, bh);
+    c.save(); c.beginPath(); c.rect(bx, by, bw, bh); c.clip(); grPlanet(c, bx + bw * .7, by + bh * .3, pr * 1.2);
+    R(bx, by + bh * .55, bw, bh, "#e0e6ec"); for (let i = 0; i < 9; i++) { c.fillStyle = "#3a4038"; c.beginPath(); c.moveTo(bx + i * bw / 9, by + bh * .56); c.lineTo(bx + i * bw / 9 + 8, by + bh * .3 - (i % 3) * 6); c.lineTo(bx + i * bw / 9 + 16, by + bh * .56); c.fill(); }
+    for (let i = 0; i < 4; i++) { R(bx + bw * (.1 + i * .24), by + bh * .2, 2, bh * .4, "#3a3a3a"); }
+    for (let i = 0; i < 60; i++) R(bx + (i * 41) % bw, by + (i * 17) % bh, 1, 1, "#ffffff");
+    c.restore(); R(bx, by + bh - 4, bw, 4, "#2a2c30"); R(0, H * .72, W, H * .28, "#2a2c34"); R(W * .1, H * .78, W * .3, H * .2, "#3a2a3a");
+  } else {                                   // grvillage: дом с синими наличниками в снегу, тёплые окна, планета над лесом
+    const sky = c.createLinearGradient(0, 0, 0, H * .62); sky.addColorStop(0, "#1a2440"); sky.addColorStop(1, "#4a5878"); c.fillStyle = sky; c.fillRect(0, 0, W, H);
+    grPlanet(c, W * .74, H * .2, pr * 1.3);
+    for (let i = 0; i < 14; i++) { c.fillStyle = "#1a2030"; c.beginPath(); c.moveTo(i * W / 13 - 10, H * .62); c.lineTo(i * W / 13, H * .42 - (i % 3) * 6); c.lineTo(i * W / 13 + 10, H * .62); c.fill(); }
+    R(0, H * .62, W, H * .38, "#d8e0ea"); for (let i = 0; i < 40; i++) R((i * 31) % W, H * .64 + (i * 13) % (H * .3), 4, 1, "#b8c4d4");
+    R(W * .3, H * .32, W * .42, H * .32, "#5a4434"); for (let y = H * .34; y < H * .64; y += 5) R(W * .3, y, W * .42, 1, "#4a3424");
+    c.fillStyle = "#3a2c22"; c.beginPath(); c.moveTo(W * .27, H * .33); c.lineTo(W * .51, H * .14); c.lineTo(W * .75, H * .33); c.fill();
+    c.fillStyle = "#eef2f6"; c.beginPath(); c.moveTo(W * .26, H * .33); c.lineTo(W * .51, H * .13); c.lineTo(W * .76, H * .33); c.lineTo(W * .7, H * .31); c.lineTo(W * .51, H * .17); c.lineTo(W * .32, H * .31); c.fill();   // снег на крыше
+    for (const x of [.36, .58]) { R(W * x - 2, H * .4 - 2, W * .1 + 4, H * .13 + 4, "#3a6aa8"); R(W * x, H * .4, W * .1, H * .13, "#f8c870"); R(W * x + W * .05 - 1, H * .4, 2, H * .13, "#3a6aa8");
+      const wg = c.createRadialGradient(W * x + W * .05, H * .46, 2, W * x + W * .05, H * .46, W * .12); wg.addColorStop(0, "#ffc87044"); wg.addColorStop(1, "#0000"); c.fillStyle = wg; c.fillRect(W * x - W * .08, H * .3, W * .26, H * .34); }
+    R(W * .66, H * .08, 6, H * .14, "#4a3a2a"); for (let i = 0; i < 4; i++) { c.fillStyle = "#c8d0d855"; c.beginPath(); c.arc(W * .67 + i * 3, H * .06 - i * 6, 3 + i, 0, 7); c.fill(); }   // дым из трубы
+    for (let x = 0; x < W; x += 8) { R(x, H * .58, 4, H * .1, "#4a3a2a"); R(x, H * .575, 4, 2, "#eef2f6"); }
+    for (let i = 0; i < 80; i++) R((i * 53) % W, (i * 29) % (H * .62), 1, 1, "#ffffffcc");
   }
 }
 
@@ -4753,151 +4816,123 @@ const scenes = {
     ending: "Тренировка · концовка «Геройство у мусорки»",
     choices: () => [{ icon: "rewind", t: "Ещё раз", sub: "Без лишних подходов", go: "tr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
   },
-  // ===== «Осень»: грустная история одной девушки (имени пока нет — «Она»). Москва, бабушка в деревне, звонки, которые откладываешь. Трек — в главной сцене =====
+  // ===== «Осень» → «Меланхолия»: девушка без имени, депрессия и зависимость, съёмная комната, которую скоро отберут,
+  // и голубая планета, которая каждый день всё больше в окне. Мир то ли кончится, то ли нет. Трек — в главных сценах =====
   gr_start: {
-    bg: "grcity", place: "Москва · октябрь", noSprites: true, rain: true, music: "lonely",
-    linesFn: () => { Object.assign(GR, { calls: 0, missed: 0, song: false }); return [
-      { skip: "Осень" },
-      { who: null, t: "Ей двадцать два. Съёмная комната на Нагатинской, работа в кофейне до одиннадцати, учёба, которую она всё время «вот-вот догонит»." },
-      { who: "", t: "В Москве всё быстро. Даже дождь здесь идёт так, будто опаздывает." },
-      { who: null, t: "У неё есть бабушка. Деревня под Торжком, дом с синими наличниками. Бабушка растила её с семи лет, пока мама «устраивала жизнь»." },
-      { tg: "Внучка, ты как. Тут яблоки упали все. Приезжай, пирог сделаю", time: "18:42", chat: "Бабушка", sayWho: "", sayText: "Бабушка пишет без точек, но с заглавной. Её научила соседка, Валя." }
+    get bg() { return "grcity"; }, get place() { return `Нагатинская · до сближения ${GR.day} дн.`; }, noSprites: true, snow: true, music: "lonely",
+    linesFn: () => { Object.assign(GR, { day: 7, use: 0, gran: false, door: false, mirror: false, out: false }); return [
+      { skip: "Меланхолия" },
+      { who: null, t: "Комната на Нагатинской. Шторы задёрнуты наполовину. На полу матрас, вокруг — одежда, коробки из-под пиццы, кружки с чем-то, что когда-то было чаем." },
+      { who: null, t: "За окном идёт снег. А над домами, над трубами ТЭЦ, висит она. Голубая, огромная, бледная, как таблетка. Её назвали Меланхолией. Через семь дней она пройдёт рядом с Землёй. Или не пройдёт." },
+      { who: "", t: "Мне всё равно. Это не грусть. Грусть — это когда что-то чувствуешь." },
+      { tg: "Добрый день. Напоминаю: оплаты нет второй месяц. Освободите комнату до 1 декабря. Тамара Петровна", time: "11:02", chat: "Хозяйка", sayWho: "", sayText: "Она читает и кладёт телефон экраном вниз. С работы её уволили, когда она третий раз не пришла. Ей не обидно. Ей никак." }
+    ]; },
+    choices: () => gr_hub()
+  },
+  gr_hub_scene: {
+    get bg() { return "grcity"; }, get place() { return `Нагатинская · до сближения ${GR.day} дн.`; }, noSprites: true, snow: true, music: "lonely",
+    linesFn: () => [{ who: null, t: [
+      "День проходит, как будто его кто-то пролистал. В окне Меланхолия стала ещё чуть больше.",
+      "Снег за окном не прекращается третий день. В комнате пахнет пылью и выдохшимся энергетиком.",
+      "Телефон вибрирует. Она не смотрит. Потом смотрит. Ничего важного. Ничего вообще.",
+      "В новостях говорят, что вероятность столкновения — «не выше тридцати процентов». Город пьёт шампанское по вторникам."
+    ][GR.day % 4] }],
+    choices: () => gr_hub()
+  },
+  gr_stash: {
+    bg: "grcity", place: "Нагатинская · матрас", noSprites: true, snow: true, mp3: "grust",
+    linesFn: () => { GR.use++; GR.day--; return [
+      { who: null, t: GR.use === 1 ? "Она достаёт из-под матраса то, что обещала себе больше не доставать. Через двадцать минут мир становится ватным, и Меланхолия в окне кажется красивой." : GR.use === 2 ? "Снова. Вата толще. Песня в наушниках играет третий раз подряд, и она не помнит, как ставила её на повтор." : "Снова. Теперь она не помнит, какой сегодня день. Это пугает меньше, чем должно." },
+      { who: "", t: GR.use >= 2 ? "Я не хочу умереть. Я просто хочу, чтобы ничего не было. Это разные вещи. Наверное." : "Вот. Теперь не больно. Теперь вообще никак. Это и есть отдых?" },
+      ...(GR.use >= 3 ? [{ who: null, t: "Под утро её трясёт. Сердце бьётся неровно, как стиральная машина на отжиме. Она лежит и считает удары, пока не засыпает." }] : [])
+    ]; },
+    nextFn: () => GR.day <= 0 ? gr_final() : "gr_hub_scene"
+  },
+  gr_mirror: {
+    bg: "grmirror", place: "Нагатинская · зеркало", noSprites: true, snow: true, mp3: "grust",
+    linesFn: () => { GR.mirror = true; GR.day--; return [
+      { who: null, t: "Зеркало в прихожей. По углу трещина — она сама ударила его в сентябре и не помнит за что. На раме жёлтые стикеры её почерком, старые, двухмесячные." },
+      { who: null, t: "«Поесть». «Позвонить бабушке». «Работа 9:00». «Ты справишься». Последний наполовину отклеился и висит вниз головой." },
+      { who: "", t: "В зеркале кто-то худой, с серой кожей, в чужой толстовке. Мне её подарил кто-то. Не помню кто. Как будто это не я, а я, которую забыли выключить." },
+      { who: null, t: "Голубой свет из комнаты падает на зеркало. Меланхолия отражается в трещине — две половинки планеты, которые никак не совпадут." }
     ]; },
     choices: () => [
-      { icon: "talk", t: "Позвонить ей", sub: "Прямо сейчас, между заказами", go: "gr_call1", act: () => { GR.calls++; } },
-      { icon: "write", t: "«Приеду на выходных!»", sub: "Ответить и убрать телефон", go: "gr_week2", act: () => { GR.missed++; } }
+      { icon: "write", t: "Переклеить «Ты справишься» ровно", sub: "Это ничего не значит. Наверное", go: "gr_hub_scene", act: () => { GR.note = true; } },
+      { icon: "let", t: "Отвернуться", sub: "", go: "gr_hub_scene" }
     ]
   },
-  gr_call1: {
-    bg: "grcity", place: "Кофейня · подсобка", noSprites: true, rain: true, music: "lonely", next: "gr_week2",
-    lines: [
-      { who: "Бабушка", t: "Алё? Ой. Это ты. А я думаю — кто звонит, не праздник ведь." },
-      { who: "Бабушка", t: "У меня всё хорошо. Давление скачет, а так хорошо. Валя заходит. Кот жирный. Ты ешь там?" },
-      { who: null, t: "Они говорят семь минут. Ни о чём. О яблоках, о коте, о том, что в Торжке открыли «Магнит» второй." },
-      { who: "", t: "Она не помнит, когда последний раз говорила с кем-то семь минут ни о чём. И почему от этого так спокойно." }
-    ]
+  gr_window: {
+    bg: "grcity", place: "Нагатинская · окно", noSprites: true, snow: true, mp3: "grust",
+    linesFn: () => { GR.day--; return [
+      { who: null, t: "Она раздвигает шторы до конца. Впервые за месяц. Снег. Двор. Мальчик лепит снеговика, отец фотографирует. Над ними — голубой шар в полнеба." },
+      { who: null, t: "Люди внизу не боятся. Или боятся, но лепят снеговиков. Она не понимает, как это — бояться и всё равно лепить." },
+      { who: "", t: "Если мир кончится через несколько дней, то всё неважно. Если не кончится — тоже всё неважно. Так почему у мальчика внизу важно?" }
+    ]; },
+    nextFn: () => GR.day <= 0 ? gr_final() : "gr_hub_scene"
   },
-  gr_week2: {
-    bg: "grcity", place: "Москва · ноябрь", noSprites: true, rain: true, music: "lonely",
-    lines: [
-      { skip: "Через три недели" },
-      { who: null, t: "Выходные пришли и ушли. Потом ещё одни. Смена, зачёт, день рождения подруги, снова смена." },
-      { tg: "Внучка. Я тут забываю иногда. Ключи, чайник. Валя говорит это возраст. Ты не волнуйся", time: "21:15", chat: "Бабушка", sayWho: "", sayText: "«Ты не волнуйся» — это бабушкино «приезжай». Она это знает." }
-    ],
-    choices: () => [
-      { icon: "go", t: "Взять билет на автобус", sub: "Отпроситься со смены", go: "gr_bus", act: () => { GR.calls++; } },
-      { icon: "talk", t: "Позвонить Вале", sub: "Узнать, что на самом деле", go: "gr_valya", act: () => { GR.calls++; } },
-      { icon: "write", t: "«В декабре точно приеду»", sub: "Сейчас никак", go: "gr_december", act: () => { GR.missed++; } }
-    ]
+  gr_door: {
+    bg: "grcity", place: "Нагатинская · стук в дверь", noSprites: true, snow: true, music: "sad",
+    linesFn: () => { GR.door = true; GR.day--; return [
+      { who: null, t: "Стук. Долгий. Потом голос: «Я знаю, что вы дома. Свет в окне»." },
+      { who: null, t: "На пороге Тамара Петровна. Шестьдесят пять лет, пуховик, пакет из «Пятёрочки». Она оглядывает комнату и ничего не говорит про грязь." },
+      { who: "Тамара Петровна", t: "Первого декабря вы съезжаете. Это не обсуждается, мне тоже надо на что-то жить. Но вот." },
+      { who: null, t: "Она ставит пакет на пол. Там гречка, молоко, хлеб, мандарины." },
+      { who: "Тамара Петровна", t: "У меня сын так лежал. Два года. Выкарабкался. Не потому что сильный, а потому что кто-то ему суп носил. Вам кто-то суп носит?" },
+      { who: "", t: "Она не отвечает. Тамара Петровна кивает, как будто это и был ответ, и уходит." }
+    ]; },
+    nextFn: () => GR.day <= 0 ? gr_final() : "gr_hub_scene"
   },
-  gr_valya: {
-    bg: "grcity", place: "Москва · ночь", noSprites: true, rain: true, music: "sad",
-    lines: [
-      { who: "Валя", t: "Ой, хорошо, что ты позвонила. Я не хотела пугать. Она вчера пошла в магазин и не вернулась. Я нашла её у остановки. Она ждала автобус. Сказала — едет к тебе, в школу, забирать." },
-      { who: "Валя", t: "Тебе двадцать два, а она тебя из школы забирать ехала. Врач говорит — деменция. Начало. Приезжай, пока она тебя… ну. Пока помнит." },
-      { who: null, t: "Она сидит на полу в коридоре съёмной квартиры. Соседи за стенкой смотрят сериал и смеются. Очень громко смеются." }
-    ],
-    choices: () => [
-      { icon: "go", t: "Утренним автобусом", sub: "Всё остальное подождёт", go: "gr_bus" },
-      { icon: "write", t: "«В декабре. Сессия»", sub: "Она не может сейчас", go: "gr_december", act: () => { GR.missed++; } }
-    ]
-  },
-  gr_december: {
-    bg: "grcity", place: "Москва · декабрь", noSprites: true, rain: true, music: "lonely",
-    lines: [
-      { skip: "Декабрь" },
-      { who: null, t: "Сессия. Новогодние смены — двойная ставка. Подарок маме, которая не звонит. Подарок бабушке, который лежит на полке с ноября." },
-      { tg: "Внучка. А кто ты мне. Валя говорит внучка. Я верю ей. Приезжай я пирог", time: "04:12", chat: "Бабушка", sayWho: "", sayText: "Сообщение пришло в четыре утра. Она читает его в восемь. Перечитывает до девяти." }
-    ],
-    choices: () => [
-      { icon: "go", t: "Автобус. Сегодня", sub: "Хватит", go: "gr_bus" },
-      { icon: "let", t: "После Нового года", sub: "Ещё неделя", go: "gr_end_late", act: () => { GR.missed++; } }
-    ]
+  gr_gran: {
+    bg: "grcity", place: "Нагатинская · звонок", noSprites: true, snow: true, mp3: "grust",
+    linesFn: () => { GR.gran = true; GR.day--; return [
+      { who: null, t: "Телефон звонит. «Бабушка». Она смотрит на экран так долго, что звонок почти кончается. Потом всё-таки нажимает." },
+      { who: "Бабушка", t: "Алё? Внучка? Ой, взяла. А я по телевизору смотрю эту… звезду. Говорят, конец света. А я думаю: ну и что, а пирог-то я всё равно испеку." },
+      { who: "Бабушка", t: "Приезжай, а? Если конец света — так хоть вместе. А если не конец — так тем более." },
+      { who: "", t: "Она плачет. Впервые за три месяца. Не от грусти. Просто что-то внутри сдвинулось, как снег с крыши." }
+    ]; },
+    nextFn: () => GR.day <= 0 ? gr_final() : "gr_hub_scene"
   },
   gr_bus: {
-    bg: "grbus", place: "Автобус Москва — Торжок", noSprites: true, rain: true, mp3: "grust",
+    bg: "grbus", place: "Автобус Москва — Торжок · снег", noSprites: true, snow: true, mp3: "grust", next: "gr_end_snow",
     lines: [
-      { who: null, t: "Автобус в семь утра. Окно в каплях. Поля, серые, как старое одеяло. Наушники." },
-      { who: "", t: "Эту песню бабушка слушала по радио на кухне. Каждое утро, пока чистила картошку и делала вид, что не поёт." },
-      { who: null, t: "Она включает её в наушниках. Ставит на повтор. Едет четыре часа и не замечает ни одного из них." },
-      { who: "", t: "Почему так долго? Не дорога. Почему так долго я ехала?" }
-    ],
-    next: "gr_house"
+      { who: null, t: "Автобус в семь утра. Последний рейс перед сближением — водитель сказал, что дальше не поедет, «мало ли». Она взяла только рюкзак. Комнату пусть забирают." },
+      { who: null, t: "За окном поля в снегу. Над полями — голубой шар, такой большой, что кажется, будто едешь к нему." },
+      { who: "", t: "Песня в наушниках. Та же. Только теперь она слышит слова." }
+    ]
   },
-  gr_house: {
-    bg: "grvillage", place: "Деревня под Торжком · дом с синими наличниками", noSprites: true, rain: true, mp3: "grust",
+  gr_end_snow: {
+    bg: "grvillage", place: "Деревня под Торжком · ночь сближения", noSprites: true, snow: true, mp3: "grust",
+    lines: [
+      { who: null, t: "Дом с синими наличниками, весь в снегу. Бабушка в валенках на крыльце, в руках пирог прямо в форме. Кривой. Горячий." },
+      { who: "Бабушка", t: "Ну вот. Приехала. Худая какая. Ешь. Конец света на голодный желудок — это не по-людски." },
+      { who: null, t: "Ночью они сидят на крыльце под одним одеялом и смотрят, как Меланхолия проходит над деревней. Она не падает. Она медленно уходит за лес, огромная и равнодушная." },
+      { who: "", t: "Мир не кончился. Значит, завтра опять надо что-то делать. Странно, но сейчас это не страшно. Сейчас у меня есть пирог." }
+    ],
+    ending: "Меланхолия · концовка «Снег у бабушки»",
+    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Семь дней до сближения", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+  },
+  gr_end_window: {
+    bg: "grcity", place: "Нагатинская · утро после", noSprites: true, snow: true, mp3: "grust",
+    lines: [
+      { who: null, t: "Она встречает сближение у окна, с пакетом мандаринов от Тамары Петровны на коленях. Меланхолия проходит так близко, что дрожат стёкла. И уходит." },
+      { who: null, t: "Утро. Мир на месте. Снег на месте. Мальчик во дворе на месте — достраивает снеговика." },
+      { who: "", t: "Всё на месте. Значит, и мне придётся быть на месте." },
+      { who: null, t: "Она съедает мандарин. Потом второй. Потом открывает ноутбук и пишет: «Тамара Петровна, можно я отработаю долг? Я найду работу до конца декабря». Отправляет, пока не передумала." }
+    ],
+    ending: "Меланхолия · концовка «Мир на месте»",
+    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Семь дней до сближения", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+  },
+  gr_end_out: {
+    bg: "grcity", place: "Подъезд на Нагатинской · 1 декабря", noSprites: true, snow: true, mp3: "grust",
     linesFn: () => [
-      { who: null, t: "Калитка не заперта. Кот жирный, как обещали. На кухне пахнет яблоками, которые никто не собрал. Они лежат в тазу и темнеют." },
-      { who: null, t: "Бабушка сидит у окна. Маленькая. Меньше, чем помнилось. В руках — полотенце, она складывает его и раскладывает снова." },
-      { who: "Бабушка", t: "Здравствуйте. Вы из собеса? Проходите. Валя сказала, кто-то приедет." },
-      { who: "", t: "Она не узнаёт. Конечно. Она не узнаёт." }
+      { who: null, t: "Сближение прошло, пока она спала. Она узнала об этом из новостей, когда уже стояла у подъезда с чемоданом. Первое декабря. Ключи у Тамары Петровны." },
+      { who: null, t: "Снег. Чемодан. Мир, который не кончился, — и ей некуда в нём идти." },
+      { who: null, t: GR.gran ? "Телефон. «Бабушка». Она обещала бабушке приехать — и не приехала. Шесть пропущенных." : "Телефон. Двадцать три пропущенных. «Бабушка». Все за последнюю неделю." },
+      { who: "", t: "Она перезванивает. Гудок. Ещё гудок. Песня в наушниках играет где-то очень далеко." },
+      { who: "Бабушка", t: "…Алё? Внучка? Ты где? Ты живая? Приезжай. Слышишь? Просто приезжай. Ничего не надо, просто приезжай." }
     ],
-    choices: () => [
-      { icon: "soul", t: "Включить ту песню", sub: "С телефона, на кухне, негромко", go: "gr_song", act: () => { GR.song = true; } },
-      { icon: "talk", t: "«Бабушка, это я»", sub: "Сказать вслух", go: "gr_name" },
-      { icon: "let", t: "Просто сесть рядом", sub: "Складывать полотенца вместе", go: "gr_sit" }
-    ]
-  },
-  gr_name: {
-    bg: "grvillage", place: "Кухня", noSprites: true, rain: true, mp3: "grust",
-    lines: [
-      { who: "Бабушка", t: "Это вы? Ну хорошо. Хорошо, что вы. А то я тут жду кого-то. Девочку. Она в школе. Я её заберу скоро." },
-      { who: "", t: "Она кивает. Говорить больше не получается." }
-    ],
-    choices: () => [
-      { icon: "soul", t: "Включить ту песню", sub: "Последняя попытка", go: "gr_song", act: () => { GR.song = true; } },
-      { icon: "let", t: "Просто сесть рядом", sub: "", go: "gr_sit" }
-    ]
-  },
-  gr_sit: {
-    bg: "grvillage", place: "Кухня", noSprites: true, rain: true, mp3: "grust", next: "gr_end_stay",
-    lines: [
-      { who: null, t: "Они складывают полотенца. Одно, второе, десятое. Бабушка поправляет её уголки — «не так, надо ровнее». Так она поправляла её косички." },
-      { who: "", t: "Она не помнит меня. Но руки помнят, как меня поправлять." }
-    ]
-  },
-  gr_song: {
-    bg: "grvillage", place: "Кухня", noSprites: true, rain: true, mp3: "grust", next: "gr_end_seen",
-    lines: [
-      { who: null, t: "Она ставит телефон на подоконник. Та самая песня. Негромко, как радио когда-то." },
-      { who: null, t: "Бабушка перестаёт складывать полотенце. Слушает. Губы двигаются — она подпевает. Без слов. Как всегда, делая вид, что не поёт." },
-      { who: "Бабушка", t: "…Это моя песня. Я под неё картошку чищу. А внучка смеётся, говорит — ба, ты поёшь. А я не пою. Я просто."  },
-      { who: null, t: "Она поворачивается. Смотрит. Долго. В глазах что-то проясняется, как окно, по которому провели рукой." },
-      { who: "Бабушка", t: "…Ты выросла. Ты почему так долго, а? Я пирог… я хотела пирог." }
-    ]
-  },
-  gr_end_seen: {
-    bg: "grvillage", place: "Кухня · вечер", noSprites: true, rain: true, mp3: "grust",
-    lines: [
-      { who: null, t: "Это длится минуту. Может, две. Потом бабушка снова спрашивает, не из собеса ли она. Но минута была. Её нельзя отменить." },
-      { who: null, t: "Они пекут пирог вместе. Бабушка не помнит рецепт, но руки помнят. Получается кривой и очень вкусный." },
-      { who: "", t: "Я заберу эту песню себе. Буду включать её, когда кажется, что всё быстро. Она медленная. Как всё, что важно." }
-    ],
-    ending: "Осень · концовка «Одна минута»",
-    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Снова октябрь", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
-  },
-  gr_end_stay: {
-    bg: "grvillage", place: "Деревня · зима", noSprites: true, rain: true, mp3: "grust",
-    lines: [
-      { skip: "Зима" },
-      { who: null, t: "Она остаётся на зиму. Берёт академ. Работает удалённо, когда ловит связь у колодца." },
-      { who: null, t: "Бабушка зовёт её то Валей, то «девушкой», то никак. Иногда — по имени. Тогда она записывает дату в блокнот. За зиму набирается девять дат." },
-      { who: "", t: "Девять раз она меня узнала. Это больше, чем за последние три года, когда я была в Москве." }
-    ],
-    ending: "Осень · концовка «Девять дат»",
-    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Снова октябрь", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
-  },
-  gr_end_late: {
-    bg: "grvillage", place: "Деревня · январь", noSprites: true, rain: true, mp3: "grust",
-    lines: [
-      { skip: "Январь" },
-      { who: null, t: "Она приезжает второго января. Калитка заперта. Ключ у Вали. Валя плачет, не говоря ни слова, и это всё объясняет." },
-      { who: null, t: "Бабушку забрали в районную больницу в Торжке тридцатого декабря. Она там. Она ещё там. Но больше никого не узнаёт, даже Валю." },
-      { who: null, t: "На кухне в тазу лежат почерневшие яблоки. На подоконнике — радио. Она включает его. Там играет что-то другое." },
-      { who: "", t: "Она находит в телефоне ту песню и включает её одна, на пустой кухне. Подпевает без слов. Делая вид, что не поёт." }
-    ],
-    ending: "Осень · концовка «После Нового года»",
-    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Ответить раньше", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
+    ending: "Меланхолия · концовка «Чемодан в снегу»",
+    choices: () => [{ icon: "rewind", t: "Сначала", sub: "Попробовать иначе", go: "gr_start", reset: true, cls: "rewind" }, { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }]
   },
   se_1: {
     bg: "seroom", place: "Сергей", noSprites: true, music: "mystic",
@@ -7169,13 +7204,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282236`, talk: `img/${n}_talk.png?v=10282236`, blink: `img/${n}_blink.png?v=10282236` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282247`, talk: `img/${n}_talk.png?v=10282247`, blink: `img/${n}_blink.png?v=10282247` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282236" : `img/${n}_spartan.png?v=10282236`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282247" : `img/${n}_spartan.png?v=10282247`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -7204,7 +7239,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic", "Александр": "npc_trainer"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282236`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282247`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -7213,7 +7248,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282236`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282247`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7517,6 +7552,7 @@ function show(id) {
   $("stage").classList.toggle("noir", !!scene.noir);
   $("stage").classList.toggle("lis", !!scene.lis);
   $("stage").classList.toggle("rain", !!scene.rain);
+  $("stage").classList.toggle("snow", !!scene.snow);
   $("stage").classList.toggle("high2", id.startsWith("pg_") && PG.high === 2);
   $("stage").classList.toggle("high3", id.startsWith("pg_") && PG.high >= 3);
   $("inv").classList.toggle("on", !!scene.lis && ST.inv.size > 0);
@@ -7538,7 +7574,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282236) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282247) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
