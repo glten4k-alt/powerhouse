@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282129") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282142") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -425,7 +425,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282129") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282142") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -549,11 +549,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282129" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282129" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282142" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282142" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282129) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282142) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -984,7 +984,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282129"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282142"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1103,7 +1103,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282129`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282142`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1474,7 +1474,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282129";
+  $("qteEgor").src = "img/egor_px.png?v=10282142";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -4198,7 +4198,7 @@ const scenes = {
   // ===== «Гаражи Пети»: пьянка в ГСК «Рассвет». Ходить по гаражам, курить с Петей, говорить с Claude Code на ноутбуке =====
   pg_start: {
     bg: "garage", place: "ГСК «Рассвет» · пятница · 22:40", egor: true, music: "reggae", next: "pg_walk",
-    linesFn: () => { Object.assign(PG, { x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 }); return [
+    linesFn: () => { Object.assign(PG, { zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 }); return [
       { skip: "Гаражи Пети" },
       { tg: "пацаны. гаражи. все четыре открыты. приходите. будет всё. даже то чего не будет", time: "21:58", chat: "Петя", sayWho: null, sayText: "Петя пишет без заглавных букв. Значит, уже начал." },
       { who: null, t: "ГСК «Рассвет», между МКАДом и железкой. Четыре гаража Пети подряд — один бар, один чилл, одна мастерская и один, который всегда закрыт." },
@@ -4365,6 +4365,46 @@ const scenes = {
       { who: "Ален", t: "Не жалей меня. Я выбрал. Я всегда выбираю сам." }
     ]; }
   },
+  // Жора — вымышленный комик: шутит, когда больно; бывшая ушла к другому, и он прилип к компании. Ходит за Глебом хвостом
+  pg_zhora: {
+    bg: "garage", place: "ГСК «Рассвет» · Жора", music: "drunk",
+    linesFn: () => { const first = !PG.met.has("zhora"); PG.met.add("zhora"); return first ? [
+      { npcShow: "npc_comic", who: null, t: "Из темноты между гаражами выходит силуэт в очках. Очки ловят свет гирлянды. Больше ничего не видно — только очки и улыбка в голосе." },
+      { who: "Жора", t: "Пацаны! Это же вы! Я Жора. Комик. Ну, был комиком. Сейчас скорее… свободный художник. От слова «свободный». От меня жена ушла. К фитнес-тренеру. Ха-ха. Ну, смешно же." },
+      { who: "Егор", t: "(из первого гаража) Это кто вообще? Петя, ты его звал?" },
+      { who: "Петя", t: "(из второго) Он сам пришёл! Третью пятницу подряд! Я не знаю, как его выгнать, он слишком добрый!" },
+      { who: "Жора", t: "Можно я с вами? Я пиво принёс. Своё! И шутки. Много шуток. Вот: «Жена ушла к тренеру — теперь у неё личный, а у меня — личная драма». А? А?" }
+    ] : [{ npcShow: "npc_comic", who: "Жора", t: [
+      "Глеб! Ты куда? Я с тобой. Я просто рядом постою. Я тихо. Я умею тихо, я три года был женат.",
+      "А давай селфи? Для сторис. Пусть бывшая видит, что у меня теперь есть друзья. Ты же друг? Скажи, что друг.",
+      "Я придумал новый материал! «Я не куколд, я просто хорошо делегирую». Не смешно? Ну и ладно. Мне тоже не смешно.",
+      "Глеб, а вы меня в чат добавите? В ваш, с Петей. Я буду только лайкать. Иногда писать. Ну, часто писать."
+    ][PG.zhora++ % 4] }]; },
+    choices: () => [
+      { icon: "spark", t: "Подколоть Жору", sub: "Он сам напрашивается", go: "pg_zhora_tease" },
+      ...(!PG.q.has("z_real") ? [{ icon: "soul", t: "«Жора, а если без шуток?»", sub: "Спросить всерьёз", go: "pg_zhora_real" }] : []),
+      { icon: "let", t: "«Жора, иди к Пете»", sub: "Отшить", go: "pg_walk" }
+    ]
+  },
+  pg_zhora_tease: {
+    bg: "garage", place: "ГСК «Рассвет» · Жора", music: "drunk", next: "pg_walk",
+    linesFn: () => { const n = PG.tease = (PG.tease || 0) + 1; return [
+      [{ who: "Глеб", t: "Жора, а тренер хоть хороший? Может, и нам абонемент возьмёшь? Со скидкой для бывших." }, { who: "Жора", t: "Ха! Ха-ха. Нет, он дорогой. Она мне тоже дорого обошлась. Ха. Это шутка. Почти." }],
+      [{ who: "Егор", t: "(издалека) Жора, ты как кальян у Пети — все пользуются, никто не помнит, откуда взялся!" }, { who: "Жора", t: "Это обидно. Но смешно. Запишу. Можно я это у себя в стендапе возьму?" }],
+      [{ who: "Глеб", t: "Жора, ты в нашей компании на позиции «запасной». Как скамейка. Как Витя в FIFA." }, { who: "Жора", t: "Запасной — это тоже в команде! Я согласен! Я на всё согласен, это, видимо, моя проблема." }],
+      [{ who: "Петя", t: "(из второго) Жора, по Пелевину ты не куколд, ты просто наблюдатель в чужой иллюзии!" }, { who: "Жора", t: "Петя, это лучшее, что мне говорили за год. Можно я тебя обниму? Нет? Ладно." }],
+      [{ who: "Витя", t: "Жора, ты как банк. Ты от нас что-то хочешь, а мы тебе ничего не должны." }, { who: "Жора", t: "Витя… это было жёстко. Я даже не нашёл, что пошутить. Это со мной впервые." }]
+    ][(n - 1) % 5]; }
+  },
+  pg_zhora_real: {
+    bg: "garage", place: "ГСК «Рассвет» · Жора", music: "lonely", next: "pg_walk",
+    linesFn: () => { PG.q.add("z_real"); return [
+      { npcShow: "npc_comic", who: "Жора", t: "Без шуток… Ну. Без шуток я, оказывается, не очень умею. Восемь лет шутил. Она говорила, что ей плохо, — я шутил. Думал, это помогает." },
+      { who: "Жора", t: "А она ушла. И сказала подругам… ну, неважно. Сказала, что я ни разу её не услышал. И я сижу и думаю: а вдруг правда." },
+      { who: null, t: "Очки на силуэте больше не блестят. Он отвернулся от гирлянды." },
+      { who: "Жора", t: "Я к вам хожу, потому что вы шутите друг над другом — и всё равно друг друга не бросаете. Я так не умел. Хочу научиться. Ладно. Всё. Ха. Вот, пошутил." }
+    ]; }
+  },
   pg_claude: {
     bg: "garage", place: "Гараж 3 · ноутбук", music: "reggae",
     linesFn: () => { const first = !PG.met.has("claude"); PG.met.add("claude"); return first ? [
@@ -4433,9 +4473,10 @@ const scenes = {
   },
   pg_end_dawn: {
     bg: "garage", place: "ГСК «Рассвет» · 5:20", egor: true, music: "hope",
-    lines: [
+    linesFn: () => [
       { who: null, t: "Мы сидим у догоревшего костра. Петя спит на диване, обняв кальян. Витя спит сидя, и впервые за месяц — без тревоги на лице. Егор доедает последнюю сосиску." },
       { who: "Егор", t: "Хорошо посидели. Как будто мы все — в одном гараже. Ну, в четырёх. Но в одном." },
+      ...(PG.met.has("zhora") ? [{ who: null, t: "Жора спит в «Волге», обняв мою куртку. Он попросил добавить его в наш чат. Мы добавили. Потом удалили. Потом снова добавили. Петя сказал — это карма." }] : []),
       { who: null, t: "Дед Михалыч приносит чайник. Ален уехал ещё в три — не попрощавшись, но оставив на капоте «Волги» пачку «Голуаз». Для всех." }
     ],
     ending: "Гаражи Пети · концовка «Рассвет над ГСК»",
@@ -6344,6 +6385,7 @@ const FIGHTER = {
   vitya:  { hair: "#1a1410", hairH: 4, curly: false, skin: "#e0b090", top: "jacket", topA: "#4a5a6a", topB: "#2a2a2a", legs: "#262632", w: 10, hp: 100 },
   ded:    { hair: "#c8c8c8", hairH: 3, curly: false, skin: "#d8a888", top: "jacket", topA: "#3a4a2a", topB: "#6a5a3a", legs: "#2a2a2a", w: 11, hp: 100 },
   sergey: { hair: null, skin: "#e0b898", top: "tee", topA: "#5a3a8a", topB: "#d8c040", legs: "#2a2a2a", w: 10, hp: 100, shades: true },
+  comic:  { hair: "#0a0a0c", hairH: 5, curly: false, skin: "#16161a", top: "jacket", topA: "#0e0e12", topB: "#16161a", legs: "#0e0e12", w: 11, hp: 100, shades: true },
   alain:  { hair: "#1a1410", hairH: 4, curly: false, skin: "#e0b898", top: "jacket", topA: "#141414", topB: "#2a2a2a", legs: "#1a1a1a", w: 10, hp: 100 },
   grunt:  { alien: "grunt", w: 9,  hp: 22,  dmg: 5,  speed: .7,  blood: "#4aa0ff" },
   elite:  { alien: "elite", w: 11, hp: 55,  dmg: 9,  speed: .55, blood: "#7a5aff", sword: true },
@@ -6740,13 +6782,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282129`, talk: `img/${n}_talk.png?v=10282129`, blink: `img/${n}_blink.png?v=10282129` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282142`, talk: `img/${n}_talk.png?v=10282142`, blink: `img/${n}_blink.png?v=10282142` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282129" : `img/${n}_spartan.png?v=10282129`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282142" : `img/${n}_spartan.png?v=10282142`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6773,9 +6815,9 @@ const NPC_IMG = {
   "Бармен": "npc_bartender", "Диджей": "npc_dj", "Охранник": "npc_guard", "Полицейский": "npc_police",
   "Судья": "npc_judge", "Виктор Резник": "npc_viktor", "Зэк": "npc_zek",
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
-  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost"
+  "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282129`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282142`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6784,7 +6826,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282129`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282142`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7106,7 +7148,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282129) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282142) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -7406,7 +7448,7 @@ $("mS").onclick = e => {
 };
 // ---------- Прогулка по гаражам Пети: Глеб ходит влево-вправо, подходит к людям и вещам, «E» — поговорить ----------
 // Мир 1400×180 в пикселях, камера едет за Глебом. Объект: { x, label, go, if? } — go уводит в сцену, сцена возвращается в "pg_walk".
-const PG = { x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 };
+const PG = { zx: 470, zhora: 0, tease: 0, x: 60, dir: 1, walk: 0, high: 0, beer: 0, key: false, open: false, met: new Set(), q: new Set(), intro: false, track: "reggae", bad: 0 };
 const WALK = { on: false, keys: {}, near: null };
 const PG_OBJS = [
   { x: 150, label: "Егор", go: "pg_egor", who: "egor" },
@@ -7416,6 +7458,7 @@ const PG_OBJS = [
   { x: 560, label: "Петя", go: "pg_petya", who: "petya" },
   { x: 655, label: "Холодильник", go: "pg_fridge" },
   { x: 712, label: "Ален", go: "pg_alain", who: "alain" },
+  { get x() { return PG.zx; }, label: "Жора", go: "pg_zhora", who: "comic" },
   { x: 800, label: "«Волга»", go: "pg_volga" },
   { x: 915, label: "Ноутбук · Claude Code", go: "pg_claude" },
   { x: 1120, label: () => PG.open ? "Четвёртый гараж" : "Замок на гараже", go: () => PG.open ? "pg_secret" : "pg_lock", who: () => PG.open ? "sergey" : null },
@@ -7441,6 +7484,7 @@ function walkStep() {
   let dx = (k.r ? 1 : 0) - (k.l ? 1 : 0);
   if (PG.high >= 3 && dx) dx += Math.sin(Date.now() / 300) * .4;          // обкуренного ведёт
   if (dx) { PG.x = Math.max(20, Math.min(1380, PG.x + dx * sp)); PG.dir = dx > 0 ? 1 : -1; PG.walk++; }
+  if (PG.met.has("zhora")) PG.zx += (PG.x - 30 * PG.dir - PG.zx) * .025;   // Жора ходит хвостом
   WALK.near = PG_OBJS.filter(o => Math.abs(o.x - PG.x) < 22).sort((a, b) => Math.abs(a.x - PG.x) - Math.abs(b.x - PG.x))[0] || null;
   const lab = WALK.near ? (typeof WALK.near.label === "function" ? WALK.near.label() : WALK.near.label) : "";
   $("walkAct").textContent = lab ? "E · " + lab : "E";
