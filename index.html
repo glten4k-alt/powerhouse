@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282152") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282157") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -425,7 +425,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282152") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282157") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -508,13 +508,17 @@
   #inv span:first-child { background:none; color:#f8efe2; box-shadow:none; rotate:0deg; }
   /* прогулка по гаражам */
   #walk { position:absolute; inset:0; z-index:6; display:none; background:#000; } #walk.on { display:block; }
-  #walkCv { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:url(#paintFx) sepia(.12); touch-action:none; }
+  #walkCv { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; touch-action:none; }
   #walkHint { position:absolute; top:12px; left:50%; translate:-50% 0; font:12px "Courier New", monospace; color:#ffffffaa; background:#0008; padding:4px 10px; border-radius:6px; }
   #walkPad { position:absolute; left:0; right:0; bottom:4%; display:flex; justify-content:space-between; padding:0 4%; gap:10px; }
   #walkPad button { font:bold 22px system-ui; color:#fff; background:#0009; border:1px solid #ffffff44; border-radius:14px; padding:12px 22px; cursor:pointer; touch-action:none; user-select:none; }
-  #walkAct { margin-left:auto; font:700 18px 'Caveat', cursive !important; opacity:.6; }
+  #walkAct { flex:1; max-width:340px; margin:0 auto; font:700 20px 'Caveat', cursive !important; opacity:.6; }
   @media (max-aspect-ratio: 1/1) { #walkHint { top:58px; font-size:11px; } }
-  @media (pointer:coarse) { #walkL, #walkR { display:none; } #walkPad { bottom:calc(env(safe-area-inset-bottom) + 18px); } #walkAct { margin:0 auto; font-size:22px !important; padding:14px 26px !important; } } #walkAct.ready { opacity:1; border-color:#f0b35e !important; color:#f0b35e !important; }
+  /* телефон: большие кнопки — держишь ◀ или ▶, Глеб идёт; посередине «Поговорить» */
+  @media (pointer:coarse) { #walkPad { bottom:calc(env(safe-area-inset-bottom) + 14px); align-items:stretch; padding:0 12px; }
+    #walkL, #walkR { width:26vw; min-height:78px; font-size:34px !important; border-radius:20px !important; background:#000b !important; }
+    #walkL:active, #walkR:active { background:#f0b35e55 !important; }
+    #walkAct { font-size:22px !important; padding:10px 12px !important; min-height:78px; line-height:1.1; } } #walkAct.ready { opacity:1; border-color:#f0b35e !important; color:#f0b35e !important; }
   #stage.high2 #walkCv, #stage.high2 #bg { filter:saturate(1.5) hue-rotate(15deg); }
   #stage.high3 #walkCv, #stage.high3 #bg { animation:trip 7s linear infinite; }
   @keyframes trip { 0% { filter:saturate(1.8) hue-rotate(0deg); transform:skewX(0); } 50% { filter:saturate(1.8) hue-rotate(180deg) blur(.6px); transform:skewX(1.5deg) scale(1.02); } 100% { filter:saturate(1.8) hue-rotate(360deg); transform:skewX(0); } }
@@ -551,17 +555,17 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282152" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282152" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282157" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282157" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282152) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282157) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
   <div id="toast"></div>
-  <div id="walk"><canvas id="walkCv"></canvas><div id="walkHint">Нажми, куда идти · на человека — поговорить</div><div id="walkPad"><button id="walkL">◀</button><button id="walkR">▶</button><button id="walkAct">E</button></div></div>
+  <div id="walk"><canvas id="walkCv"></canvas><div id="walkHint">◀ ▶ — идти · можно нажать прямо на человека</div><div id="walkPad"><button id="walkL">◀</button><button id="walkAct">E</button><button id="walkR">▶</button></div></div>
   <div id="inv"></div>
   <div id="qte"><div id="qteCam"><img id="qteEgor" alt=""><canvas id="qteFoe"></canvas></div><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
   <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
@@ -986,7 +990,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282152"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282157"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1105,7 +1109,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282152`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282157`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1476,7 +1480,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282152";
+  $("qteEgor").src = "img/egor_px.png?v=10282157";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -6784,13 +6788,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282152`, talk: `img/${n}_talk.png?v=10282152`, blink: `img/${n}_blink.png?v=10282152` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282157`, talk: `img/${n}_talk.png?v=10282157`, blink: `img/${n}_blink.png?v=10282157` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282152" : `img/${n}_spartan.png?v=10282152`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282157" : `img/${n}_spartan.png?v=10282157`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6819,7 +6823,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282152`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282157`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6828,7 +6832,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282152`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282157`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7151,7 +7155,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282152) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282157) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -7489,22 +7493,75 @@ function pgMood(id) {
   if (!l || PG.moodSeen.has(id + st)) return null;
   PG.moodSeen.add(id + st); return { who: l[0], t: l[1] };
 }
+// Чёткие рисованные люди для гаражей: контур, тень на одежде, причёска у каждого своя. Рисуется в мировых пикселях, холст уже увеличен.
+const PLOOK = {
+  gleb:   { skin: "#e8b48a", hair: "#2e1c14", style: "curly",  top: "#1c1a1e", stripe: "#e8dcc0", legs: "#262632" },
+  egor:   { skin: "#eab48c", hair: "#c8642a", style: "messy",  top: "#3a2a24", legs: "#262632", hood: true },
+  petya:  { skin: "#e8b48a", hair: "#3a2414", style: "short",  top: "#2a8a3a", print: "#f0c020", legs: "#3a3a3a" },
+  vitya:  { skin: "#e0b090", hair: "#1a1410", style: "short",  top: "#4a5a6a", legs: "#262632" },
+  ded:    { skin: "#d8a888", hair: "#c8c8c8", style: "short",  top: "#3a4a2a", legs: "#2a2a2a", cap: "#2a3a2a" },
+  sergey: { skin: "#e0b898", hair: null,      style: "bald",   top: "#5a3a8a", legs: "#2a2a2a", glasses: "#d8c8a0" },
+  alain:  { skin: "#e0b898", hair: "#1a1410", style: "slick",  top: "#141414", legs: "#141414", coat: true },
+  comic:  { skin: "#16161a", hair: "#0a0a0c", style: "side",   top: "#0e0e12", legs: "#0e0e12", glasses: "#dfe8f0", shadow: true }
+};
+function drawPerson(c, x, gy, kind, dir, walk) {
+  const L = PLOOK[kind] || PLOOK.gleb, ol = L.shadow ? "#000" : "#1a1214", sw = Math.sin(walk * .3), lw = .7;
+  c.save(); c.translate(x, gy); c.lineJoin = "round"; c.lineCap = "round";
+  c.fillStyle = "#0007"; c.beginPath(); c.ellipse(0, 0, 9, 2.4, 0, 0, 7); c.fill();
+  const shade = (col, d) => { const n = parseInt(col.slice(1), 16), f = v => Math.max(0, Math.min(255, v + d)); return `rgb(${f(n >> 16)},${f(n >> 8 & 255)},${f(n & 255)})`; };
+  const part = (path, fill) => { c.fillStyle = fill; c.fill(path); c.strokeStyle = ol; c.lineWidth = lw; c.stroke(path); };
+  // ноги
+  for (const s of [-1, 1]) { const p = new Path2D(); p.roundRect(s * 3 - 2 + s * sw * 1.5 * (s > 0 ? 1 : -1), -14, 4, 14, 1.5); part(p, s > 0 ? L.legs : shade(L.legs, -12)); }
+  // задняя рука
+  c.strokeStyle = ol; c.lineWidth = 3.6; c.beginPath(); c.moveTo(-dir * 5, -26); c.lineTo(-dir * 6 - dir * sw * 2, -16); c.stroke();
+  c.strokeStyle = shade(L.top, -22); c.lineWidth = 2.4; c.stroke();
+  // корпус с тенью сбоку
+  const body = new Path2D(); body.roundRect(-6, L.coat ? -29 : -28, 12, L.coat ? 19 : 15, 3);
+  const g = c.createLinearGradient(-6, 0, 6, 0); g.addColorStop(0, shade(L.top, -dir * 18)); g.addColorStop(1, shade(L.top, dir * 18));
+  part(body, g);
+  if (L.stripe) { c.save(); c.clip(body); c.fillStyle = L.stripe; for (let i = 0; i < 4; i++) c.fillRect(-6, -26 + i * 3.6, 12, 1.5); c.restore(); c.strokeStyle = ol; c.lineWidth = lw; c.stroke(body); }
+  if (L.print) { c.fillStyle = L.print; c.beginPath(); c.arc(0, -22, 2.2, 0, 7); c.fill(); }
+  if (L.hood) { c.strokeStyle = shade(L.top, 25); c.lineWidth = 1; c.beginPath(); c.moveTo(-3, -28); c.lineTo(0, -24); c.lineTo(3, -28); c.stroke(); }
+  if (L.coat) { c.strokeStyle = "#3a3a3a"; c.lineWidth = .6; c.beginPath(); c.moveTo(0, -28); c.lineTo(0, -10); c.stroke(); }
+  // передняя рука
+  c.strokeStyle = ol; c.lineWidth = 3.6; c.beginPath(); c.moveTo(dir * 5, -26); c.lineTo(dir * 6 + dir * sw * 2, -16); c.stroke();
+  c.strokeStyle = shade(L.top, 8); c.lineWidth = 2.4; c.stroke();
+  c.fillStyle = L.skin; c.beginPath(); c.arc(dir * 6 + dir * sw * 2, -15.5, 1.4, 0, 7); c.fill();
+  // голова
+  const head = new Path2D(); head.ellipse(dir * .5, -33, 4.6, 5.2, 0, 0, 7); part(head, L.skin);
+  c.fillStyle = "#00000022"; c.beginPath(); c.ellipse(-dir * 2, -32, 2.4, 4.4, 0, 0, 7); c.fill();
+  c.fillStyle = L.hair || "#0000";
+  const H = new Path2D();
+  if (L.style === "curly") { for (const [hx, hy, r] of [[-3, -37, 2.6], [0, -38.5, 2.8], [3, -37, 2.6], [-4.5, -34, 2], [4.2, -34.5, 2]]) H.arc(hx + dir * .5, hy, r, 0, 7); }
+  else if (L.style === "messy") { H.moveTo(-5, -33); H.quadraticCurveTo(-6, -40, 0, -39.5); H.quadraticCurveTo(6, -40, 5.5, -33); H.lineTo(4, -36); H.lineTo(2, -34.5); H.lineTo(0, -36.5); H.lineTo(-2, -34.5); H.lineTo(-4, -36); H.closePath(); }
+  else if (L.style === "slick") { H.moveTo(-4.8, -33); H.quadraticCurveTo(-4.5, -39.5, 1, -39); H.quadraticCurveTo(5.5, -38.5, 5, -33.5); H.quadraticCurveTo(2, -37, -4.8, -33); }
+  else if (L.style === "side") { H.moveTo(-4.8, -32); H.quadraticCurveTo(-5.5, -40, 0, -39.5); H.quadraticCurveTo(5.5, -39, 5, -33); H.quadraticCurveTo(1, -37.5, -2, -35.5); H.closePath(); }
+  else if (L.style === "short") { H.moveTo(-4.7, -33.5); H.quadraticCurveTo(-4.5, -39, .5, -38.7); H.quadraticCurveTo(5, -38.5, 4.8, -33.5); H.quadraticCurveTo(0, -36, -4.7, -33.5); }
+  if (L.hair) { c.fill(H); c.strokeStyle = ol; c.lineWidth = lw; c.stroke(H); }
+  if (L.style === "bald") { c.fillStyle = "#ffffff44"; c.beginPath(); c.ellipse(dir * 1.5, -36.5, 1.6, .9, 0, 0, 7); c.fill(); }
+  if (L.cap) { c.fillStyle = L.cap; c.beginPath(); c.ellipse(0, -37, 5, 2.4, 0, Math.PI, 0); c.fill(); c.fillRect(dir > 0 ? 0 : -7, -37.2, 7, 1.2); }
+  // глаза или очки
+  if (L.glasses) { c.strokeStyle = L.glasses; c.lineWidth = .7; c.strokeRect(dir * 1.2 - 2.4 + dir * .5, -34.2, 2.4, 1.8); c.strokeRect(dir * 1.2 + .4 + dir * .5, -34.2, 2.4, 1.8); }
+  else { c.fillStyle = "#1a1010"; c.fillRect(dir * 2 - .5, -33.8, 1, 1.2); c.fillRect(dir * 2 + (dir > 0 ? -2.6 : 1.6), -33.8, 1, 1.2); }
+  c.restore();
+}
 const WS = 4, walkPano = document.createElement("canvas"), walkLive = document.createElement("canvas");
 function walkBuildPano() {
-  const lo = document.createElement("canvas"); lo.width = 1400; lo.height = 180;
-  walkWorld(lo.getContext("2d"), 0, Date.now(), true);
   walkPano.width = 1400 * WS; walkPano.height = 180 * WS;
-  const c = walkPano.getContext("2d"), W = walkPano.width, H = walkPano.height, src = lo.getContext("2d").getImageData(0, 0, 1400, 180).data;
-  c.imageSmoothingEnabled = true; c.filter = "blur(6px) saturate(1.1)"; c.drawImage(lo, -8, -8, W + 16, H + 16); c.filter = "none";
+  const c = walkPano.getContext("2d"), W = walkPano.width, H = walkPano.height;
+  c.setTransform(WS, 0, 0, WS, 0, 0); walkWorld(c, 0, Date.now(), true);
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  const lo = document.createElement("canvas"); lo.width = 1400; lo.height = 180; lo.getContext("2d").drawImage(walkPano, 0, 0, 1400, 180);
+  const src = lo.getContext("2d").getImageData(0, 0, 1400, 180).data;
   let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  for (let i = 0; i < 16000; i++) {
-    const x = rnd() * W, y = rnd() * H, k = ((y / WS | 0) * 1400 + (x / WS | 0)) * 4;
-    c.save(); c.translate(x, y); c.rotate(-.4 + rnd() * .5 + (y > H * .82 ? .4 : 0)); c.globalAlpha = .3 + rnd() * .35;
-    c.fillStyle = `rgb(${src[k] + (rnd() * 20 - 10)},${src[k + 1] + (rnd() * 20 - 10)},${src[k + 2] + (rnd() * 20 - 10)})`;
-    c.beginPath(); c.ellipse(0, 0, 6 + rnd() * 12, 2 + rnd() * 4, 0, 0, 7); c.fill(); c.restore();
+  for (let i = 0; i < 14000; i++) {                       // фактура кисти: короткие полупрозрачные мазки цвета из-под себя
+    const x = rnd() * W, y = rnd() * H, k = ((y / WS | 0) * 1400 + (x / WS | 0)) * 4, d = rnd() * 30 - 15;
+    c.save(); c.translate(x, y); c.rotate(-.3 + rnd() * .4); c.globalAlpha = .1 + rnd() * .14;
+    c.fillStyle = `rgb(${src[k] + d},${src[k + 1] + d},${src[k + 2] + d})`;
+    c.beginPath(); c.ellipse(0, 0, 5 + rnd() * 10, 1.2 + rnd() * 2, 0, 0, 7); c.fill(); c.restore();
   }
-  c.globalAlpha = 1; c.fillStyle = "#e8e0d0"; c.font = `bold ${8 * WS}px 'Caveat', cursive`; c.fillText("ГСК «Рассвет»", 10 * WS, 60 * WS);
-  ["1", "2", "3", "4"].forEach((n, i) => c.fillText(n, ([80, 460, 740, 1020][i] + 6) * WS, 92 * WS));
+  c.globalAlpha = 1; c.fillStyle = "#f0e6d4"; c.font = `700 ${11 * WS}px 'Caveat', cursive`; c.fillText("ГСК «Рассвет»", 10 * WS, 60 * WS);
+  c.font = `700 ${10 * WS}px 'Caveat', cursive`; ["1", "2", "3", "4"].forEach((n, i) => c.fillText(n, ([80, 460, 740, 1020][i] + 6) * WS, 93 * WS));
 }
 // мир: stat = только неподвижное (для панорамы), иначе — только живое
 function walkWorld(c, cam, t, stat) {
@@ -7517,7 +7574,9 @@ function walkWorld(c, cam, t, stat) {
     R(0, 150, 1400, 30, "#2e2c34"); for (let x = 0; x < 1400; x += 40) R(x, 164, 20, 2, "#55525a");
     const G = [[80, "#6a5240", "#f0b060"], [460, "#4a6050", "#a0e070"], [740, "#4e4e62", "#e8f0ff"], [1020, "#6a4030", "#ffb050"]];
     G.forEach(([gx, wall, light], i) => {
-      R(gx, 80, 240, 70, wall); R(gx - 4, 76, 248, 6, "#2a2a2a");
+      R(gx, 80, 240, 70, wall); R(gx - 4, 76, 248, 6, "#2a2a2a"); R(gx - 4, 76, 248, 1, "#ffffff22");
+      for (let y = 84; y < 150; y += 5) for (let x = gx + ((y / 5) % 2) * 6; x < gx + 240; x += 12) { c.fillStyle = "#00000018"; c.fillRect(x, y, 11, .6); }
+      c.fillStyle = "#0000003a"; c.fillRect(gx + 18, 148, 204, 3);
       if (i < 3) { R(gx + 20, 92, 200, 58, "#1e1610"); const g = c.createRadialGradient(gx + 120, 132, 4, gx + 120, 132, 120); g.addColorStop(0, light + "88"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(gx + 20, 92, 200, 58); }
       else { R(gx + 20, 92, 200, 58, "#6a4a32"); for (let y = 96; y < 150; y += 6) R(gx + 20, y, 200, 1, "#4a3220"); }
     });
@@ -7538,8 +7597,8 @@ function walkWorld(c, cam, t, stat) {
   if (PG.open) R(1040, 92, 200, 58, "#1c1008");
   if (PG.open) for (let i = 0; i < 6; i++) R(1060 + i * 30, 140, 2, 6 + (i % 2) * 2, "#f8e8c0");
   const people = PG_OBJS.filter(o => o.who && (typeof o.who === "function" ? o.who() : o.who));
-  for (const o of people) { const kind = typeof o.who === "function" ? o.who() : o.who; c.save(); c.translate(-cam, 0); drawFighter(c, { kind, x: o.x, y: 152, dir: o.x > PG.x ? -1 : 1, walk: kind === "comic" ? PG.walk : o.x === 560 ? t / 60 : 0, act: 0, hurt: 0, ko: 0 }); c.restore(); }
-  c.save(); c.translate(-cam, 0); drawFighter(c, { kind: "gleb", x: PG.x, y: 160, dir: PG.dir, walk: PG.walk, act: 0, hurt: 0, ko: 0 }); c.restore();
+  for (const o of people) { const kind = typeof o.who === "function" ? o.who() : o.who; drawPerson(c, o.x - cam, 152, kind, o.x > PG.x ? -1 : 1, kind === "comic" ? PG.walk : 0); }
+  drawPerson(c, PG.x - cam, 160, "gleb", PG.dir, WALK.keys.l || WALK.keys.r || WALK.tx !== null ? PG.walk : 0);
   if (WALK.near) { const nx = WALK.near.x - cam; c.fillStyle = "#f0b35e"; c.beginPath(); c.moveTo(nx - 4, 104); c.lineTo(nx + 4, 104); c.lineTo(nx, 110 + Math.sin(t / 150) * 2); c.fill(); }
   if (WALK.tx !== null && WALK.tx !== undefined) { c.strokeStyle = "#f0b35e88"; c.beginPath(); c.ellipse(WALK.tx - cam, 162, 6, 2, 0, 0, 7); c.stroke(); }
 }
@@ -7573,7 +7632,7 @@ function walkStep() {
   if (PG.met.has("zhora")) PG.zx += (PG.x - 30 * PG.dir - PG.zx) * .025;   // Жора ходит хвостом
   WALK.near = PG_OBJS.filter(o => Math.abs(o.x - PG.x) < 22).sort((a, b) => Math.abs(a.x - PG.x) - Math.abs(b.x - PG.x))[0] || null;
   const lab = WALK.near ? (typeof WALK.near.label === "function" ? WALK.near.label() : WALK.near.label) : "";
-  $("walkAct").textContent = lab ? "Поговорить · " + lab : "Подойди к кому-нибудь";
+  $("walkAct").textContent = lab ? "Поговорить: " + lab : "Подойди к кому-нибудь";
   $("walkAct").classList.toggle("ready", !!lab);
 }
 function walkDraw() {
@@ -7584,8 +7643,7 @@ function walkDraw() {
     for (let i = 0; i < 40; i++) { c.fillStyle = "#c8c8e0"; c.fillRect(((i * 97) % 1400 - cam * .2) * WS % cv.width, (i * 53) % top, 3, 3); } }
   c.drawImage(walkPano, cam * WS, 0, vw * WS, 180 * WS, 0, top, vw * WS, 180 * WS);
   if (WALK.pad) { c.fillStyle = "#2a2830"; c.fillRect(0, top + 180 * WS - 2, cv.width, WALK.pad * WS + 2); }
-  const l = walkLive.getContext("2d"); l.clearRect(0, 0, vw, 180); walkWorld(l, cam, t, false);
-  c.imageSmoothingEnabled = true; c.drawImage(walkLive, 0, 0, vw, 180, 0, top, vw * WS, 180 * WS);
+  c.save(); c.translate(0, top); c.scale(WS, WS); walkWorld(c, cam, t, false); c.restore();
   if (PG.high >= 2) { c.globalAlpha = .1 + PG.high * .04; for (let i = 0; i < 5; i++) { c.fillStyle = `hsl(${(t / 20 + i * 70) % 360},80%,60%)`; c.beginPath(); c.arc((((t / 30 + i * 90) % (vw + 60)) - 30) * WS, top + (60 + Math.sin(t / 700 + i) * 40) * WS, 30 * WS, 0, 7); c.fill(); } c.globalAlpha = 1; }
   if (PG.beer >= 4) { c.globalAlpha = .25; c.drawImage(cv, 6 + Math.sin(t / 500) * 6, 0); c.globalAlpha = 1; }   // перепил — двоится
 }
