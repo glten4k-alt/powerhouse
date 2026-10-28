@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282305") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282307") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -427,7 +427,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282305") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282307") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -585,11 +585,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282305" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282305" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282307" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282307" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282305) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282307) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -1023,7 +1023,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282305"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282307"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1142,7 +1142,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282305`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282307`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1513,7 +1513,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282305";
+  $("qteEgor").src = "img/egor_px.png?v=10282307";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -1681,9 +1681,9 @@ function gr_final() { return GR.door && GR.use < 3 ? "gr_end_window" : "gr_end_o
 // планета: бледно-голубой шар со свечением, с каждым днём ближе
 // моргание: раз в 3–6 секунд на 140 мс подменить картинку на закрытые глаза
 (function blink() {
-  setTimeout(() => { const n = $("npc"); if (n.classList.contains("girl") && n.classList.contains("on")) { n.src = "img/npc_girl_blink.png?v=10282305"; setTimeout(() => { if (n.classList.contains("girl")) n.src = "img/npc_girl.png?v=10282305"; }, 140); } blink(); }, 3000 + Math.random() * 3000);
+  setTimeout(() => { const n = $("npc"); if (n.classList.contains("girl") && n.classList.contains("on")) { n.src = "img/npc_girl_blink.png?v=10282307"; setTimeout(() => { if (n.classList.contains("girl")) n.src = "img/npc_girl.png?v=10282307"; }, 140); } blink(); }, 3000 + Math.random() * 3000);
 })();
-new Image().src = "img/npc_girl_blink.png?v=10282305";
+new Image().src = "img/npc_girl_blink.png?v=10282307";
 function grPlanet(c, x, y, r) {
   const g = c.createRadialGradient(x, y, r * .2, x, y, r * 2.4); g.addColorStop(0, "#a8d8ff55"); g.addColorStop(1, "#0000"); c.fillStyle = g; c.fillRect(x - r * 2.5, y - r * 2.5, r * 5, r * 5);
   const b = c.createRadialGradient(x - r * .35, y - r * .35, r * .1, x, y, r); b.addColorStop(0, "#e8f4ff"); b.addColorStop(.6, "#8ab8e0"); b.addColorStop(1, "#4a78a8"); c.fillStyle = b; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill();
@@ -7212,13 +7212,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282305`, talk: `img/${n}_talk.png?v=10282305`, blink: `img/${n}_blink.png?v=10282305` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282307`, talk: `img/${n}_talk.png?v=10282307`, blink: `img/${n}_blink.png?v=10282307` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282305" : `img/${n}_spartan.png?v=10282305`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282307" : `img/${n}_spartan.png?v=10282307`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -7247,7 +7247,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic", "Александр": "npc_trainer"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282305`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282307`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -7256,7 +7256,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282305`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282307`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost", "girl", "low");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7473,8 +7473,8 @@ function markTimeline(id) {
 function openTimeline() {
   if (B || BR.on || FL.on) return;
   const cur = timeline.length - 1;
-  $("tlMem").innerHTML = known.size ? [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
-    : `<div class="sub" style="margin:0">Глеб пока ничего особенного не узнал.</div>`;
+  $("tlMem").innerHTML = known.size ? [...known].map(k => `<div class="mem">${hero()} помнит: ${MEM[k]}</div>`).join("")
+    : `<div class="sub" style="margin:0">${hero()} пока ничего особенного не ${hero() === "Она" ? "узнала" : "узнал"}.</div>`;
   $("tlPts").innerHTML = timeline.length ? timeline.map((p, i) =>
     `<button class="pt${i === cur && scene === scenes[p.id] ? " now" : ""}" data-i="${i}"><b>${p.place}</b><span>${p.pick ? "Ты выбрал: «" + p.pick + "»" : (i === cur ? "Ты здесь. Выбор ещё не сделан." : "")}</span></button>`
   ).join("") : `<div class="sub">Развилок пока не было. Перематывать некуда.</div>`;
@@ -7489,7 +7489,7 @@ function openTimeline() {
 }
 function closeTimeline() { $("tl").classList.remove("on"); }
 function renderMemory() {
-  $("memory").innerHTML = [...known].map(k => `<div class="mem">Глеб помнит: ${MEM[k]}</div>`).join("")
+  $("memory").innerHTML = [...known].map(k => `<div class="mem">${hero()} помнит: ${MEM[k]}</div>`).join("")
     + (scene && scene.x ? `<div class="mem mana">✦ магия: ${mana}</div>` : "")
     + (scene && scene.forest && sv.camp === "forest" ? `<div class="mem">еда ${sv.food} · дрова ${sv.wood} · рассудок ${sv.mind}</div>` : "")
     + (scene && scene.halo && sv.camp ? `<div class="mem">еда ${sv.food} · патроны ${sv.ammo} · материалы ${sv.mat} · люди ${sv.people} · защита ${hDef()}</div>` : "");
@@ -7538,6 +7538,8 @@ function showExplore() {
 }
 
 let curId = "";
+// чьими глазами идёт глава: Витя, Петя, девушка из «Меланхолии» — или Глеб
+function hero() { return ({ v_: "Витя", pe: "Петя", tr: "Петя", gr: "Она" })[curId.startsWith("v_") ? "v_" : curId.slice(0, 2)] || "Глеб"; }
 // плашка «Егор это запомнит» после важного выбора
 function toast(text) { const el = $("toast"); el.textContent = text; el.classList.remove("on"); void el.offsetWidth; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2800); }
 function show(id) {
@@ -7582,7 +7584,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282305) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282307) center/cover";
   $("npc").classList.remove("on", "dim");
   if (id.startsWith("gr_") && scene.bg !== "grmirror") {   // героиня «Меланхолии» всегда в кадре, кроме зеркала: дышит, моргает, в тяжёлые моменты опускает голову
     showNpc(null, "npc_girl"); $("npc").classList.add("girl"); $("npc").classList.toggle("low", ["gr_stash", "gr_end_out", "gr_door"].includes(id));
@@ -7688,7 +7690,7 @@ function step() {
 function say(who, text, quiet) {
   const think = who === "";
   focus(who);
-  $("name").textContent = think ? ({ tr_: "Петя", gr_: "Она" }[curId.slice(0, 3)] || "Глеб") + " (мысли)" : (who || "");
+  $("name").textContent = think ? hero() + " (мысли)" : (who || "");
   const prov = who === "Провидение", devil = who === "Дьявол";
   $("name").className = think ? "think" : prov ? "prov" : devil ? "devil" : who === "Глеб" ? "gleb" : who && who !== "Егор" ? "npc" : "";
   $("line").className = think ? "think" : prov ? "prov" : devil ? "devil" : "";
@@ -7720,7 +7722,7 @@ function showChoices() {
   box.classList.add("on");
   const cs = paChoices(curId);
   if (cs.some(c => c.rewind)) hint("rewind", "⟲ Это перемотка. Глеб вернётся назад, но запомнит то, что узнал. Все развилки — по кнопке «⟲ время» сверху.");
-  else if (cs.some(c => c.cls === "new")) hint("new", "Синяя карточка открылась, потому что Глеб помнит прошлую попытку.");
+  else if (cs.some(c => c.cls === "new")) hint("new", `Синяя карточка открылась, потому что ${hero()} помнит прошлую попытку.`);
 }
 
 let loopDay = 1;
