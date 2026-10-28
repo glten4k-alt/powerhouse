@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282157") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282202") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -425,7 +425,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282157") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282202") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -555,11 +555,11 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282157" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282157" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282202" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282202" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282157) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282202) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
@@ -990,7 +990,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282157"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282202"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1109,7 +1109,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282157`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282202`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1480,7 +1480,7 @@ function qteStart(l) {
   $("stage").classList.add("qteing");
   Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  $("qteEgor").src = "img/egor_px.png?v=10282157";
+  $("qteEgor").src = "img/egor_px.png?v=10282202";
   qteDrawFoe();
   const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
   qtePose("idle", "idle"); qteCam("wide");
@@ -3841,8 +3841,7 @@ const scenes = {
       { who: "", t: "Можно отвечать. Можно бить. Можно попробовать переговорить его — ловить на его же словах." }
     ],
     choices: () => [
-      { icon: "talk", t: "Переговорить Шурупа", sub: "Словесная дуэль: найди слабое место в его фразе", go: "st_bt1", act: () => { ST.bt = 0; } },
-      { icon: "fight", t: "Сразу бить", sub: "Егор давно этого ждал", go: "st_fight" }
+      { icon: "talk", t: "Переговорить Шурупа", sub: "Словесная дуэль: найди слабое место в его фразе", go: "st_bt1", act: () => { ST.bt = 0; } }
     ]
   },
   st_bt1: {
@@ -3880,8 +3879,8 @@ const scenes = {
   },
   st_bt_end: {
     bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk",
-    nextFn: () => ST.bt >= 2 ? "st_bt_win" : "st_fight",
-    linesFn: () => [{ who: null, t: ST.bt >= 2 ? `Счёт дуэли: ${ST.bt} из 3. Шуруп открывает рот, закрывает. Открывает снова.` : `Счёт дуэли: ${ST.bt} из 3. Слова кончились. Шуруп снимает цепочку и наматывает на кулак.` }]
+    nextFn: () => ST.bt >= 2 ? "st_bt_win" : "st_bt_lose",
+    linesFn: () => [{ who: null, t: ST.bt >= 2 ? `Счёт дуэли: ${ST.bt} из 3. Шуруп открывает рот, закрывает. Открывает снова.` : `Счёт дуэли: ${ST.bt} из 3. Слова кончились. Шуруп улыбается — он понял, что победил.` }]
   },
   st_bt_win: {
     bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_words",
@@ -3895,34 +3894,6 @@ const scenes = {
       { who: "Егор", t: "Ты его словами уебал. Словами, Глеб. Я пять лет мечтал. Я думал, это можно только кулаком." },
       { who: "Глеб", t: "Кулаком тоже можно. Но так он запомнит дольше." },
       { who: null, t: "Когда «Приора» трогается, из её окна на асфальт вываливается чёрный травмат. Видимо, лежал на коленях у кого-то из друзей Шурупа." }
-    ]
-  },
-  st_fight: {
-    bg: "cheb_vkusno", place: "«Вкусно — и точка» · драка", egor: true, lis: true, music: "folk_rock",
-    lines: [
-      { who: "Егор", t: "Всё, Шуруп. Восьмой класс кончился." },
-      { fx: "punch", who: null, t: "Картошка разлетается по парковке. Охранник «Вкусно — и точка» выходит, смотрит и заходит обратно." },
-      { qte: true, foe: "shurup", win: "st_fight_win", lose: "st_fight_lose", beats: [
-        { foe: "swing", need: "dodge", tip: "Шуруп бьёт с размаху!" },
-        { need: "hit", tip: "Он открылся!" },
-        { foe: "swing", need: "block", tip: "Цепочка в кулаке — закройся!" },
-        { foe: "grab", need: "dodge", tip: "Хватает за капюшон!" },
-        { need: "hit", tip: "Сейчас!" },
-        { foe: "swing", need: "dodge", tip: "Последний замах!", time: 1.4 },
-        { need: "hit", tip: "За восьмой класс!", time: 1.4 }
-      ] }
-    ]
-  },
-  st_fight_win: {
-    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_fist",
-    lines: [
-      { who: null, t: "Шуруп сидит на асфальте и держится за нос. Как Егор пять лет назад. Круг замкнулся." },
-      { who: "Егор", t: "Я думал, мне станет легче. Мне не стало. Но и хуже не стало." },
-      { who: null, t: "Друзья Шурупа затаскивают его в «Приору». Из кармана его спортивок на асфальт выпадает чёрный травмат. Никто не замечает. Кроме меня." }
-    ],
-    choices: () => [
-      { icon: "grab", t: "Подобрать травмат", sub: "В рюкзак. На всякий случай", go: "st_plant", rem: "Егор это запомнит.", act: () => ST.inv.add("gun") },
-      { icon: "let", t: "Оставить", sub: "Не моё", go: "st_plant" }
     ]
   },
   st_x_knife: {
@@ -4022,12 +3993,17 @@ const scenes = {
       { who: "Егор", t: "Спасибо. Что убрал." }
     ]
   },
-  st_fight_lose: {
-    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk_storm", learn: "st_fist", next: "st_plant",
+  st_bt_lose: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk_storm",
     lines: [
-      { who: null, t: "Мы лежим на асфальте, «Приора» уезжает. У Егора разбита губа, у меня — гордость и кроссовки." },
-      { who: "Егор", t: "Ну. Зато мы попробовали. В восьмом классе я даже не пробовал." },
-      { who: null, t: "Мы смеёмся. Больно смеяться, а мы всё равно смеёмся. Девушка с кассы выносит нам лёд в стаканчике из-под колы." }
+      { who: "Шуруп", t: "Вот и всё, москвич. Язык есть, а сказать нечего. Егорка, ты себе друга под стать нашёл." },
+      { who: null, t: "Он забирает у Егора картошку из рук. Одну. Медленно съедает. Друзья ржут. «Приора» уезжает, музыка бьёт в асфальт." },
+      { who: "Егор", t: "Не надо было с ним разговаривать. С ним вообще не надо. Восьмой класс, Глеб. Он всегда побеждает." },
+      { who: null, t: "Когда «Приора» отъезжает, из её окна на асфальт вываливается чёрный травмат. Шуруп не замечает. Егор — тоже. Я — да." }
+    ],
+    choices: () => [
+      { icon: "grab", t: "Подобрать травмат", sub: "В рюкзак. На всякий случай", go: "st_plant", rem: "Егор это запомнит.", act: () => ST.inv.add("gun") },
+      { icon: "let", t: "Оставить", sub: "Не моё", go: "st_plant" }
     ]
   },
   st_plant: {
@@ -6788,13 +6764,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282157`, talk: `img/${n}_talk.png?v=10282157`, blink: `img/${n}_blink.png?v=10282157` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282202`, talk: `img/${n}_talk.png?v=10282202`, blink: `img/${n}_blink.png?v=10282202` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282157" : `img/${n}_spartan.png?v=10282157`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282202" : `img/${n}_spartan.png?v=10282202`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6823,7 +6799,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost", "Жора": "npc_comic", "Жора Куколд": "npc_comic"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282157`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282202`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6832,7 +6808,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282157`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282202`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -7155,7 +7131,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282157) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282202) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
