@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282102") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282112") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -187,6 +187,9 @@
     text-shadow:0 0 12px #ff4f7e, 0 0 40px #ff4f7e88; animation:neon 3s infinite; }
   #title p { color:var(--dim); font-size:14px; }
   #title p.cupid { color:var(--accent); font-size:17px; margin:0; }
+  #title .hero small { font:600 15px/1 Georgia, serif; letter-spacing:.32em; color:#f0e6d8; text-transform:uppercase; }
+  #title p.stats { margin:0; font:15px Georgia, serif; color:#cfc6b8; letter-spacing:.04em; }
+  #title p.stats b { font:700 22px Georgia, serif; color:#f0b35e; margin-right:4px; } #title p.stats i { color:#ffffff40; margin:0 8px; font-style:normal; }
   #saveBtns { display:flex; flex-direction:column; gap:8px; max-height:100%; }
   #saveBtns h3 { margin:10px 0 0; font:bold 11px "Courier New", monospace; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); }
   #saveBtns .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px; }
@@ -196,6 +199,36 @@
   #saveBtns button:hover { transform:translateY(-2px); background:color-mix(in srgb, var(--c) 18%, rgba(14,12,24,.9)); }
   #saveBtns button b { font-size:15px; }
   #saveBtns button span { font-size:12px; color:var(--dim); }
+  /* у каждой главы своя карточка: фон, шрифт, настроение */
+  #saveBtns .grid button { min-height:68px; position:relative; overflow:hidden; border-left-width:1px; }
+  #saveBtns .grid button:hover { filter:brightness(1.18); }
+  #saveBtns #mStory { background:repeating-linear-gradient(0deg, #0000 0 11px, #00000055 11px 12px), linear-gradient(135deg, #3a1420, #120810); border-color:#ff4f7e66; }
+  #saveBtns #mStory b { font:10px/1.5 'Press Start 2P', monospace; color:#ff6f94; text-shadow:0 0 8px #ff4f7e; }
+  #saveBtns #mC { background:radial-gradient(circle at 85% 30%, #0000 16px, #c8905a55 17px 19px, #0000 20px), linear-gradient(135deg, #5a3a24, #2a1a10); border-color:#f0b35e55; }
+  #saveBtns #mC b { font:italic 600 17px 'Playfair Display', serif; color:#f6dfb8; }
+  #saveBtns #mPe { background:linear-gradient(#0008, #000a), linear-gradient(180deg, #c8202a 0 33%, #e8b820 33% 66%, #2a8a3a 66%); border-color:#e8b82088; }
+  #saveBtns #mPe b { font:700 16px 'Comfortaa', sans-serif; color:#ffe680; }
+  #saveBtns #mV { background:radial-gradient(#cfe6ff30 1.5px, #0000 2px) 0 0/14px 18px, radial-gradient(#cfe6ff22 1px, #0000 1.5px) 7px 9px/14px 18px, linear-gradient(180deg, #1c2c3c, #0c141c); border-color:#8ad0ff44; }
+  #saveBtns #mV b { font:19px 'Neucha', cursive; color:#cfe6ff; }
+  #saveBtns #mSe { background:radial-gradient(#fff 1px, #0000 1.5px) 3px 5px/23px 19px, radial-gradient(#d9b8ff 1px, #0000 1.5px) 11px 13px/31px 27px, linear-gradient(135deg, #2a1846, #0e0818); border-color:#b56cff66; }
+  #saveBtns #mSe b { font:italic 600 20px 'Cormorant Garamond', serif; color:#e6d4ff; }
+  #saveBtns #mS { background:radial-gradient(circle at 20% 120%, #ff4fa855, #0000 60%), linear-gradient(135deg, #2a0818, #10040a); border-color:#ff4fa888; }
+  #saveBtns #mS b { font:21px 'Lobster', cursive; color:#ff8ad0; text-shadow:0 0 10px #ff4fa8; }
+  #saveBtns #mM { background:radial-gradient(circle at 20% 30%, #4a5232 18%, #0000 19%), radial-gradient(circle at 70% 70%, #2e3420 22%, #0000 23%), radial-gradient(circle at 85% 20%, #5a5a3a 14%, #0000 15%), #3a4028; border-color:#c8c0a066; }
+  #saveBtns #mM b { font:14px 'Russo One', sans-serif; text-transform:uppercase; letter-spacing:.08em; color:#f0ead0; text-shadow:0 1px 2px #000; }
+  #saveBtns #mM span { color:#d8d0b0; }
+  #saveBtns #mPa { background:repeating-linear-gradient(90deg, #ddd 0 6px, #0000 6px 14px) 0 3px/100% 5px no-repeat, repeating-linear-gradient(90deg, #ddd 0 6px, #0000 6px 14px) 0 calc(100% - 3px)/100% 5px no-repeat, radial-gradient(#0000 40%, #000c), #1a1a1a; border-color:#ffffff44; }
+  #saveBtns #mPa b { font:italic 600 17px 'Playfair Display', serif; color:#f4f4f4; letter-spacing:.03em; } #saveBtns #mPa span { color:#aaa; }
+  #saveBtns #mSt { background:radial-gradient(circle at 95% 0, #ffb06070, #0000 45%), repeating-linear-gradient(#f3ead6 0 15px, #c8d8e6 15px 16px); border-color:#0000; rotate:-.8deg; box-shadow:0 6px 14px #0008; }
+  #saveBtns #mSt b { font:700 22px/1 'Caveat', cursive; color:#2a2420; } #saveBtns #mSt span { font:16px 'Caveat', cursive; color:#6a5444; }
+  #saveBtns #mH { background:repeating-linear-gradient(90deg, #5ab0ff14 0 1px, #0000 1px 16px), repeating-linear-gradient(0deg, #5ab0ff14 0 1px, #0000 1px 16px), linear-gradient(135deg, #0a1a2c, #04080e); border-color:#5ab0ff66; }
+  #saveBtns #mH b { font:14px 'Russo One', sans-serif; text-transform:uppercase; letter-spacing:.1em; color:#9fd4ff; text-shadow:0 0 8px #5ab0ff; }
+  #saveBtns #mP { background:linear-gradient(115deg, #0000 46%, #d8e8ff55 47%, #0000 49%), linear-gradient(135deg, #1a2448, #080c1a); border-color:#7a9aff66; }
+  #saveBtns #mP b { font:14px 'Russo One', sans-serif; color:#c8d8ff; }
+  #saveBtns #mX { background:radial-gradient(circle at 50% 130%, #c41a2a88, #0000 70%), #12060e; border-color:#b56cff66; }
+  #saveBtns #mX b { font:italic 600 19px 'Cormorant Garamond', serif; color:#ffb0b0; }
+  #saveBtns #mL { background:linear-gradient(135deg, #4a0610, #14020a); border-color:#c41a2a88; } #saveBtns #mL b { font:20px 'Lobster', cursive; color:#ff9090; }
+  #saveBtns #mBrawl { background:repeating-linear-gradient(45deg, #ffffff08 0 4px, #0000 4px 9px), #1c1c20; } #saveBtns #mBrawl b { font:14px 'Russo One', sans-serif; color:#d8d8e0; }
   #saveBtns .cont button { width:100%; border:1px solid var(--accent); border-left:3px solid var(--accent); background:#f0b35e26; }
   #saveBtns .cont button b { font-size:17px; color:var(--accent); }
   #saveBtns .cont:has(#mCont[style*="none"]) { display:none; }
@@ -392,7 +425,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282102") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282112") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -475,10 +508,18 @@
   #inv span:first-child { background:none; color:#f8efe2; box-shadow:none; rotate:0deg; }
   /* кино-драка */
   #qte { position:absolute; inset:0; z-index:7; display:none; } #qte.on { display:block; }
-  #qteCv { position:absolute; inset:0; width:100%; height:100%; filter:url(#paintFx); }
+  #qteCv { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  #qteCam { position:absolute; inset:0; transform-origin:50% 62%; }
+  #qteEgor, #qteFoe { position:absolute; bottom:-3%; transition:transform .2s cubic-bezier(.3,1.4,.5,1), filter .15s; transform-origin:50% 90%; }
+  #qteEgor { left:4%; height:94%; image-rendering:auto; filter:url(#paintFx) sepia(.2) drop-shadow(0 0 24px #000c); }
+  #qteFoe { right:3%; height:100%; filter:url(#paintFx) drop-shadow(0 0 30px #000); }
+  #qteEgor.blur, #qteFoe.blur { filter:url(#paintFx) blur(3px) brightness(1.15); }
+  #qte::before, #qte::after { content:""; position:absolute; left:0; right:0; height:9%; background:#000; z-index:2; }
+  #qte::before { top:0; } #qte::after { bottom:0; }
+  @media (max-aspect-ratio: 1/1) { #qteEgor { left:-14%; height:58%; bottom:14%; } #qteFoe { right:-12%; height:64%; bottom:14%; } }
   #stage.qteing .sprite, #stage.qteing #box { opacity:0 !important; }
-  #qteTip { position:absolute; top:15%; left:0; right:0; text-align:center; font:700 38px 'Caveat', cursive; color:#fff4e0; text-shadow:0 2px 10px #000; }
-  #qteBtns { position:absolute; bottom:7%; left:0; right:0; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  #qteTip { position:absolute; z-index:3; top:15%; left:0; right:0; text-align:center; font:700 38px 'Caveat', cursive; color:#fff4e0; text-shadow:0 2px 10px #000; }
+  #qteBtns { position:absolute; z-index:3; bottom:11%; left:0; right:0; display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
   #qteBtns button { font:700 22px 'Caveat', cursive; padding:10px 20px; border-radius:40px; border:2px solid #ffffff55; background:#000a; color:#f8efe2; cursor:pointer; opacity:.5; transition:transform .15s, opacity .15s; }
   #qteBtns button b { margin-right:8px; font:700 18px system-ui, sans-serif; }
   #qteBtns button.need { opacity:1; border-color:#f0b35e; color:#1a1008; transform:scale(1.18); background:conic-gradient(#f0b35e calc(var(--k, 1) * 360deg), #f8efe2 0); }
@@ -489,25 +530,25 @@
     background:radial-gradient(#ffffff55, #ffffff00 70%); animation:puff 3.2s ease-out forwards; }
   @keyframes puff { from { opacity:.9; transform:translate(0,0) scale(.4); } to { opacity:0; transform:translate(30px,-160px) scale(3.2); } }
 </style>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Comfortaa:wght@700&family=Cormorant+Garamond:ital,wght@1,600&family=Lobster&family=Neucha&family=Playfair+Display:ital,wght@1,600&family=Press+Start+2P&family=Russo+One&display=swap" rel="stylesheet">
 <style>#mX,#mL,#mBrawl{display:none!important}</style></head>
 <body>
 <svg width="0" height="0" style="position:absolute"><filter id="paintFx"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="7" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="0.7"/></filter></svg>
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282102" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282102" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282112" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282112" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282102) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282112) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
   <div id="toast"></div>
   <div id="inv"></div>
-  <div id="qte"><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
+  <div id="qte"><div id="qteCam"><img id="qteEgor" alt=""><canvas id="qteFoe"></canvas></div><canvas id="qteCv"></canvas><div id="qteTip"></div><div id="qteBtns"></div></div>
   <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
     <canvas id="hLiver" width="32" height="28"></canvas><div><b>Печень <em id="hVt"></em></b><i><s id="hV"></s></i></div>
     <canvas id="hCig" width="32" height="28"></canvas><div><b>Тяга <em id="hCt"></em></b><i><s id="hC"></s></i></div></div>
@@ -561,7 +602,7 @@
   <div id="gphone"><div class="scr" id="gscr"></div></div>
   <div id="dedic" class="gone" style="display:none"></div>
   <div id="title">
-    <div class="hero"><small>Сборник историй · Глеб, Егор, Петя, Витя</small><h1>POWERHOUSE</h1><p class="cupid">Глеб — купидон. Сегодня он решает судьбу Егора.</p></div>
+    <div class="hero"><small>Сборник историй</small><h1>POWERHOUSE</h1><p class="stats" id="menuStats"></p></div>
     <div id="saveBtns">
       <div class="cont"><button id="mCont"><b>▶ Продолжить</b><span id="saveInfo"></span></button></div>
       <h3>Основная история</h3>
@@ -929,7 +970,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282102"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282112"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1048,7 +1089,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282102`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282112`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1402,27 +1443,40 @@ function drawParis(b) {
   }
 }
 
-// ---------- Кино-драка (QTE) для «Дыма над Волгой»: два рисованных бойца, кнопка появляется — успей нажать ----------
-// Такты: противник замахивается → появляется кнопка с кольцом-таймером (время замедляется) → удачно: Егор уходит/бьёт, нет — пропускает удар.
+// ---------- Кино-драка (QTE) для «Дыма над Волгой»: крупные планы, наезды камеры, тряска, смена кадра ----------
+// Такты: противник замахивается (камера наезжает на него) → появляется кнопка с кольцом-таймером → удачно: Егор уходит/бьёт, нет — пропускает удар.
 // Три пропущенных удара — поражение. У такта может быть «альтернатива» (нож), которая сразу уводит в свою сцену.
 const QF = { on: false };
-const QLOOK = {
-  egor:   { hair: "#c8642a", skin: "#eab48c", top: "#24201e", legs: "#2a2a34", messy: true },
-  shurup: { hair: null, skin: "#d8a27c", top: "#111114", legs: "#1c2c70", chain: true, stripes: true, big: 1.12 }
-};
 const QKEYS = { dodge: { label: "Увернуться", key: "←", codes: ["ArrowLeft", "a", "ф"] }, block: { label: "Блок", key: "↓", codes: ["ArrowDown", "s", "ы"] }, hit: { label: "Удар", key: "→", codes: ["ArrowRight", "d", "в"] } };
+// позы — это сдвиг и поворот портретов; камера — масштаб и сдвиг всего кадра
+const QPOSE = {
+  me: { idle: "translateX(0)", punch: "translateX(36%) rotate(8deg) scale(1.06)", dodge: "translateX(-16%) rotate(-12deg)", block: "translateX(-5%) rotate(-3deg) scale(.97)",
+        hit: "translateX(-14%) rotate(-15deg)", down: "translateY(42%) rotate(-72deg)" },
+  en: { idle: "translateX(0)", wind: "translateX(7%) rotate(-9deg)", grab: "translateX(-12%) rotate(6deg) scale(1.05)", open: "translateX(4%) rotate(-13deg)",
+        punch: "translateX(-36%) rotate(11deg) scale(1.08)", hit: "translateX(15%) rotate(17deg)", down: "translateY(46%) rotate(76deg)" }
+};
+const QCAM = { wide: ["scale(1)", .5], foe: ["scale(1.32) translate(-13%, 4%)", .45], tense: ["scale(1.55) translate(-16%, 5%)", 1.8], me: ["scale(1.4) translate(14%, 4%)", .08], impact: ["scale(1.12)", .06] };
 function qteStart(l) {
   $("stage").classList.add("qteing");
-  Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, foe: l.foe || "shurup",
-    me: { x: .32, pose: "idle", hurt: 0, k: 0 }, en: { x: .66, pose: "idle", hurt: 0, k: 0 }, shake: 0, flash: 0, sparks: [], last: performance.now(), res: null });
+  Object.assign(QF, { on: true, beats: l.beats, i: 0, phase: "idle", t: 0, fails: 0, win: l.win, lose: l.lose, shake: 0, flash: 0, red: 0, sparks: [], last: performance.now(), res: null });
   $("box").style.display = "none";
-  const cv = $("qteCv"), pt = innerHeight > innerWidth; cv.width = pt ? 720 : 1280; cv.height = pt ? 1280 : 720;
+  $("qteEgor").src = "img/egor_px.png?v=10282112";
+  qteDrawFoe();
+  const cv = $("qteCv"); cv.width = innerWidth; cv.height = innerHeight;
+  qtePose("idle", "idle"); qteCam("wide");
   $("qte").classList.add("on"); qteButtons();
   cancelAnimationFrame(QF.raf);
   const loop = now => { if (!QF.on) return; const dt = Math.min(50, now - QF.last) / 1000; QF.last = now; qteStep(dt); qteDraw(); QF.raf = requestAnimationFrame(loop); };
   QF.raf = requestAnimationFrame(loop);
 }
 function qteStop() { $("stage").classList.remove("qteing"); QF.on = false; cancelAnimationFrame(QF.raf); $("qte").classList.remove("on"); $("box").style.display = ""; }
+function qtePose(me, en) {
+  if (me) { $("qteEgor").style.transform = "scaleX(-1) " + QPOSE.me[me].replace(/translateX\((-?[\d.]+)%\)/, (m, v) => `translateX(${-v}%)`).replace(/rotate\((-?[\d.]+)deg\)/, (m, v) => `rotate(${-v}deg)`); }
+  if (en) $("qteFoe").style.transform = QPOSE.en[en];
+  // смазанное движение на ударах
+  for (const [id, p] of [["qteEgor", me], ["qteFoe", en]]) if (p === "punch" || p === "hit") { const el = $(id); el.classList.add("blur"); setTimeout(() => el.classList.remove("blur"), 160); }
+}
+function qteCam(k) { const [tf, sec] = QCAM[k], el = $("qteCam"); el.style.transition = `transform ${sec}s cubic-bezier(.2,.8,.2,1)`; el.style.transform = tf; }
 function qteButtons() {
   const b = QF.beats[QF.i] || {}, wrap = $("qteBtns");
   wrap.innerHTML = "";
@@ -1433,7 +1487,7 @@ function qteButtons() {
 function qteInput(id) {
   if (!QF.on || QF.phase !== "prompt") return;
   const b = QF.beats[QF.i];
-  if (id === "alt" && b.alt) { QF.on = false; qteFx(QF.me.x + .08, .5, 18); setTimeout(() => { qteStop(); show(b.alt.go); }, 500); return; }
+  if (id === "alt" && b.alt) { QF.on = false; qteCam("foe"); QF.flash = .5; setTimeout(() => { qteStop(); show(b.alt.go); }, 600); return; }
   qteResolve(id === b.need);
 }
 document.addEventListener("keydown", e => {
@@ -1445,88 +1499,68 @@ function qteResolve(ok) {
   const b = QF.beats[QF.i];
   QF.phase = "resolve"; QF.t = 0; QF.res = ok;
   [...$("qteBtns").children].forEach(el => el.classList.toggle("ok", ok && el.dataset.id === b.need));
-  if (ok) {
-    if (b.need === "hit") { QF.me.pose = "punch"; QF.en.pose = "hit"; QF.en.hurt = 1; qteFx(QF.en.x - .04, .42, 14); }
-    else if (b.need === "dodge") { QF.me.pose = "dodge"; QF.en.pose = "punch"; }
-    else { QF.me.pose = "block"; QF.en.pose = "punch"; qteFx(QF.me.x + .05, .45, 6); }
-  } else {
-    QF.fails++; QF.me.pose = "hit"; QF.me.hurt = 1; QF.en.pose = "punch"; qteFx(QF.me.x + .03, .4, 16);
-    music.punch && music.punch();
-  }
+  if (ok && b.need === "hit") { qteCam("impact"); qtePose("punch", "hit"); qteFx(.62, .38, 16, 1); }
+  else if (ok && b.need === "dodge") { qteCam("wide"); qtePose("dodge", "punch"); QF.shake = .2; }
+  else if (ok) { qteCam("impact"); qtePose("block", "punch"); qteFx(.42, .42, 8, .5); }
+  else { QF.fails++; qteCam("me"); qtePose("hit", "punch"); qteFx(.36, .36, 18, 1); QF.red = 1; music.punch && music.punch(); }
   if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred(ok ? "light" : "heavy");
 }
-function qteFx(x, y, n) { QF.shake = n > 10 ? 1 : .4; QF.flash = n > 10 ? .6 : .3; for (let i = 0; i < n; i++) QF.sparks.push({ x, y, vx: (Math.random() - .5) * .02, vy: (Math.random() - .7) * .02, life: 1 }); }
+function qteFx(x, y, n, k) { QF.shake = k; QF.flash = k * .7; for (let i = 0; i < n; i++) QF.sparks.push({ x, y, vx: (Math.random() - .5) * .016, vy: (Math.random() - .7) * .016, life: 1 }); }
 function qteStep(dt) {
   const b = QF.beats[QF.i];
-  const slow = QF.phase === "prompt" ? .35 : 1;          // замедление, пока висит кнопка
-  QF.t += dt * (QF.phase === "prompt" ? 1 : slow);
-  for (const f of [QF.me, QF.en]) { f.k += dt * 3 * slow; f.hurt = Math.max(0, f.hurt - dt * 2); }
-  QF.shake = Math.max(0, QF.shake - dt * 3); QF.flash = Math.max(0, QF.flash - dt * 2.5);
-  QF.sparks.forEach(s => { s.x += s.vx; s.y += s.vy; s.vy += .0006; s.life -= dt * 2; }); QF.sparks = QF.sparks.filter(s => s.life > 0);
-  if (QF.phase === "idle" && QF.t > .7) { QF.phase = "tele"; QF.t = 0; QF.en.pose = b.need === "hit" ? "open" : b.foe === "grab" ? "grab" : "wind"; $("qteTip").textContent = b.tip || ""; }
-  else if (QF.phase === "tele" && QF.t > .45) { QF.phase = "prompt"; QF.t = 0; qteButtons(); [...$("qteBtns").children].forEach(el => el.classList.toggle("need", el.dataset.id === b.need)); }
+  QF.t += dt;
+  QF.shake = Math.max(0, QF.shake - dt * 2.5); QF.flash = Math.max(0, QF.flash - dt * 3); QF.red = Math.max(0, QF.red - dt * 1.5);
+  QF.sparks.forEach(s => { s.x += s.vx; s.y += s.vy; s.vy += .0005; s.life -= dt * 2; }); QF.sparks = QF.sparks.filter(s => s.life > 0);
+  if (QF.phase === "idle" && QF.t > .8) { QF.phase = "tele"; QF.t = 0; qteCam("foe"); qtePose(null, b.need === "hit" ? "open" : b.foe === "grab" ? "grab" : "wind"); $("qteTip").textContent = b.tip || ""; }
+  else if (QF.phase === "tele" && QF.t > .5) { QF.phase = "prompt"; QF.t = 0; qteCam("tense"); qteButtons(); [...$("qteBtns").children].forEach(el => el.classList.toggle("need", el.dataset.id === b.need)); }
   else if (QF.phase === "prompt" && QF.t > (b.time || 1.8)) qteResolve(false);
-  else if (QF.phase === "resolve" && QF.t > .8) {
+  else if (QF.phase === "resolve" && QF.t > .9) {
     $("qteTip").textContent = "";
     if (QF.fails >= 3) return qteEnd(false);
     QF.i++; if (QF.i >= QF.beats.length) return qteEnd(true);
-    QF.phase = "idle"; QF.t = 0; QF.me.pose = "idle"; QF.en.pose = "idle"; qteButtons();
+    QF.phase = "idle"; QF.t = 0; qtePose("idle", "idle"); qteCam("wide"); qteButtons();
   }
 }
 function qteEnd(won) {
-  QF.phase = "end"; QF.me.pose = won ? "idle" : "down"; QF.en.pose = won ? "down" : "idle";
+  QF.phase = "end"; qteCam(won ? "foe" : "me"); qtePose(won ? "idle" : "down", won ? "down" : "idle"); QF.shake = .6;
   $("qteTip").textContent = won ? "Шуруп на асфальте" : "Егор на асфальте…";
-  setTimeout(() => { qteStop(); show(won ? QF.win : QF.lose); }, 1600);
+  setTimeout(() => { qteStop(); show(won ? QF.win : QF.lose); }, 1800);
 }
-// боец: ноги, корпус, руки из двух отрезков, голова; поза задаёт углы. dir = 1 смотрит вправо
-function qteMan(c, cx, gy, u, look, pose, dir, k, hurt) {
-  const s = u * (look.big || 1), bob = Math.sin(k * 2) * s * .6;
-  let lean = 0, dx = 0, fa = -1.1, fb = 2.2, ba = -1.4, bb = 2.4, stance = 6;
-  if (pose === "wind") { fa = 2.3; fb = 1.2; lean = -.15; }
-  if (pose === "grab") { fa = -.2; fb = .3; ba = -.1; bb = .3; lean = .25; dx = 4; }
-  if (pose === "punch") { fa = -.08; fb = 0; lean = .22; dx = 7; }
-  if (pose === "open") { fa = .6; fb = 1.4; ba = .9; bb = 1.2; lean = -.1; }
-  if (pose === "hit") { fa = .9; fb = 1; lean = -.4; dx = -6; }
-  if (pose === "dodge") { lean = -.55; dx = -9; }
-  if (pose === "block") { fa = -1.5; fb = 2.7; ba = -1.6; bb = 2.8; dx = -2; }
-  c.save(); c.translate(cx + dx * s * dir, gy);
-  if (pose === "down") { c.translate(0, -3 * s); c.rotate(-dir * Math.PI / 2 * .96); }
-  c.scale(dir, 1); c.lineCap = "round"; c.lineJoin = "round";
-  c.fillStyle = "#0005"; c.beginPath(); c.ellipse(0, 0, 13 * s, 2.5 * s, 0, 0, 7); c.fill();
-  const hip = [0, -22 * s + bob], sh = [hip[0] + Math.sin(lean) * 20 * s, hip[1] - Math.cos(lean) * 20 * s];
-  const line = (pts, w, col) => { c.strokeStyle = col; c.lineWidth = w; c.beginPath(); c.moveTo(pts[0][0], pts[0][1]); for (const p of pts.slice(1)) c.lineTo(p[0], p[1]); c.stroke(); };
-  line([hip, [-stance * s * .6, -11 * s], [-stance * s, 0]], 3.6 * s, look.legs);
-  line([hip, [stance * s * .5, -11 * s], [stance * s, 0]], 3.6 * s, look.legs);
-  if (look.stripes) { c.strokeStyle = "#e8e8e8"; c.lineWidth = .6 * s; c.beginPath(); c.moveTo(hip[0] + 1.5 * s, hip[1]); c.lineTo(stance * s + 1.5 * s, 0); c.stroke(); }
-  const arm = (a, bnd, col, w) => { const el = [sh[0] + Math.cos(a) * 8 * s, sh[1] + Math.sin(a) * 8 * s], hd = [el[0] + Math.cos(a + bnd) * 8 * s, el[1] + Math.sin(a + bnd) * 8 * s];
-    line([sh, el, hd], w, col); c.fillStyle = look.skin; c.beginPath(); c.arc(hd[0], hd[1], 1.9 * s, 0, 7); c.fill(); };
-  arm(ba + Math.PI * .02, bb, shade(look.top, -18), 2.8 * s);
-  line([hip, sh], 8.5 * s, look.top);
-  if (look.chain) { c.strokeStyle = "#e8c040"; c.lineWidth = .8 * s; c.beginPath(); c.arc(sh[0], sh[1] + 1.5 * s, 3 * s, .3, Math.PI - .3); c.stroke(); }
-  const hc = [sh[0] + Math.sin(lean) * 7 * s, sh[1] - Math.cos(lean) * 7 * s];
-  c.fillStyle = look.skin; c.beginPath(); c.arc(hc[0], hc[1], 5 * s, 0, 7); c.fill();
-  if (look.hair) { c.fillStyle = look.hair; c.beginPath(); c.arc(hc[0], hc[1] - .5 * s, 5.3 * s, Math.PI * 1.05, Math.PI * 2.05); c.fill();
-    if (look.messy) for (let i = 0; i < 5; i++) { c.beginPath(); c.ellipse(hc[0] - 4 * s + i * 2 * s, hc[1] - 4.5 * s, 1.6 * s, 2.6 * s, -.5 + i * .25, 0, 7); c.fill(); } }
-  else { c.fillStyle = "#ffffff44"; c.beginPath(); c.ellipse(hc[0] + 1.5 * s, hc[1] - 3 * s, 1.6 * s, 1 * s, -.4, 0, 7); c.fill(); }
-  c.fillStyle = "#1a1210"; c.fillRect(hc[0] + 2 * s, hc[1] - 1 * s, 1.2 * s, 1.2 * s);
-  arm(fa, fb, look.top, 3 * s);
-  if (hurt > 0) { c.globalAlpha = hurt * .5; c.fillStyle = "#ff3020"; c.beginPath(); c.arc(hc[0], hc[1], 6 * s, 0, 7); c.fill(); c.globalAlpha = 1; }
+// Шуруп — силуэт против света: лысая голова, спортивка с лампасами, цепочка, оранжевый контровой свет от фонаря и пожара
+function qteDrawFoe() {
+  const cv = $("qteFoe"), c = cv.getContext("2d"), W = cv.width = 520, H = cv.height = 900;
+  c.clearRect(0, 0, W, H);
+  const body = new Path2D(); body.moveTo(40, H); body.bezierCurveTo(50, 560, 90, 470, 150, 440); body.lineTo(370, 440); body.bezierCurveTo(440, 470, 480, 560, 490, H); body.closePath();
+  const g = c.createLinearGradient(0, 0, W, 0); g.addColorStop(0, "#0c0e1a"); g.addColorStop(.75, "#161c34"); g.addColorStop(1, "#2a2c48");
+  c.fillStyle = g; c.fill(body);
+  c.save(); c.clip(body); c.strokeStyle = "#e8e8f0"; c.lineWidth = 9;            // лампасы на рукавах
+  for (const dx of [0, 18, 36]) { c.beginPath(); c.moveTo(430 + dx * .4, 470 + dx); c.lineTo(500, H); c.stroke(); c.beginPath(); c.moveTo(80 - dx * .4, 480 + dx); c.lineTo(20, H); c.stroke(); }
+  c.strokeStyle = "#0a0c14"; c.lineWidth = 6; c.beginPath(); c.moveTo(260, 470); c.lineTo(255, H); c.stroke();   // молния куртки
   c.restore();
+  c.strokeStyle = "#ff9a48"; c.lineWidth = 7; c.shadowColor = "#ff8a30"; c.shadowBlur = 24;                  // контровой свет справа
+  c.beginPath(); c.moveTo(372, 442); c.bezierCurveTo(440, 470, 480, 560, 490, H); c.stroke(); c.shadowBlur = 0;
+  c.fillStyle = "#2a1c18"; c.fillRect(205, 380, 110, 80);                                                       // шея
+  const hg = c.createRadialGradient(300, 250, 20, 260, 280, 150); hg.addColorStop(0, "#6a4636"); hg.addColorStop(1, "#24160f");
+  c.fillStyle = hg; c.beginPath(); c.ellipse(260, 280, 108, 130, 0, 0, 7); c.fill();                          // голова
+  c.strokeStyle = "#ffb070"; c.lineWidth = 6; c.shadowColor = "#ff9040"; c.shadowBlur = 18; c.beginPath(); c.ellipse(260, 280, 108, 130, 0, -1.4, .9); c.stroke(); c.shadowBlur = 0;
+  c.fillStyle = "#ffffff30"; c.beginPath(); c.ellipse(300, 190, 34, 16, -.4, 0, 7); c.fill();                  // блик на лысине
+  c.fillStyle = "#140c08"; c.fillRect(185, 268, 70, 16); c.fillRect(278, 268, 60, 14);                         // надбровья в тени
+  c.fillStyle = "#f0e0c0"; c.fillRect(226, 290, 8, 5); c.fillRect(306, 290, 7, 5);                              // глаза блестят
+  c.strokeStyle = "#140c08"; c.lineWidth = 5; c.beginPath(); c.moveTo(225, 360); c.quadraticCurveTo(268, 352, 310, 342); c.stroke();   // ухмылка
+  c.fillStyle = "#3a2418"; c.beginPath(); c.ellipse(368, 290, 14, 30, .1, 0, 7); c.fill();                      // ухо
+  c.strokeStyle = "#e8c040"; c.lineWidth = 7; c.beginPath(); c.arc(260, 430, 70, .35, Math.PI - .35); c.stroke();   // цепочка
+  c.fillStyle = "#fff6c0"; for (const a of [.6, 1.2, 1.9, 2.5]) { c.beginPath(); c.arc(260 + Math.cos(a) * 70, 430 + Math.sin(a) * 70, 4, 0, 7); c.fill(); }
 }
-function shade(hex, d) { const n = parseInt(hex.slice(1), 16), f = v => Math.max(0, Math.min(255, v + d)); return `rgb(${f(n >> 16)},${f(n >> 8 & 255)},${f(n & 255)})`; }
 function qteDraw() {
-  const cv = $("qteCv"), c = cv.getContext("2d"), W = cv.width, H = cv.height, u = H / 100 * (W < H ? .55 : 1);
-  c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, W, H);
-  if (QF.shake) c.translate((Math.random() - .5) * QF.shake * 18, (Math.random() - .5) * QF.shake * 12);
-  const gy = H * (W < H ? .62 : .9);
-  qteMan(c, W * QF.me.x, gy, u, QLOOK.egor, QF.me.pose, 1, QF.me.k, QF.me.hurt);
-  qteMan(c, W * QF.en.x, gy, u, QLOOK[QF.foe] || QLOOK.shurup, QF.en.pose, -1, QF.en.k, QF.en.hurt);
-  for (const s of QF.sparks) { c.globalAlpha = s.life; c.fillStyle = "#fff4d0"; c.beginPath(); c.arc(s.x * W, s.y * H * (W < H ? 1.25 : 1.6), 4 + s.life * 4, 0, 7); c.fill(); }
+  const cv = $("qteCv"), c = cv.getContext("2d"), W = cv.width, H = cv.height;
+  c.clearRect(0, 0, W, H);
+  $("qte").style.translate = QF.shake ? `${(Math.random() - .5) * QF.shake * 26}px ${(Math.random() - .5) * QF.shake * 16}px` : "0 0";
+  for (const s of QF.sparks) { c.globalAlpha = s.life; c.fillStyle = "#fff4d0"; c.beginPath(); c.arc(s.x * W, s.y * H, 3 + s.life * 6, 0, 7); c.fill(); }
   c.globalAlpha = 1;
-  if (QF.flash) { c.fillStyle = `rgba(255,250,235,${QF.flash * .5})`; c.fillRect(-20, -20, W + 40, H + 40); }
-  // кольцо-таймер вокруг нужной кнопки рисуется CSS-ом; на холсте — полоса оставшихся сил
-  c.setTransform(1, 0, 0, 1, 0, 0);
-  for (let i = 0; i < 3; i++) { c.fillStyle = i < 3 - QF.fails ? "#f0b35e" : "#ffffff33"; c.beginPath(); c.arc(W / 2 - 34 + i * 34, H * (W < H ? .15 : .07), 11, 0, 7); c.fill(); }
+  if (QF.flash) { c.fillStyle = `rgba(255,250,235,${QF.flash * .55})`; c.fillRect(0, 0, W, H); }
+  if (QF.red) { const g = c.createRadialGradient(W / 2, H / 2, H * .2, W / 2, H / 2, H * .8); g.addColorStop(0, "#0000"); g.addColorStop(1, `rgba(170,0,0,${QF.red * .55})`); c.fillStyle = g; c.fillRect(0, 0, W, H); }
+  if (QF.phase === "prompt" || QF.phase === "tele") { const g = c.createRadialGradient(W / 2, H / 2, H * .3, W / 2, H / 2, H * .9); g.addColorStop(0, "#0000"); g.addColorStop(1, "#000a"); c.fillStyle = g; c.fillRect(0, 0, W, H); }
+  for (let i = 0; i < 3; i++) { c.fillStyle = i < 3 - QF.fails ? "#f0b35e" : "#ffffff33"; c.beginPath(); c.arc(W / 2 - 30 + i * 30, H * .14, 9, 0, 7); c.fill(); }
   if (QF.phase === "prompt") { const b = QF.beats[QF.i], k = 1 - QF.t / (b.time || 1.8); $("qteBtns").style.setProperty("--k", k.toFixed(3)); }
 }
 
@@ -6411,13 +6445,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282102`, talk: `img/${n}_talk.png?v=10282102`, blink: `img/${n}_blink.png?v=10282102` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282112`, talk: `img/${n}_talk.png?v=10282112`, blink: `img/${n}_blink.png?v=10282112` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282102" : `img/${n}_spartan.png?v=10282102`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282112" : `img/${n}_spartan.png?v=10282112`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -6446,7 +6480,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282102`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282112`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -6455,7 +6489,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282102`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282112`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -6775,7 +6809,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282102) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282112) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -7030,7 +7064,17 @@ function newGame() {
   known.clear(); timeline = []; start();
 }
 // Главное меню: продолжить сохранение, начать главу 1 или режим драки
+// сколько историй, развилок и концовок — считается по сценам, скрытые на сайте режимы не считаются
+function menuStats() {
+  const hidden = [["mX", "x_"], ["mL", "l_"], ["mBrawl", "brawl"]].filter(([b]) => getComputedStyle($(b)).display === "none").map(([, p]) => p);
+  const ids = Object.keys(scenes).filter(id => !hidden.some(p => id.startsWith(p)));
+  const forks = ids.filter(id => scenes[id].choices && !scenes[id].ending && !scenes[id].endingFn).length;
+  const ends = new Set(ids.filter(id => scenes[id].ending).map(id => scenes[id].ending)).size;
+  const stories = [...document.querySelectorAll("#saveBtns .grid button")].filter(b => getComputedStyle(b).display !== "none").length;
+  $("menuStats").innerHTML = `<b>${stories}</b> историй <i>·</i> <b>${forks}</b> развилок <i>·</i> <b>${ends}</b> концовок`;
+}
 function initMenu() {
+  menuStats();
   const d = loadSave();
   $("mCont").style.display = d ? "" : "none";
   $("saveInfo").textContent = d ? "Сохранено: " + d.place : "";
