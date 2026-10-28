@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282011") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10282044") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -392,7 +392,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282011") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10282044") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -450,6 +450,14 @@
   @keyframes smogDrift { from { transform:translateX(-3%) scale(1); } to { transform:translateX(3%) scale(1.06); } }
   #stage.withdraw #bg { animation:shakeW .3s steps(2) infinite; }
   @keyframes shakeW { 50% { translate:1.5px -1px; } }
+  /* «Дым над Волгой»: тёплая выцветшая плёнка, засветы по углам, плашка «запомнит» */
+  #stage.lis #bg { filter:sepia(.3) saturate(.88) contrast(1.04) brightness(1.04); }
+  #stage.lis .sprite:not(.dim) { filter:sepia(.18) saturate(.95) drop-shadow(0 12px 18px #000a); }
+  #stage.lis::after { content:""; position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:radial-gradient(circle at 94% 6%, #ffb06055, transparent 38%), radial-gradient(circle at 4% 96%, #ff805a2e, transparent 34%), radial-gradient(transparent 58%, #2a140a80); }
+  #toast { position:absolute; top:58px; right:14px; z-index:9; padding:8px 14px; background:#1a1410d8; border-left:3px solid #f0b35e; color:#f8e8d0;
+    font:italic 14px Georgia, serif; opacity:0; transform:translateX(16px); transition:opacity .4s, transform .4s; pointer-events:none; }
+  #toast.on { opacity:1; transform:none; }
   .puff { position:absolute; z-index:6; width:70px; height:70px; border-radius:50%; pointer-events:none;
     background:radial-gradient(#ffffff55, #ffffff00 70%); animation:puff 3.2s ease-out forwards; }
   @keyframes puff { from { opacity:.9; transform:translate(0,0) scale(.4); } to { opacity:0; transform:translate(30px,-160px) scale(3.2); } }
@@ -459,15 +467,16 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282011" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10282011" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10282044" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10282044" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282011) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10282044) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
   <div id="smog"></div>
+  <div id="toast"></div>
   <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
     <canvas id="hLiver" width="32" height="28"></canvas><div><b>Печень <em id="hVt"></em></b><i><s id="hV"></s></i></div>
     <canvas id="hCig" width="32" height="28"></canvas><div><b>Тяга <em id="hCt"></em></b><i><s id="hC"></s></i></div></div>
@@ -537,6 +546,7 @@
         <button id="mS" style="--c:#ff4fa8"><b>«Сахар»</b><span>Клуб, которым владеет Глеб</span></button>
         <button id="mM" style="--c:#9aa0b0"><b>Мобилизация</b><span>Самолёт, лес и указание свыше</span></button>
         <button id="mPa" style="--c:#d8d8d8"><b>Пепел · Париж</b><span>Ч/б нуар. Ален, Сергей и плёнка 18+</span></button>
+        <button id="mSt" style="--c:#f0a868"><b>Дым над Волгой</b><span>Эксперимент. Чебоксары, лето 2023</span></button>
       </div>
       <h3>Режимы</h3>
       <div class="grid">
@@ -566,7 +576,7 @@ function paint(years) {
   const b = scene && scene.bg;
   if (b === "cell") drawCell(years); else if (b === "street") drawStreet(); else if (b === "court") drawCourt(); else if (b === "ring") drawRing();
   else if (b === "home") drawHome(); else if (b === "drive") startDrive();
-  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
+  else if (b === "memory") drawMemory(); else if (b === "summer") drawSummer(); else if (b === "lecture") drawLecture(); else if (b === "garage") drawGarage(); else if (b === "field") drawField(); else if (b === "cafe") drawCafe(); else if (b === "flat") drawFlat(); else if (b === "pflat") drawPflat(); else if (b === "hangar") drawHangar(); else if (b === "club") drawClub(); else if (b === "seroom") drawSeroom(); else if (b === "milbase") drawMilbase(); else if (b === "forest") drawForest(); else if (b === "balcony") drawBalcony(); else if (b === "photo") drawPhoto(); else if (b && b.startsWith("paris")) drawParis(b); else if (b && b.startsWith("cheb")) drawCheb(b); else if (b === "war") startWar(); else if (b === "oka") startOka(); else drawBar(!!(scene && scene.drunk));
 }
 function redraw() {
   if (!scene) return drawBar(false);
@@ -885,7 +895,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282011"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10282044"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -1004,7 +1014,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282011`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10282044`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -1358,6 +1368,68 @@ function drawParis(b) {
   }
 }
 
+// ---------- Локации «Дыма над Волгой»: Чебоксары летом, дымное небо, тёплый выцветший цвет ----------
+function drawCheb(b) {
+  const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
+  const R = (x, y, w, h, col) => { c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  const sky = (top, mid, low) => { const g = c.createLinearGradient(0, 0, 0, H * .6); g.addColorStop(0, top); g.addColorStop(.6, mid); g.addColorStop(1, low); c.fillStyle = g; c.fillRect(0, 0, W, H * .6); };
+  const smoke = (y, a) => { for (let i = 0; i < 7; i++) { c.fillStyle = `rgba(160,140,130,${a})`; c.beginPath(); c.ellipse((i * 61) % W, y + (i % 3) * 6, 40, 8, 0, 0, 7); c.fill(); } };
+  if (b === "cheb") {                       // набережная Волги, мост, дым за рекой
+    sky("#d8a878", "#e8c49a", "#f0d0a8"); smoke(H * .3, .35);
+    c.fillStyle = "#f8e0b0"; c.beginPath(); c.arc(W * .7, H * .25, 10, 0, 7); c.fill();
+    R(0, H * .5, W, 4, "#8a7a6a"); for (let i = 0; i < 12; i++) R(i * W / 11, H * .46, 3, 4, "#7a6a5a");
+    R(0, H * .54, W, H * .2, "#7a8a90"); for (let i = 0; i < 30; i++) R((i * 43) % W, H * .56 + (i * 11) % (H * .16), 8, 1, "#e8d0a8aa");
+    R(W * .55, H * .44, W * .45, 3, "#5a5048"); for (let i = 0; i < 5; i++) R(W * (.58 + i * .09), H * .44, 3, H * .1, "#5a5048");
+    R(0, H * .74, W, H * .26, "#a89070"); for (let x = 0; x < W; x += 14) R(x, H * .74 + (x / 14 % 2) * 4, 13, 3, "#b8a080");
+    R(W * .1, H * .6, 3, H * .14, "#3a3430"); R(W * .1 - 3, H * .58, 9, 3, "#3a3430"); c.fillStyle = "#3a5a3a"; c.beginPath(); c.arc(W * .88, H * .62, 16, 0, 7); c.fill(); R(W * .88 - 1, H * .64, 3, H * .1, "#4a3a2a");
+  } else if (b === "cheb_vkusno") {        // парковка фастфуда в сумерках: вывеска, бордюр, «Приора»
+    sky("#6a5a78", "#c88a78", "#e8a878"); smoke(H * .2, .25);
+    R(W * .08, H * .2, W * .56, H * .42, "#c8b8a8"); R(W * .08, H * .2, W * .56, H * .06, "#2a5a3a");
+    c.fillStyle = "#f8f0e0"; c.font = "bold 8px sans-serif"; c.fillText("ВКУСНО — И ТОЧКА", W * .12, H * .245);
+    for (let i = 0; i < 4; i++) R(W * (.12 + i * .13), H * .32, W * .1, H * .14, "#f0d898");
+    R(W * .3, H * .48, W * .1, H * .14, "#5a4a3a");
+    R(0, H * .62, W, H * .38, "#5a5654"); for (let x = 0; x < W; x += 30) R(x, H * .8, 16, 2, "#e8e0c0");
+    R(0, H * .62, W, 3, "#9a9690");
+    R(W * .66, H * .6, W * .28, H * .1, "#2a2a30"); R(W * .7, H * .54, W * .18, H * .07, "#1a1a20"); R(W * .72, H * .55, W * .14, H * .05, "#3a3a48");
+    c.fillStyle = "#111"; c.beginPath(); c.arc(W * .72, H * .7, 6, 0, 7); c.arc(W * .89, H * .7, 6, 0, 7); c.fill(); R(W * .93, H * .62, 3, 3, "#f04030");
+  } else if (b === "cheb_plant") {         // заброшенный завод: кирпич, выбитые окна, прожекторы, толпа
+    R(0, 0, W, H, "#2a1c18"); for (let y = 0; y < H * .6; y += 6) for (let x = (y / 6 % 2) * 7; x < W; x += 14) R(x, y, 13, 5, "#3a2620");
+    for (let i = 0; i < 5; i++) { R(W * (.06 + i * .2), H * .08, W * .1, H * .2, "#1a1210"); R(W * (.06 + i * .2) + 3, H * .12, 4, 4, "#e8c890"); }
+    c.fillStyle = "#ffe8b022"; for (const [x, w] of [[.3, .15], [.6, .12]]) { c.beginPath(); c.moveTo(W * x, 0); c.lineTo(W * (x - w), H * .7); c.lineTo(W * (x + w), H * .7); c.fill(); }
+    R(W * .2, H * .44, W * .6, H * .06, "#1a1210"); for (let i = 0; i < 4; i++) R(W * (.28 + i * .14), H * .32, 4, H * .12, "#2a2a2a");
+    for (let i = 0; i < 40; i++) { const x = (i * 23) % W, y = H * .72 + (i % 4) * 5; c.fillStyle = "#120c0a"; c.beginPath(); c.arc(x, y, 7, 0, 7); c.fill(); R(x - 6, y + 4, 12, H, "#120c0a"); }
+    if ((Date.now() / 400 | 0) % 2) for (let i = 0; i < 6; i++) R((i * 47) % W, H * .7 - 18 - (i % 3) * 4, 3, 10, "#120c0a");
+  } else if (b === "cheb_yard") {          // свалка у затона, ржавый теплоход «Заря»
+    sky("#3a3048", "#8a6060", "#c88060"); smoke(H * .2, .3); for (let i = 0; i < 20; i++) R((i * 71) % W, (i * 13) % (H * .2), 1, 1, "#e8d8c8");
+    R(0, H * .6, W, H * .4, "#4a4038");
+    R(W * .14, H * .36, W * .72, H * .24, "#8a7a6a"); R(W * .14, H * .36, W * .72, 3, "#a89888"); R(W * .3, H * .22, W * .4, H * .14, "#9a8878");
+    for (let i = 0; i < 6; i++) R(W * (.32 + i * .06), H * .26, W * .04, H * .05, "#2a2220");
+    c.fillStyle = "#c8b8a8"; c.font = "bold 7px sans-serif"; c.fillText("ЗАРЯ", W * .18, H * .46);
+    for (let i = 0; i < 12; i++) R(W * .14 + i * W * .06, H * .4 + (i % 3) * 3, W * .03, 4, "#7a4a2a88");
+    for (let i = 0; i < 5; i++) { c.fillStyle = "#2a2420"; c.beginPath(); c.arc(W * (.08 + i * .21), H * .78 + (i % 2) * 5, 9, 0, 7); c.fill(); c.fillStyle = "#4a4038"; c.beginPath(); c.arc(W * (.08 + i * .21), H * .78 + (i % 2) * 5, 4, 0, 7); c.fill(); }
+    R(W * .76, H * .66, W * .2, H * .1, "#6a3a2a"); R(W * .78, H * .62, W * .12, H * .05, "#5a3020");
+  } else if (b === "cheb_fire") {          // крыша «Зари»: оранжевый горизонт, пепел, надпись
+    sky("#4a3040", "#c8604a", "#f0904a"); R(0, H * .5, W, H * .06, "#f8a040");
+    for (let i = 0; i < 18; i++) { c.fillStyle = "#1a1418"; c.beginPath(); c.moveTo((i * W) / 17 - 6, H * .56); c.lineTo((i * W) / 17, H * .44 - (i % 3) * 5); c.lineTo((i * W) / 17 + 6, H * .56); c.fill(); }
+    smoke(H * .32, .45); R(0, H * .56, W, H * .1, "#5a4048");
+    R(0, H * .66, W, H * .34, "#7a6a5a"); R(W * .5, H * .7, W * .45, H * .22, "#8a7a6a");
+    const t = Date.now() / 900; for (let i = 0; i < 26; i++) R((i * 53 + t * 9 * (1 + i % 3)) % W, (i * 31 + t * 14) % H, 2, 2, "#d8d0c8");
+    if (ST.tag) { c.fillStyle = "#f0f0f0"; c.font = "bold 8px sans-serif"; c.fillText(ST.tag, W * .52, H * .82); }
+  } else if (b === "cheb_train") {         // товарняк с брёвнами среди полей, дымное солнце
+    sky("#c88a68", "#e8b088", "#f0c8a0"); c.fillStyle = "#f8d8a0"; c.beginPath(); c.arc(W * .8, H * .3, 14, 0, 7); c.fill(); smoke(H * .25, .3);
+    R(0, H * .55, W, H * .45, "#a8a060"); for (let i = 0; i < 40; i++) R((i * 37) % W, H * .58 + (i * 7) % (H * .12), 2, 3, "#8a8a48");
+    R(0, H * .72, W, H * .28, "#5a4a3a"); R(0, H * .74, W, 2, "#2a2a2a");
+    for (let i = 0; i < 6; i++) { const y = H * .62 + (i % 3) * 5; c.fillStyle = "#8a6a4a"; c.fillRect(0, y, W, 5); c.fillStyle = "#6a4a2a"; for (let x = 0; x < W; x += 40) { c.beginPath(); c.arc(x + 20, y + 2.5, 2.5, 0, 7); c.fill(); } }
+    for (let x = 6; x < W; x += 50) R(x, H * .56, 3, H * .2, "#3a3a3a");
+  } else {                                  // cheb_kitchen: кухня на рассвете, чайник, окно с дымным солнцем
+    R(0, 0, W, H, "#d8c8a8"); for (let y = 0; y < H * .62; y += 10) for (let x = (y / 10 % 2) * 10; x < W; x += 20) R(x, y, 10, 10, "#e0d0b0");
+    R(W * .58, H * .1, W * .32, H * .36, "#f0c890"); c.fillStyle = "#f8e0a0"; c.beginPath(); c.arc(W * .74, H * .3, 10, 0, 7); c.fill(); R(W * .74 - 1, H * .1, 2, H * .36, "#a89070"); R(W * .58, H * .28, W * .32, 2, "#a89070");
+    R(0, H * .62, W, H * .38, "#9a7a5a"); R(W * .08, H * .55, W * .44, H * .08, "#c8b090"); R(W * .1, H * .63, 3, H * .2, "#8a6a4a"); R(W * .48, H * .63, 3, H * .2, "#8a6a4a");
+    R(W * .2, H * .5, 10, 6, "#d8d8d8"); R(W * .3, H * .52, 8, 3, "#f8f8f0"); R(W * .62, H * .56, W * .28, H * .06, "#a8a8a8"); R(W * .7, H * .5, 10, 7, "#c84030"); R(W * .72, H * .48, 6, 2, "#c84030");
+  }
+}
+const ST = { bt: 0, dad: "", tag: "" };   // «Дым над Волгой»: счёт словесной дуэли, что сделали с отцом, что написали на «Заре»
+
 // ---------- Локация: военный аэродром / блокпост — сетка, вышка, прожекторы, БТР, ряды грузовиков ----------
 function drawMilbase() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
@@ -1509,7 +1581,11 @@ const music = {
     club:       { kind: "club", bpm: 140, prog: "club", f: 2600, vol: 1, lfo: 120 },
     // «Пепел»: мюзет-вальс на аккордеоне; в кабаре — галоп
     paris:      { kind: "paris", bpm: 160, prog: "paris", f: 3000, vol: 1, lfo: 0 },
-    cancan:     { kind: "paris", bpm: 172, prog: "paris", galop: true, f: 3400, vol: 1, lfo: 0 }
+    cancan:     { kind: "paris", bpm: 172, prog: "paris", galop: true, f: 3400, vol: 1, lfo: 0 },
+    // «Дым над Волгой»: гитарный перебор; концерт — с барабанами; грусть — минор и дождь
+    folk:       { kind: "folk", bpm: 88, prog: "folk", f: 3000, vol: 1, lfo: 0 },
+    folk_rock:  { kind: "folk", bpm: 124, prog: "folk", rock: true, f: 3400, vol: 1, lfo: 0 },
+    folk_storm: { kind: "folk", bpm: 72, prog: "folkm", rain: true, f: 1900, vol: 1, lfo: 0 }
   },
   // Аккорды: «королевская» последовательность аниме (IV–V–iii–vi), грустная и тревожная
   progs: {
@@ -1531,6 +1607,10 @@ const music = {
       mel: [[659.3, 0, 0, 0, 523.3, 0, 0, 0], [0, 0, 587.3, 0, 0, 0, 493.9, 0], [523.3, 0, 0, 0, 0, 0, 440, 0], [0, 0, 0, 0, 415.3, 0, 0, 0]] },
     club:   { ch: [[220, 261.6, 329.6, 392], [174.6, 220, 261.6, 329.6], [196, 233.1, 293.7, 349.2], [164.8, 207.7, 246.9, 293.7]], bass: [55, 43.7, 49, 41.2],   // Am7 Fmaj7 Gm7 E7
       mel: [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]] },
+    folk:   { ch: [[196, 246.9, 293.7], [146.8, 185, 220], [164.8, 196, 246.9], [130.8, 164.8, 196]], bass: [98, 73.4, 82.4, 65.4],   // G D Em C
+      mel: [[0, 0, 0, 0, 0, 0, 0, 0], [587.3, 0, 659.3, 0, 587.3, 0, 493.9, 0], [0, 0, 0, 0, 0, 0, 0, 0], [523.3, 0, 493.9, 0, 392, 0, 0, 0]] },
+    folkm:  { ch: [[164.8, 196, 246.9], [130.8, 164.8, 196], [196, 246.9, 293.7], [146.8, 185, 220]], bass: [82.4, 65.4, 98, 73.4],   // Em C G D
+      mel: [[0, 0, 0, 0, 0, 0, 0, 0], [493.9, 0, 0, 0, 392, 0, 329.6, 0], [0, 0, 0, 0, 0, 0, 0, 0], [440, 0, 370, 0, 293.7, 0, 0, 0]] },
     paris:  { ch: [[220, 261.6, 329.6, 392], [146.8, 174.6, 220, 261.6], [164.8, 207.7, 246.9, 293.7], [220, 261.6, 329.6, 392]], bass: [110, 73.4, 82.4, 110],   // Am7 Dm7 E7 Am7
       walk: [[110, 130.8, 164.8, 196], [73.4, 87.3, 110, 130.8], [82.4, 103.8, 123.5, 146.8], [110, 98, 87.3, 82.4]],
       mel: [[659.3, 0, 0, 587.3, 523.3, 0, 493.9, 0], [523.3, 0, 440, 0, 0, 0, 349.2, 392], [415.3, 0, 0, 493.9, 587.3, 0, 523.3, 0], [440, 0, 0, 0, 0, 0, 0, 0]] },
@@ -1743,6 +1823,33 @@ const music = {
     bass: [110, 82.4, 110, 82.4],
     mel: [[880, 0, 1108.7, 0, 1318.5, 1108.7, 880, 0], [987.8, 0, 1174.7, 0, 1318.5, 1174.7, 987.8, 0],
           [1108.7, 1318.5, 1760, 1318.5, 1108.7, 1318.5, 1760, 0], [1661.2, 1480, 1318.5, 1174.7, 1108.7, 987.8, 880, 0]]
+  },
+  // «Дым над Волгой»: инди-фолк — гитарный перебор, мягкий шейкер; на концерте — бочка и малый, в грусти — минор и дождь
+  folkStep(s, bar, t, P, m) {
+    const ch = P.ch[bar], r = P.bass[bar];
+    if (s === 0 || s === 8) this.pluck(t, r, 1.6, .09);                                   // бас пальцем
+    const pick = [0, 2, 1, 2, 0, 2, 1, 2][s / 2];                                         // перебор восьмыми
+    if (s % 2 === 0 && s !== 0 && s !== 8) this.pluck(t, ch[pick] * 2, .9, .045);
+    if (s % 4 === 2) this.noiseHit(t, "highpass", 7000, .03, .05);                        // шейкер
+    if (bar % 2 === 1 && s % 4 === 0) { const f = P.mel[bar][s / 2]; if (f) this.pluck(t, f, 1.2, .05); }
+    if (m.rock) {
+      if (s === 0 || s === 8 || s === 10) this.kick(t, .6);
+      if (s === 4 || s === 12) this.noiseHit(t, "bandpass", 1800, .26, .12);
+      if (s % 2 === 0) this.hat(t, .05, .03);
+      if (s === 0 || s === 6 || s === 12) for (let i = 0; i < 3; i++) this.pluck(t + i * .012, ch[i] * 2, .4, .03);   // бой
+    }
+    if (m.rain && s === 0) this.noiseHit(t, "lowpass", 1200, .05, 16 * 60 / m.bpm / 4);
+  },
+  // щипок струны: пила + треугольник через фильтр, который быстро закрывается
+  pluck(t, f, dec, v) {
+    const lp = this.ac.createBiquadFilter(), g = this.ac.createGain();
+    lp.type = "lowpass"; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(500, t + dec * .5);
+    g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.0001, t + dec);
+    for (const [type, k, dt] of [["sawtooth", .5, 3], ["triangle", 1, -3]]) {
+      const o = this.ac.createOscillator(), og = this.ac.createGain(); o.type = type; o.frequency.value = f; o.detune.value = dt; og.gain.value = k;
+      o.connect(og); og.connect(lp); o.start(t); o.stop(t + dec + .05);
+    }
+    lp.connect(g); g.connect(this.filt);
   },
   // «Сахар»: трэп в половинном темпе — 808 с глайдом, хэты с дробями, рим, тягучий пэд
   clubStep(s, bar, t, P, m) {
@@ -3424,6 +3531,296 @@ const scenes = {
     ending: "Пепел · концовка «Ломка»",
     choices: () => [
       { icon: "rewind", t: "Начать заново", sub: "Курить вовремя. Но не слишком часто", go: "pa_start", reset: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  // ===== Эксперимент «Дым над Волгой»: Чебоксары, лето 2023, за год до переезда Егора. Тёплая выцветшая картинка, гитара =====
+  st_start: {
+    bg: "cheb", place: "Чебоксары · вокзал · июль 2023", egor: true, lis: true, music: "folk",
+    linesFn: () => { ST.bt = 0; ST.dad = ""; ST.tag = ""; return [
+      { skip: "Дым над Волгой" },
+      { who: null, t: "Чебоксары. Июль. Двенадцать часов в плацкарте, и вот я тут. За Волгой третью неделю горит лес, и всё небо — цвета старой фотографии." },
+      { who: "", t: "Мы с Егором два года знакомы по Halo. Голос в наушниках, ник, шутки в три ночи. Вживую — первый раз." },
+      { who: null, t: "Он стоит на перроне в чёрной толстовке с капюшоном, хотя на улице тридцать. Худой, злой, прекрасный." },
+      { who: "Егор", t: "Ну здарова, москвич. Ты в жизни ещё больше похож на свою аватарку. Это не комплимент." }
+    ]; },
+    choices: () => [
+      { icon: "soul", t: "Обнять его", sub: "Два года ждал", go: "st_walk", rem: "Егор это запомнит.", act: () => known.add("st_hug") },
+      { icon: "let", t: "Пожать руку", sub: "По-мужски", go: "st_walk" },
+      { icon: "talk", t: "«А ты в жизни ниже»", sub: "Подколоть", go: "st_walk", rem: "Егор это запомнит." }
+    ]
+  },
+  st_walk: {
+    bg: "cheb", place: "Набережная Волги", egor: true, lis: true, music: "folk",
+    linesFn: () => [
+      known.has("st_hug") ? { who: null, t: "Он сначала застывает, потом хлопает меня по спине. Три раза. Как будто проверяет, настоящий ли я." }
+                          : { who: null, t: "Мы идём вдоль Волги. Вода серая, на том берегу дымит. Пахнет гарью и черёмухой, хотя черёмуха давно отцвела." },
+      { who: "Егор", t: "Мать на смене до утра. Отец… отца нет. Ну, он есть, но не тут. В Казани. С новой семьёй. Не спрашивай." },
+      { who: "Егор", t: "Короче. План: жрать, потом вечером концерт на заброшенном заводе. «Пожарная тревога» играют. Вход по паспорту, нам не продадут. Но мы что-нибудь придумаем." },
+      { who: "", t: "Он говорит «мы» так, будто мы всю жизнь тут вдвоём." }
+    ],
+    choices: () => [
+      { icon: "party", t: "«Пошли жрать»", sub: "«Вкусно — и точка» у вокзала", go: "st_vkusno" },
+      { icon: "talk", t: "«Почему не спрашивать про отца?»", sub: "Всё равно спросить", go: "st_dadtalk", rem: "Егор это запомнит." }
+    ]
+  },
+  st_dadtalk: {
+    bg: "cheb", place: "Набережная Волги", egor: true, lis: true, music: "folk_storm", learn: "st_dad", next: "st_vkusno",
+    lines: [
+      { who: "Егор", t: "Потому что я, блять, просил не спрашивать." },
+      { who: null, t: "Он долго молчит. Кидает камень в воду. Тот не прыгает, просто тонет." },
+      { who: "Егор", t: "Он звукорежиссёр. Ставил звук на всех концертах в городе. Ушёл, когда мне было пятнадцать. Сказал — «так будет лучше для всех». Для всех — это для него." },
+      { who: "Егор", t: "Всё. Пошли жрать. Я злой, когда голодный. И когда не голодный тоже." }
+    ]
+  },
+  st_vkusno: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk",
+    lines: [
+      { who: null, t: "Парковка у «Вкусно — и точка». Мы сидим на бордюре, жрём картошку. Мимо проезжает тонированная «Приора», музыка из неё бьёт в асфальт." },
+      { who: null, t: "«Приора» тормозит. Из неё вылезают трое. Главный — лысый, в спортивках, с цепочкой. Егор шепчет: «Дима Шуруп. Учились вместе. Он мне в восьмом классе нос сломал»." },
+      { who: "Шуруп", t: "О-о, Егорка. Ещё живой? А это кто с тобой, москвич, что ли? По кроссовкам видно." },
+      { who: "", t: "Можно отвечать. Можно бить. Можно попробовать переговорить его — ловить на его же словах." }
+    ],
+    choices: () => [
+      { icon: "talk", t: "Переговорить Шурупа", sub: "Словесная дуэль: найди слабое место в его фразе", go: "st_bt1", act: () => { ST.bt = 0; } },
+      { icon: "fight", t: "Сразу бить", sub: "Егор давно этого ждал", go: "st_fight" }
+    ]
+  },
+  st_bt1: {
+    bg: "cheb_vkusno", place: "Дуэль · раунд 1 из 3", egor: true, lis: true, music: "folk_rock",
+    lines: [{ who: "Шуруп", t: "Москвич, ты чё сюда приехал? У нас тут не Москва. У нас тут люди нормальные, без понтов." }],
+    choices: () => [
+      { icon: "spark", t: "«Без понтов? А цепочка у тебя из чего, из скрепки?»", sub: "Поймать на «без понтов»", go: "st_bt2", act: () => ST.bt++ },
+      { icon: "let", t: "«Я в гости приехал»", sub: "Спокойно", go: "st_bt2" },
+      { icon: "stop", t: "«Тебе какое дело?»", sub: "Огрызнуться", go: "st_bt2" }
+    ]
+  },
+  st_bt2: {
+    bg: "cheb_vkusno", place: "Дуэль · раунд 2 из 3", egor: true, lis: true, music: "folk_rock",
+    linesFn: () => [
+      ST.bt ? { who: null, t: "Двое за спиной Шурупа хмыкают. Шуруп краснеет до цепочки." } : { who: null, t: "Шуруп скалится. Его друзья подходят ближе." },
+      { who: "Шуруп", t: "Ты чё такой смелый? Егорка тебя защитит, что ли? Он в восьмом классе от меня плакал." }
+    ],
+    choices: () => [
+      { icon: "let", t: "«Мы не хотим проблем»", sub: "Отступить", go: "st_bt3" },
+      { icon: "spark", t: "«В восьмом классе? Тебе восемнадцать, Дима, а ты всё ещё помнишь восьмой класс. Это у тебя лучшее, что было?»", sub: "Поймать на «восьмом классе»", go: "st_bt3", act: () => ST.bt++ },
+      { icon: "stop", t: "«Сам ты плакал»", sub: "Как в школе", go: "st_bt3" }
+    ]
+  },
+  st_bt3: {
+    bg: "cheb_vkusno", place: "Дуэль · раунд 3 из 3", egor: true, lis: true, music: "folk_rock",
+    linesFn: () => [
+      ST.bt >= 2 ? { who: null, t: "Один из друзей Шурупа уже откровенно ржёт. Шуруп оборачивается на него, и это ошибка." } : { who: null, t: "Шуруп чувствует, что прав. Он делает шаг вперёд." },
+      { who: "Шуруп", t: "Слышь, умный. В Чебоксарах за базар отвечают. Ты за свой базар ответишь?" }
+    ],
+    choices: () => [
+      { icon: "spark", t: "«Отвечу. Видишь камеру над входом? Она тоже ответит. Участковому. А твоя „Приора“ без номеров»", sub: "Поймать на «ответишь»", go: "st_bt_end", act: () => ST.bt++ },
+      { icon: "fight", t: "«Отвечу кулаком»", sub: "Дуэль окончена", go: "st_bt_end" },
+      { icon: "let", t: "«Ладно, извини»", sub: "Сдаться", go: "st_bt_end" }
+    ]
+  },
+  st_bt_end: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk",
+    nextFn: () => ST.bt >= 2 ? "st_bt_win" : "st_fight",
+    linesFn: () => [{ who: null, t: ST.bt >= 2 ? `Счёт дуэли: ${ST.bt} из 3. Шуруп открывает рот, закрывает. Открывает снова.` : `Счёт дуэли: ${ST.bt} из 3. Слова кончились. Шуруп снимает цепочку и наматывает на кулак.` }]
+  },
+  st_bt_win: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_words", next: "st_plant",
+    lines: [
+      { who: "Шуруп", t: "…Да пошли вы. Москвич, блять. Ещё увидимся." },
+      { who: null, t: "«Приора» уезжает. Музыка из неё затихает за поворотом. Егор смотрит на меня, как будто я только что прошёл Legendary без смертей." },
+      { who: "Егор", t: "Ты его словами уебал. Словами, Глеб. Я пять лет мечтал. Я думал, это можно только кулаком." },
+      { who: "Глеб", t: "Кулаком тоже можно. Но так он запомнит дольше." }
+    ]
+  },
+  st_fight: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» · драка", egor: true, lis: true, music: "folk_rock",
+    lines: [
+      { who: "Егор", t: "Всё, Шуруп. Восьмой класс кончился." },
+      { fx: "punch", who: null, t: "Егор бьёт первым. Картошка разлетается по парковке. Охранник «Вкусно — и точка» выходит, смотрит и заходит обратно." },
+      { battle: "melee", me: "Егор", foe: "Дима Шуруп", hp: 60, tip: "Егор дерётся за восьмой класс. «УДАР» — бить, когда Шуруп замахнётся — «БЛОК»!", lost: "Егор на асфальте…", win: "st_fight_win", lose: "st_fight_lose" }
+    ]
+  },
+  st_fight_win: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk", learn: "st_fist", next: "st_plant",
+    lines: [
+      { who: null, t: "Шуруп сидит на асфальте и держится за нос. Как Егор пять лет назад. Круг замкнулся." },
+      { who: "Егор", t: "Я думал, мне станет легче. Мне не стало. Но и хуже не стало. Пошли отсюда." },
+      { who: null, t: "Костяшки у него разбиты. Я отдаю ему салфетку из пакета. Он заматывает руку, как боксёр, и почему-то улыбается." }
+    ]
+  },
+  st_fight_lose: {
+    bg: "cheb_vkusno", place: "«Вкусно — и точка» у вокзала", egor: true, lis: true, music: "folk_storm", learn: "st_fist", next: "st_plant",
+    lines: [
+      { who: null, t: "Мы лежим на асфальте, «Приора» уезжает. У Егора разбита губа, у меня — гордость и кроссовки." },
+      { who: "Егор", t: "Ну. Зато мы попробовали. В восьмом классе я даже не пробовал." },
+      { who: null, t: "Мы смеёмся. Больно смеяться, а мы всё равно смеёмся. Девушка с кассы выносит нам лёд в стаканчике из-под колы." }
+    ]
+  },
+  st_plant: {
+    bg: "cheb_plant", place: "Заброшенный завод «Контур» · вечер", egor: true, lis: true, music: "folk_rock",
+    lines: [
+      { skip: "Вечер" },
+      { who: null, t: "Завод «Контур». Окна выбиты, внутри свет прожекторов, гремит гитара. На входе — вышибала. Но Егор знает дыру в заборе. Он знает тут все дыры." },
+      { who: null, t: "Внутри триста человек, жара, пыль в лучах. На сцене «Пожарная тревога» орут про то, что город горит. Город правда горит, за рекой." },
+      { who: "Егор", t: "Глеб. Пульт звука. Видишь, кто стоит за пультом?" },
+      { who: null, t: "Мужчина лет пятидесяти, в наушниках, седая борода. Такой же нос, как у Егора. Такие же злые брови." },
+      { who: "Егор", t: "Это он. Отец. Он, блять, тут. В Чебоксарах. И мне не позвонил." }
+    ],
+    choices: () => [
+      { icon: "go", t: "«Пойдём к нему»", sub: "Поговорить", go: "st_dad", rem: "Егор это запомнит.", act: () => { ST.dad = "talk"; } },
+      { icon: "fight", t: "«Хочешь — разнесём ему пульт»", sub: "Месть", go: "st_dad", act: () => { ST.dad = "rage"; } },
+      { icon: "soul", t: "«Пошли отсюда. Не порти себе вечер»", sub: "Увести Егора", go: "st_yard", act: () => { ST.dad = "leave"; } }
+    ]
+  },
+  st_dad: {
+    bg: "cheb_plant", place: "Завод «Контур» · пульт", egor: true, lis: true, music: "folk_storm",
+    linesFn: () => ST.dad === "rage" ? [
+      { who: null, t: "Егор идёт к пульту. Я иду за ним. Он хватает провод и выдёргивает. Звук обрывается на полуслове. Триста человек оборачиваются." },
+      { who: "Отец Егора", t: "…Егор?" },
+      { who: "Егор", t: "Удивлён? Я тоже. Ты в моём городе. Без звонка. Без звука. Как тебе без звука, папа?" },
+      { who: null, t: "Отец молчит. Потом медленно втыкает провод обратно. Музыка возвращается. Он смотрит не на Егора — на свои руки." },
+      { who: "Отец Егора", t: "Я хотел позвонить. Я каждый раз хочу позвонить." },
+      { who: "Егор", t: "Хотеть — это не звонить." }
+    ] : [
+      { who: null, t: "Мы подходим к пульту. Отец снимает наушники. Видит Егора. Лицо у него сначала радостное, потом виноватое, потом пустое." },
+      { who: "Отец Егора", t: "Егор. Ты вырос." },
+      { who: "Егор", t: "Да. Это бывает с детьми, если не смотреть на них три года." },
+      { who: "Отец Егора", t: "Я знаю. Я… у меня там дочка. Ей два. Я не знал, как тебе сказать." },
+      { who: null, t: "Егор молчит. Я вижу, как у него дрожит челюсть. Он не плачет. Он слишком злой, чтобы плакать." },
+      { who: "Егор", t: "Ты мог сказать «привет». Это два слога. Ты звукорежиссёр, ты знаешь, как звучат два слога." }
+    ],
+    choices: () => [
+      { icon: "soul", t: "Положить руку Егору на плечо", sub: "Ничего не говорить", go: "st_yard", rem: "Егор это запомнит.", act: () => known.add("st_hand") },
+      { icon: "talk", t: "«Дайте ему свой номер»", sub: "Сказать отцу", go: "st_yard", act: () => known.add("st_number") },
+      { icon: "go", t: "Увести Егора", sub: "Хватит", go: "st_yard" }
+    ]
+  },
+  st_yard: {
+    bg: "cheb_yard", place: "Свалка у реки · старый теплоход «Заря»", egor: true, lis: true, music: "folk_storm",
+    linesFn: () => [
+      { skip: "Ночь" },
+      { who: null, t: known.has("st_number") ? "Отец написал номер на билете. Егор не выкинул билет. Он не смотрел на него всю дорогу, но держал в кулаке." : "Мы уходим с концерта, не дослушав. Идём через пустырь, через железку, к реке." },
+      { who: null, t: "Свалка у затона. Среди ржавых машин стоит старый речной теплоход «Заря». Без двигателя, без окон. Егор забирается в него, как домой." },
+      { who: "Егор", t: "Это моё место. Тут никого не бывает. Кроме меня. Теперь — кроме нас. Осмотрись, если хочешь." }
+    ],
+    explore: [
+      { label: "Фотография на стене", x: 22, y: 34, px: 26, py: 30, go: "st_x_photo" },
+      { label: "Кассетный магнитофон", x: 50, y: 62, px: 50, py: 56, go: "st_x_tape" },
+      { label: "Тетрадь Егора", x: 78, y: 40, px: 74, py: 44, go: "st_x_book" },
+      { label: "Конверт под матрасом", x: 64, y: 72, px: 66, py: 70, go: "st_x_letter" }
+    ],
+    exploreGo: "st_fire", exploreTip: "Осмотрись в «Заре»: нажимай на вещи", exploreBtn: "Залезть на крышу →"
+  },
+  st_x_photo: {
+    bg: "cheb_yard", place: "«Заря» · фотография", egor: true, lis: true, music: "folk_storm", next: "st_yard",
+    lines: [
+      { who: null, t: "Полароид, выцветший до голубого. Мальчик лет семи держит огромного леща. Рядом мужчина с бородой смеётся, запрокинув голову." },
+      { who: "Егор", t: "Это мы на Волге. Единственный раз, когда он взял меня на рыбалку. Лещ был три кило. Я до сих пор помню, как он пах." },
+      { who: "Егор", t: "Не знаю, зачем я её тут повесил. Чтобы злиться, наверное. Злиться проще, чем скучать." }
+    ]
+  },
+  st_x_tape: {
+    bg: "cheb_yard", place: "«Заря» · магнитофон", egor: true, lis: true, music: "folk", next: "st_yard",
+    lines: [
+      { who: null, t: "Старый «Романтик» на батарейках. Я нажимаю «play». Хрипит гитара, кто-то поёт по-чувашски. Тихо, как будто из соседнего века." },
+      { who: "Егор", t: "Это бабушка. Пела, когда я маленький был. Я записал её на диктофон, а потом переписал на кассету. Чтобы звучало как надо. Тёплое." },
+      { who: "", t: "Мы сидим и слушаем. За бортом шуршит река. Я ни разу в жизни не слышал ничего настолько тихого и настолько громкого одновременно." }
+    ]
+  },
+  st_x_book: {
+    bg: "cheb_yard", place: "«Заря» · тетрадь", egor: true, lis: true, music: "folk", next: "st_yard",
+    lines: [
+      { who: null, t: "Тетрадь в клетку. На каждой странице — спартанец из Halo. Шлем, броня, но вместо оружия — то гитара, то удочка, то мама с пакетами из «Пятёрочки»." },
+      { who: null, t: "На последней странице два спартанца сидят на крыше. Над одним написано «Е», над другим — «Г»." },
+      { who: "Егор", t: "Не смотри. Это… это я давно рисовал. Неделю назад." }
+    ]
+  },
+  st_x_letter: {
+    bg: "cheb_yard", place: "«Заря» · конверт", egor: true, lis: true, music: "folk_storm", learn: "st_letter", next: "st_yard",
+    lines: [
+      { who: null, t: "Конверт с печатью московского колледжа. «Уважаемый Егор… вы зачислены… начало занятий — 1 сентября 2024 года»." },
+      { who: "Глеб", t: "Егор. Тебя взяли в Москву. Ты молчал?" },
+      { who: "Егор", t: "А кому говорить? Мать одна. Если я уеду, она будет одна по-настоящему. Я не могу. Я спрятал его, чтобы не думать." },
+      { who: "Егор", t: "Каждый вечер достаю и думаю." }
+    ]
+  },
+  st_fire: {
+    bg: "cheb_fire", place: "Крыша «Зари» · 3:00", egor: true, lis: true, music: "folk_storm",
+    lines: [
+      { who: null, t: "Мы залезаем на крышу теплохода. Ветер сменился. Огонь за рекой теперь видно — длинная оранжевая полоса, как будто кто-то поджёг горизонт." },
+      { who: null, t: "С неба падает пепел. Мягкий, серый, как снег в неправильном месяце. Он ложится Егору на волосы, и тот не стряхивает." },
+      { who: "Егор", t: "Как будто весь мир горит, а мы сидим. И ничего не можем сделать. Только смотреть." },
+      { who: "Глеб", t: "Можем написать что-нибудь. Чтобы осталось." },
+      { who: null, t: "У Егора в рюкзаке баллончик с краской. Конечно, у него есть баллончик. Он протягивает его мне." }
+    ],
+    choices: () => [
+      { icon: "write", t: "«ЗДЕСЬ БЫЛИ МЫ»", sub: "Просто и навсегда", go: "st_tag", act: () => { ST.tag = "ЗДЕСЬ БЫЛИ МЫ"; } },
+      { icon: "write", t: "«Е + МОСКВА»", sub: "Подтолкнуть его", go: "st_tag", rem: "Егор это запомнит.", act: () => { ST.tag = "Е + МОСКВА"; } },
+      { icon: "write", t: "«ГОРИТ — ЗНАЧИТ ЖИВОЕ»", sub: "Про пожар. И не только", go: "st_tag", act: () => { ST.tag = "ГОРИТ — ЗНАЧИТ ЖИВОЕ"; } }
+    ]
+  },
+  st_tag: {
+    bg: "cheb_fire", place: "Крыша «Зари» · рассвет", egor: true, lis: true, music: "folk",
+    linesFn: () => [
+      { who: null, t: `Я пишу на ржавой рубке, большими буквами, кривыми от ветра: «${ST.tag}». Краска стекает, как будто буквы плачут. Нормально. Так и надо.` },
+      { who: "Егор", t: ST.tag === "Е + МОСКВА" ? "…Ты хитрый. Ты очень хитрый, Глеб. Я теперь буду на это смотреть каждый вечер." : ST.tag === "ЗДЕСЬ БЫЛИ МЫ" ? "Были. Правда были. Даже если всё сгорит — это уже было." : "Горит — значит живое. Ну да. Я, значит, очень живой." },
+      { who: null, t: "Начинает светать. Сквозь дым солнце красное и плоское, на него можно смотреть, не щурясь. Внизу по путям ползёт товарняк. Медленно, на Москву." },
+      { who: "Егор", t: "Глеб. Если я сейчас запрыгну на этот поезд — ты со мной?" }
+    ],
+    choices: () => {
+      const cs = [{ icon: "go", t: "«Запрыгиваем»", sub: "Прямо сейчас. Без вещей", go: "st_end_train" }];
+      if (known.has("st_letter")) cs.unshift({ icon: "soul", t: "«Сначала — к маме. Покажи ей письмо»", sub: "Ты знаешь про конверт", go: "st_end_mom", cls: "new" });
+      cs.push({ icon: "let", t: "«Нет. Оставайся. Ей ты нужнее»", sub: "Честно", go: "st_end_stay" });
+      return cs;
+    }
+  },
+  st_end_train: {
+    bg: "cheb_train", place: "Товарняк на запад · 5:40", egor: true, lis: true, music: "folk_rock",
+    lines: [
+      { who: null, t: "Мы бежим по насыпи. Егор запрыгивает первым и протягивает руку. Я цепляюсь за неё, и меня тянет вверх, на платформу с лесом." },
+      { who: null, t: "Мы едем на брёвнах. Ветер, дым, солнце. Егор орёт песню «Пожарной тревоги», не зная слов. Я тоже не знаю. Мы орём вместе." },
+      { who: null, t: "Через час у Егора звонит телефон. «Мама». Он смотрит на экран. Сбрасывает. Через пять минут — снова. Четырнадцать пропущенных к Канашу." },
+      { who: "Егор", t: "Я ей позвоню. Из Москвы. Когда будет что сказать." },
+      { who: "", t: "Это самый счастливый и самый неправильный день в его жизни. Я знаю, потому что он держит телефон экраном вниз и не отпускает." }
+    ],
+    ending: "Дым над Волгой · концовка «Товарняк»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать на крышу", sub: "Решить иначе", go: "st_tag", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  st_end_mom: {
+    bg: "cheb_kitchen", place: "Кухня · 7:15", egor: true, lis: true, music: "folk",
+    linesFn: () => [
+      { who: null, t: "Мама Егора приходит со смены в семь. Пахнет больницей и хлоркой. На кухне двое помятых пацанов в пепле и конверт на столе." },
+      { who: "Мама Егора", t: "Это что?" },
+      { who: "Егор", t: "Меня взяли. В Москву. С сентября двадцать четвёртого. Я не поеду. Я просто хотел, чтобы ты знала." },
+      { who: null, t: "Она читает письмо. Дважды. Потом садится. Потом встаёт и ставит чайник, потому что больше не знает, что делать руками." },
+      { who: "Мама Егора", t: "Поедешь. Ещё как поедешь. Ты думаешь, я тебя растила, чтобы ты тут на свалке сидел? Я знаю про свалку, Егор. Я всё знаю." },
+      { who: "Мама Егора", t: "Только звони. Не как отец. Звони." },
+      { who: null, t: "Егор плачет. Первый раз за всю ночь. Как будто всё, что горело за рекой, наконец догорело." },
+      ...(known.has("st_hand") || known.has("st_hug") ? [{ who: "Егор", t: "Глеб. Спасибо, что приехал. Ты не представляешь. Ты, блять, не представляешь." }] : []),
+      { who: "", t: "Через год он переедет. В Москве у него почти никого не будет, кроме меня. Но это уже другая история. Она начинается в Powerhouse." }
+    ],
+    ending: "Дым над Волгой · концовка «Мама»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать на крышу", sub: "Решить иначе", go: "st_tag", rewind: true, cls: "rewind" },
+      { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
+    ]
+  },
+  st_end_stay: {
+    bg: "cheb", place: "Вокзал · вечер", egor: true, lis: true, music: "folk_storm",
+    linesFn: () => [
+      { who: null, t: "Я уезжаю вечерним поездом. Егор провожает. Стоит на перроне в той же толстовке, хотя тридцать." },
+      { who: "Егор", t: "Ты прав. Ей я нужнее. Наверное. Я не знаю, Глеб. Я не знаю, кому я нужнее." },
+      { who: "Глеб", t: "Мне тоже. Просто я подожду." },
+      { who: null, t: `Поезд трогается. Последнее, что я вижу, — ржавая рубка «Зари» за путями и белые буквы на ней: «${ST.tag || "ЗДЕСЬ БЫЛИ МЫ"}».` },
+      { tg: "я всё равно приеду. не знаю когда. но приеду", time: "23:48", chat: "Егор", sayWho: null, sayText: "Он приедет через год. С одним рюкзаком и без предупреждения. Как всегда." }
+    ],
+    ending: "Дым над Волгой · концовка «Перрон»",
+    choices: () => [
+      { icon: "rewind", t: "Перемотать на крышу", sub: "Решить иначе", go: "st_tag", rewind: true, cls: "rewind" },
       { icon: "again", t: "В главное меню", sub: "", menu: true, go: "" }
     ]
   },
@@ -5596,7 +5993,8 @@ const MEM = { text: "что написал Егор", voice: "драка кон�
 const PA = { drink: 0, smoke: 0, crave: 0, vodka: 0, q: new Set(), loc: new Set(), askIntro: false, cityIntro: false, ret: false, back: "pa_hotel" };   // «Пепел»: сколько выпито и выкурено, куда вернуться
 Object.assign(MEM, { pa_why: "Ален знает про перемотку", pa_age: "Алену восемьдесят один год", pa_brand: "клеймо «14.06.1940» на спине Алена", pa_stairs: "отца Алена расстреляли в 1946-м",
   pa_father: "сюжет фильма Сергею рассказал Ален", pa_box: "коробка с волосами и запиской", pa_petya: "Петя ждёт звонка", pa_egor: "Егор плакал в катакомбах", pa_egor_out: "Егор уснул на лестнице",
-  pa_plea: "Ален просит остановить фильм", pa_louvre: "отец Алена составлял списки для немцев", pa_misha: "Ален каждую ночь пьёт за отца у Миши" });
+  pa_plea: "Ален просит остановить фильм",
+  st_dad: "отец Егора — звукорежиссёр, ушёл три года назад", st_words: "Шурупа победили словами", st_fist: "Егор подрался с Шурупом у «Вкусно — и точка»", st_letter: "Егора взяли в московский колледж", st_hug: "Глеб обнял Егора на вокзале", st_hand: "рука на плече у пульта", st_number: "отец дал свой номер", pa_louvre: "отец Алена составлял списки для немцев", pa_misha: "Ален каждую ночь пьёт за отца у Миши" });
 // ---------- «Пепел»: здоровье и тяга. Лёгкие темнеют от сигарет, печень желтеет от вина, без затяжки — ломка ----------
 const PA_WITHDRAW = [
   { who: "", t: "Руки трясутся. Я ловлю себя на том, что третий раз проверяю карман с пачкой." },
@@ -5690,13 +6088,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10282011`, talk: `img/${n}_talk.png?v=10282011`, blink: `img/${n}_blink.png?v=10282011` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10282044`, talk: `img/${n}_talk.png?v=10282044`, blink: `img/${n}_blink.png?v=10282044` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282011" : `img/${n}_spartan.png?v=10282011`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10282044" : `img/${n}_spartan.png?v=10282044`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -5725,7 +6123,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo", "Гитлер": "npc_ghost"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282011`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282044`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -5734,7 +6132,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282011`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10282044`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged", "ghost");
   if (!cls && (who === "Гитлер" || n === "npc_ghost")) cls = "ghost";   // призрак всегда полупрозрачный
@@ -5998,6 +6396,8 @@ function clearIdle() { clearTimeout(idleT); idleT = null; }
 const exSeen = new Set();
 function showExplore() {
   $("box").style.display = "none";
+  $("exTip").textContent = scene.exploreTip || "Пройдись по бару: нажимай на людей";
+  $("exGo").textContent = scene.exploreBtn || "Сесть за стойку и ждать Егора →";
   $("phone").classList.remove("on");
   const portrait = innerHeight > innerWidth;
   $("exSpots").innerHTML = "";
@@ -6014,6 +6414,8 @@ function showExplore() {
 }
 
 let curId = "";
+// плашка «Егор это запомнит» после важного выбора
+function toast(text) { const el = $("toast"); el.textContent = text; el.classList.remove("on"); void el.offsetWidth; el.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("on"), 2800); }
 function show(id) {
   // «Пепел»: слишком долго без сигареты — срыв
   if (id.startsWith("pa_") && PA.crave >= 7 && !scenes[id].ending && !["pa_smoke", "pa_drink", "pa_vodka", "pa_start", "pa_crave_fix"].includes(id)) { PA.after = id; id = "pa_crave_fix"; }
@@ -6032,6 +6434,7 @@ function show(id) {
   $("stage").classList.toggle("inferno", !!scene.inferno);
   $("stage").classList.toggle("soulless", !!scene.soulless);
   $("stage").classList.toggle("noir", !!scene.noir);
+  $("stage").classList.toggle("lis", !!scene.lis);
   if (scene.manaStart !== undefined) mana = scene.manaStart;
   $("stage").classList.remove("frozen");
   svApply(scene);
@@ -6047,7 +6450,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10282011) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10282044) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -6192,6 +6595,8 @@ function choose(c) {
   if (c.loopReset) loopDay = 1;
   if (c.style) music.setStyle(c.style);
   if (c.phone) return openGPhone(c.go);
+  if (c.act) c.act();
+  if (c.rem) toast(c.rem);
   if (c.reset) { known.clear(); timeline = []; }
   if (!c.rewind) return show(c.go);
   rewindTo = c.tlIndex !== undefined ? c.tlIndex : -1;
@@ -6330,6 +6735,11 @@ $("mS").onclick = e => {
   e.stopPropagation();
   try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
   known.clear(); timeline = []; $("title").classList.add("gone"); music.start(); show("su_ride");
+};
+$("mSt").onclick = e => {
+  e.stopPropagation();
+  try { localStorage.removeItem(SAVE_KEY); } catch (er) {}
+  known.clear(); timeline = []; exSeen.clear(); $("title").classList.add("gone"); music.start(); show("st_start");
 };
 $("mPa").onclick = e => {
   e.stopPropagation();
