@@ -178,7 +178,7 @@
     background:var(--box); border:1px solid var(--accent); color:var(--accent); font-size:14px; display:none; z-index:5; }
 
   /* Заставка главы */
-  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10281859") center 30%/cover;
+  #title { position:absolute; inset:0; background:linear-gradient(90deg,#000e 0%,#000c 45%,#0006 100%),#000 url("img/menu_bg.jpg?v=10281905") center 30%/cover;
     display:grid; grid-template-columns:minmax(260px, 1fr) minmax(320px, 1.25fr); align-items:center; gap:4%; padding:4% 5%;
     overflow-y:auto; z-index:10; transition:opacity .8s; }
   #title.gone { opacity:0; pointer-events:none; }
@@ -392,7 +392,7 @@
   /* меню на телефоне: фото Бородино целиком сверху, а не обрезанный центр */
   @media (max-aspect-ratio: 1/1) {
     #title { grid-template-columns:1fr; align-items:start; gap:14px; padding:calc(env(safe-area-inset-top) + 16px) 16px calc(env(safe-area-inset-bottom) + 20px);
-      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10281859") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
+      background:linear-gradient(#0003 0%,#000a 26%,#000e 45%),#000 url("img/menu_bg.jpg?v=10281905") center calc(env(safe-area-inset-top)) / 100% auto no-repeat; }
     #title .hero { padding-top:34vw; text-align:center; }
     #saveBtns .grid { grid-template-columns:1fr 1fr; }
   }
@@ -437,6 +437,18 @@
     background:radial-gradient(transparent 45%, #000000cc), repeating-linear-gradient(90deg, transparent 0 37%, #ffffff14 37% 37.15%, transparent 37.15% 81%, #ffffff0c 81% 81.1%, transparent 81.1%);
     animation:noirFlick .18s steps(2) infinite; }
   @keyframes noirFlick { 0% { opacity:.92; background-position:0 0; } 100% { opacity:1; background-position:3px 0; } }
+  #health { position:absolute; left:12px; top:80px; z-index:5; display:none; grid-template-columns:32px 96px; gap:4px 8px; align-items:center;
+    background:#000a; border:1px solid #ffffff30; border-radius:8px; padding:7px 9px; font:11px system-ui, sans-serif; color:#eee; }
+  #health.on { display:grid; }
+  #health canvas { width:32px; height:28px; image-rendering:pixelated; }
+  #health b { display:flex; justify-content:space-between; font-weight:600; margin-bottom:3px; } #health em { font-style:normal; opacity:.8; }
+  #health i { display:block; height:6px; background:#333; border-radius:3px; overflow:hidden; } #health s { display:block; height:100%; transition:width .8s, background .8s; }
+  @media (max-aspect-ratio: 1/1) { #health { top:64px; left:8px; grid-template-columns:24px 70px; padding:5px 7px; font-size:10px; } #health canvas { width:24px; height:21px; } }
+  #smog { position:absolute; inset:-5%; pointer-events:none; z-index:1; opacity:0; transition:opacity 1.5s;
+    background:radial-gradient(ellipse at 40% 75%, #d8d2c0aa, #9a947c55 55%, #00000000 80%); animation:smogDrift 9s ease-in-out infinite alternate; }
+  @keyframes smogDrift { from { transform:translateX(-3%) scale(1); } to { transform:translateX(3%) scale(1.06); } }
+  #stage.withdraw #bg { animation:shakeW .3s steps(2) infinite; }
+  @keyframes shakeW { 50% { translate:1.5px -1px; } }
   .puff { position:absolute; z-index:6; width:70px; height:70px; border-radius:50%; pointer-events:none;
     background:radial-gradient(#ffffff55, #ffffff00 70%); animation:puff 3.2s ease-out forwards; }
   @keyframes puff { from { opacity:.9; transform:translate(0,0) scale(.4); } to { opacity:0; transform:translate(30px,-160px) scale(3.2); } }
@@ -446,14 +458,18 @@
 <div id="stage">
   <canvas id="bg" width="320" height="180"></canvas>
   <img id="photoFit" alt="">
-  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10281859" alt="Глеб">
-  <img class="sprite" id="egor" src="img/egor_px.png?v=10281859" alt="Егор">
+  <img class="sprite" id="gleb" src="img/gleb_px.png?v=10281905" alt="Глеб">
+  <img class="sprite" id="egor" src="img/egor_px.png?v=10281905" alt="Егор">
   <img class="sprite" id="npc" alt="">
   <div id="phone"><div class="scr">
-    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10281859) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
+    <div class="hdr"><div class="ava" id="tgava" style="background:url(img/yulia_ava.png?v=10281905) center/cover"></div><div><div class="nm" id="tgnm">Юлия — семинары</div><div class="st" id="tgst">была недавно</div></div></div>
     <div id="msgs"></div>
   </div></div>
   <div id="place"></div>
+  <div id="smog"></div>
+  <div id="health"><canvas id="hLung" width="32" height="28"></canvas><div><b>Лёгкие <em id="hLt"></em></b><i><s id="hL"></s></i></div>
+    <canvas id="hLiver" width="32" height="28"></canvas><div><b>Печень <em id="hVt"></em></b><i><s id="hV"></s></i></div>
+    <canvas id="hCig" width="32" height="28"></canvas><div><b>Тяга <em id="hCt"></em></b><i><s id="hC"></s></i></div></div>
   <div id="memory"></div>
   <div id="base"><h2>КАРТА БАЗЫ</h2><div class="sub" id="bRes"></div><canvas id="bMap" width="320" height="150"></canvas><div id="bList"></div><button class="close" id="bClose">Готово, к делам дня</button></div>
   <div id="tl"><h2>⟲ ПЕРЕМОТКА</h2><div class="sub">Нажми на момент, чтобы вернуться. Всё, что Глеб узнал, останется с ним.</div><div class="memo" id="tlMem"></div><div class="pts" id="tlPts"></div><button class="close" id="tlClose">Закрыть</button></div>
@@ -868,7 +884,7 @@ function startDrive() {
 }
 
 // ---------- Локация: воспоминание в «Ровеснике» (фон — та самая аниме-фотка в пикселях) ----------
-const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10281859"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
+const ROV = new Image(); ROV.src = "img/rovesnik_bg.png?v=10281905"; ROV.onload = () => { if (scene && scene.bg === "memory") redraw(); };
 function drawMemory() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height;
   c.imageSmoothingEnabled = false;
@@ -987,7 +1003,7 @@ function drawPhoto() {
   const c = $("bg").getContext("2d"), W = c.canvas.width, H = c.canvas.height, name = scene.photo;
   c.fillStyle = "#120808"; c.fillRect(0, 0, W, H);
   let im = PHOTO[name];
-  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10281859`; }
+  if (!im) { im = PHOTO[name] = new Image(); im.onload = () => { if (scene && scene.photo === name) redraw(); }; im.onerror = () => { if (scene && scene.photo === name) { scene.bg = "war"; redraw(); } }; im.src = `img/${name}.jpg?v=10281905`; }
   if (!im.complete || !im.naturalWidth) return;
   c.imageSmoothingEnabled = false;
   const k = Math.max(W / im.width, H / im.height), w = im.width * k, h = im.height * k;
@@ -2722,7 +2738,7 @@ const scenes = {
   // ===== Глава «Пепел» · Париж, чёрно-белая. Ален Мерсье, фильм Сергея, Петя, которого шлют =====
   pa_start: {
     place: "Powerhouse · Таганка · 23:10", egor: true, music: "paris",
-    linesFn: () => { PA.drink = 0; PA.smoke = 0; PA.ret = false; PA.back = "pa_hotel"; return [
+    linesFn: () => { PA.drink = 0; PA.smoke = 0; PA.crave = 0; PA.ret = false; PA.back = "pa_hotel"; return [
       { skip: "Пепел" },
       { who: null, t: "В Powerhouse заходит мужчина в чёрном пальто. Весь бар на секунду замолкает, будто кто-то выключил звук." },
       { who: "Ален", t: "Bonsoir. Вы — Глеб и Егор. Мне вас описал один ваш друг. Лысый, в очках. Пахнет ладаном." },
@@ -2768,7 +2784,7 @@ const scenes = {
   pa_hotel: {
     bg: "paris_hotel", place: "Пигаль · отель «Le Chat Noir»", egor: true, noir: true, music: "paris",
     get drunk() { return PA.drink >= 3; },
-    linesFn: () => { PA.back = "pa_hotel"; if (PA.ret) { PA.ret = false; return []; } return [
+    linesFn: () => { PA.back = "pa_hotel"; return [
       { who: "", t: "Внизу ждёт Сергей. Но Сергей ждёт всегда, у него это профессия." }
     ]; },
     choices: () => [
@@ -2787,6 +2803,7 @@ const scenes = {
       n === 4 ? { who: "Егор", t: "Глеб. Я тебе скажу. Только не смейся. Мне тут нравится больше, чем дома. Потому что тут я никто. И это честно." } :
       n === 5 ? { who: "Егор", t: "*напевает тему из Halo, фальшиво* …ты знаешь, что я плакал на финале Reach? Три раза. Нет, четыре." } :
       { who: null, t: "Бутылка кончилась. Егор достаёт из куртки ещё одну. Откуда — я не спрашиваю. Это Париж, тут не задают вопросов." },
+      ...(n >= 5 ? [{ who: null, t: "Под правым ребром тупо ноет. Печень напоминает о себе, как соседка, которая стучит по батарее." }] : []),
       n >= 4 ? { who: "", t: "Надо бы притормозить. Но Егор смотрит так, будто если я перестану пить, он останется один." } : { who: "", t: "Вино кислое. Хорошо." }
     ]; },
     nextFn: () => PA.back
@@ -2794,15 +2811,17 @@ const scenes = {
   pa_smoke: {
     get bg() { return scenes[PA.back].bg; }, get place() { return scenes[PA.back].place; }, egor: true, noir: true, music: "paris",
     get drunk() { return PA.drink >= 3; },
-    linesFn: () => { PA.smoke++; PA.ret = true; const n = PA.smoke; return [
+    linesFn: () => { PA.smoke++; PA.crave = 0; PA.ret = true; const n = PA.smoke; return [
       { fx: "smoke", who: null, t: n === 1 ? "«Голуаз» без фильтра. Затягиваюсь — лёгкие говорят «сука» по-французски." :
-        n === 2 ? "Вторая идёт легче. Это плохой знак." :
+        n === 2 ? "Ален молча протягивает мне свою зажигалку. Серебряная, с гравировкой «J.M. 1940». Вторая идёт легче. Это плохой знак." :
         n === 3 ? "Дым висит в воздухе, как плёнка, которую забыли проявить." :
         n === 4 ? "Пальцы пахнут табаком. Я уже держу сигарету, как в кино шестидесятых, и мне это нравится. Это тоже плохой знак." :
         "Пачка пустая. Я выхожу и покупаю ещё. Табачник говорит мне «courage». Не знаю, что он имел в виду." },
       n === 1 ? { who: "Егор", t: "Ты куришь, как будто в тебя сейчас выстрелят. Расслабь лицо, мы во Франции." } :
       n === 3 ? { who: "Егор", t: "Дай одну. Нет, две. Одну за маму." } :
-      { who: "", t: "Затяжка. Выдох. Город становится чуть тише." }
+      n === 5 ? { who: "Ален", t: "Ты куришь как мой отец. Он тоже думал, что успеет бросить." } :
+      { who: "", t: "Затяжка. Выдох. Город становится чуть тише." },
+      ...(n >= 7 ? [{ who: null, t: "В зеркале лифта у меня серое лицо. Как будто ч/б здесь не плёнка, а я." }] : n >= 5 ? [{ who: null, t: "Кашель. Долгий, сухой. Во рту привкус железа. Я закуриваю, чтобы он прошёл. Он не проходит." }] : [])
     ]; },
     nextFn: () => PA.back
   },
@@ -2896,7 +2915,7 @@ const scenes = {
   pa_night: {
     bg: "paris", place: "Набережная Сены · ночь", egor: true, noir: true, music: "paris",
     get drunk() { return PA.drink >= 3; },
-    linesFn: () => { PA.back = "pa_night"; if (PA.ret) { PA.ret = false; return []; } return [
+    linesFn: () => { PA.back = "pa_night"; return [
       { skip: "Ночь" },
       { who: null, t: "Сена чёрная, как кофе в автомате на Мясницкой. Мы сидим на парапете, ноги над водой." },
       { who: "Егор", t: "Ален куда-то пошёл. Один. В сторону Монпарнаса. Без охраны, без Марго." },
@@ -5265,9 +5284,69 @@ function closeGPhone() {
 // ---------- Движок ----------
 const known = new Set();          // что Глеб знает; переживает перемотку
 const MEM = { text: "что написал Егор", voice: "драка кончится голосовым Юле", jail: "восемь лет в колонии", gun: "травмат в кармане — плохая идея", address: "где живёт Юля", brave: "страх отдан Лилит", rus: "Егор ответил Русу", sober: "Егор писал Юле трезвым", late: "разговор на Бородинском поле", silence: "как тихо без Егора" };
-const PA = { drink: 0, smoke: 0, ret: false, back: "pa_hotel" };   // «Пепел»: сколько выпито и выкурено, куда вернуться
+const PA = { drink: 0, smoke: 0, crave: 0, ret: false, back: "pa_hotel" };   // «Пепел»: сколько выпито и выкурено, куда вернуться
 Object.assign(MEM, { pa_why: "Ален знает про перемотку", pa_age: "Алену восемьдесят один год", pa_brand: "клеймо «14.06.1940» на спине Алена", pa_stairs: "отца Алена расстреляли в 1946-м",
   pa_father: "сюжет фильма Сергею рассказал Ален", pa_box: "коробка с волосами и запиской", pa_petya: "Петя ждёт звонка", pa_egor: "Егор плакал в катакомбах", pa_egor_out: "Егор уснул на лестнице" });
+// ---------- «Пепел»: здоровье и тяга. Лёгкие темнеют от сигарет, печень желтеет от вина, без затяжки — ломка ----------
+const PA_WITHDRAW = [
+  { who: "", t: "Руки трясутся. Я ловлю себя на том, что третий раз проверяю карман с пачкой." },
+  { who: "", t: "Во рту сухо. Всё раздражает. Даже Сергей. Особенно Сергей." },
+  { who: "Егор", t: "Ты чё такой дёрганый? Покури, блять, на тебя смотреть страшно. И мне дай." },
+  { who: "", t: "Я не слышу, что мне говорят. Я думаю только о затяжке." }
+];
+const paLungs = () => Math.max(4, 100 - PA.smoke * 11);
+const paLiver = () => Math.max(4, 100 - PA.drink * 10);
+function paHealthLine() {
+  if (paLungs() < 50 && paLiver() < 50) return { who: null, t: "Через месяц — флюорография и анализы. Врач на Таганке смотрит на снимок, потом на печёночные пробы, потом на меня. «Вы где были?» — «В Париже. Неделю». Он не верит." };
+  if (paLungs() < 50) return { who: null, t: "Через месяц я всё ещё курю. Пачка в день. Кашель по утрам. Париж кончился, а «Голуаз» — нет." };
+  if (paLiver() < 50) return { who: null, t: "Егор потом сдаст анализы. Печёночные пробы в три раза выше нормы. Он скажет, что это Париж. Это не Париж." };
+  return { who: null, t: "Я привёз из Парижа пачку «Голуаз». Она так и лежит нераспечатанной. Это, наверное, лучший сувенир." };
+}
+// перед показом сцены главы: тяга растёт, при ломке вставляется реплика, в концовке — итог по здоровью
+function paPrepare(id) {
+  const base = scene.linesFn ? scene.lines : (scene._base || (scene._base = scene.lines));
+  let lines = base;
+  if (PA.ret && id === PA.back) { PA.ret = false; lines = []; }
+  else if (id !== "pa_smoke" && id !== "pa_drink" && id !== "pa_start" && PA.smoke) PA.crave += PA.smoke >= 4 ? 2 : 1;
+  if (scene.choices && !scene.ending && id !== "pa_smoke" && id !== "pa_drink") PA.back = id;
+  if (lines.length && PA.crave >= 3 && id !== "pa_smoke") { const k = lines[0].skip ? 1 : 0; lines = [...lines.slice(0, k), PA_WITHDRAW[PA.crave % PA_WITHDRAW.length], ...lines.slice(k)]; }
+  if (scene.ending && lines.length) lines = [...lines, paHealthLine()];
+  scene.lines = lines;
+}
+// карточка «Закурить» в каждой развилке главы, кроме старта и обряда
+function paChoices(id) {
+  let cs = scene.choices();
+  if (id && id.startsWith("pa_") && id !== "pa_start" && id !== "pa_rite" && !scene.ending && !cs.some(c => c.go === "pa_smoke"))
+    cs = [...cs, { icon: "smoke", t: "Закурить", sub: PA.crave >= 3 ? "Ломает. Очень хочется" : PA.smoke ? `Сигарет: ${PA.smoke}` : "«Голуаз», без фильтра", go: "pa_smoke" }];
+  return cs;
+}
+function paHud(on) {
+  $("health").classList.toggle("on", on);
+  $("smog").style.opacity = on ? Math.min(.75, PA.smoke * .09) : 0;
+  $("stage").classList.toggle("withdraw", on && PA.crave >= 3);
+  if (!on) return;
+  const L = paLungs(), V = paLiver(), C = Math.min(100, PA.crave * 25);
+  const bar = (id, v, good) => { const s = $(id); s.style.width = v + "%"; const g = good ? v : 100 - v; s.style.background = g > 60 ? "#7ad07a" : g > 30 ? "#e0c050" : "#e04848"; };
+  bar("hL", L, true); bar("hV", V, true); bar("hC", Math.max(4, C), false);
+  $("hLt").textContent = L + "%"; $("hVt").textContent = V + "%"; $("hCt").textContent = PA.crave >= 3 ? "ломка" : C + "%";
+  const mix = (a, b, k) => "#" + [0, 2, 4].map(i => Math.round(parseInt(a.substr(i, 2), 16) * (1 - k) + parseInt(b.substr(i, 2), 16) * k).toString(16).padStart(2, "0")).join("");
+  // лёгкие: розовые → серые → почти чёрные, с чёрными точками смолы
+  let c = $("hLung").getContext("2d"); c.clearRect(0, 0, 32, 28);
+  c.fillStyle = "#c8c0c0"; c.fillRect(15, 2, 2, 10); c.fillRect(11, 10, 10, 2);
+  c.fillStyle = mix("e88a9a", "2a2424", 1 - L / 100);
+  c.beginPath(); c.ellipse(9, 17, 7, 10, -.15, 0, 7); c.ellipse(23, 17, 7, 10, .15, 0, 7); c.fill();
+  c.fillStyle = "#100c0c"; for (let i = 0; i < PA.smoke * 2; i++) c.fillRect([5, 9, 12, 20, 24, 26, 7, 22][i % 8] + (i >> 3), [12, 20, 15, 13, 21, 16, 24, 25][i % 8] - (i >> 3), 2, 2);
+  // печень: тёмно-красная → жёлто-оливковая, пятна
+  c = $("hLiver").getContext("2d"); c.clearRect(0, 0, 32, 28);
+  c.fillStyle = mix("9a3a2a", "b8a040", 1 - V / 100);
+  c.beginPath(); c.moveTo(2, 10); c.quadraticCurveTo(14, 2, 30, 6); c.quadraticCurveTo(28, 18, 14, 24); c.quadraticCurveTo(4, 22, 2, 10); c.fill();
+  c.fillStyle = "#5a4a20"; for (let i = 0; i < PA.drink; i++) c.fillRect([8, 16, 22, 12, 6, 20, 26][i % 7], [10, 8, 12, 16, 14, 17, 9][i % 7], 2, 2);
+  // сигарета: при ломке тлеет ярче и дымит
+  c = $("hCig").getContext("2d"); c.clearRect(0, 0, 32, 28);
+  c.fillStyle = "#f0ece0"; c.fillRect(2, 15, 22, 4); c.fillStyle = "#c08040"; c.fillRect(2, 15, 6, 4);
+  c.fillStyle = PA.crave >= 3 ? "#ff5020" : "#7a4030"; c.fillRect(24, 15, 3, 4);
+  if (PA.crave >= 2) { c.fillStyle = "#ffffff88"; c.fillRect(26, 11, 2, 2); c.fillRect(28, 7, 2, 2); c.fillRect(26, 3, 2, 2); }
+}
 
 // выстрел: резкая вспышка, «БАХ!», звук
 function shotFx() {
@@ -5301,13 +5380,13 @@ let scene, idx, typing = null;
 // анимация персонажей: три кадра у каждого
 const FRAMES = {}, anim = {};
 for (const n of ["gleb", "egor"]) {
-  FRAMES[n] = { base: `img/${n}_px.png?v=10281859`, talk: `img/${n}_talk.png?v=10281859`, blink: `img/${n}_blink.png?v=10281859` };
+  FRAMES[n] = { base: `img/${n}_px.png?v=10281905`, talk: `img/${n}_talk.png?v=10281905`, blink: `img/${n}_blink.png?v=10281905` };
   Object.values(FRAMES[n]).forEach(src => { new Image().src = src; });
   anim[n] = { talking: false, blinking: false, open: false };
 }
 function frame(n) {
   if (scene && (scene.spartan || scene.spartanAll) && (n === "egor" || scene.spartanAll)) {
-    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10281859" : `img/${n}_spartan.png?v=10281859`; return;
+    $(n).src = n === "egor" && scene.spartanAll ? "img/egor_spartan2.png?v=10281905" : `img/${n}_spartan.png?v=10281905`; return;
   }
   const a = anim[n], f = FRAMES[n];
   $(n).src = a.blinking ? f.blink : (a.talking && a.open ? f.talk : f.base);
@@ -5336,7 +5415,7 @@ const NPC_IMG = {
   "Именинница": "npc_bday", "Подружка": "npc_friend", "Блондинка": "npc_blonde",
   "Петя": "npc_petya", "Юля": "npc_yulia", "Сергей": "npc_sergey", "Мила": "npc_dancer1", "Ника": "npc_dancer2", "Ева": "npc_dancer3", "Вера": "npc_vera.webp", "Витя": "npc_viktor", "Лилит": "npc_lilith", "Ален": "npc_alain", "Марго": "npc_margo"
 };
-Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281859`; });
+Object.values(NPC_IMG).forEach(n => { new Image().src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281905`; });
 function showNpc(who, file, cls) {
   let n = file || NPC_IMG[who];
   if (!n) return;
@@ -5345,7 +5424,7 @@ function showNpc(who, file, cls) {
   if (scene.spartanAll && who === "Витя") n = "npc_vitya_sp";
   const el = $("npc");
   el.onerror = () => el.classList.remove("on");    // нет картинки — лучше пусто, чем битая иконка
-  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281859`; el.alt = who;
+  el.src = /\.\w+$/.test(n) ? `img/${n}` : `img/${n}.png?v=10281905`; el.alt = who;
   el.classList.toggle("mid", !!scene.egor);      // Егор в кадре — собеседник встаёт между ними
   el.classList.remove("devil", "possessed", "aged");
   if (cls) el.classList.add(cls);
@@ -5623,6 +5702,7 @@ function showExplore() {
   $("explore").classList.add("on");
 }
 
+let curId = "";
 function show(id) {
   clearIdle();
   if (id === "s0") idleT = setTimeout(() => { if (scene === scenes.s0) show("secret"); }, 25000);
@@ -5643,6 +5723,9 @@ function show(id) {
   $("stage").classList.remove("frozen");
   svApply(scene);
   if (scene.linesFn) scene.lines = scene.linesFn();
+  curId = id;
+  if (id.startsWith("pa_")) paPrepare(id);
+  paHud(id.startsWith("pa_"));
   music.mood(scene.x && scene.music !== "tense" ? "mystic" : scene.music || (scene.bg === "cell" ? "jail" : scene.bg === "street" ? "street" : scene.drunk ? "drunk" : "bar"));
   $("place").textContent = scene.place;
   $("gleb").classList.toggle("on", !scene.noSprites);
@@ -5651,7 +5734,7 @@ function show(id) {
   $("msgs").innerHTML = "";
   $("tgst").textContent = "была недавно"; $("tgst").className = "st";
   $("tgnm").textContent = "Юлия — семинары"; $("tgava").textContent = "";
-  $("tgava").style.background = "url(img/yulia_ava.png?v=10281859) center/cover";
+  $("tgava").style.background = "url(img/yulia_ava.png?v=10281905) center/cover";
   $("npc").classList.remove("on", "dim");
   $("timer").classList.remove("on");
   $("explore").classList.remove("on");
@@ -5772,7 +5855,7 @@ function showChoices() {
   if (scene.ending) { $("ending").textContent = scene.endingFn ? scene.endingFn() : scene.ending; $("ending").style.display = "block"; c1Mark(scene.ending); }
   const box = $("choices");
   box.innerHTML = "";
-  for (const c of scene.choices().filter(c => !c.magic || mana >= c.magic)) {
+  for (const c of paChoices(curId).filter(c => !c.magic || mana >= c.magic)) {
     const el = document.createElement("div");
     el.className = "card " + (c.cls || "");
     el.innerHTML = `${ICON[c.icon] || ICON.let}<b>${c.t}</b><small>${c.sub}</small>`;
@@ -5780,7 +5863,7 @@ function showChoices() {
     box.appendChild(el);
   }
   box.classList.add("on");
-  const cs = scene.choices();
+  const cs = paChoices(curId);
   if (cs.some(c => c.rewind)) hint("rewind", "⟲ Это перемотка. Глеб вернётся назад, но запомнит то, что узнал. Все развилки — по кнопке «⟲ время» сверху.");
   else if (cs.some(c => c.cls === "new")) hint("new", "Синяя карточка открылась, потому что Глеб помнит прошлую попытку.");
 }
