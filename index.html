@@ -86,21 +86,20 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 @media (min-width:960px){
   :root{--tile:104px}
   .tile b{font-size:30px}
-  .layout{grid-template-columns:340px minmax(0,1fr);grid-template-areas:"side stage" "side chat";align-items:start}
-  .side .cols{grid-template-columns:1fr}
+  .layout{grid-template-columns:420px minmax(0,1fr);grid-template-areas:"side stage" "side chat";align-items:start}
   .side .betbar .amount{flex-basis:100%}
 }
-.col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;transition:opacity .3s, box-shadow .3s}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:opacity .3s, box-shadow .3s}
 .col.dim{opacity:.45}
 .col.won{box-shadow:0 0 0 2px var(--gold), 0 0 26px rgba(255,200,61,.35)}
-.place{border-radius:10px;padding:14px 10px;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.place{border-radius:10px;padding:12px 6px;font-weight:800;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;text-align:center}
 .place small{font-weight:600;opacity:.85}
 .place.red{background:var(--red)}.place.black{background:var(--black);border:1px solid var(--line)}.place.green{background:var(--green)}
 .place:disabled{filter:grayscale(.6);cursor:not-allowed}
-.sum{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.sum{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .sum b{color:var(--fg)}
-.players{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
-.players li{display:flex;justify-content:space-between;gap:8px;padding:5px 8px;border-radius:6px;background:var(--panel2);font-variant-numeric:tabular-nums}
+.players{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;font-size:12px}
+.players li{display:flex;justify-content:space-between;gap:4px;padding:4px 6px;border-radius:6px;background:var(--panel2);font-variant-numeric:tabular-nums}
 .players li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .players li.me{background:rgba(255,200,61,.16);color:var(--gold);font-weight:800}
 .players .more{background:transparent;color:var(--muted);justify-content:center}
@@ -126,6 +125,12 @@ footer .btn{font-size:12px;padding:7px 10px}
 
 .pawn{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:start}
 .map{width:100%;height:auto;display:block;border-radius:12px;background:#070818}
+.leafmap{width:100%;height:380px;border-radius:12px;background:#070818;z-index:0}
+.leafmap .leaflet-tooltip.lbl-tip{background:var(--panel);color:var(--fg);border:1px solid var(--line);font:700 11px var(--body);box-shadow:none}
+.leafmap .leaflet-tooltip.lbl-tip::before{display:none}
+.leafmap .leaflet-tile-pane{filter:invert(1) hue-rotate(200deg) brightness(.8) contrast(.9) saturate(.6)}
+.leafmap .leaflet-control-attribution{background:rgba(9,10,22,.75);color:var(--muted)}
+.leafmap .leaflet-control-attribution a{color:var(--neon)}
 .map .land{fill:var(--panel2)}
 .map .ring{fill:none;stroke:var(--line);stroke-width:2}
 .map .ring.mkad{stroke:#3d4688;stroke-width:3}
@@ -143,7 +148,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 .lot:hover{border-color:var(--gold)}
 .lot b{color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums}
 .lot:disabled{opacity:.4;cursor:default;border-color:var(--line)}
-@media (max-width:640px){ .pawn{grid-template-columns:1fr} }
+@media (max-width:640px){ .pawn{grid-template-columns:1fr} .players li{flex-direction:column;gap:0} .players li span:last-child{color:var(--muted);white-space:nowrap} .place small{font-size:11px} }
 
 .debt{background:rgba(215,54,75,.15);border:1px solid var(--red);color:#ff8a98;border-radius:10px;padding:8px 12px;font-weight:800;font-variant-numeric:tabular-nums}
 .offers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
@@ -181,7 +186,6 @@ footer .btn{font-size:12px;padding:7px 10px}
 @media (max-width:640px){
   :root{--tile:62px}
   .tile b{font-size:18px}
-  .cols{grid-template-columns:1fr}
   .balance{min-width:0;flex:1 1 auto}
 }
 @media (prefers-reduced-motion: reduce){ .col,.toast{transition:none} }
@@ -277,7 +281,8 @@ footer .btn{font-size:12px;padding:7px 10px}
     <div class="baby-row"><div id="appraiserFace"></div><div class="bubble"><small>Оценщик Аркадий Палыч, 2 года</small>Принесите вещь, я её оближу и оценю.</div></div>
     <p>Кончились деньги? Выбери ломбард на карте и заложи что-нибудь. Деньги сразу придут на баланс.</p>
     <div class="pawn">
-      <svg class="map" viewBox="0 0 400 400" role="img" aria-label="Схема Москвы с ломбардами">
+      <div id="leafmap" class="leafmap" hidden></div>
+      <svg class="map" id="schemeMap" viewBox="0 0 400 400" role="img" aria-label="Схема Москвы с ломбардами">
         <ellipse class="land" cx="200" cy="200" rx="182" ry="186"/>
         <ellipse class="ring mkad" cx="200" cy="200" rx="182" ry="186"/>
         <ellipse class="ring" cx="200" cy="200" rx="88" ry="82"/>
@@ -287,7 +292,7 @@ footer .btn{font-size:12px;padding:7px 10px}
         <text class="lbl" x="200" y="130" text-anchor="middle">ТТК</text>
         <g id="pins"></g>
       </svg>
-      <div class="shop" id="shop"><h3>Выбери ломбард</h3><span class="where">Нажми на жёлтую точку на карте.</span></div>
+      <div class="shop" id="shop"><h3>Выбери ломбард</h3><span class="where">Нажми на жёлтую точку на карте. Карту можно двигать и приближать.</span></div>
     </div>
   </div>
 </div>
@@ -315,6 +320,8 @@ footer .btn{font-size:12px;padding:7px 10px}
 
 <div class="toast" id="toast" role="status"></div>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
   const ORDER=[1,14,2,13,3,12,4,0,11,5,10,6,9,7,8];
@@ -427,9 +434,9 @@ footer .btn{font-size:12px;padding:7px 10px}
     const total=list.reduce((s,b)=>s+b.amt,0);
     $('sum-'+c).textContent=fmt(total)+' ₽';
     const ul=$('pl-'+c); ul.innerHTML='';
-    list.slice(0,7).forEach(b=>{ const li=document.createElement('li'); if(b.me) li.className='me';
+    list.slice(0,5).forEach(b=>{ const li=document.createElement('li'); if(b.me) li.className='me';
       li.innerHTML='<span></span><span>'+fmt(b.amt)+' ₽</span>'; li.firstChild.textContent=b.me?'Ты':b.name; ul.appendChild(li); });
-    if(list.length>7){ const li=document.createElement('li'); li.className='more'; li.textContent='и ещё '+(list.length-7); ul.appendChild(li); }
+    if(list.length>5){ const li=document.createElement('li'); li.className='more'; li.textContent='и ещё '+(list.length-5); ul.appendChild(li); }
   }
   const renderCols=()=>['red','green','black'].forEach(renderCol);
 
@@ -537,22 +544,20 @@ footer .btn{font-size:12px;padding:7px 10px}
   modal.addEventListener('click',e=>{ if(e.target===modal) modal.hidden=true; });
   // pawnshops
   const SHOPS=[
-    {id:'vaht', name:'Залог у Вахтёрши', where:'Капотня', x:268, y:288, lots:[['zach','Зачётка (почти без троек)',500],['servant','Бабушкин сервант',1500]]},
-    {id:'shans', name:'Ломбард «Последний шанс» 24/7', where:'Бирюлёво', x:212, y:338, lots:[['ps5','PS5 соседа',4000],['bike','Велосипед с балкона',1200]]},
-    {id:'hrush', name:'Золотой Хрущ', where:'Черёмушки', x:148, y:268, lots:[['iph','Айфон 7 с трещиной',900],['ring','Цепочка с рынка',2000]]},
-    {id:'peres', name:'Ломбард «Пересдача»', where:'Покровка', x:226, y:186, lots:[['stip','Стипендия за март',2500],['laptop','Ноутбук с курсачом',3000]]},
-    {id:'kitay', name:'Скупка у Садового', where:'Китай-город', x:192, y:206, lots:[['jacket','Куртка с Садовода',700],['mug','Кружка из Икеи',30]]},
-    {id:'monday', name:'Скупка «Вернусь в понедельник»', where:'Гольяново', x:332, y:158, lots:[['tv','Телевизор из общаги',1800],['grill','Мангал с дачи',600]]},
-    {id:'mama', name:'Ломбард «Мама не узнает»', where:'Строгино', x:78, y:128, lots:[['car','Ключи от папиной «Лады»',5000],['guitar','Гитара, три аккорда',800]]}
+    {id:'vaht', name:'Залог у Вахтёрши', where:'Капотня', x:268, y:288, ll:[55.638,37.797], lots:[['zach','Зачётка (почти без троек)',500],['servant','Бабушкин сервант',1500]]},
+    {id:'shans', name:'Ломбард «Последний шанс» 24/7', where:'Бирюлёво', x:212, y:338, ll:[55.590,37.660], lots:[['ps5','PS5 соседа',4000],['bike','Велосипед с балкона',1200]]},
+    {id:'hrush', name:'Золотой Хрущ', where:'Черёмушки', x:148, y:268, ll:[55.670,37.555], lots:[['iph','Айфон 7 с трещиной',900],['ring','Цепочка с рынка',2000]]},
+    {id:'peres', name:'Ломбард «Пересдача»', where:'Покровка', x:226, y:186, ll:[55.759,37.648], lots:[['stip','Стипендия за март',2500],['laptop','Ноутбук с курсачом',3000]]},
+    {id:'kitay', name:'Скупка у Садового', where:'Китай-город', x:192, y:206, ll:[55.754,37.633], lots:[['jacket','Куртка с Садовода',700],['mug','Кружка из Икеи',30]]},
+    {id:'monday', name:'Скупка «Вернусь в понедельник»', where:'Гольяново', x:332, y:158, ll:[55.822,37.810], lots:[['tv','Телевизор из общаги',1800],['grill','Мангал с дачи',600]]},
+    {id:'mama', name:'Ломбард «Мама не узнает»', where:'Строгино', x:78, y:128, ll:[55.803,37.403], lots:[['car','Ключи от папиной «Лады»',5000],['guitar','Гитара, три аккорда',800]]}
   ];
   const pins=$('pins'); let curShop=null;
   SHOPS.forEach(s=>{
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
     g.setAttribute('class','pin'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label',s.name+', '+s.where);
     g.innerHTML='<circle cx="'+s.x+'" cy="'+s.y+'" r="7"/><text class="lbl" x="'+s.x+'" y="'+(s.y+19)+'" text-anchor="middle">'+s.where+'</text>';
-    const pick=()=>{ curShop=s; pins.querySelectorAll('.pin').forEach(p=>p.classList.remove('on')); g.classList.add('on'); renderShop(); };
-    g.addEventListener('click',pick);
-    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); } });
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); g.dispatchEvent(new MouseEvent('click')); } });
     pins.appendChild(g);
   });
   function renderShop(){
@@ -568,7 +573,41 @@ footer .btn{font-size:12px;padding:7px 10px}
     });
   }
   const pawnModal=$('pawnModal');
-  $('openPawn').addEventListener('click',()=>{ pawnModal.hidden=false; if(curShop) renderShop(); $('closePawn').focus(); });
+  // настоящая карта (Leaflet); если подложка не грузится, остаётся схема
+  let lmap=null, lmarkers={};
+  function showMap(on){ $('leafmap').toggleAttribute('hidden',!on); $('schemeMap').toggleAttribute('hidden',on); }
+  function useScheme(){ showMap(false); }
+  function selectShop(s){
+    curShop=s; renderShop();
+    pins.querySelectorAll('.pin').forEach((p,i)=>p.classList.toggle('on', SHOPS[i]===s));
+    Object.keys(lmarkers).forEach(id=>lmarkers[id].setStyle(id===s.id?{fillColor:'#fff'}:{fillColor:'#ffc83d'}));
+  }
+  pins.querySelectorAll('.pin').forEach((p,i)=>{ p.addEventListener('click',()=>selectShop(SHOPS[i])); });
+  function initMap(){
+    if(lmap || !window.L) return;
+    try{
+      showMap(true);
+      lmap=L.map('leafmap',{zoomControl:true, attributionControl:true}).setView([55.735,37.62],10);
+      let ok=false, errs=0;
+      const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        maxZoom:18,
+        attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(lmap);
+      tiles.on('tileload',()=>{
+        if(!ok){ ok=true; showMap(true); lmap.invalidateSize(); }
+      });
+      tiles.on('tileerror',()=>{ errs++; if(!ok && errs>8) useScheme(); });
+      setTimeout(()=>{ if(!ok) useScheme(); }, 8000);
+      SHOPS.forEach(s=>{
+        const m=L.circleMarker(s.ll,{radius:9,color:'#1a1203',weight:2,fillColor:'#ffc83d',fillOpacity:1}).addTo(lmap);
+        m.bindTooltip(s.where,{permanent:true,direction:s.id==='peres'?'right':'bottom',offset:s.id==='peres'?[10,0]:[0,8],className:'lbl-tip'});
+        m.on('click',()=>selectShop(s));
+        lmarkers[s.id]=m;
+      });
+    }catch(e){ useScheme(); }
+  }
+  let fitted=false;
+  $('openPawn').addEventListener('click',()=>{ pawnModal.hidden=false; initMap(); if(lmap) setTimeout(()=>{ lmap.invalidateSize(); if(!fitted){ fitted=true; lmap.fitBounds(SHOPS.map(s=>s.ll),{padding:[30,30]}); } },60); if(curShop) renderShop(); $('closePawn').focus(); });
   $('closePawn').addEventListener('click',()=>{ pawnModal.hidden=true; });
   pawnModal.addEventListener('click',e=>{ if(e.target===pawnModal) pawnModal.hidden=true; });
 
