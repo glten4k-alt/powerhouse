@@ -535,6 +535,21 @@ footer .btn{font-size:12px;padding:7px 10px}
   });
   renderMusic();
 
+  // «фьюююю-бум» на каждую кнопку
+  function sWhistle(){
+    const a=actx; if(!a||muted) return; const t=a.currentTime, d=0.55;
+    const o=a.createOscillator(), g=a.createGain(), lfo=a.createOscillator(), lg=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(2200,t); o.frequency.exponentialRampToValueAtTime(380,t+d);
+    lfo.frequency.value=9; lg.gain.value=25; lfo.connect(lg).connect(o.frequency);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.12,t+0.03); g.gain.setValueAtTime(0.12,t+d-0.05); g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g).connect(a.destination); o.start(t); o.stop(t+d+0.02); lfo.start(t); lfo.stop(t+d+0.02);
+    const b=a.createOscillator(), bg=a.createGain(); b.type='sine';
+    b.frequency.setValueAtTime(110,t+d); b.frequency.exponentialRampToValueAtTime(40,t+d+0.3);
+    bg.gain.setValueAtTime(0.0001,t+d); bg.gain.exponentialRampToValueAtTime(0.5,t+d+0.01); bg.gain.exponentialRampToValueAtTime(0.0001,t+d+0.35);
+    b.connect(bg).connect(a.destination); b.start(t+d); b.stop(t+d+0.4);
+  }
+  document.addEventListener('click',e=>{ if(e.target.closest('button')){ ac(); sWhistle(); } });
+
   let lastTile=null;
   function spinSound(){
     if(phase!=='spin') return;
