@@ -201,6 +201,7 @@ footer .btn{font-size:12px;padding:7px 10px}
       <button class="btn" id="openPawn" type="button">Ломбард</button>
       <button class="btn" id="openLoan" type="button">Займ</button>
       <button class="btn" id="withdraw" type="button">Вывести</button>
+      <button class="btn" id="sound" type="button" aria-pressed="true">Звук: вкл</button>
     </div>
   </header>
 
@@ -454,12 +455,59 @@ footer .btn{font-size:12px;padding:7px 10px}
   }
   const renderCols=()=>['red','green','black'].forEach(renderCol);
 
+  // звук: всё синтезируется Web Audio, без файлов
+  let actx=null, muted=false;
+  try{ muted = localStorage.getItem('naebalovo.mute')==='1'; }catch(e){}
+  function ac(){
+    if(!actx){ try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } }
+    if(actx.state==='suspended') actx.resume();
+    return actx;
+  }
+  addEventListener('pointerdown',ac); addEventListener('keydown',ac);
+  function renderSound(){ const b=$('sound'); b.textContent='Звук: '+(muted?'выкл':'вкл'); b.setAttribute('aria-pressed',String(!muted)); }
+  $('sound').addEventListener('click',()=>{ muted=!muted; try{ localStorage.setItem('naebalovo.mute',muted?'1':'0'); }catch(e){} renderSound(); });
+  renderSound();
+  function env(g,t,peak,dur){ g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(peak,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); }
+  function sTick(){
+    const a=actx; if(!a||muted) return; const t=a.currentTime;
+    const o=a.createOscillator(), g=a.createGain(), f=a.createBiquadFilter();
+    o.type='square'; o.frequency.value=1500+Math.random()*400; f.type='highpass'; f.frequency.value=900;
+    env(g,t,0.05,0.035); o.connect(f).connect(g).connect(a.destination); o.start(t); o.stop(t+0.05);
+  }
+  function sChip(){
+    const a=actx; if(!a||muted) return; const t=a.currentTime;
+    [0,0.045].forEach((d,i)=>{
+      const n=a.createBufferSource(), buf=a.createBuffer(1, a.sampleRate*0.05, a.sampleRate), ch=buf.getChannelData(0);
+      for(let k=0;k<ch.length;k++) ch[k]=(Math.random()*2-1)*(1-k/ch.length);
+      n.buffer=buf; const f=a.createBiquadFilter(); f.type='bandpass'; f.frequency.value=i?2600:3400; f.Q.value=4;
+      const g=a.createGain(); env(g,t+d,0.35,0.06); n.connect(f).connect(g).connect(a.destination); n.start(t+d);
+    });
+  }
+  function sWin(){
+    const a=actx; if(!a||muted) return; const t=a.currentTime;
+    [523,659,784,1047].forEach((fr,i)=>{ const o=a.createOscillator(), g=a.createGain(); o.type='triangle'; o.frequency.value=fr;
+      env(g,t+i*0.09,0.18,0.35); o.connect(g).connect(a.destination); o.start(t+i*0.09); o.stop(t+i*0.09+0.4); });
+  }
+  function sLose(){
+    const a=actx; if(!a||muted) return; const t=a.currentTime;
+    const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.setValueAtTime(140,t); o.frequency.exponentialRampToValueAtTime(55,t+0.35);
+    env(g,t,0.4,0.4); o.connect(g).connect(a.destination); o.start(t); o.stop(t+0.45);
+  }
+  let lastTile=null;
+  function spinSound(){
+    if(phase!=='spin') return;
+    const m=new DOMMatrixReadOnly(getComputedStyle(track).transform), W=tileW();
+    const i=Math.floor((win.clientWidth/2 - m.m41)/W);
+    if(i!==lastTile){ if(lastTile!==null) sTick(); lastTile=i; }
+    requestAnimationFrame(spinSound);
+  }
+
   function placeBet(c){
     if(phase!=='bet'){ toast('Ставки закрыты, жди следующий раунд'); return; }
     const amt=Math.floor(Number($('amount').value));
     if(!amt || amt<1){ toast('Впиши ставку'); return; }
     if(amt>st.bal){ toast('Не хватает. Закинь скин'); return; }
-    st.bal-=amt; save(); renderBal();
+    st.bal-=amt; save(); renderBal(); sChip();
     const mine=bets[c].find(b=>b.me);
     if(mine) mine.amt+=amt; else bets[c].push({me:true,name:'Ты',amt});
     renderCol(c);
@@ -500,7 +548,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     $('phase').textContent='Крутим';
     dealer('smirk'); say('Ставки сделаны, ставок больше нет');
     const n=randInt(15), idx=ORDER.indexOf(n), jit=(Math.random()-.5)*.8;
-    ci=9*15+idx+jit; place(true);
+    ci=9*15+idx+jit; place(true); lastTile=null; requestAnimationFrame(spinSound);
     setTimeout(()=>finish(n,idx,jit), SPIN_MS+60);
   }
   function finish(n,idx,jit){
@@ -513,8 +561,8 @@ footer .btn{font-size:12px;padding:7px 10px}
     $('phase').textContent='Выпало '+n+' — '+names[c];
     let staked=0; ['red','green','black'].forEach(k=>{ const m=bets[k].find(b=>b.me); if(m) staked+=m.amt; });
     const mine=bets[c].find(b=>b.me);
-    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; toast('Выигрыш +'+fmt(win)+' ₽'); dealer('cry'); say(pick(['Нечестно! Я маме скажу','Ыыыы, забирай...','Это последний раз, понял?'])); }
-    else if(staked>0){ toast('Мимо. −'+fmt(staked)+' ₽'); dealer('happy'); say(pick(['Хи-хи. Казино всегда в плюсе','Спасибо, на памперсы','Ещё разок?'])); }
+    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; sWin(); toast('Выигрыш +'+fmt(win)+' ₽'); dealer('cry'); say(pick(['Нечестно! Я маме скажу','Ыыыы, забирай...','Это последний раз, понял?'])); }
+    else if(staked>0){ sLose(); toast('Мимо. −'+fmt(staked)+' ₽'); dealer('happy'); say(pick(['Хи-хи. Казино всегда в плюсе','Спасибо, на памперсы','Ещё разок?'])); }
     else { say('Выпало '+n+'. А ты чего не ставил?'); }
     st.recent.push(n); if(st.recent.length>30) st.recent=st.recent.slice(-30);
     if(st.debt>0){
