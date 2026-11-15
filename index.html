@@ -202,6 +202,7 @@ footer .btn{font-size:12px;padding:7px 10px}
       <button class="btn" id="openLoan" type="button">Займ</button>
       <button class="btn" id="withdraw" type="button">Вывести</button>
       <button class="btn" id="sound" type="button" aria-pressed="true">Звук: вкл</button>
+      <button class="btn" id="music" type="button" aria-pressed="false">Музыка: выкл</button>
     </div>
   </header>
 
@@ -493,6 +494,47 @@ footer .btn{font-size:12px;padding:7px 10px}
     const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.setValueAtTime(140,t); o.frequency.exponentialRampToValueAtTime(55,t+0.35);
     env(g,t,0.4,0.4); o.connect(g).connect(a.destination); o.start(t); o.stop(t+0.45);
   }
+  // фоновая музыка: свой луп Am – F – C – G, 96 bpm, всё синтезировано
+  let musicOn=false, musicGain=null, nextBeat=0, beatN=0, musicTimer=null;
+  const BPM=96, SPB=60/BPM;
+  const CHORDS=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]]; // MIDI: Am F C G
+  const BASS=[45,41,36,43];
+  const mtof=n=>440*Math.pow(2,(n-69)/12);
+  function mNote(a,t,freq,dur,type,peak,dest){
+    const o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(peak,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(dest); o.start(t); o.stop(t+dur+0.05);
+  }
+  function mHat(a,t,peak,dest){
+    const n=a.createBufferSource(), buf=a.createBuffer(1,a.sampleRate*0.04,a.sampleRate), ch=buf.getChannelData(0);
+    for(let k=0;k<ch.length;k++) ch[k]=(Math.random()*2-1)*(1-k/ch.length);
+    n.buffer=buf; const f=a.createBiquadFilter(); f.type='highpass'; f.frequency.value=7000;
+    const g=a.createGain(); g.gain.value=peak; n.connect(f).connect(g).connect(dest); n.start(t);
+  }
+  function scheduleMusic(){
+    const a=actx; if(!a||!musicOn) return;
+    while(nextBeat < a.currentTime+0.25){
+      const bar=Math.floor(beatN/4)%4, beat=beatN%4, t=nextBeat;
+      if(beat===0) CHORDS[bar].forEach(n=>mNote(a,t,mtof(n),SPB*3.8,'triangle',0.05,musicGain));
+      mNote(a,t,mtof(BASS[bar]),SPB*0.9,'sine',0.22,musicGain);
+      if(beat===2) mNote(a,t+SPB/2,mtof(BASS[bar]+12),SPB*0.4,'sine',0.12,musicGain);
+      mHat(a,t+SPB/2,0.05,musicGain); if(beat%2) mHat(a,t,0.03,musicGain);
+      nextBeat+=SPB; beatN++;
+    }
+  }
+  function renderMusic(){ const b=$('music'); b.textContent='Музыка: '+(musicOn?'вкл':'выкл'); b.setAttribute('aria-pressed',String(musicOn)); }
+  $('music').addEventListener('click',()=>{
+    const a=ac(); if(!a) return;
+    musicOn=!musicOn; renderMusic();
+    if(musicOn){
+      musicGain=a.createGain(); musicGain.gain.value=0.6; musicGain.connect(a.destination);
+      nextBeat=a.currentTime+0.1; beatN=0; musicTimer=setInterval(scheduleMusic,100); scheduleMusic();
+    } else {
+      clearInterval(musicTimer); const g=musicGain; g.gain.setTargetAtTime(0.0001,a.currentTime,0.1); setTimeout(()=>g.disconnect(),600);
+    }
+  });
+  renderMusic();
+
   let lastTile=null;
   function spinSound(){
     if(phase!=='spin') return;
