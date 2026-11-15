@@ -128,7 +128,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 .leafmap{width:100%;height:380px;border-radius:12px;background:#070818;z-index:0}
 .leafmap .leaflet-tooltip.lbl-tip{background:var(--panel);color:var(--fg);border:1px solid var(--line);font:700 11px var(--body);box-shadow:none}
 .leafmap .leaflet-tooltip.lbl-tip::before{display:none}
-.leafmap .leaflet-tile-pane{filter:invert(1) hue-rotate(200deg) brightness(.8) contrast(.9) saturate(.6)}
+.leafmap.inv .leaflet-tile-pane{filter:invert(1) hue-rotate(200deg) brightness(.8) contrast(.9) saturate(.6)}
 .leafmap .leaflet-control-attribution{background:rgba(9,10,22,.75);color:var(--muted)}
 .leafmap .leaflet-control-attribution a{color:var(--neon)}
 .map .land{fill:var(--panel2)}
@@ -320,8 +320,8 @@ footer .btn{font-size:12px;padding:7px 10px}
 
 <div class="toast" id="toast" role="status"></div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="leaflet/leaflet.css">
+<script src="leaflet/leaflet.js"></script>
 <script>
 (function(){
   const ORDER=[1,14,2,13,3,12,4,0,11,5,10,6,9,7,8];
@@ -602,16 +602,21 @@ footer .btn{font-size:12px;padding:7px 10px}
     try{
       showMap(true);
       lmap=L.map('leafmap',{zoomControl:true, attributionControl:true}).setView([55.735,37.62],10);
-      let ok=false, errs=0;
-      const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        maxZoom:18,
-        attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(lmap);
-      tiles.on('tileload',()=>{
-        if(!ok){ ok=true; showMap(true); lmap.invalidateSize(); }
-      });
-      tiles.on('tileerror',()=>{ errs++; if(!ok && errs>8) useScheme(); });
-      setTimeout(()=>{ if(!ok) useScheme(); }, 8000);
+      const SRC=[
+        {url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png', inv:true,
+         attr:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'},
+        {url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', inv:false,
+         attr:'&copy; Esri, <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}
+      ];
+      let done=false;
+      (function tryTiles(i){
+        if(i>=SRC.length){ useScheme(); return; }
+        const src=SRC[i]; let ok=false;
+        $('leafmap').classList.toggle('inv', src.inv);
+        const layer=L.tileLayer(src.url,{maxZoom:18, attribution:src.attr}).addTo(lmap);
+        layer.on('tileload',()=>{ if(!ok){ ok=true; done=true; showMap(true); lmap.invalidateSize(); } });
+        setTimeout(()=>{ if(!ok && !done){ lmap.removeLayer(layer); tryTiles(i+1); } }, 7000);
+      })(0);
       SHOPS.forEach(s=>{
         const m=L.circleMarker(s.ll,{radius:9,color:'#1a1203',weight:2,fillColor:'#ffc83d',fillOpacity:1}).addTo(lmap);
         m.bindTooltip(s.where,{permanent:true,direction:s.id==='peres'?'right':'bottom',offset:s.id==='peres'?[10,0]:[0,8],className:'lbl-tip'});
