@@ -135,6 +135,26 @@ footer .btn{font-size:12px;padding:7px 10px}
 .lot:disabled{opacity:.4;cursor:default;border-color:var(--line)}
 @media (max-width:640px){ .pawn{grid-template-columns:1fr} }
 
+.debt{background:rgba(215,54,75,.15);border:1px solid var(--red);color:#ff8a98;border-radius:10px;padding:8px 12px;font-weight:800;font-variant-numeric:tabular-nums}
+.offers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.offer{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;text-align:left}
+.offer:hover{border-color:var(--gold)}
+.offer b{font-family:var(--display);font-weight:400;font-size:22px;color:var(--gold)}
+.offer span{font-size:12px;color:var(--muted)}
+.loanstate{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;background:var(--panel2);border-radius:12px;padding:12px}
+.loanstate strong{font-variant-numeric:tabular-nums}
+
+.chat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.chat h2{margin:0;font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold)}
+.chat h2 small{font-family:var(--body);font-size:12px;color:var(--green);font-weight:700;margin-left:6px}
+.msgs{height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;font-size:13px;padding-right:4px}
+.msg{line-height:1.4;overflow-wrap:anywhere}
+.msg b{color:var(--gold);margin-right:6px}
+.msg.me b{color:#fff}
+.msg.sys{color:var(--muted);font-style:italic}
+.chatform{display:flex;gap:8px}
+.chatform input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--fg);font:inherit;padding:10px 12px}
+
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;
   background:var(--panel2);border:1px solid var(--gold);border-radius:10px;padding:10px 16px;font-weight:700;max-width:calc(100% - 32px);text-align:center;
   transition:opacity .25s;opacity:0;pointer-events:none}
@@ -153,9 +173,11 @@ footer .btn{font-size:12px;padding:7px 10px}
   <header>
     <div class="logo">NAEBALOVO<small>CS roulette</small></div>
     <div class="wallet">
+      <div class="debt" id="debt" hidden>Долг <span id="debtv">0</span> ₽</div>
       <div class="balance" aria-live="polite"><span id="bal">1 000</span> ₽</div>
       <button class="btn gold" id="openDeposit" type="button">Закинуть скин</button>
       <button class="btn" id="openPawn" type="button">Ломбард</button>
+      <button class="btn" id="openLoan" type="button">Займ</button>
       <button class="btn" id="withdraw" type="button">Вывести</button>
     </div>
   </header>
@@ -200,6 +222,15 @@ footer .btn{font-size:12px;padding:7px 10px}
     </div>
   </div>
 
+  <section class="chat" aria-label="Чат">
+    <h2>Чат <small id="online">● 214 онлайн</small></h2>
+    <div class="msgs" id="msgs" aria-live="polite"></div>
+    <form class="chatform" id="chatform" autocomplete="off">
+      <input id="chatinput" maxlength="200" placeholder="Написать в чат">
+      <button class="btn gold" type="submit">Отправить</button>
+    </form>
+  </section>
+
   <footer>
     <span>© Naebalovo, 2026</span>
     <button class="btn" id="reset" type="button">Начать заново</button>
@@ -234,6 +265,19 @@ footer .btn{font-size:12px;padding:7px 10px}
   </div>
 </div>
 
+<div class="modal" id="loanModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lTitle">
+    <div class="sheet-head"><h2 id="lTitle">Naebalovo Займ</h2><button class="btn" id="closeLoan" type="button">Закрыть</button></div>
+    <p>Без справок и паспорта, деньги на баланс за секунду. Ставка 1,5% за каждый раунд рулетки. Лимит долга 60 000 ₽.</p>
+    <div class="offers">
+      <button class="offer" type="button" data-loan="1000"><b>1 000 ₽</b><span>на одну ставку</span></button>
+      <button class="offer" type="button" data-loan="5000"><b>5 000 ₽</b><span>отыграться</span></button>
+      <button class="offer" type="button" data-loan="20000"><b>20 000 ₽</b><span>на всё, что есть</span></button>
+    </div>
+    <div class="loanstate"><span>Текущий долг: <strong id="loanDebt">0 ₽</strong></span><button class="btn" id="repay" type="button">Погасить с баланса</button></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status"></div>
 
 <script>
@@ -248,14 +292,14 @@ footer .btn{font-size:12px;padding:7px 10px}
   const $=id=>document.getElementById(id);
 
   const SKINS=[
-    {id:'knife', type:'НОЖ', name:'Нож «Хлеборез»', rar:'Тайное', color:'#c43b3b', price:3000},
-    {id:'gloves', type:'ПЕРЧАТКИ', name:'Перчатки «Дача»', rar:'Тайное', color:'#b8862f', price:1800},
-    {id:'rifle', type:'АВТОМАТ', name:'Автомат «Хрущёвка»', rar:'Засекреченное', color:'#a43fb8', price:900},
-    {id:'sniper', type:'СНАЙПЕРКА', name:'Винтовка «Подъезд»', rar:'Засекреченное', color:'#8a3fc4', price:650},
-    {id:'shotgun', type:'ДРОБОВИК', name:'Дробовик «Сессия»', rar:'Запрещённое', color:'#4b5fd6', price:300},
-    {id:'pistol', type:'ПИСТОЛЕТ', name:'Пистолет «Сосед»', rar:'Запрещённое', color:'#4b78d6', price:150},
-    {id:'charm', type:'БРЕЛОК', name:'Брелок «Вахтёрша»', rar:'Армейское', color:'#4a8fb8', price:80},
-    {id:'sticker', type:'НАКЛЕЙКА', name:'Наклейка «Мама, я в Naebalovo»', rar:'Ширпотреб', color:'#6b8798', price:40}
+    {id:'k_karambit', type:'★ KARAMBIT', name:'★ Karambit | Doppler', rar:'Тайное · нож', color:'#d9a52e', price:60000},
+    {id:'k_deagle', type:'DESERT EAGLE', name:'Desert Eagle | Blaze', rar:'Запрещённое', color:'#4b5fd6', price:25000},
+    {id:'k_awp', type:'AWP', name:'AWP | Asiimov', rar:'Тайное', color:'#c43b3b', price:9000},
+    {id:'k_usp', type:'USP-S', name:'USP-S | Kill Confirmed', rar:'Тайное', color:'#c43b3b', price:4000},
+    {id:'k_ak', type:'AK-47', name:'AK-47 | Redline', rar:'Засекреченное', color:'#a43fb8', price:2500},
+    {id:'k_m4', type:'M4A1-S', name:'M4A1-S | Hyper Beast', rar:'Тайное', color:'#c43b3b', price:1800},
+    {id:'k_glock', type:'GLOCK-18', name:'Glock-18 | Water Elemental', rar:'Засекреченное', color:'#a43fb8', price:600},
+    {id:'k_p250', type:'P250', name:'P250 | Sand Dune', rar:'Ширпотреб', color:'#6b8798', price:5}
   ];
   const BOTS=['vasya_2007','Kirill_AWP','mama_ne_znaet','Дед Инсайд','sessiya_zakryta','ne_s_babkami','lucky_bomj','Анатолий','ez_katka','tvoy_bratan','Стипендия','gopnik_pro','xX_Vova_Xx','Бабка с подъезда','urbanist228'];
 
@@ -264,6 +308,7 @@ footer .btn{font-size:12px;padding:7px 10px}
   let st={bal:1000, used:[], pawned:[], recent:[]};
   try{ const s=JSON.parse(localStorage.getItem(KEY)||'null'); if(s && typeof s.bal==='number') st=Object.assign(st,s); }catch(e){}
   if(!Array.isArray(st.pawned)) st.pawned=[];
+  if(typeof st.debt!=='number' || !(st.debt>=0)) st.debt=0;
   const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
 
   let phase='bet', phaseEnd=0, bets=null, botTimer=null;
@@ -370,7 +415,12 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; toast('Выигрыш +'+fmt(win)+' ₽'); }
     else if(staked>0){ toast('Мимо. −'+fmt(staked)+' ₽'); }
     st.recent.push(n); if(st.recent.length>30) st.recent=st.recent.slice(-30);
-    save(); renderBal(); renderRecent();
+    if(st.debt>0){
+      const before=st.debt; st.debt=Math.ceil(st.debt*1.015);
+      if(before<30000 && st.debt>=30000) setTimeout(()=>toast('Naebalovo Займ: коллекторы уже выехали'),1200);
+    }
+    save(); renderBal(); renderRecent(); renderDebt();
+    if(Math.random()<.6) setTimeout(()=>botSay(pick(REACT[c])), 500+Math.random()*1200);
     setTimeout(()=>{
       document.querySelectorAll('.tile.win').forEach(t=>t.classList.remove('win'));
       ci=2*15+idx+jit; place(false); void track.offsetWidth;
@@ -441,7 +491,55 @@ footer .btn{font-size:12px;padding:7px 10px}
   $('closePawn').addEventListener('click',()=>{ pawnModal.hidden=true; });
   pawnModal.addEventListener('click',e=>{ if(e.target===pawnModal) pawnModal.hidden=true; });
 
-  addEventListener('keydown',e=>{ if(e.key==='Escape'){ modal.hidden=true; pawnModal.hidden=true; } });
+  // loans
+  function renderDebt(){
+    $('debt').hidden = !(st.debt>0);
+    $('debtv').textContent=fmt(st.debt);
+    $('loanDebt').textContent=fmt(st.debt)+' ₽';
+  }
+  const loanModal=$('loanModal');
+  $('openLoan').addEventListener('click',()=>{ renderDebt(); loanModal.hidden=false; $('closeLoan').focus(); });
+  $('closeLoan').addEventListener('click',()=>{ loanModal.hidden=true; });
+  loanModal.addEventListener('click',e=>{ if(e.target===loanModal) loanModal.hidden=true; });
+  document.querySelectorAll('.offer').forEach(b=>b.addEventListener('click',()=>{
+    const a=Number(b.dataset.loan);
+    if(st.debt+a>60000){ toast('Лимит исчерпан. Загляни в ломбард'); return; }
+    st.debt+=a; st.bal+=a; save(); renderBal(); renderDebt(); toast('Займ одобрен: +'+fmt(a)+' ₽');
+  }));
+  $('repay').addEventListener('click',()=>{
+    if(!(st.debt>0)){ toast('Долгов нет'); return; }
+    const p=Math.min(st.bal, st.debt);
+    if(p<=0){ toast('На балансе пусто'); return; }
+    st.bal-=p; st.debt-=p; save(); renderBal(); renderDebt();
+    toast(st.debt>0 ? 'Погашено '+fmt(p)+' ₽, осталось '+fmt(st.debt)+' ₽' : 'Долг закрыт');
+  });
+
+  // chat
+  function pick(a){ return a[randInt(a.length)]; }
+  const LINES=['го на красное','зеро не было уже лет сто','кто займёт 500, верну завтра','ломбард на Покровке топ, стипендию взяли без вопросов','ставлю всё на чёрное','сегодня мой день','кто со мной на зеро?','минус стипендия','коллекторы звонят, ставлю дальше','AWP заложил, не жалею','мама, прости','опять чёрное...','последняя ставка и спать','я в плюсе, выводить?','ну давай, красненькое','кто знает, вывод работает?','занял 20к, щас отыграюсь','пары завтра, а я тут','всё, я на зеро до победного'];
+  const REACT={red:['КРАСНОЕ!!!','ну я же говорил, красное','минус на чёрном, класс'],black:['чёрное, кто бы сомневался','опять чёрное...','+2 на чёрном, едем'],green:['ЗЕРО!!! x14','кто стоял на зеро, признавайтесь','зеро, а я на красном...']};
+  const REPLY=['согласен','ты где ставишь?','ахах','не, я пас','держись','сам такой','бро, займи','иди в ломбард','поддерживаю'];
+  const msgs=$('msgs');
+  function addMsg(name,text,cls){
+    const d=document.createElement('div'); d.className='msg'+(cls?' '+cls:'');
+    if(name){ const b=document.createElement('b'); b.textContent=name; d.appendChild(b); }
+    d.appendChild(document.createTextNode(text)); msgs.appendChild(d);
+    while(msgs.children.length>40) msgs.firstChild.remove();
+    msgs.scrollTop=msgs.scrollHeight;
+  }
+  function botSay(t){ addMsg(pick(BOTS), t); }
+  for(let i=0;i<5;i++) botSay(pick(LINES));
+  (function chatTick(){ botSay(pick(LINES)); setTimeout(chatTick, 2500+Math.random()*4500); })();
+  setInterval(()=>{ $('online').textContent='● '+(190+randInt(60))+' онлайн'; }, 7000);
+  $('chatform').addEventListener('submit',e=>{
+    e.preventDefault();
+    const inp=$('chatinput'), t=inp.value.trim().slice(0,200);
+    if(!t) return;
+    addMsg('Ты', t, 'me'); inp.value='';
+    if(Math.random()<.6) setTimeout(()=>botSay(pick(REPLY)), 900+Math.random()*1500);
+  });
+
+  addEventListener('keydown',e=>{ if(e.key==='Escape'){ modal.hidden=true; pawnModal.hidden=true; loanModal.hidden=true; } });
 
   const jokes=['Вывода нет. Это Naebalovo.','Касса закрыта на обед. Навсегда.','Вывод доступен с 4 курса.','Рубли игровые, их не вывести.'];
   $('withdraw').addEventListener('click',()=>toast(jokes[randInt(jokes.length)]));
@@ -451,10 +549,10 @@ footer .btn{font-size:12px;padding:7px 10px}
     const b=$('reset');
     if(!resetArmed){ resetArmed=true; b.textContent='Точно? Нажми ещё раз'; setTimeout(()=>{resetArmed=false;b.textContent='Начать заново';},3000); return; }
     resetArmed=false; b.textContent='Начать заново';
-    st={bal:1000,used:[],pawned:[],recent:st.recent}; save(); renderBal(); if(curShop) renderShop(); toast('Баланс 1 000 ₽, скины и вещи вернулись');
+    st={bal:1000,used:[],pawned:[],debt:0,recent:st.recent}; save(); renderBal(); renderDebt(); if(curShop) renderShop(); toast('Баланс 1 000 ₽, скины и вещи вернулись');
   });
 
-  renderBal(); renderRecent(); startBet(); loop();
+  renderBal(); renderRecent(); renderDebt(); startBet(); loop();
 })();
 </script>
 
