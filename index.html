@@ -144,6 +144,14 @@ footer .btn{font-size:12px;padding:7px 10px}
 .loanstate{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;background:var(--panel2);border-radius:12px;padding:12px}
 .loanstate strong{font-variant-numeric:tabular-nums}
 
+.dealer{display:flex;align-items:center;gap:10px}
+.baby{flex:0 0 auto;width:64px;height:64px;display:block}
+.baby.big{width:84px;height:84px}
+.bubble{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-weight:700;font-size:14px;min-width:0}
+.bubble::before{content:"";position:absolute;left:-7px;top:50%;margin-top:-6px;border:6px solid transparent;border-right-color:var(--line);border-left:0}
+.bubble small{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.baby-row{display:flex;align-items:center;gap:12px}
+
 .chat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .chat h2{margin:0;font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold)}
 .chat h2 small{font-family:var(--body);font-size:12px;color:var(--green);font-weight:700;margin-left:6px}
@@ -184,6 +192,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 
 
   <section class="stage" aria-label="Рулетка">
+    <div class="dealer"><div id="dealerFace"></div><div class="bubble"><small>Крупье Вовочка</small><span id="dealerSay">Делайте ставки, господа</span></div></div>
     <div class="status"><span id="phase">Ставки принимаются</span><span id="timer">10.0</span></div>
     <div class="bar"><i id="barFill"></i></div>
     <div class="window" id="win">
@@ -248,6 +257,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 <div class="modal" id="pawnModal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pTitle">
     <div class="sheet-head"><h2 id="pTitle">Ломбарды Москвы</h2><button class="btn" id="closePawn" type="button">Закрыть</button></div>
+    <div class="baby-row"><div id="appraiserFace"></div><div class="bubble"><small>Оценщик Аркадий Палыч, 2 года</small>Принесите вещь, я её оближу и оценю.</div></div>
     <p>Кончились деньги? Выбери ломбард на карте и заложи что-нибудь. Деньги сразу придут на баланс.</p>
     <div class="pawn">
       <svg class="map" viewBox="0 0 400 400" role="img" aria-label="Схема Москвы с ломбардами">
@@ -268,6 +278,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 <div class="modal" id="loanModal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lTitle">
     <div class="sheet-head"><h2 id="lTitle">Naebalovo Займ</h2><button class="btn" id="closeLoan" type="button">Закрыть</button></div>
+    <div class="baby-row"><div id="collectorFace"></div><div class="bubble"><small>Коллектор Тёма, 11 месяцев</small>Займём. Найдём. Напомним.</div></div>
     <p>Без справок и паспорта, деньги на баланс за секунду. Ставка 1,5% за каждый раунд рулетки. Лимит долга 60 000 ₽.</p>
     <div class="offers">
       <button class="offer" type="button" data-loan="1000"><b>1 000 ₽</b><span>на одну ставку</span></button>
@@ -302,6 +313,41 @@ footer .btn{font-size:12px;padding:7px 10px}
     {id:'k_p250', type:'P250', name:'P250 | Sand Dune', rar:'Ширпотреб', color:'#6b8798', price:5}
   ];
   const BOTS=['vasya_2007','Kirill_AWP','mama_ne_znaet','Дед Инсайд','sessiya_zakryta','ne_s_babkami','lucky_bomj','Анатолий','ez_katka','tvoy_bratan','Стипендия','gopnik_pro','xX_Vova_Xx','Бабка с подъезда','urbanist228'];
+
+  // babies (нарисованы кодом)
+  function baby(o){
+    o=Object.assign({mouth:'smirk', acc:[], suit:'#4b78d6', big:false},o);
+    const sk='#f1c3a2', ln='#8a5a3f';
+    let m='';
+    if(o.mouth==='smirk') m='<path d="M40 66 Q50 70 61 63" fill="none" stroke="'+ln+'" stroke-width="2.4" stroke-linecap="round"/><rect x="51" y="65" width="4" height="4" rx="1" fill="#fff" stroke="'+ln+'" stroke-width=".8"/>';
+    if(o.mouth==='happy') m='<path d="M37 61 Q50 80 64 61 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><rect x="46" y="61" width="5" height="5" rx="1" fill="#fff"/><ellipse cx="51" cy="71" rx="5" ry="2.5" fill="#e0707f"/>';
+    if(o.mouth==='cry') m='<path d="M38 72 Q50 58 63 72 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><path d="M31 50 q-3 8 0 12 q3 -4 0 -12" fill="#7fc4ff"/><path d="M68 49 q-3 9 0 13 q3 -4 0 -13" fill="#7fc4ff"/>';
+    let acc='';
+    if(o.acc.includes('bowtie')) acc+='<path d="M50 86 L38 80 L38 92 Z M50 86 L62 80 L62 92 Z" fill="#d7364b" stroke="#5a1220" stroke-width="1.2"/><circle cx="50" cy="86" r="3" fill="#a3203a"/>';
+    if(o.acc.includes('chain')) acc+='<path d="M34 88 Q50 100 66 88" fill="none" stroke="#e9b949" stroke-width="3" stroke-dasharray="3 1.5"/><circle cx="50" cy="96" r="3.5" fill="#e9b949"/>';
+    if(o.acc.includes('shades')) acc+='<rect x="28" y="40" width="19" height="10" rx="3" fill="#111"/><rect x="53" y="39" width="19" height="10" rx="3" fill="#111"/><path d="M47 44 H53" stroke="#111" stroke-width="2.5"/><path d="M31 42 l5 0" stroke="#555" stroke-width="1.5"/>';
+    if(o.acc.includes('monocle')) acc+='<circle cx="62" cy="44" r="8" fill="rgba(200,230,255,.25)" stroke="#e9b949" stroke-width="2"/><path d="M70 46 Q76 62 70 78" fill="none" stroke="#e9b949" stroke-width="1.2"/>';
+    if(o.acc.includes('pacifier')) acc+='<circle cx="44" cy="70" r="6" fill="#ff8fb1" stroke="#b34d70" stroke-width="1.5"/><circle cx="44" cy="70" r="2.5" fill="none" stroke="#b34d70" stroke-width="1.2"/>';
+    const eyes = o.acc.includes('shades') ? '' :
+      '<ellipse cx="38" cy="45" rx="7" ry="6.5" fill="#fff" stroke="'+ln+'" stroke-width="1.2"/><circle cx="40" cy="46" r="3.3" fill="#2b1a12"/>'+
+      '<ellipse cx="62" cy="43" rx="4.5" ry="4" fill="#fff" stroke="'+ln+'" stroke-width="1.2"/><circle cx="61" cy="43" r="2.1" fill="#2b1a12"/>'+
+      '<path d="M30 36 L44 38" stroke="'+ln+'" stroke-width="2.2" stroke-linecap="round"/><path d="M57 35 Q63 31 68 36" fill="none" stroke="'+ln+'" stroke-width="2" stroke-linecap="round"/>';
+    return '<svg class="baby'+(o.big?' big':'')+'" viewBox="0 0 100 100" aria-hidden="true">'+
+      '<ellipse cx="50" cy="98" rx="30" ry="16" fill="'+o.suit+'"/>'+
+      '<circle cx="17" cy="50" r="9" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.5"/><circle cx="84" cy="47" r="11" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.5"/>'+
+      '<ellipse cx="50" cy="50" rx="33" ry="32" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.8"/>'+
+      '<path d="M44 19 q-4 -9 3 -12 M52 18 q1 -8 7 -9 M48 18 q-2 -6 1 -9" fill="none" stroke="#6b4a2a" stroke-width="1.6" stroke-linecap="round"/>'+
+      '<path d="M30 28 q4 -2 7 1 M64 25 q4 0 6 3" fill="none" stroke="'+ln+'" stroke-width="1" opacity=".5"/>'+
+      '<circle cx="30" cy="60" r="6" fill="#ec8f8f" opacity=".55"/><circle cx="71" cy="58" r="6" fill="#ec8f8f" opacity=".55"/>'+
+      eyes+
+      '<ellipse cx="51" cy="55" rx="4.5" ry="3.2" fill="#e4a283" stroke="'+ln+'" stroke-width="1"/>'+
+      m+acc+'</svg>';
+  }
+  const dealer=(mouth)=>{ $('dealerFace').innerHTML=baby({mouth, acc:['bowtie'], suit:'#1b1b22'}); };
+  dealer('smirk');
+  $('collectorFace').innerHTML=baby({mouth:'smirk', acc:['shades','chain'], suit:'#222', big:true});
+  $('appraiserFace').innerHTML=baby({mouth:'smirk', acc:['monocle','pacifier'], suit:'#6b4a8a', big:true});
+  const say=t=>{ $('dealerSay').textContent=t; };
 
   // state
   const KEY='naebalovo.v1';
@@ -392,12 +438,14 @@ footer .btn{font-size:12px;padding:7px 10px}
     document.querySelectorAll('.col').forEach(c=>c.classList.remove('dim','won'));
     document.querySelectorAll('.tile.win').forEach(t=>t.classList.remove('win'));
     $('phase').textContent='Ставки принимаются'; setButtons(true);
+    dealer('smirk'); say(pick(['Делайте ставки, господа','Ну что, на красное?','Зеро давно не было, кстати','Ставь всё, не бойся']));
     clearTimeout(botTimer); botTimer=setTimeout(botTick,400);
     setTimeout(startSpin, BET_MS);
   }
   function startSpin(){
     phase='spin'; phaseEnd=performance.now()+SPIN_MS; clearTimeout(botTimer); setButtons(false);
     $('phase').textContent='Крутим';
+    dealer('smirk'); say('Ставки сделаны, ставок больше нет');
     const n=randInt(15), idx=ORDER.indexOf(n), jit=(Math.random()-.5)*.8;
     ci=9*15+idx+jit; place(true);
     setTimeout(()=>finish(n,idx,jit), SPIN_MS+60);
@@ -412,8 +460,9 @@ footer .btn{font-size:12px;padding:7px 10px}
     $('phase').textContent='Выпало '+n+' — '+names[c];
     let staked=0; ['red','green','black'].forEach(k=>{ const m=bets[k].find(b=>b.me); if(m) staked+=m.amt; });
     const mine=bets[c].find(b=>b.me);
-    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; toast('Выигрыш +'+fmt(win)+' ₽'); }
-    else if(staked>0){ toast('Мимо. −'+fmt(staked)+' ₽'); }
+    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; toast('Выигрыш +'+fmt(win)+' ₽'); dealer('cry'); say(pick(['Нечестно! Я маме скажу','Ыыыы, забирай...','Это последний раз, понял?'])); }
+    else if(staked>0){ toast('Мимо. −'+fmt(staked)+' ₽'); dealer('happy'); say(pick(['Хи-хи. Казино всегда в плюсе','Спасибо, на памперсы','Ещё разок?'])); }
+    else { say('Выпало '+n+'. А ты чего не ставил?'); }
     st.recent.push(n); if(st.recent.length>30) st.recent=st.recent.slice(-30);
     if(st.debt>0){
       const before=st.debt; st.debt=Math.ceil(st.debt*1.015);
