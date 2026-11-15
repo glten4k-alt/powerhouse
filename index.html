@@ -11,9 +11,9 @@
 /* Layout: одна колонка: шапка с балансом, лента рулетки, ставки, три колонки цветов. Одна тёмная тема по выбору. */
 :root{
   color-scheme: dark;
-  --bg:#170b12; --panel:#22121b; --panel2:#2c1823; --line:#3d2431;
-  --fg:#f3e6ea; --muted:#b39aa6;
-  --gold:#e9b949; --red:#d7364b; --black:#2b2a33; --green:#23a865;
+  --bg:#090a16; --panel:#121429; --panel2:#1a1d3a; --line:#2a2f5c;
+  --fg:#eef0ff; --muted:#9ba1cc; --neon:#2fe3ff;
+  --gold:#ffc83d; --red:#ff3b5c; --black:#2a2e4c; --green:#17d98b;
   --display:"Russo One", "Arial Black", system-ui, sans-serif;
   --body:"Manrope", system-ui, -apple-system, sans-serif;
   --tile:84px;
@@ -25,15 +25,15 @@ body{font-family:var(--body);font-size:15px;
   padding-left:max(16px, env(safe-area-inset-left,0px));
   padding-right:max(16px, env(safe-area-inset-right,0px));
   padding-block:16px 40px;
-  background:radial-gradient(ellipse at 50% -10%, #3a1526 0%, var(--bg) 60%) fixed, var(--bg);
+  background:radial-gradient(ellipse at 20% -10%, #1d1660 0%, transparent 55%) fixed, radial-gradient(ellipse at 100% 0%, #3a0f3f 0%, transparent 45%) fixed, var(--bg);
 }
-.wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 button{font:inherit;color:inherit;cursor:pointer;border:0}
 button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 .logo{font-family:var(--display);font-size:clamp(24px,5vw,34px);letter-spacing:.04em;color:var(--gold);
-  text-shadow:0 0 18px rgba(233,185,73,.35);line-height:1}
+  text-shadow:0 0 10px rgba(47,227,255,.55), 0 0 28px rgba(255,200,61,.35);line-height:1}
 .logo small{display:block;font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:4px;text-shadow:none}
 .wallet{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .balance{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;
@@ -41,24 +41,24 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .balance span{color:var(--gold)}
 .btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:700}
 .btn:hover{border-color:var(--gold)}
-.btn.gold{background:var(--gold);color:#2a1406;border-color:var(--gold)}
+.btn.gold{background:var(--gold);color:#1a1203;border-color:var(--gold)}
 .btn.gold:hover{filter:brightness(1.08)}
 
 .notice{font-size:13px;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:8px 12px}
 .notice b{color:var(--fg)}
 
-.stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.stage{background:var(--panel);border:1px solid var(--line);box-shadow:0 0 0 1px rgba(47,227,255,.08), 0 10px 40px rgba(0,0,0,.4);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
 .status{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700}
 .status #phase{text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--muted)}
 .status #timer{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums;color:var(--gold)}
 .bar{height:5px;background:var(--panel2);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--neon),var(--gold));transform-origin:left}
 
-.window{position:relative;overflow:hidden;height:calc(var(--tile) + 12px);border-radius:10px;background:#120810;padding-top:6px}
+.window{position:relative;overflow:hidden;height:calc(var(--tile) + 12px);border-radius:10px;background:#060714;padding-top:6px}
 .window::before,.window::after{content:"";position:absolute;top:0;bottom:0;width:18%;z-index:2;pointer-events:none}
-.window::before{left:0;background:linear-gradient(90deg,#120810,transparent)}
-.window::after{right:0;background:linear-gradient(-90deg,#120810,transparent)}
-.marker{position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--gold);z-index:3;box-shadow:0 0 12px var(--gold)}
+.window::before{left:0;background:linear-gradient(90deg,#060714,transparent)}
+.window::after{right:0;background:linear-gradient(-90deg,#060714,transparent)}
+.marker{position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--neon);z-index:3;box-shadow:0 0 10px var(--neon),0 0 24px var(--neon)}
 .track{display:flex;gap:0;will-change:transform}
 .tile{flex:0 0 var(--tile);height:var(--tile);display:grid;place-items:center;padding:3px}
 .tile b{width:100%;height:100%;display:grid;place-items:center;border-radius:8px;font-family:var(--display);font-size:24px}
@@ -80,9 +80,19 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .chip:hover{border-color:var(--gold)}
 
 .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.layout{display:grid;gap:18px;grid-template-areas:"stage" "side" "chat";grid-template-columns:minmax(0,1fr)}
+.layout>.stage{grid-area:stage}.layout>.side{grid-area:side}.layout>.chat{grid-area:chat}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+@media (min-width:960px){
+  :root{--tile:104px}
+  .tile b{font-size:30px}
+  .layout{grid-template-columns:340px minmax(0,1fr);grid-template-areas:"side stage" "side chat";align-items:start}
+  .side .cols{grid-template-columns:1fr}
+  .side .betbar .amount{flex-basis:100%}
+}
 .col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;transition:opacity .3s, box-shadow .3s}
 .col.dim{opacity:.45}
-.col.won{box-shadow:0 0 0 2px var(--gold), 0 0 26px rgba(233,185,73,.35)}
+.col.won{box-shadow:0 0 0 2px var(--gold), 0 0 26px rgba(255,200,61,.35)}
 .place{border-radius:10px;padding:14px 10px;font-weight:800;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .place small{font-weight:600;opacity:.85}
 .place.red{background:var(--red)}.place.black{background:var(--black);border:1px solid var(--line)}.place.green{background:var(--green)}
@@ -92,7 +102,7 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .players{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-size:13px}
 .players li{display:flex;justify-content:space-between;gap:8px;padding:5px 8px;border-radius:6px;background:var(--panel2);font-variant-numeric:tabular-nums}
 .players li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.players li.me{background:rgba(233,185,73,.16);color:var(--gold);font-weight:800}
+.players li.me{background:rgba(255,200,61,.16);color:var(--gold);font-weight:800}
 .players .more{background:transparent;color:var(--muted);justify-content:center}
 
 footer{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center}
@@ -115,10 +125,10 @@ footer .btn{font-size:12px;padding:7px 10px}
 .empty{color:var(--muted);text-align:center;padding:20px}
 
 .pawn{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;align-items:start}
-.map{width:100%;height:auto;display:block;border-radius:12px;background:#140a10}
+.map{width:100%;height:auto;display:block;border-radius:12px;background:#070818}
 .map .land{fill:var(--panel2)}
 .map .ring{fill:none;stroke:var(--line);stroke-width:2}
-.map .ring.mkad{stroke:#5a3546;stroke-width:3}
+.map .ring.mkad{stroke:#3d4688;stroke-width:3}
 .map .river{fill:none;stroke:#2c4a6e;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
 .map .lbl{fill:var(--muted);font:600 9px var(--body)}
 .map .pin{cursor:pointer}
@@ -191,6 +201,7 @@ footer .btn{font-size:12px;padding:7px 10px}
   </header>
 
 
+  <div class="layout">
   <section class="stage" aria-label="Рулетка">
     <div class="dealer"><div id="dealerFace"></div><div class="bubble"><small>Крупье Вовочка</small><span id="dealerSay">Делайте ставки, господа</span></div></div>
     <div class="status"><span id="phase">Ставки принимаются</span><span id="timer">10.0</span></div>
@@ -202,6 +213,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     <div class="recent" id="recent"><span>Последние:</span></div>
   </section>
 
+  <aside class="side">
   <div class="betbar">
     <div class="amount"><label for="amount">Ставка</label><input id="amount" type="number" min="1" step="1" value="50" inputmode="numeric"><span>₽</span></div>
     <button class="chip" type="button" data-q="clear">Сброс</button>
@@ -231,6 +243,8 @@ footer .btn{font-size:12px;padding:7px 10px}
     </div>
   </div>
 
+  </aside>
+
   <section class="chat" aria-label="Чат">
     <h2>Чат <small id="online">● 214 онлайн</small></h2>
     <div class="msgs" id="msgs" aria-live="polite"></div>
@@ -239,6 +253,8 @@ footer .btn{font-size:12px;padding:7px 10px}
       <button class="btn gold" type="submit">Отправить</button>
     </form>
   </section>
+
+  </div>
 
   <footer>
     <span>© Naebalovo, 2026</span>
@@ -508,7 +524,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(!left.length){ g.innerHTML='<div class="empty">Инвентарь пуст. Загляни в ломбард.</div>'; return; }
     left.forEach(s=>{
       const b=document.createElement('button'); b.type='button'; b.className='skin';
-      b.innerHTML='<div class="art" style="background:linear-gradient(135deg,'+s.color+',#1a0c14)">'+s.type+'</div>'+
+      b.innerHTML='<div class="art" style="background:linear-gradient(135deg,'+s.color+',#0d0f22)">'+s.type+'</div>'+
         '<div class="info"><span class="name"></span><span class="rar">'+s.rar+'</span><span class="price">'+fmt(s.price)+' ₽</span></div>';
       b.querySelector('.name').textContent=s.name;
       b.addEventListener('click',()=>{ st.used.push(s.id); st.bal+=s.price; save(); renderBal(); renderInv(); toast('Скин принят: +'+fmt(s.price)+' ₽'); });
