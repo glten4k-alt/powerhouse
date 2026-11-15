@@ -346,9 +346,14 @@ footer .btn{font-size:12px;padding:7px 10px}
   const BOTS=['vasya_2007','Kirill_AWP','mama_ne_znaet','Дед Инсайд','sessiya_zakryta','ne_s_babkami','lucky_bomj','Анатолий','ez_katka','tvoy_bratan','Стипендия','gopnik_pro','xX_Vova_Xx','Бабка с подъезда','urbanist228'];
 
   // babies (нарисованы кодом)
+  let babyN=0;
   function baby(o){
     o=Object.assign({mouth:'smirk', acc:[], suit:'#4b78d6', big:false},o);
-    const sk='#f1c3a2', ln='#8a5a3f';
+    const id='b'+(++babyN), ln='#a0694c', sk='url(#'+id+'s)';
+    const defs='<defs><radialGradient id="'+id+'s" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#fbdcc6"/><stop offset=".65" stop-color="#efbf9f"/><stop offset="1" stop-color="#d79a78"/></radialGradient>'+
+      '<radialGradient id="'+id+'b" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ee8f8f" stop-opacity=".7"/><stop offset="1" stop-color="#ee8f8f" stop-opacity="0"/></radialGradient>'+
+      '<radialGradient id="'+id+'i" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#2b1a12"/><stop offset=".45" stop-color="#3d6b8f"/><stop offset="1" stop-color="#1f3d55"/></radialGradient>'+
+      '<linearGradient id="'+id+'n" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".18"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>';
     let m='';
     if(o.mouth==='smirk') m='<path d="M40 66 Q50 70 61 63" fill="none" stroke="'+ln+'" stroke-width="2.4" stroke-linecap="round"/><rect x="51" y="65" width="4" height="4" rx="1" fill="#fff" stroke="'+ln+'" stroke-width=".8"/>';
     if(o.mouth==='happy') m='<path d="M37 61 Q50 80 64 61 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><rect x="46" y="61" width="5" height="5" rx="1" fill="#fff"/><ellipse cx="51" cy="71" rx="5" ry="2.5" fill="#e0707f"/>';
@@ -363,21 +368,30 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(o.acc.includes('glasses')) acc+='<circle cx="38" cy="45" r="9" fill="none" stroke="#333" stroke-width="2"/><circle cx="62" cy="43" r="8" fill="none" stroke="#333" stroke-width="2"/><path d="M47 44 H54" stroke="#333" stroke-width="2"/>';
     if(o.acc.includes('pacifier')) acc+='<circle cx="44" cy="70" r="6" fill="#ff8fb1" stroke="#b34d70" stroke-width="1.5"/><circle cx="44" cy="70" r="2.5" fill="none" stroke="#b34d70" stroke-width="1.2"/>';
     const eyes = o.acc.includes('shades') ? '' :
-      '<ellipse cx="38" cy="45" rx="7" ry="6.5" fill="#fff" stroke="'+ln+'" stroke-width="1.2"/><circle cx="40" cy="46" r="3.3" fill="#2b1a12"/>'+
-      '<ellipse cx="62" cy="43" rx="4.5" ry="4" fill="#fff" stroke="'+ln+'" stroke-width="1.2"/><circle cx="61" cy="43" r="2.1" fill="#2b1a12"/>'+
-      '<path d="M30 36 L44 38" stroke="'+ln+'" stroke-width="2.2" stroke-linecap="round"/><path d="M57 35 Q63 31 68 36" fill="none" stroke="'+ln+'" stroke-width="2" stroke-linecap="round"/>';
+      '<path d="M30 49 Q38 53 46 48" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".7"/><path d="M56 46 Q62 49 67 45" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".7"/>'+
+      '<ellipse cx="38" cy="45" rx="7" ry="6" fill="#fbf7f4" stroke="#7a4a35" stroke-width=".9"/><circle cx="40" cy="45.5" r="3.8" fill="url(#'+id+'i)"/><circle cx="40" cy="45.5" r="1.6" fill="#120a06"/><circle cx="41.4" cy="44" r="1.1" fill="#fff"/>'+
+      '<ellipse cx="62" cy="43" rx="4.6" ry="3.9" fill="#fbf7f4" stroke="#7a4a35" stroke-width=".9"/><circle cx="61" cy="43" r="2.5" fill="url(#'+id+'i)"/><circle cx="61" cy="43" r="1.1" fill="#120a06"/><circle cx="62" cy="42" r=".8" fill="#fff"/>'+
+      '<path d="M31 39 Q34 37.5 37 39" fill="none" stroke="#7a4a35" stroke-width=".9"/><path d="M58 39.5 Q61 38 64 39.5" fill="none" stroke="#7a4a35" stroke-width=".9"/>'+
+      '<path d="M30 35 Q37 33.5 44 36.5" fill="none" stroke="#b58a63" stroke-width="2.2" stroke-linecap="round" opacity=".75"/><path d="M57 34 Q63 30.5 68 34.5" fill="none" stroke="#b58a63" stroke-width="1.9" stroke-linecap="round" opacity=".75"/>';
     return '<svg class="baby'+(o.big?' big':'')+'" viewBox="0 0 100 100" aria-hidden="true">'+
       '<ellipse cx="50" cy="98" rx="30" ry="16" fill="'+o.suit+'"/>'+
-      '<circle cx="17" cy="50" r="9" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.5"/><circle cx="84" cy="47" r="11" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.5"/>'+
-      '<ellipse cx="50" cy="50" rx="33" ry="32" fill="'+sk+'" stroke="'+ln+'" stroke-width="1.8"/>'+
+      defs+
+      '<path d="M40 80 Q50 86 60 80 L60 90 L40 90 Z" fill="#d9a07f"/>'+
+      '<circle cx="17" cy="50" r="9" fill="'+sk+'" stroke="'+ln+'" stroke-width=".9"/><path d="M14 46 Q19 50 15 55" fill="none" stroke="#c98a6a" stroke-width="1.4"/>'+
+      '<circle cx="84" cy="47" r="11" fill="'+sk+'" stroke="'+ln+'" stroke-width=".9"/><path d="M87 42 Q81 47 86 53" fill="none" stroke="#c98a6a" stroke-width="1.6"/>'+
+      '<ellipse cx="50" cy="50" rx="33" ry="32" fill="'+sk+'" stroke="'+ln+'" stroke-width="1"/>'+
+      '<ellipse cx="50" cy="78" rx="18" ry="5" fill="url(#'+id+'n)"/>'+
       (o.hair==='bowl' ? '<path d="M16 48 Q14 13 50 13 Q86 13 84 46 Q76 33 62 35 L58 29 L54 35 Q40 33 30 36 Q22 39 16 48 Z" fill="#5a3a22"/>' :
        o.hair==='pigtails' ? '<circle cx="11" cy="36" r="10" fill="#c9852f"/><circle cx="89" cy="36" r="10" fill="#c9852f"/><path d="M17 44 Q17 15 50 15 Q83 15 83 44 Q72 28 50 31 Q28 28 17 44 Z" fill="#c9852f"/><path d="M13 24 l-7 -5 l1 9 Z M13 24 l7 -6 l0 9 Z M87 24 l-7 -6 l0 9 Z M87 24 l7 -5 l-1 9 Z" fill="#ff8fb1"/>' :
        '<path d="M44 19 q-4 -9 3 -12 M52 18 q1 -8 7 -9 M48 18 q-2 -6 1 -9" fill="none" stroke="#6b4a2a" stroke-width="1.6" stroke-linecap="round"/>')+
       (o.freckles ? '<g fill="#b8764f" opacity=".6"><circle cx="34" cy="57" r="1.2"/><circle cx="38" cy="59" r="1.2"/><circle cx="31" cy="60" r="1.2"/><circle cx="66" cy="56" r="1.2"/><circle cx="70" cy="58" r="1.2"/><circle cx="64" cy="59" r="1.2"/></g>' : '')+
       '<path d="M30 28 q4 -2 7 1 M64 25 q4 0 6 3" fill="none" stroke="'+ln+'" stroke-width="1" opacity=".5"/>'+
-      '<circle cx="30" cy="60" r="6" fill="#ec8f8f" opacity=".55"/><circle cx="71" cy="58" r="6" fill="#ec8f8f" opacity=".55"/>'+
+      '<circle cx="30" cy="60" r="9" fill="url(#'+id+'b)"/><circle cx="71" cy="58" r="9" fill="url(#'+id+'b)"/>'+
+      '<ellipse cx="40" cy="30" rx="10" ry="5" fill="#fff" opacity=".18"/>'+
       eyes+
-      '<ellipse cx="51" cy="55" rx="4.5" ry="3.2" fill="#e4a283" stroke="'+ln+'" stroke-width="1"/>'+
+      '<path d="M49 47 Q48 53 46.5 55.5" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".6"/>'+
+      '<ellipse cx="51" cy="55" rx="5.2" ry="3.6" fill="#eaa98a"/><ellipse cx="52" cy="53.6" rx="2" ry="1" fill="#fff" opacity=".35"/>'+
+      '<ellipse cx="48.6" cy="56.3" rx="1.2" ry=".8" fill="#8a4f3a"/><ellipse cx="53.4" cy="56.3" rx="1.2" ry=".8" fill="#8a4f3a"/>'+
       m+acc+'</svg>';
   }
   const dealer=(mouth)=>{ $('dealerFace').innerHTML=baby({mouth, acc:['bowtie'], suit:'#1b1b22'}); };
