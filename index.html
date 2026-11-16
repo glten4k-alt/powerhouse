@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Naebalovo Casino</title>
+<title>VULPES — частный игровой дом</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&family=Manrope:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: одна колонка: шапка с балансом, лента рулетки, ставки, три колонки цветов. Одна тёмная тема по выбору. */
+/* VULPES: частный игровой дом. Одна тёмная тема, сдержанная типографика, золото. */
 :root{
   color-scheme: dark;
-  --bg:#090a16; --panel:#121429; --panel2:#1a1d3a; --line:#2a2f5c;
-  --fg:#eef0ff; --muted:#9ba1cc; --neon:#2fe3ff;
-  --gold:#ffc83d; --red:#ff3b5c; --black:#2a2e4c; --green:#17d98b;
-  --display:"Russo One", "Arial Black", system-ui, sans-serif;
-  --body:"Manrope", system-ui, -apple-system, sans-serif;
+  --bg:#0b0b0c; --panel:#121213; --panel2:#19191b; --line:#2c2c30;
+  --fg:#f2efe8; --muted:#96938c; --neon:#c9a227;
+  --gold:#d3b06a; --gold2:#f0d79b; --red:#8e2438; --black:#232326; --green:#1f6b4d;
+  --display:"Cormorant Garamond", "Times New Roman", serif;
+  --body:"Inter", system-ui, -apple-system, sans-serif;
   --tile:84px;
 }
 *{box-sizing:border-box}
@@ -25,46 +25,53 @@ body{font-family:var(--body);font-size:15px;
   padding-left:max(16px, env(safe-area-inset-left,0px));
   padding-right:max(16px, env(safe-area-inset-right,0px));
   padding-block:16px 40px;
-  background:radial-gradient(ellipse at 20% -10%, #1d1660 0%, transparent 55%) fixed, radial-gradient(ellipse at 100% 0%, #3a0f3f 0%, transparent 45%) fixed, var(--bg);
+  background:radial-gradient(ellipse at 50% -20%, #1a1712 0%, transparent 60%) fixed, var(--bg);
 }
 .wrap{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 button{font:inherit;color:inherit;cursor:pointer;border:0}
 button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
-.logo{font-family:var(--display);font-size:clamp(24px,5vw,34px);letter-spacing:.04em;color:var(--gold);
-  text-shadow:0 0 10px rgba(47,227,255,.55), 0 0 28px rgba(255,200,61,.35);line-height:1}
-.logo small{display:block;font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:4px;text-shadow:none}
+.logo{font-family:var(--display);font-size:clamp(26px,5vw,38px);letter-spacing:.22em;color:var(--gold);
+  font-weight:600;line-height:1;text-transform:uppercase}
+.logo small{display:block;font-family:var(--body);font-size:10px;font-weight:500;letter-spacing:.34em;color:var(--muted);text-transform:uppercase;margin-top:6px}
 .wallet{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .balance{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;
   font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums;color:var(--fg);min-width:150px;text-align:right}
 .balance span{color:var(--gold)}
-.btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-weight:700}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:10px 14px;font-weight:600;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 .btn:hover{border-color:var(--gold)}
-.btn.gold{background:var(--gold);color:#1a1203;border-color:var(--gold)}
-.btn.gold:hover{filter:brightness(1.08)}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#17130c;border-color:#b8964f}
+.btn.gold:hover{filter:brightness(1.05)}
+
+/* сдержанная полировка */
+.btn{transition:transform .12s ease, border-color .12s ease, filter .12s ease}
+.btn:hover{transform:translateY(-1px)}
+.marker{box-shadow:0 0 12px rgba(211,176,106,.5)}
+@media (prefers-reduced-motion: reduce){ .logo,.marker{animation:none} }
 
 .notice{font-size:13px;color:var(--muted);background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:8px 12px}
 .notice b{color:var(--fg)}
 
-.stage{background:var(--panel);border:1px solid var(--line);box-shadow:0 0 0 1px rgba(47,227,255,.08), 0 10px 40px rgba(0,0,0,.4);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.stage{background:var(--panel);border:1px solid var(--line);box-shadow:0 1px 0 rgba(255,255,255,.02), 0 24px 60px rgba(0,0,0,.55);border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .status{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700}
 .status #phase{text-transform:uppercase;letter-spacing:.08em;font-size:13px;color:var(--muted)}
 .status #timer{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums;color:var(--gold)}
 .bar{height:5px;background:var(--panel2);border-radius:3px;overflow:hidden}
-.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--neon),var(--gold));transform-origin:left}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#8c6f33,var(--gold));transform-origin:left}
 
-.window{position:relative;overflow:hidden;height:calc(var(--tile) + 12px);border-radius:10px;background:#060714;padding-top:6px}
+.window{position:relative;overflow:hidden;height:calc(var(--tile) + 12px);border-radius:6px;background:#0a0a0b;padding-top:6px}
 .window::before,.window::after{content:"";position:absolute;top:0;bottom:0;width:18%;z-index:2;pointer-events:none}
-.window::before{left:0;background:linear-gradient(90deg,#060714,transparent)}
-.window::after{right:0;background:linear-gradient(-90deg,#060714,transparent)}
-.marker{position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;background:var(--neon);z-index:3;box-shadow:0 0 10px var(--neon),0 0 24px var(--neon)}
+.window::before{left:0;background:linear-gradient(90deg,#0a0a0b,transparent)}
+.window::after{right:0;background:linear-gradient(-90deg,#0a0a0b,transparent)}
+.marker{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--gold2);z-index:3;box-shadow:0 0 10px rgba(240,215,155,.6)}
 .track{display:flex;gap:0;will-change:transform}
 .tile{flex:0 0 var(--tile);height:var(--tile);display:grid;place-items:center;padding:3px}
-.tile b{width:100%;height:100%;display:grid;place-items:center;border-radius:8px;font-family:var(--display);font-size:24px}
-.c-red b{background:linear-gradient(160deg,#e8475c,var(--red))}
-.c-black b{background:linear-gradient(160deg,#3b3a45,var(--black))}
-.c-green b{background:linear-gradient(160deg,#35c47b,var(--green))}
+.tile b{width:100%;height:100%;display:grid;place-items:center;border-radius:4px;font-family:var(--display);font-size:24px}
+.c-red b{background:linear-gradient(180deg,#a02a3f,#7c1e30)}
+.c-black b{background:linear-gradient(180deg,#2c2c31,#1c1c1f)}
+.c-green b{background:linear-gradient(180deg,#256f52,#174a37)}
 .tile.win b{outline:3px solid var(--gold);outline-offset:-3px}
 
 .recent{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
@@ -76,8 +83,20 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
 .amount label{font-size:12px;color:var(--muted);white-space:nowrap}
 .amount input{background:transparent;border:0;color:var(--fg);font:700 18px var(--body);padding:10px 0;width:100%;min-width:0;font-variant-numeric:tabular-nums}
 .amount span{color:var(--gold);font-weight:800}
-.chip{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-weight:700;font-size:13px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
 .chip:hover{border-color:var(--gold)}
+.btn.sac{background:#141312;border-color:#4a3d24;color:var(--gold2)}
+.btn.sac:hover{border-color:var(--gold)}
+.btn.sac.armed{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#17130c;border-color:#b8964f}
+.btn.sac:disabled{opacity:.4;cursor:not-allowed}
+#ritual{position:absolute;left:50%;top:46%;z-index:11;pointer-events:none;opacity:0;
+  transform:translate(-50%,-50%) scale(.96);transition:opacity .18s,transform .18s;
+  background:#0d0d0e;border:1px solid var(--gold);padding:10px 10px 30px;width:190px;
+  box-shadow:0 26px 70px rgba(0,0,0,.75)}
+#ritual.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#ritual .baby{width:100%;height:auto;display:block;background:#141312}
+#ritual .rcap{position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:9px;
+  letter-spacing:.22em;font-weight:600;color:var(--gold2);text-transform:uppercase}
 
 .cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .layout{display:grid;gap:18px;grid-template-areas:"stage" "side" "chat";grid-template-columns:minmax(0,1fr)}
@@ -89,11 +108,11 @@ header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-betw
   .layout{grid-template-columns:420px minmax(0,1fr);grid-template-areas:"side stage" "side chat";align-items:start}
   .side .betbar .amount{flex-basis:100%}
 }
-.col{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:opacity .3s, box-shadow .3s}
-.col.dim{opacity:.45}
-.col.won{box-shadow:0 0 0 2px var(--gold), 0 0 26px rgba(255,200,61,.35)}
-.place{border-radius:10px;padding:12px 6px;font-weight:800;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;text-align:center}
-.place small{font-weight:600;opacity:.85}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:8px;min-width:0;transition:opacity .3s, box-shadow .3s}
+.col.dim{opacity:.4}
+.col.won{box-shadow:0 0 0 1px var(--gold), 0 0 30px rgba(211,176,106,.18)}
+.place{border-radius:6px;padding:12px 6px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;text-align:center}
+.place small{font-weight:500;letter-spacing:0;text-transform:none;opacity:.8}
 .place.red{background:var(--red)}.place.black{background:var(--black);border:1px solid var(--line)}.place.green{background:var(--green)}
 .place:disabled{filter:grayscale(.6);cursor:not-allowed}
 .sum{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -160,18 +179,41 @@ footer .btn{font-size:12px;padding:7px 10px}
 .loanstate strong{font-variant-numeric:tabular-nums}
 
 .dealer{display:flex;align-items:center;gap:10px}
-.baby{flex:0 0 auto;width:64px;height:64px;display:block}
-.baby.big{width:84px;height:84px}
+.dealer .swap{margin-left:auto;flex:0 0 auto;padding:8px 10px;font-size:15px;line-height:1;color:var(--muted)}
+.dealer .swap:hover{color:var(--fg)}
+.furry{filter:drop-shadow(0 0 7px rgba(255,138,60,.28))}
+.baby{flex:0 0 auto;width:72px;height:72px;display:block}
+.baby.big{width:94px;height:94px}
+/* портрет из пользовательского файла: кроп 3:4, фокус в верхней трети */
+.baby.portrait{object-fit:cover;object-position:50% 22%;border-radius:10px;background:#151318;border:1px solid var(--line)}
 .bubble{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-weight:700;font-size:14px;min-width:0}
 .bubble::before{content:"";position:absolute;left:-7px;top:50%;margin-top:-6px;border:6px solid transparent;border-right-color:var(--line);border-left:0}
 .bubble small{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
 .baby-row{display:flex;align-items:center;gap:12px}
 
+/* появление фигуры поверх рулетки */
+.stage{position:relative}
+#popBaby{position:absolute;right:12px;top:92px;z-index:9;pointer-events:none;opacity:0}
+#popBaby .pp{display:block}
+#popBaby .pw{display:block;animation:wig .9s ease-in-out infinite}
+#popBaby .baby{width:84px;height:84px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.6))}
+#popBaby.show{opacity:1}
+#popBaby.show .pp{animation:popIn .48s cubic-bezier(.2,1.6,.4,1) both}
+#popBaby.out .pp{animation:popOut .26s ease both}
+.baby.pop{animation:popIn .4s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes popIn{0%{transform:scale(0) translateY(34px);opacity:0}60%{opacity:1}78%{transform:scale(1.14) translateY(-8px)}100%{transform:scale(1) translateY(0);opacity:1}}
+@keyframes popOut{to{transform:scale(0) translateY(44px);opacity:0}}
+@keyframes wig{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@media (prefers-reduced-motion: reduce){ #popBaby .pw{animation:none} .baby.pop{animation:none} }
+
 .chat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px}
 .chat h2{margin:0;font-family:var(--display);font-weight:400;font-size:16px;color:var(--gold)}
 .chat h2 small{font-family:var(--body);font-size:12px;color:var(--green);font-weight:700;margin-left:6px}
 .msgs{height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;font-size:13px;padding-right:4px}
-.msg{line-height:1.4;overflow-wrap:anywhere}
+.msg{line-height:1.4;overflow-wrap:anywhere;display:flex;gap:7px;align-items:flex-start}
+.msg-body{min-width:0;flex:1}
+.msg-ava{flex:0 0 22px;width:22px;height:22px;line-height:0;margin-top:1px}
+.msg-ava .baby{width:22px;height:22px;display:block}
 .msg b{color:var(--gold);margin-right:6px}
 .msg.me b{color:#fff}
 .msg.sys{color:var(--muted);font-style:italic}
@@ -193,14 +235,14 @@ footer .btn{font-size:12px;padding:7px 10px}
 
 <div class="wrap">
   <header>
-    <div class="logo">NAEBALOVO<small>CS roulette</small></div>
+    <div class="logo">VULPES<small>частный игровой дом</small></div>
     <div class="wallet">
       <div class="debt" id="debt" hidden>Долг <span id="debtv">0</span> ₽</div>
       <div class="balance" aria-live="polite"><span id="bal">1 000</span> ₽</div>
-      <button class="btn gold" id="openDeposit" type="button">Закинуть скин</button>
+      <button class="btn gold" id="openDeposit" type="button">Пополнить</button>
       <button class="btn" id="openPawn" type="button">Ломбард</button>
-      <button class="btn" id="openLoan" type="button">Займ</button>
-      <button class="btn" id="withdraw" type="button">Вывести</button>
+      <button class="btn" id="openLoan" type="button">Кредит</button>
+      <button class="btn" id="withdraw" type="button">Вывод</button>
       <button class="btn" id="sound" type="button" aria-pressed="true">Звук: вкл</button>
       <button class="btn" id="music" type="button" aria-pressed="false">Музыка: выкл</button>
     </div>
@@ -209,12 +251,19 @@ footer .btn{font-size:12px;padding:7px 10px}
 
   <div class="layout">
   <section class="stage" aria-label="Рулетка">
-    <div class="dealer"><div id="dealerFace"></div><div class="bubble"><small>Крупье Вовочка</small><span id="dealerSay">Делайте ставки, господа</span></div></div>
+    <div class="dealer"><div id="dealerFace"></div><div class="bubble"><small id="dealerName">Крупье Лиска</small><span id="dealerSay">Ставки принимаются</span></div><button class="swap" id="dealerSwap" type="button" aria-label="Сменить крупье" title="Сменить крупье">⇄</button></div>
     <div class="status"><span id="phase">Ставки принимаются</span><span id="timer">10.0</span></div>
     <div class="bar"><i id="barFill"></i></div>
     <div class="window" id="win">
       <div class="marker"></div>
       <div class="track" id="track"></div>
+    </div>
+    <div id="popBaby" aria-hidden="true">
+      <div class="pp"><div class="pw" id="popBabyArt"></div></div>
+    </div>
+    <div id="ritual" aria-hidden="true">
+      <div id="ritualArt"></div>
+      <div class="rcap">Гарантия раунда</div>
     </div>
     <div class="recent" id="recent"><span>Последние:</span></div>
   </section>
@@ -229,6 +278,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     <button class="chip" type="button" data-q="half">½</button>
     <button class="chip" type="button" data-q="x2">×2</button>
     <button class="chip" type="button" data-q="max">Всё</button>
+    <button class="btn sac" id="sacrifice" type="button">Гарантия раунда · 777 ₽</button>
   </div>
 
   <div class="cols">
@@ -263,25 +313,25 @@ footer .btn{font-size:12px;padding:7px 10px}
   </div>
 
   <footer>
-    <span>© Naebalovo, 2026</span>
-    <button class="btn" id="reset" type="button">Начать заново</button>
+    <span>© VULPES, 2026 · игровые рубли, реальных ставок нет</span>
+    <button class="btn" id="reset" type="button">Сбросить сессию</button>
   </footer>
 </div>
 
 <div class="modal" id="modal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle">
-    <div class="sheet-head"><h2 id="mTitle">Инвентарь</h2><button class="btn" id="closeDeposit" type="button">Закрыть</button></div>
-    <div class="baby-row"><div id="cashierFace"></div><div class="bubble"><small>Кассир Алина, 5 «А»</small>Давайте скорее, у меня в 14:00 продлёнка.</div></div>
-    <p>Выбери скин, касса сразу зачислит его стоимость на баланс.</p>
+    <div class="sheet-head"><h2 id="mTitle">Пополнение счёта</h2><button class="btn" id="closeDeposit" type="button">Закрыть</button></div>
+    <div class="baby-row"><div id="cashierFace"></div><div class="bubble"><small>Кассир Мира</small>Оценка по текущему курсу. Средства зачисляются сразу.</div></div>
+    <p>Выберите предмет — касса зачислит его стоимость на баланс.</p>
     <div class="grid" id="inv"></div>
   </div>
 </div>
 
 <div class="modal" id="pawnModal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pTitle">
-    <div class="sheet-head"><h2 id="pTitle">Ломбарды Москвы</h2><button class="btn" id="closePawn" type="button">Закрыть</button></div>
-    <div class="baby-row"><div id="appraiserFace"></div><div class="bubble"><small>Оценщик Аркадий Палыч, 2 года</small>Принесите вещь, я её оближу и оценю.</div></div>
-    <p>Кончились деньги? Выбери ломбард на карте и заложи что-нибудь. Деньги сразу придут на баланс.</p>
+    <div class="sheet-head"><h2 id="pTitle">Ломбард</h2><button class="btn" id="closePawn" type="button">Закрыть</button></div>
+    <div class="baby-row"><div id="appraiserFace"></div><div class="bubble"><small>Оценщик Артур</small>Оценка занимает минуту. Деньги выдаём сразу.</div></div>
+    <p>Выберите отделение на карте и заложите вещь. Средства поступят на баланс.</p>
     <div class="pawn">
       <div id="leafmap" class="leafmap" hidden></div>
       <svg class="map" id="schemeMap" viewBox="0 0 400 400" role="img" aria-label="Схема Москвы с ломбардами">
@@ -302,19 +352,19 @@ footer .btn{font-size:12px;padding:7px 10px}
 <div class="modal" id="wdModal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="wTitle">
     <div class="sheet-head"><h2 id="wTitle">Вывод средств</h2><button class="btn" id="closeWd" type="button">Закрыть</button></div>
-    <div class="baby-row"><div id="guardFace"></div><div class="bubble"><small>Охранник Серёжа, 3 «Б»</small><span id="guardSay">Вывода нет.</span></div></div>
+    <div class="baby-row"><div id="guardFace"></div><div class="bubble"><small>Служба безопасности</small><span id="guardSay">Вывод недоступен.</span></div></div>
   </div>
 </div>
 
 <div class="modal" id="loanModal" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lTitle">
-    <div class="sheet-head"><h2 id="lTitle">Naebalovo Займ</h2><button class="btn" id="closeLoan" type="button">Закрыть</button></div>
-    <div class="baby-row"><div id="collectorFace"></div><div class="bubble"><small>Коллектор Тёма, 11 месяцев</small>Займём. Найдём. Напомним.</div></div>
-    <p>Без справок и паспорта, деньги на баланс за секунду. Ставка 1,5% за каждый раунд рулетки. Лимит долга 60 000 ₽.</p>
+    <div class="sheet-head"><h2 id="lTitle">Кредитная линия</h2><button class="btn" id="closeLoan" type="button">Закрыть</button></div>
+    <div class="baby-row"><div id="collectorFace"></div><div class="bubble"><small>Кредитный отдел</small>Решение моментальное. Условия — ниже.</div></div>
+    <p>Без справок и документов, средства на баланс сразу. Ставка 1,5% за каждый раунд. Лимит 60 000 ₽.</p>
     <div class="offers">
-      <button class="offer" type="button" data-loan="1000"><b>1 000 ₽</b><span>на одну ставку</span></button>
-      <button class="offer" type="button" data-loan="5000"><b>5 000 ₽</b><span>отыграться</span></button>
-      <button class="offer" type="button" data-loan="20000"><b>20 000 ₽</b><span>на всё, что есть</span></button>
+      <button class="offer" type="button" data-loan="1000"><b>1 000 ₽</b><span>минимальный транш</span></button>
+      <button class="offer" type="button" data-loan="5000"><b>5 000 ₽</b><span>стандартный транш</span></button>
+      <button class="offer" type="button" data-loan="20000"><b>20 000 ₽</b><span>максимальный транш</span></button>
     </div>
     <div class="loanstate"><span>Текущий долг: <strong id="loanDebt">0 ₽</strong></span><button class="btn" id="repay" type="button">Погасить с баланса</button></div>
   </div>
@@ -345,7 +395,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     {id:'k_glock', type:'GLOCK-18', name:'Glock-18 | Water Elemental', rar:'Засекреченное', color:'#a43fb8', price:600},
     {id:'k_p250', type:'P250', name:'P250 | Sand Dune', rar:'Ширпотреб', color:'#6b8798', price:5}
   ];
-  const BOTS=['vasya_2007','Kirill_AWP','mama_ne_znaet','Дед Инсайд','sessiya_zakryta','ne_s_babkami','lucky_bomj','Анатолий','ez_katka','tvoy_bratan','Стипендия','gopnik_pro','xX_Vova_Xx','Бабка с подъезда','urbanist228'];
+  const BOTS=['A. Volkov','M. Sokolova','V. Zaytsev','N. Lisitsyn','K. Belov','D. Orlov','R. Kravets','S. Medvedev','T. Rybakova','I. Gromov','P. Volkov','L. Sorokina','G. Barsukov','E. Krug','A. Volkova','fox_major','vulpes_nox','silver_fang','night_tail','kitsune_nya','V. Snezhkov','O. Lisova','B. Krotov','M. Belkina'];
 
   // babies (нарисованы кодом)
   let babyN=0;
@@ -360,6 +410,9 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(o.mouth==='smirk') m='<path d="M40 66 Q50 70 61 63" fill="none" stroke="'+ln+'" stroke-width="2.4" stroke-linecap="round"/><rect x="51" y="65" width="4" height="4" rx="1" fill="#fff" stroke="'+ln+'" stroke-width=".8"/>';
     if(o.mouth==='happy') m='<path d="M37 61 Q50 80 64 61 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><rect x="46" y="61" width="5" height="5" rx="1" fill="#fff"/><ellipse cx="51" cy="71" rx="5" ry="2.5" fill="#e0707f"/>';
     if(o.mouth==='cry') m='<path d="M38 72 Q50 58 63 72 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><path d="M31 50 q-3 8 0 12 q3 -4 0 -12" fill="#7fc4ff"/><path d="M68 49 q-3 9 0 13 q3 -4 0 -13" fill="#7fc4ff"/>';
+    if(o.mouth==='surprised') m='<ellipse cx="50" cy="68" rx="6" ry="8" fill="#7a2230" stroke="'+ln+'" stroke-width="1.8"/><ellipse cx="50" cy="72" rx="3" ry="2.5" fill="#e0707f"/>';
+    if(o.mouth==='angry') m='<path d="M38 70 Q50 62 63 70" fill="none" stroke="'+ln+'" stroke-width="2.6" stroke-linecap="round"/><path d="M44 66 l3 3 M56 66 l-3 3" stroke="'+ln+'" stroke-width="1.4" stroke-linecap="round"/>';
+    if(o.mouth==='laugh') m='<path d="M36 58 Q50 58 64 58 Q62 75 50 76 Q38 75 36 58 Z" fill="#7a2230" stroke="'+ln+'" stroke-width="2"/><path d="M38 59 q12 5 24 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="50" cy="72" rx="6.4" ry="3.2" fill="#e0707f"/><path d="M34 61 q-3 4 -3 8" fill="none" stroke="#d3a084" stroke-width="1" opacity=".55"/><path d="M66 60 q3 4 3 8" fill="none" stroke="#d3a084" stroke-width="1" opacity=".55"/><path d="M44 81 q6 3.5 12 0" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".45"/>';
     let acc='';
     if(o.acc.includes('bowtie')) acc+='<path d="M50 86 L38 80 L38 92 Z M50 86 L62 80 L62 92 Z" fill="#d7364b" stroke="#5a1220" stroke-width="1.2"/><circle cx="50" cy="86" r="3" fill="#a3203a"/>';
     if(o.acc.includes('chain')) acc+='<path d="M34 88 Q50 100 66 88" fill="none" stroke="#e9b949" stroke-width="3" stroke-dasharray="3 1.5"/><circle cx="50" cy="96" r="3.5" fill="#e9b949"/>';
@@ -369,14 +422,26 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(o.acc.includes('cap')) acc+='<path d="M19 31 Q50 2 81 31 Z" fill="#1b1b22"/><rect x="14" y="28" width="72" height="6" rx="3" fill="#1b1b22"/><text x="50" y="25" font-size="8.5" font-weight="700" fill="#e9b949" text-anchor="middle" font-family="sans-serif">ОХРАНА</text>';
     if(o.acc.includes('glasses')) acc+='<circle cx="38" cy="45" r="9" fill="none" stroke="#333" stroke-width="2"/><circle cx="62" cy="43" r="8" fill="none" stroke="#333" stroke-width="2"/><path d="M47 44 H54" stroke="#333" stroke-width="2"/>';
     if(o.acc.includes('pacifier')) acc+='<circle cx="44" cy="70" r="6" fill="#ff8fb1" stroke="#b34d70" stroke-width="1.5"/><circle cx="44" cy="70" r="2.5" fill="none" stroke="#b34d70" stroke-width="1.2"/>';
-    const eyes = o.acc.includes('shades') ? '' :
-      '<path d="M30 49 Q38 53 46 48" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".7"/><path d="M56 46 Q62 49 67 45" fill="none" stroke="#c98a6a" stroke-width="1" opacity=".7"/>'+
-      '<ellipse cx="38" cy="45" rx="7" ry="6" fill="#fbf7f4" stroke="#7a4a35" stroke-width=".9"/><circle cx="40" cy="45.5" r="3.8" fill="url(#'+id+'i)"/><circle cx="40" cy="45.5" r="1.6" fill="#120a06"/><circle cx="41.4" cy="44" r="1.1" fill="#fff"/>'+
-      '<ellipse cx="62" cy="43" rx="4.6" ry="3.9" fill="#fbf7f4" stroke="#7a4a35" stroke-width=".9"/><circle cx="61" cy="43" r="2.5" fill="url(#'+id+'i)"/><circle cx="61" cy="43" r="1.1" fill="#120a06"/><circle cx="62" cy="42" r=".8" fill="#fff"/>'+
-      '<path d="M31 39 Q34 37.5 37 39" fill="none" stroke="#7a4a35" stroke-width=".9"/><path d="M58 39.5 Q61 38 64 39.5" fill="none" stroke="#7a4a35" stroke-width=".9"/>'+
-      '<path d="M30 35 Q37 33.5 44 36.5" fill="none" stroke="#b58a63" stroke-width="2.2" stroke-linecap="round" opacity=".75"/><path d="M57 34 Q63 30.5 68 34.5" fill="none" stroke="#b58a63" stroke-width="1.9" stroke-linecap="round" opacity=".75"/>';
-    return '<svg class="baby'+(o.big?' big':'')+'" viewBox="0 0 100 100" aria-hidden="true">'+
-      '<ellipse cx="50" cy="98" rx="30" ry="16" fill="'+o.suit+'"/>'+
+    if(o.acc.includes('party')) acc+='<path d="M50 -2 L38 30 L62 30 Z" fill="#ff5c8a" stroke="#8a2244" stroke-width="1.2"/><circle cx="50" cy="-2" r="4" fill="#ffd23d"/><path d="M42 22 L58 22" stroke="#ffd23d" stroke-width="2"/><path d="M45 14 L55 14" stroke="#2fe3ff" stroke-width="2"/>';
+    if(o.acc.includes('crown')) acc+='<path d="M28 22 L34 4 L42 18 L50 2 L58 18 L66 4 L72 22 Z" fill="#ffc83d" stroke="#a37a12" stroke-width="1.2"/><circle cx="50" cy="14" r="2.4" fill="#ff3b5c"/><circle cx="35" cy="17" r="1.8" fill="#2fe3ff"/><circle cx="65" cy="17" r="1.8" fill="#17d98b"/>';
+    if(o.acc.includes('soother')) acc+='<path d="M36 88 L50 76 L64 88 L50 100 Z" fill="#2a2f5c" stroke="#0c0e1e" stroke-width="1.2"/><text x="50" y="93" font-size="7" font-weight="700" fill="#ffc83d" text-anchor="middle" font-family="sans-serif">18+</text>';
+    const eyes = o.mouth==='laugh'
+      ? '<path d="M29 47 Q37 37.5 45 47" fill="none" stroke="#5a3a22" stroke-width="2.8" stroke-linecap="round"/><path d="M55 46 Q63 36.5 71 46" fill="none" stroke="#5a3a22" stroke-width="2.8" stroke-linecap="round"/><path d="M31 40 Q34 38.5 37 40" fill="none" stroke="#7a4a35" stroke-width="1"/><path d="M63 39 Q66 37.5 69 39" fill="none" stroke="#7a4a35" stroke-width="1"/>'
+      : o.acc.includes('shades') ? '' :
+      '<path d="M30 49 Q38 54 46 48" fill="none" stroke="#c98a6a" stroke-width="1.1" opacity=".55"/><path d="M56 46 Q62 50 67 45" fill="none" stroke="#c98a6a" stroke-width="1.1" opacity=".55"/>'+
+      '<ellipse cx="38" cy="45" rx="7" ry="6.2" fill="#fbf7f4" stroke="#6b4633" stroke-width="1"/><circle cx="40" cy="45.5" r="3.9" fill="url(#'+id+'i)"/><circle cx="40" cy="45.5" r="1.7" fill="#120a06"/><circle cx="41.5" cy="43.8" r="1.2" fill="#fff"/><circle cx="38.5" cy="46.8" r=".5" fill="#fff" opacity=".85"/>'+
+      '<ellipse cx="62" cy="43" rx="4.8" ry="4.1" fill="#fbf7f4" stroke="#6b4633" stroke-width="1"/><circle cx="61" cy="43" r="2.6" fill="url(#'+id+'i)"/><circle cx="61" cy="43" r="1.2" fill="#120a06"/><circle cx="62" cy="41.8" r=".9" fill="#fff"/><circle cx="59.5" cy="44.2" r=".5" fill="#fff" opacity=".85"/>'+
+      '<path d="M31 39 Q34 37.5 37 39" fill="none" stroke="#7a4a35" stroke-width="1"/><path d="M58 39.5 Q61 38 64 39.5" fill="none" stroke="#7a4a35" stroke-width="1"/>'+
+      '<path d="M28.5 34 Q37 31 45 36" fill="none" stroke="#5a3a22" stroke-width="2.6" stroke-linecap="round"/><path d="M55 33 Q63 28.5 69.5 34" fill="none" stroke="#5a3a22" stroke-width="2.3" stroke-linecap="round"/>';
+    let knit='';
+    if(o.wrap){
+      const kn=['#ff87ae','#fff3f1','#ff9a5b'];
+      knit='<clipPath id="'+id+'w"><ellipse cx="50" cy="98" rx="30" ry="16"/></clipPath><g clip-path="url(#'+id+'w)" transform="rotate(-20 50 98)">';
+      for(let i=-54,k=0;i<150;i+=9,k++) knit+='<rect x="'+i+'" y="74" width="6.2" height="50" fill="'+kn[k%3]+'"/>';
+      knit+='</g><ellipse cx="50" cy="98" rx="30" ry="16" fill="none" stroke="#c9506f" stroke-width=".9"/>';
+    }
+    return '<svg class="baby'+(o.big?' big':'')+'" viewBox="'+(o.crop?'10 12 80 82':'0 0 100 100')+'" aria-hidden="true">'+
+      '<ellipse cx="50" cy="98" rx="30" ry="16" fill="'+o.suit+'"/>'+knit+
       defs+
       '<path d="M40 80 Q50 86 60 80 L60 90 L40 90 Z" fill="#d9a07f"/>'+
       '<circle cx="17" cy="50" r="9" fill="'+sk+'" stroke="'+ln+'" stroke-width=".9"/><path d="M14 46 Q19 50 15 55" fill="none" stroke="#c98a6a" stroke-width="1.4"/>'+
@@ -396,13 +461,195 @@ footer .btn{font-size:12px;padding:7px 10px}
       '<ellipse cx="48.6" cy="56.3" rx="1.2" ry=".8" fill="#8a4f3a"/><ellipse cx="53.4" cy="56.3" rx="1.2" ry=".8" fill="#8a4f3a"/>'+
       m+acc+'</svg>';
   }
-  const dealer=(mouth)=>{ $('dealerFace').innerHTML=baby({mouth, acc:['bowtie'], suit:'#1b1b22'}); };
-  dealer('smirk');
-  $('collectorFace').innerHTML=baby({mouth:'smirk', acc:['shades','chain'], suit:'#222', big:true});
-  $('appraiserFace').innerHTML=baby({mouth:'smirk', acc:['monocle','pacifier'], suit:'#6b4a8a', big:true});
-  $('cashierFace').innerHTML=baby({mouth:'happy', hair:'pigtails', freckles:true, acc:['glasses','tie'], suit:'#2a3550', big:true});
-  $('guardFace').innerHTML=baby({mouth:'smirk', hair:'bowl', freckles:true, acc:['cap','tie'], suit:'#2a3550', big:true});
+  // фурри-персонажи: рисованные портреты, тот же viewBox 0 0 100 100
+  function hex2rgb(h){ h=String(h).replace('#',''); if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2]; return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
+  function mixc(a,b,t){ const A=hex2rgb(a), B=hex2rgb(b); let s='#'; for(let i=0;i<3;i++){ const v=Math.round(A[i]+(B[i]-A[i])*t); s+=('0'+Math.max(0,Math.min(255,v)).toString(16)).slice(-2); } return s; }
+  let furN=0;
+  function furry(o){
+    o=Object.assign({mouth:'smirk', acc:[], fur:'#e8813a', suit:'#1b1b22', big:false},o);
+    const id='f'+(++furN), has=a=>o.acc.indexOf(a)>=0;
+    const fur=o.fur, furD=mixc(fur,'#160c06',.55), furL=mixc(fur,'#fff2da',.32);
+    const ln=mixc(fur,'#180a04',.78), creD='#e3cbaa', gold='#d3b06a', gold2='#f0d79b', ink='#2a1208';
+    const HEAD='M50 13 C40 13 31 18 27 26 L15 32 L24 39 L18 47 L26 51 C25 59 29 68 36 73 C41 76.6 45.5 78 50 78 C54.5 78 59 76.6 64 73 C71 68 75 59 74 51 L82 47 L76 39 L85 32 L73 26 C69 18 60 13 50 13 Z';
+    const defs='<defs>'+
+      '<radialGradient id="'+id+'h" cx="35%" cy="27%" r="80%"><stop offset="0" stop-color="'+furL+'"/><stop offset=".44" stop-color="'+fur+'"/><stop offset="1" stop-color="'+furD+'"/></radialGradient>'+
+      '<radialGradient id="'+id+'m" cx="44%" cy="24%" r="76%"><stop offset="0" stop-color="#fffaf1"/><stop offset="1" stop-color="'+creD+'"/></radialGradient>'+
+      '<linearGradient id="'+id+'j" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+mixc(o.suit,'#ffffff',.14)+'"/><stop offset=".6" stop-color="'+o.suit+'"/><stop offset="1" stop-color="'+mixc(o.suit,'#000000',.42)+'"/></linearGradient>'+
+      '<linearGradient id="'+id+'l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+mixc(o.suit,'#ffffff',.22)+'"/><stop offset="1" stop-color="'+mixc(o.suit,'#000000',.18)+'"/></linearGradient>'+
+      '<linearGradient id="'+id+'g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+gold2+'"/><stop offset="1" stop-color="'+gold+'"/></linearGradient>'+
+      '<radialGradient id="'+id+'e" cx="52%" cy="32%" r="68%"><stop offset="0" stop-color="#fff0b8"/><stop offset=".45" stop-color="#f2ba3e"/><stop offset="1" stop-color="#7d4c06"/></radialGradient>'+
+      '<radialGradient id="'+id+'s" cx="40%" cy="30%" r="80%"><stop offset="0" stop-color="#3a3740"/><stop offset="1" stop-color="#0c0b0f"/></radialGradient>'+
+      '<clipPath id="'+id+'c"><path d="'+HEAD+'"/></clipPath>'+
+      '</defs>';
+
+    const torso='<path d="M12 100 C14 89 20 82 31 77 C38 74 44 73 50 73 C56 73 62 74 69 77 C80 82 86 89 88 100 Z" fill="url(#'+id+'j)" stroke="'+mixc(o.suit,'#000000',.55)+'" stroke-width="1"/>';
+    const shirt='<path d="M44 73 L50 78.5 L56 73 Z" fill="#ece2cf" stroke="#b9ab93" stroke-width=".7"/>'+
+      '<path d="M43.5 73 L47.5 72 L45 78 Z" fill="#f4ecdd" stroke="#b9ab93" stroke-width=".6"/>'+
+      '<path d="M56.5 73 L52.5 72 L55 78 Z" fill="#f4ecdd" stroke="#b9ab93" stroke-width=".6"/>';
+    const lapel='<path d="M44 73 L50 78.5 L56 73" fill="none" stroke="'+mixc(o.suit,'#000000',.45)+'" stroke-width="2.2" stroke-linejoin="round"/>';
+
+    const earL='<path d="M27 29 L19 5 L45 19 Z" fill="url(#'+id+'h)" stroke="'+ln+'" stroke-width="1.3" stroke-linejoin="round"/>'+
+      '<path d="M29.5 24 L24.5 11.5 L38 19 Z" fill="#e794a8" opacity=".8"/>'+
+      '<path d="M19 5 L27 21 L31 12 Z" fill="'+furD+'" opacity=".3"/>';
+    const earR='<path d="M73 29 L81 5 L55 19 Z" fill="url(#'+id+'h)" stroke="'+ln+'" stroke-width="1.3" stroke-linejoin="round"/>'+
+      '<path d="M70.5 24 L75.5 11.5 L62 19 Z" fill="#e794a8" opacity=".8"/>'+
+      '<path d="M81 5 L73 21 L69 12 Z" fill="'+furD+'" opacity=".3"/>';
+
+    const head='<path d="'+HEAD+'" fill="url(#'+id+'h)" stroke="'+ln+'" stroke-width="1.3" stroke-linejoin="round"/>';
+    const inner='<g clip-path="url(#'+id+'c)">'+
+      '<ellipse cx="67" cy="42" rx="25" ry="31" fill="'+furD+'" opacity=".34"/>'+
+      '<ellipse cx="35" cy="29" rx="19" ry="13" fill="#ffffff" opacity=".07"/>'+
+      '<ellipse cx="39" cy="43" rx="8.5" ry="7" fill="'+furD+'" opacity=".12"/>'+
+      '<ellipse cx="61" cy="43" rx="8.5" ry="7" fill="'+furD+'" opacity=".12"/>'+
+      '<ellipse cx="50" cy="77" rx="22" ry="8" fill="'+furD+'" opacity=".45"/>'+
+      '<ellipse cx="50" cy="25" rx="6.5" ry="8" fill="'+furL+'" opacity=".16"/>'+
+      '<g stroke="'+furD+'" stroke-opacity=".3" stroke-width=".7" stroke-linecap="round" fill="none">'+
+        '<path d="M30 34 q4 1 6 4"/><path d="M28 40 q4 1 5 4"/><path d="M31 48 q4 2 5 5"/>'+
+        '<path d="M70 34 q-4 1 -6 4"/><path d="M72 40 q-4 1 -5 4"/><path d="M69 48 q-4 2 -5 5"/>'+
+        '<path d="M44 20 q3 3 3 7"/><path d="M56 20 q-3 3 -3 7"/>'+
+        '<path d="M23 60 q4 2 6 5"/><path d="M77 60 q-4 2 -6 5"/>'+
+      '</g>'+
+    '</g>';
+    const rim='<path d="M74 28 L84 33 L76 39 L81 47 L74 51 C75 60 71 68 64 73" fill="none" stroke="'+gold2+'" stroke-width="1.1" stroke-opacity=".38" stroke-linecap="round"/>'+
+      '<path d="M80 8 L74 26" fill="none" stroke="'+gold2+'" stroke-width=".9" stroke-opacity=".4" stroke-linecap="round"/>';
+
+    const eyes='<path d="M31.5 42 Q39 34 46.5 42 Q39 50 31.5 42 Z" fill="url(#'+id+'e)" stroke="'+ink+'" stroke-width="1"/>'+
+      '<ellipse cx="39" cy="42.4" rx="1.9" ry="4.6" fill="#170b04"/>'+
+      '<circle cx="41" cy="39.4" r="1.5" fill="#fff" opacity=".95"/><circle cx="37" cy="45" r=".7" fill="#fff" opacity=".65"/>'+
+      '<path d="M31.5 41.5 Q39 33.4 46.5 41" fill="none" stroke="'+ink+'" stroke-width="1.9" stroke-linecap="round"/>'+
+      '<path d="M31.5 41 l-3.2 -2.6" fill="none" stroke="'+ink+'" stroke-width="1.6" stroke-linecap="round"/>'+
+      '<path d="M68.5 42 Q61 34 53.5 42 Q61 50 68.5 42 Z" fill="url(#'+id+'e)" stroke="'+ink+'" stroke-width="1"/>'+
+      '<ellipse cx="61" cy="42.4" rx="1.9" ry="4.6" fill="#170b04"/>'+
+      '<circle cx="63" cy="39.4" r="1.5" fill="#fff" opacity=".95"/><circle cx="59" cy="45" r=".7" fill="#fff" opacity=".65"/>'+
+      '<path d="M68.5 41.5 Q61 33.4 53.5 41" fill="none" stroke="'+ink+'" stroke-width="1.9" stroke-linecap="round"/>'+
+      '<path d="M68.5 41 l3.2 -2.6" fill="none" stroke="'+ink+'" stroke-width="1.6" stroke-linecap="round"/>'+
+      '<path d="M30 33.5 Q37 29.5 45 32.5" fill="none" stroke="'+mixc(fur,'#2a1208',.5)+'" stroke-width="1.5" stroke-linecap="round"/>'+
+      '<path d="M70 33.5 Q63 29.5 55 32.5" fill="none" stroke="'+mixc(fur,'#2a1208',.5)+'" stroke-width="1.5" stroke-linecap="round"/>';
+    const shades='<rect x="29.5" y="36" width="19.5" height="11.5" rx="4" fill="url(#'+id+'s)" stroke="'+gold+'" stroke-width=".9"/>'+
+      '<rect x="51" y="36" width="19.5" height="11.5" rx="4" fill="url(#'+id+'s)" stroke="'+gold+'" stroke-width=".9"/>'+
+      '<path d="M49 40.5 H51" stroke="'+gold+'" stroke-width="1.6"/>'+
+      '<path d="M33 39 l6 .8" stroke="#ffffff" stroke-width="1.2" opacity=".22" stroke-linecap="round"/>'+
+      '<path d="M54.5 39 l6 .8" stroke="#ffffff" stroke-width="1.2" opacity=".22" stroke-linecap="round"/>';
+    const eyeArt = has('shades') ? shades : eyes;
+
+    const blush='<ellipse cx="32" cy="53" rx="6.5" ry="3.6" fill="#d8566f" opacity=".16"/>'+
+      '<ellipse cx="68" cy="53" rx="6.5" ry="3.6" fill="#d8566f" opacity=".16"/>';
+    const muzzle='<path d="M37 53 C38.5 49.3 44 48.4 50 48.4 C56 48.4 61.5 49.3 63 53 C64 59.5 58 68 50 68 C42 68 36 59.5 37 53 Z" fill="url(#'+id+'m)" stroke="'+mixc(fur,'#000000',.25)+'" stroke-width=".8" stroke-opacity=".5"/>'+
+      '<ellipse cx="50" cy="66" rx="9" ry="3" fill="#ffffff" opacity=".35"/>'+
+      '<path d="M46.5 51 Q50 48.4 53.5 51 Q54 54.6 50 55.9 Q46 54.6 46.5 51 Z" fill="'+ink+'"/>'+
+      '<ellipse cx="48.6" cy="50.6" rx="1.6" ry=".9" fill="#ffffff" opacity=".3"/>'+
+      '<path d="M50 55.9 v3.4" stroke="'+ink+'" stroke-width="1.2" stroke-linecap="round"/>'+
+      '<g fill="#a97f5c" opacity=".45"><circle cx="40" cy="57" r=".8"/><circle cx="43" cy="60" r=".8"/><circle cx="39" cy="61" r=".8"/><circle cx="60" cy="57" r=".8"/><circle cx="57" cy="60" r=".8"/><circle cx="61" cy="61" r=".8"/></g>'+
+      '<g stroke="#8a6242" stroke-opacity=".38" stroke-width=".9" stroke-linecap="round" fill="none"><path d="M34 56 q-6 -1.5 -9 -3"/><path d="M34 59 q-6 .5 -9 1"/><path d="M66 56 q6 -1.5 9 -3"/><path d="M66 59 q6 .5 9 1"/></g>';
+
+    let m='';
+    if(o.mouth==='smirk') m='<path d="M50 60.5 Q55 66 61 62.5" fill="none" stroke="'+ln+'" stroke-width="1.8" stroke-linecap="round"/><path d="M54.5 62 l1 2.6 l1.6 -2.4 Z" fill="#fff" stroke="'+ln+'" stroke-width=".4"/>';
+    if(o.mouth==='happy'||o.mouth==='laugh') m='<path d="M41 61 Q50 73 59 61 Z" fill="#5e1622" stroke="'+ln+'" stroke-width="1.4"/><ellipse cx="50" cy="68.5" rx="4.2" ry="2" fill="#e07a8c"/><path d="M44 61 l1.6 2.6 l1.6 -2.4 Z M52.8 61 l1.6 2.6 l1.6 -2.6 Z" fill="#fff"/>';
+    if(o.mouth==='cry') m='<path d="M42 66 Q50 58.5 58 66" fill="none" stroke="'+ln+'" stroke-width="1.8" stroke-linecap="round"/><path d="M34 47 q-2.5 7 0 10 q2.5 -3 0 -10" fill="#8fc8f0" opacity=".9"/><path d="M66 47 q2.5 7 0 10 q-2.5 -3 0 -10" fill="#8fc8f0" opacity=".9"/>';
+    if(o.mouth==='surprised') m='<ellipse cx="50" cy="64.5" rx="4.4" ry="5.4" fill="#5e1622" stroke="'+ln+'" stroke-width="1.3"/><ellipse cx="50" cy="67" rx="2.2" ry="1.8" fill="#e07a8c"/>';
+    if(o.mouth==='angry') m='<path d="M42 63 Q50 59 58 63" fill="none" stroke="'+ln+'" stroke-width="2" stroke-linecap="round"/>';
+
+    const earring=has('earring') ? '<path d="M78 22 v6" stroke="'+gold+'" stroke-width=".8"/><circle cx="78" cy="30.5" r="2" fill="url(#'+id+'g)" stroke="#8a6a24" stroke-width=".5"/><circle cx="78" cy="30.5" r=".8" fill="#3b2a10"/>' : '';
+
+    const ruff='<path d="M36 72 L31 80 L40 76.5 L44 81 L50 77.5 L56 81 L60 76.5 L69 80 L64 72 Z" fill="url(#'+id+'h)" stroke="'+ln+'" stroke-width=".9" stroke-linejoin="round"/>';
+    const bowtie='<path d="M50 80.5 L39.5 76 L39.5 85 Z" fill="#6d1a27" stroke="#3a0c14" stroke-width=".9"/>'+
+      '<path d="M50 80.5 L60.5 76 L60.5 85 Z" fill="#7d1f2e" stroke="#3a0c14" stroke-width=".9"/>'+
+      '<circle cx="50" cy="80.5" r="2.6" fill="#5c141f" stroke="#3a0c14" stroke-width=".7"/>'+
+      '<path d="M41.5 77.6 L48 80" stroke="#a84054" stroke-width=".8" opacity=".6"/>';
+    const tie='<path d="M50 77 L46 82 L48.5 92 L51.5 92 L54 82 Z" fill="#6d1a27" stroke="#3a0c14" stroke-width=".8"/>'+
+      '<path d="M46.5 77 L53.5 77 L50 81.5 Z" fill="#7d1f2e" stroke="#3a0c14" stroke-width=".7"/>';
+
+    let acc='';
+    if(has('necklace')) acc+='<path d="M36.5 74 Q50 89 63.5 74" fill="none" stroke="url(#'+id+'g)" stroke-width="1.7"/><circle cx="50" cy="86.5" r="2.6" fill="url(#'+id+'g)" stroke="#8a6a24" stroke-width=".6"/><circle cx="50" cy="86.5" r="1" fill="#3b2a10"/>';
+    if(has('chain')) acc+='<path d="M35 75 Q50 94 65 75" fill="none" stroke="url(#'+id+'g)" stroke-width="2.6" stroke-linecap="round"/>';
+    if(has('choker')) acc+='<path d="M39.5 70.5 Q50 75.5 60.5 70.5" fill="none" stroke="#14101a" stroke-width="4.6" stroke-linecap="round"/><circle cx="50" cy="75" r="2.2" fill="url(#'+id+'g)" stroke="#8a6a24" stroke-width=".6"/>';
+    if(has('bowtie')) acc+=bowtie;
+    if(has('tie')) acc+=tie;
+
+    return '<svg class="baby furry'+(o.big?' big':'')+'" viewBox="0 0 100 100" aria-hidden="true">'+defs+
+      torso+shirt+lapel+
+      '<g transform="rotate(-2 50 62)">'+
+        earL+earR+head+inner+rim+
+        blush+eyeArt+muzzle+m+earring+
+      '</g>'+
+      ruff+acc+
+      '</svg>';
+  }
+
+  const isFoxy=()=>{ try{ return localStorage.getItem('naebalovo.foxy')==='1'; }catch(e){ return false; } };
+  let foxy=isFoxy();
+  const dealerName=()=>{ $('dealerName').textContent = foxy ? 'Крупье Лиска' : 'Крупье Викс'; };
+
+  // пользовательские портреты: assets/manifest.json + assets/characters/*.webp
+  const ROLE_NAMES={dealer_m:'Крупье Викс',dealer_f:'Крупье Лиска',cashier:'Кассир Мира',
+    appraiser:'Оценщик Артур',guard:'Служба безопасности',collector:'Кредитный отдел'};
+  let PORTRAITS={};
+  function pEl(role,big){
+    const p=PORTRAITS[role]; if(!p) return '';
+    const base='assets/characters/';
+    const ss = p.small ? ' srcset="'+base+p.small+' 600w, '+base+p.file+' 1200w" sizes="120px"' : '';
+    return '<img class="baby portrait'+(big?' big':'')+'" src="'+base+(p.small||p.file)+'"'+ss+
+      ' width="600" height="800" alt="'+(p.alt||ROLE_NAMES[role]||'Портрет')+'" loading="lazy" decoding="async">';
+  }
+
+  const dealer=(mouth)=>{ const e=$('dealerFace');
+    e.innerHTML = pEl(foxy?'dealer_f':'dealer_m')
+      || (foxy ? furry({mouth, acc:['necklace','earring'], suit:'#141215', fur:'#e2854a'})
+               : furry({mouth, acc:['bowtie','earring'], suit:'#1a1714', fur:'#c99a6a'}));
+    e.classList.remove('pop'); void e.offsetWidth; e.classList.add('pop'); };
+  dealer('smirk'); dealerName();
+
+  const FACES=[
+    ['collectorFace','collector',()=>furry({mouth:'smirk', acc:['shades','chain'], suit:'#1a1a1c', fur:'#8d6b4a', big:true})],
+    ['appraiserFace','appraiser',()=>furry({mouth:'smirk', acc:['bowtie','earring'], suit:'#2b2620', fur:'#a8814f', big:true})],
+    ['cashierFace','cashier',()=>furry({mouth:'happy', acc:['earring','necklace'], suit:'#1f2a26', fur:'#d19a5c', big:true})],
+    ['guardFace','guard',()=>furry({mouth:'smirk', acc:['shades','bowtie'], suit:'#1c1f26', fur:'#7a5c3e', big:true})]
+  ];
+  const paintFaces=()=>FACES.forEach(([id,role,gen])=>{ const e=$(id); if(e) e.innerHTML=pEl(role,true)||gen(); });
+  paintFaces();
+
+  // реестр портретов читается тихо: нет файла или нет записи — остаются рисованные фурри
+  async function applyPortraits(){
+    try{
+      const r=await fetch('assets/manifest.json',{cache:'no-store'});
+      if(!r.ok) return;
+      const m=await r.json(), en=(m&&m.entries)||{}, map={};
+      Object.keys(en).forEach(k=>{
+        const v=en[k];
+        if(!v||!v.file||!ROLE_NAMES[k]) return;
+        map[k]={file:v.file, small:v.small||'', alt:v.name||ROLE_NAMES[k]};
+      });
+      if(!Object.keys(map).length) return;
+      PORTRAITS=map; dealer('smirk'); paintFaces();
+    }catch(e){}
+  }
+  applyPortraits();
+
   const say=t=>{ $('dealerSay').textContent=t; };
+  $('dealerSwap').addEventListener('click',()=>{
+    foxy=!foxy; try{ localStorage.setItem('naebalovo.foxy', foxy?'1':'0'); }catch(e){}
+    dealerName(); dealer('smirk');
+    say(foxy ? pick(['Ставки принимаются','Раунд начинается через минуту','Лента готова, господа','Прошу, делайте ставки'])
+              : pick(['Ставки открыты','Прошу к столу','Раунд начинается','Лента готова']));
+  });
+
+  // фигуры над лентой: рисованные фурри, появляются в момент результата
+  const POP_SUITS=['#151517','#1c1a16','#20242a','#241d16','#1a1f1c'];
+  const POP_FUR=['#e8813a','#c79a63','#a8814f','#8d6b4a','#d19a5c'];
+  const POP_ACC=[['necklace'],['earring'],['bowtie'],['shades'],['earring','necklace'],['choker']];
+  function randFurry(mouth){
+    return furry({ mouth, suit:pick(POP_SUITS), fur:pick(POP_FUR), acc:pick(POP_ACC) });
+  }
+  let popTimer=null;
+  function showPopBaby(mouth,ms,win){
+    if(reduce) return;
+    const el=$('popBaby'), roles=Object.keys(PORTRAITS);
+    $('popBabyArt').innerHTML = roles.length ? pEl(pick(roles),true)
+      : (win ? furry({mouth:'happy', fur:'#e8813a', acc:['necklace','earring'], big:true}) : randFurry(mouth));
+    el.classList.remove('out'); el.classList.add('show');
+    clearTimeout(popTimer);
+    popTimer=setTimeout(()=>{ el.classList.remove('show'); el.classList.add('out'); }, ms);
+  }
 
   // state
   const KEY='naebalovo.v1';
@@ -413,6 +660,10 @@ footer .btn{font-size:12px;padding:7px 10px}
   const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} };
 
   let phase='bet', phaseEnd=0, bets=null, botTimer=null;
+  let sacLuck=false;
+  const SAC_COST=777;
+  const SAC_LINES=['гарантия оформлена','крупье подтвердил','по регламенту','ставка защищена',
+    'услуга платная','видел в правилах','регламент позволяет','оформлено'];
 
   // toast
   let tt=null;
@@ -469,11 +720,16 @@ footer .btn{font-size:12px;padding:7px 10px}
   $('sound').addEventListener('click',()=>{ muted=!muted; try{ localStorage.setItem('naebalovo.mute',muted?'1':'0'); }catch(e){} renderSound(); });
   renderSound();
   function env(g,t,peak,dur){ g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(peak,t+0.004); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); }
+  let tickAlt=false;
   function sTick(){
     const a=actx; if(!a||muted) return; const t=a.currentTime;
-    const o=a.createOscillator(), g=a.createGain(), f=a.createBiquadFilter();
-    o.type='square'; o.frequency.value=1500+Math.random()*400; f.type='highpass'; f.frequency.value=900;
-    env(g,t,0.05,0.035); o.connect(f).connect(g).connect(a.destination); o.start(t); o.stop(t+0.05);
+    tickAlt=!tickAlt;
+    const base=tickAlt?1320:980, rr=10+Math.random()*80;
+    [base+rr, base*1.5+rr].forEach((fr,k)=>{
+      const o=a.createOscillator(), g=a.createGain(), f=a.createBiquadFilter();
+      o.type='triangle'; o.frequency.value=fr; f.type='bandpass'; f.frequency.value=fr; f.Q.value=7;
+      env(g,t+k*0.015,0.05,0.04); o.connect(f).connect(g).connect(a.destination); o.start(t+k*0.015); o.stop(t+0.06);
+    });
   }
   function sChip(){
     const a=actx; if(!a||muted) return; const t=a.currentTime;
@@ -496,9 +752,9 @@ footer .btn{font-size:12px;padding:7px 10px}
   }
   // фоновая музыка: свой луп Am – F – C – G, 96 bpm, всё синтезировано
   let musicOn=false, musicGain=null, nextBeat=0, beatN=0, musicTimer=null;
-  const BPM=96, SPB=60/BPM;
-  const CHORDS=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]]; // MIDI: Am F C G
-  const BASS=[45,41,36,43];
+  const BPM=112, SPB=60/BPM;
+  const CHORDS=[[52,55,59],[48,52,55],[55,59,62],[50,54,57]]; // MIDI: Em C G D
+  const BASS=[40,36,43,38];
   const mtof=n=>440*Math.pow(2,(n-69)/12);
   function mNote(a,t,freq,dur,type,peak,dest){
     const o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.value=freq;
@@ -511,14 +767,24 @@ footer .btn{font-size:12px;padding:7px 10px}
     n.buffer=buf; const f=a.createBiquadFilter(); f.type='highpass'; f.frequency.value=7000;
     const g=a.createGain(); g.gain.value=peak; n.connect(f).connect(g).connect(dest); n.start(t);
   }
+  function mKick(a,t,dest){
+    const o=a.createOscillator(), g=a.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(150,t); o.frequency.exponentialRampToValueAtTime(45,t+0.12);
+    g.gain.setValueAtTime(0.5,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.16);
+    o.connect(g).connect(dest); o.start(t); o.stop(t+0.2);
+  }
   function scheduleMusic(){
     const a=actx; if(!a||!musicOn) return;
     while(nextBeat < a.currentTime+0.25){
       const bar=Math.floor(beatN/4)%4, beat=beatN%4, t=nextBeat;
       if(beat===0) CHORDS[bar].forEach(n=>mNote(a,t,mtof(n),SPB*3.8,'triangle',0.05,musicGain));
       mNote(a,t,mtof(BASS[bar]),SPB*0.9,'sine',0.22,musicGain);
+      if(beat===0||beat===2) mKick(a,t,musicGain);
       if(beat===2) mNote(a,t+SPB/2,mtof(BASS[bar]+12),SPB*0.4,'sine',0.12,musicGain);
       mHat(a,t+SPB/2,0.05,musicGain); if(beat%2) mHat(a,t,0.03,musicGain);
+      // весёлый лид-арпеджио
+      mNote(a,t+SPB*0.25,mtof(CHORDS[bar][(beat+bar)%3]+12),SPB*0.18,'square',0.05,musicGain);
+      if(beat===3) mNote(a,t+SPB*0.75,mtof(CHORDS[bar][2]+24),SPB*0.14,'square',0.04,musicGain);
       nextBeat+=SPB; beatN++;
     }
   }
@@ -563,7 +829,7 @@ footer .btn{font-size:12px;padding:7px 10px}
     if(phase!=='bet'){ toast('Ставки закрыты, жди следующий раунд'); return; }
     const amt=Math.floor(Number($('amount').value));
     if(!amt || amt<1){ toast('Впиши ставку'); return; }
-    if(amt>st.bal){ toast('Не хватает. Закинь скин'); return; }
+    if(amt>st.bal){ toast('Недостаточно средств. Пополните счёт'); return; }
     st.bal-=amt; save(); renderBal(); sChip();
     const mine=bets[c].find(b=>b.me);
     if(mine) mine.amt+=amt; else bets[c].push({me:true,name:'Ты',amt});
@@ -577,6 +843,8 @@ footer .btn{font-size:12px;padding:7px 10px}
     inp.value=Math.max(0,Math.min(v, Math.max(st.bal,0)));
   }));
 
+  $('sacrifice').addEventListener('click', ritual);
+
   function botTick(){
     if(phase!=='bet') return;
     const r=Math.random(); const c= r<.08?'green':(r<.54?'red':'black');
@@ -589,6 +857,29 @@ footer .btn{font-size:12px;padding:7px 10px}
     botTimer=setTimeout(botTick, 250+Math.random()*900);
   }
 
+  // ритуал: шутка на игровые рубли, картинка рисованная
+  function sumMine(c){ return bets[c].filter(b=>b.me).reduce((s,b)=>s+b.amt,0); }
+  function renderSac(){
+    const b=$('sacrifice'); if(!b) return;
+    b.classList.toggle('armed', sacLuck);
+    b.disabled = sacLuck || phase!=='bet';
+  }
+  function ritual(){
+    if(phase!=='bet'){ toast('Гарантия оформляется только до прокрутки'); return; }
+    if(sacLuck){ toast('Гарантия уже оформлена на этот раунд'); return; }
+    if(st.bal<SAC_COST){ toast('Для гарантии нужно '+fmt(SAC_COST)+' ₽'); return; }
+    st.bal-=SAC_COST; st.sac=(st.sac||0)+1; save(); renderBal();
+    sacLuck=true; sWin();
+    $('ritualArt').innerHTML=furry({mouth:'smirk', acc:['earring','necklace'], suit:'#151517'});
+    const r=$('ritual'); r.classList.add('show');
+    setTimeout(()=>r.classList.remove('show'), 2200);
+    dealer('smirk'); say(pick(['Гарантия оформлена','Лента настроена','Раунд за вами']));
+    botSay(pick(SAC_LINES));
+    setTimeout(()=>botSay(pick(SAC_LINES)), 900);
+    toast('Гарантия оплачена: следующий раунд за вами');
+    renderSac();
+  }
+
   // rounds
   function setButtons(on){ document.querySelectorAll('.place').forEach(b=>b.disabled=!on); }
   function startBet(){
@@ -596,7 +887,8 @@ footer .btn{font-size:12px;padding:7px 10px}
     document.querySelectorAll('.col').forEach(c=>c.classList.remove('dim','won'));
     document.querySelectorAll('.tile.win').forEach(t=>t.classList.remove('win'));
     $('phase').textContent='Ставки принимаются'; setButtons(true);
-    dealer('smirk'); say(pick(['Делайте ставки, господа','Ну что, на красное?','Зеро давно не было, кстати','Ставь всё, не бойся']));
+    renderSac();
+    dealer('smirk'); say(pick(['Ставки принимаются','Прошу, делайте ставки','Лента готова','Раунд начинается']));
     clearTimeout(botTimer); botTimer=setTimeout(botTick,400);
     setTimeout(startSpin, BET_MS);
   }
@@ -604,7 +896,22 @@ footer .btn{font-size:12px;padding:7px 10px}
     phase='spin'; phaseEnd=performance.now()+SPIN_MS; clearTimeout(botTimer); setButtons(false);
     $('phase').textContent='Крутим';
     dealer('smirk'); say('Ставки сделаны, ставок больше нет');
-    const n=randInt(15), idx=ORDER.indexOf(n), jit=(Math.random()-.5)*.8;
+
+    let n=randInt(15), ritualWin=false;
+    if(sacLuck){
+      const cols=['red','green','black'].filter(c=>bets[c].some(b=>b.me));
+      sacLuck=false; renderSac();
+      if(cols.length){
+        cols.sort((a,b)=>sumMine(b)-sumMine(a));
+        const c=cols[0];
+        n = c==='green' ? 0 : pick([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14].filter(x=>colorOf(x)===c));
+        ritualWin=true;
+      } else {
+        setTimeout(()=>toast('Гарантия не применена: ставок не было'),400);
+      }
+    }
+    const idx=ORDER.indexOf(n), jit=(Math.random()-.5)*.8;
+    if(ritualWin) setTimeout(()=>toast('Гарантия сработала'), SPIN_MS-300);
     ci=9*15+idx+jit; place(true); lastTile=null; requestAnimationFrame(spinSound);
     setTimeout(()=>finish(n,idx,jit), SPIN_MS+60);
   }
@@ -618,13 +925,15 @@ footer .btn{font-size:12px;padding:7px 10px}
     $('phase').textContent='Выпало '+n+' — '+names[c];
     let staked=0; ['red','green','black'].forEach(k=>{ const m=bets[k].find(b=>b.me); if(m) staked+=m.amt; });
     const mine=bets[c].find(b=>b.me);
-    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; sWin(); toast('Выигрыш +'+fmt(win)+' ₽'); dealer('cry'); say(pick(['Нечестно! Я маме скажу','Ыыыы, забирай...','Это последний раз, понял?'])); }
-    else if(staked>0){ sLose(); toast('Мимо. −'+fmt(staked)+' ₽'); dealer('happy'); say(pick(['Хи-хи. Казино всегда в плюсе','Спасибо, на памперсы','Ещё разок?'])); }
-    else { say('Выпало '+n+'. А ты чего не ставил?'); }
+    if(mine){ const win=mine.amt*MULT[c]; st.bal+=win; sWin(); toast('Выплата +'+fmt(win)+' ₽'); dealer('smirk'); say(pick(['Поздравляю. Выплата зачислена','Хорошая ставка','Лента сегодня к вам благосклонна'])); }
+    else if(staked>0){ sLose(); toast('Проигрыш −'+fmt(staked)+' ₽'); dealer('smirk'); say(pick(['Ставка ушла в пользу дома','Бывает. Следующий раунд','Лента непредсказуема'])); }
+    else { say('Выпало '+n+'. Ставок не было.'); }
+    const mood = n===0 ? 'surprised' : (mine ? 'happy' : 'smirk');
+    showPopBaby(mood, SHOW_MS-450, !!mine);
     st.recent.push(n); if(st.recent.length>30) st.recent=st.recent.slice(-30);
     if(st.debt>0){
       const before=st.debt; st.debt=Math.ceil(st.debt*1.015);
-      if(before<30000 && st.debt>=30000) setTimeout(()=>toast('Naebalovo Займ: коллекторы уже выехали'),1200);
+      if(before<30000 && st.debt>=30000) setTimeout(()=>toast('Кредитный отдел: просрочка'),1200);
     }
     save(); renderBal(); renderRecent(); renderDebt();
     if(Math.random()<.6) setTimeout(()=>botSay(pick(REACT[c])), 500+Math.random()*1200);
@@ -647,13 +956,13 @@ footer .btn{font-size:12px;padding:7px 10px}
   function renderInv(){
     const g=$('inv'); g.innerHTML='';
     const left=SKINS.filter(s=>!st.used.includes(s.id));
-    if(!left.length){ g.innerHTML='<div class="empty">Инвентарь пуст. Загляни в ломбард.</div>'; return; }
+    if(!left.length){ g.innerHTML='<div class="empty">Инвентарь пуст. Проверьте ломбард.</div>'; return; }
     left.forEach(s=>{
       const b=document.createElement('button'); b.type='button'; b.className='skin';
       b.innerHTML='<div class="art" style="background:linear-gradient(135deg,'+s.color+',#0d0f22)">'+s.type+'</div>'+
         '<div class="info"><span class="name"></span><span class="rar">'+s.rar+'</span><span class="price">'+fmt(s.price)+' ₽</span></div>';
       b.querySelector('.name').textContent=s.name;
-      b.addEventListener('click',()=>{ st.used.push(s.id); st.bal+=s.price; save(); renderBal(); renderInv(); toast('Скин принят: +'+fmt(s.price)+' ₽'); });
+      b.addEventListener('click',()=>{ st.used.push(s.id); st.bal+=s.price; save(); renderBal(); renderInv(); toast('Предмет принят: +'+fmt(s.price)+' ₽'); });
       g.appendChild(b);
     });
   }
@@ -663,13 +972,13 @@ footer .btn{font-size:12px;padding:7px 10px}
   modal.addEventListener('click',e=>{ if(e.target===modal) modal.hidden=true; });
   // pawnshops
   const SHOPS=[
-    {id:'vaht', name:'Залог у Вахтёрши', where:'Капотня', x:268, y:288, ll:[55.638,37.797], lots:[['zach','Зачётка (почти без троек)',500],['servant','Бабушкин сервант',1500]]},
-    {id:'shans', name:'Ломбард «Последний шанс» 24/7', where:'Бирюлёво', x:212, y:338, ll:[55.590,37.660], lots:[['ps5','PS5 соседа',4000],['bike','Велосипед с балкона',1200]]},
-    {id:'hrush', name:'Золотой Хрущ', where:'Черёмушки', x:148, y:268, ll:[55.670,37.555], lots:[['iph','Айфон 7 с трещиной',900],['ring','Цепочка с рынка',2000]]},
-    {id:'peres', name:'Ломбард «Пересдача»', where:'Покровка', x:226, y:186, ll:[55.759,37.648], lots:[['stip','Стипендия за март',2500],['laptop','Ноутбук с курсачом',3000]]},
-    {id:'kitay', name:'Скупка у Садового', where:'Китай-город', x:192, y:206, ll:[55.754,37.633], lots:[['jacket','Куртка с Садовода',700],['mug','Кружка из Икеи',30]]},
-    {id:'monday', name:'Скупка «Вернусь в понедельник»', where:'Гольяново', x:332, y:158, ll:[55.822,37.810], lots:[['tv','Телевизор из общаги',1800],['grill','Мангал с дачи',600],['tg','Телеграм-аккаунт с каналом на 12 подписчиков',1500]]},
-    {id:'mama', name:'Ломбард «Мама не узнает»', where:'Строгино', x:78, y:128, ll:[55.803,37.403], lots:[['car','Ключи от папиной «Лады»',5000],['guitar','Гитара, три аккорда',800]]}
+    {id:'vaht', name:'Отделение «Капотня»', where:'Капотня', x:268, y:288, ll:[55.638,37.797], lots:[['zach','Залоговый сертификат',500],['servant','Предмет интерьера, дерево',1500]]},
+    {id:'shans', name:'Отделение «Южное», 24/7', where:'Бирюлёво', x:212, y:338, ll:[55.590,37.660], lots:[['ps5','Игровая консоль',4000],['bike','Велосипед городской',1200]]},
+    {id:'hrush', name:'Отделение «Черёмушки»', where:'Черёмушки', x:148, y:268, ll:[55.670,37.555], lots:[['iph','Смартфон, 7-е поколение',900],['ring','Изделие из золота',2000]]},
+    {id:'peres', name:'Отделение «Покровка»', where:'Покровка', x:226, y:186, ll:[55.759,37.648], lots:[['stip','Расчётный документ',2500],['laptop','Ноутбук рабочий',3000]]},
+    {id:'kitay', name:'Отделение «Китай-город»', where:'Китай-город', x:192, y:206, ll:[55.754,37.633], lots:[['jacket','Верхняя одежда, кожа',700],['mug','Посуда, керамика',30]]},
+    {id:'monday', name:'Отделение «Гольяново»', where:'Гольяново', x:332, y:158, ll:[55.822,37.810], lots:[['tv','Телевизор, 43 дюйма',1800],['grill','Изделие металлическое',600],['tg','Цифровой актив',1500]]},
+    {id:'mama', name:'Отделение «Строгино»', where:'Строгино', x:78, y:128, ll:[55.803,37.403], lots:[['car','Комплект ключей, авто',5000],['guitar','Инструмент струнный',800]]}
   ];
   const pins=$('pins'); let curShop=null;
   SHOPS.forEach(s=>{
@@ -682,7 +991,7 @@ footer .btn{font-size:12px;padding:7px 10px}
   function renderShop(){
     const s=curShop, box=$('shop'); box.innerHTML='';
     const h=document.createElement('h3'); h.textContent=s.name; box.appendChild(h);
-    const w=document.createElement('span'); w.className='where'; w.textContent='район '+s.where+' · без справок и паспорта'; box.appendChild(w);
+    const w=document.createElement('span'); w.className='where'; w.textContent='район '+s.where+' · оценка по текущему курсу'; box.appendChild(w);
     s.lots.forEach(([id,name,price])=>{
       const done=st.pawned.includes(id);
       const b=document.createElement('button'); b.type='button'; b.className='lot'; b.disabled=done;
@@ -747,8 +1056,8 @@ footer .btn{font-size:12px;padding:7px 10px}
   loanModal.addEventListener('click',e=>{ if(e.target===loanModal) loanModal.hidden=true; });
   document.querySelectorAll('.offer').forEach(b=>b.addEventListener('click',()=>{
     const a=Number(b.dataset.loan);
-    if(st.debt+a>60000){ toast('Лимит исчерпан. Загляни в ломбард'); return; }
-    st.debt+=a; st.bal+=a; save(); renderBal(); renderDebt(); toast('Займ одобрен: +'+fmt(a)+' ₽');
+    if(st.debt+a>60000){ toast('Лимит исчерпан. Проверьте ломбард'); return; }
+    st.debt+=a; st.bal+=a; save(); renderBal(); renderDebt(); toast('Кредит одобрен: +'+fmt(a)+' ₽');
   }));
   $('repay').addEventListener('click',()=>{
     if(!(st.debt>0)){ toast('Долгов нет'); return; }
@@ -760,20 +1069,47 @@ footer .btn{font-size:12px;padding:7px 10px}
 
   // chat
   function pick(a){ return a[randInt(a.length)]; }
-  const LINES=['го на красное','зеро не было уже лет сто','кто займёт 500, верну завтра','ломбард на Покровке топ, стипендию взяли без вопросов','ставлю всё на чёрное','сегодня мой день','кто со мной на зеро?','минус стипендия','коллекторы звонят, ставлю дальше','AWP заложил, не жалею','мама, прости','опять чёрное...','последняя ставка и спать','я в плюсе, выводить?','ну давай, красненькое','кто знает, вывод работает?','занял 20к, щас отыграюсь','пары завтра, а я тут','всё, я на зеро до победного'];
-  const REACT={red:['КРАСНОЕ!!!','ну я же говорил, красное','минус на чёрном, класс'],black:['чёрное, кто бы сомневался','опять чёрное...','+2 на чёрном, едем'],green:['ЗЕРО!!! x14','кто стоял на зеро, признавайтесь','зеро, а я на красном...']};
-  const REPLY=['согласен','ты где ставишь?','ахах','не, я пас','держись','сам такой','бро, займи','иди в ломбард','поддерживаю'];
+  const LINES=['ставлю на красное','зеро давно не выпадало','стол сегодня холодный','поднимаю до 500','третье красное подряд','крупье, когда следующий раунд?','сегодня только чёрное','наблюдаю, не ставлю','кто на зеро?','ухожу в плюс и всё','какой лимит стола?','дилер, ставки приняты?','была серия из семи красных','лента горячая','одна ставка и ухожу','ставлю по системе','зеро — плохая идея','проценты по кредиту растут','тихо сегодня в зале','кто взял последний раунд?','нужен перерыв','красное или чёрное — монетка','ломбард рядом, если что','больше не рискую','лимит по залу?','стол закрывается в полночь'];
+  const REACT={red:['красное','красное, как и ожидалось','минус на чёрном'],black:['чёрное','опять чёрное','чёрное, +2'],green:['зеро','кто стоял на зеро?','зеро, а я на красном']};
+  const REPLY=['согласен','верно','поддерживаю','посмотрим','не уверен','я пас','удачи','холодно сегодня','ставьте на чёрное','работает','спасибо','не советую','как скажете'];
   const msgs=$('msgs');
+  // аватарки: у каждого ника своя лиса, вид зависит от хеша имени
+  const AVA_SUIT=['#151517','#1c1a16','#20242a','#241d16','#1a1f1c'];
+  const AVA_FUR=['#e8813a','#c79a63','#a8814f','#8d6b4a','#d19a5c'];
+  const AVA_ACC=[['necklace'],['earring'],['choker'],['bowtie'],['shades'],['earring','bowtie']];
+  function avaFor(name){
+    let h=0; for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))>>>0;
+    return furry({
+      mouth:['smirk','happy','surprised'][h%3],
+      suit:AVA_SUIT[h%AVA_SUIT.length],
+      fur:AVA_FUR[(h>>>3)%AVA_FUR.length],
+      acc:AVA_ACC[(h>>>6)%AVA_ACC.length]
+    });
+  }
   function addMsg(name,text,cls){
     const d=document.createElement('div'); d.className='msg'+(cls?' '+cls:'');
-    if(name){ const b=document.createElement('b'); b.textContent=name; d.appendChild(b); }
-    d.appendChild(document.createTextNode(text)); msgs.appendChild(d);
+    if(name){
+      const a=document.createElement('span'); a.className='msg-ava';
+      a.innerHTML=avaFor(name); d.appendChild(a);
+    }
+    const body=document.createElement('div'); body.className='msg-body';
+    if(name){ const b=document.createElement('b'); b.textContent=name; body.appendChild(b); }
+    body.appendChild(document.createTextNode(text)); d.appendChild(body);
+    msgs.appendChild(d);
     while(msgs.children.length>40) msgs.firstChild.remove();
     msgs.scrollTop=msgs.scrollHeight;
   }
   function botSay(t){ addMsg(pick(BOTS), t); }
+  const MENTION=['{n}, какая ставка?','{n}, вы сегодня играете?','{n}, видели последний раунд?','{n}, ломбард рядом, если нужно','{n}, вы в плюсе?','{n}, сегодня красное','{n}, какой результат?','{n}, вы ещё за столом?'];
+  function botMention(){
+    const a=pick(BOTS), b=pick(BOTS); if(a===b) return;
+    addMsg(a, pick(MENTION).split('{n}').join(b));
+  }
   for(let i=0;i<5;i++) botSay(pick(LINES));
-  (function chatTick(){ botSay(pick(LINES)); setTimeout(chatTick, 2500+Math.random()*4500); })();
+  (function chatTick(){
+    if(Math.random()<.35) botMention(); else botSay(pick(LINES));
+    setTimeout(chatTick, 1800+Math.random()*3800);
+  })();
   setInterval(()=>{ $('online').textContent='● '+(190+randInt(60))+' онлайн'; }, 7000);
   $('chatform').addEventListener('submit',e=>{
     e.preventDefault();
@@ -785,7 +1121,7 @@ footer .btn{font-size:12px;padding:7px 10px}
 
   addEventListener('keydown',e=>{ if(e.key==='Escape'){ modal.hidden=true; pawnModal.hidden=true; loanModal.hidden=true; wdModal.hidden=true; } });
 
-  const jokes=['Не положено. Мне так Вовочка сказал.','Касса закрыта на обед. Навсегда.','Вывод доступен с 4 курса.','Приходи с родителями.','Это Naebalovo, тут не выводят.','Сначала реши пример: 7 × 8. Неправильно. Вывода нет.'];
+  const jokes=['Вывод приостановлен до завершения проверки.','Проверка счёта не пройдена.','Средства зарезервированы.','Обратитесь в поддержку. Поддержка недоступна.','Операция отклонена службой безопасности.','Вывод доступен только при нулевом балансе.'];
   const wdModal=$('wdModal');
   $('withdraw').addEventListener('click',()=>{ $('guardSay').textContent=jokes[randInt(jokes.length)]; wdModal.hidden=false; $('closeWd').focus(); });
   $('closeWd').addEventListener('click',()=>{ wdModal.hidden=true; });
@@ -794,9 +1130,9 @@ footer .btn{font-size:12px;padding:7px 10px}
   let resetArmed=false;
   $('reset').addEventListener('click',()=>{
     const b=$('reset');
-    if(!resetArmed){ resetArmed=true; b.textContent='Точно? Нажми ещё раз'; setTimeout(()=>{resetArmed=false;b.textContent='Начать заново';},3000); return; }
-    resetArmed=false; b.textContent='Начать заново';
-    st={bal:1000,used:[],pawned:[],debt:0,recent:st.recent}; save(); renderBal(); renderDebt(); if(curShop) renderShop(); toast('Баланс 1 000 ₽, скины и вещи вернулись');
+    if(!resetArmed){ resetArmed=true; b.textContent='Подтвердить сброс'; setTimeout(()=>{resetArmed=false;b.textContent='Сбросить сессию';},3000); return; }
+    resetArmed=false; b.textContent='Сбросить сессию';
+    st={bal:1000,used:[],pawned:[],debt:0,recent:st.recent}; save(); renderBal(); renderDebt(); if(curShop) renderShop(); sacLuck=false; renderSac(); toast('Сессия сброшена. Баланс 1 000 ₽');
   });
 
   renderBal(); renderRecent(); renderDebt(); startBet(); loop();

@@ -1,0 +1,65 @@
+{
+  "updated": "2026-11-16T03:54:11",
+  "entries": {
+    "dealer_m": {
+      "role": "dealer_m",
+      "name": "Крупье Викс",
+      "purpose": "мужской крупье",
+      "file": "dealer_m-1200.webp",
+      "small": "dealer_m-600.webp",
+      "source": "raw/dealer_m.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    },
+    "dealer_f": {
+      "role": "dealer_f",
+      "name": "Крупье Лиска",
+      "purpose": "женский крупье",
+      "file": "dealer_f-1200.webp",
+      "small": "dealer_f-600.webp",
+      "source": "raw/dealer_f.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    },
+    "cashier": {
+      "role": "cashier",
+      "name": "Кассир Мира",
+      "purpose": "касса и пополнение",
+      "file": "cashier-1200.webp",
+      "small": "cashier-600.webp",
+      "source": "raw/cashier.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    },
+    "appraiser": {
+      "role": "appraiser",
+      "name": "Оценщик Артур",
+      "purpose": "ломбард",
+      "file": "appraiser-1200.webp",
+      "small": "appraiser-600.webp",
+      "source": "raw/appraiser.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    },
+    "guard": {
+      "role": "guard",
+      "name": "Служба безопасности",
+      "purpose": "вывод средств",
+      "file": "guard-1200.webp",
+      "small": "guard-600.webp",
+      "source": "raw/guard.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    },
+    "collector": {
+      "role": "collector",
+      "name": "Кредитный отдел",
+      "purpose": "кредит",
+      "file": "collector-1200.webp",
+      "small": "collector-600.webp",
+      "source": "raw/collector.png",
+      "date": "2026-11-16",
+      "note": "кроп 3:4, фокус 0.22, WebP"
+    }
+  }
+}
